@@ -1,4 +1,7 @@
-import Input
+import GameKit
 
-let a = Image(width: 10, height: 10)
-print(a.contains(Point(1, 2)))
+let a = PolyTracker(degree: 2)
+a.add(value: 1, at: 0)
+a.add(value: 2, at: 1)
+a.add(value: 1, at: 2)
+print(a.regression)

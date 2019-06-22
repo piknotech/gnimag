@@ -6,6 +6,9 @@ import PackageDescription
 let package = Package(
     name: "gnimag",
     platforms: [.macOS(.v10_14)],
+    dependencies: [
+        .package(url: "https://github.com/mattt/Surge", .upToNextMajor(from: "2.2.0"))
+    ],
     targets: [
         .target(
             name: "MacCLI",
@@ -13,8 +16,13 @@ let package = Package(
         ),
         .target(
             name: "MrFlap",
-            dependencies: ["Input", "Output", "ImageAnalysis", "Regression"],
+            dependencies: ["Input", "Output", "ImageAnalysis", "GameKit"],
             path: "Sources/Games/MrFlap"
+        ),
+        .target(
+            name: "GameKit",
+            dependencies: ["Surge"],
+            path: "Sources/Libraries/GameKit"
         ),
         .target(
             name: "Input",
@@ -28,10 +36,6 @@ let package = Package(
             name: "ImageAnalysis",
             dependencies: ["Input"],
             path: "Sources/Libraries/ImageAnalysis"
-        ),
-        .target(
-            name: "Regression",
-            path: "Sources/Libraries/Regression"
-        ),
+        )
     ]
 )
