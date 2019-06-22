@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Surge",
+        "repositoryURL": "https://github.com/mattt/Surge",
+        "state": {
+          "branch": null,
+          "revision": "38a328eefe5ffef13d28dcb2804d2772aecf6107",
+          "version": "2.2.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
