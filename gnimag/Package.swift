@@ -9,13 +9,29 @@ let package = Package(
     targets: [
         .target(
             name: "MacCLI",
-            dependencies: [
-                "MrFlap"
-            ]
+            dependencies: ["MrFlap", "Input", "Output"]
         ),
         .target(
             name: "MrFlap",
+            dependencies: ["Input", "Output", "ImageAnalysis", "Regression"],
             path: "Sources/Games/MrFlap"
-        )
+        ),
+        .target(
+            name: "Input",
+            path: "Sources/Libraries/Input"
+        ),
+        .target(
+            name: "Output",
+            path: "Sources/Libraries/Output"
+        ),
+        .target(
+            name: "ImageAnalysis",
+            dependencies: ["Input"],
+            path: "Sources/Libraries/ImageAnalysis"
+        ),
+        .target(
+            name: "Regression",
+            path: "Sources/Libraries/Regression"
+        ),
     ]
 )
