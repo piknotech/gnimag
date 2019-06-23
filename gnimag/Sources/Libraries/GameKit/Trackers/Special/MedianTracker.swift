@@ -5,7 +5,7 @@
 
 /// MedianTracker continuously calculates the median value of the given stream of data points.
 
-public class MedianTracker {
+public final class MedianTracker {
     public typealias Value = Double
 
     /// The sorted array of values.

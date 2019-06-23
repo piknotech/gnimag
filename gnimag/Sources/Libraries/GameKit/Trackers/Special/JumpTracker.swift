@@ -6,7 +6,7 @@
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.
 
-public class JumpTracker {
+public final class JumpTracker {
     public typealias Value = Double
     public typealias Time = Double
     
@@ -135,7 +135,7 @@ public class JumpTracker {
         lastTime = time
     }
     
-    /// Calculate the intersection point of the current and the last jump, and bound it to "currentJumpStartBounds".
+    /// Calculate the intersection point of the current and the last jump, and bind it to "currentJumpStartBounds".
     private var currentJumpStart: Time {
         let bounds = currentJumpStartBounds!
         
@@ -200,7 +200,7 @@ public class JumpTracker {
         if gravityValid && jumpValid {
             gravityTracker.add(value: gravity)
             jumpVelocityTracker.add(value: jumpVelocity)
-            currentEstimationsAreInTheTrackers = isPreliminary // On a definite update, the updated values cannot be removed lateron
+            currentEstimationsAreInTheTrackers = isPreliminary // On a definite update, the updated values cannot be removed later on
         }
         else {
             currentEstimationsAreInTheTrackers = false

@@ -7,7 +7,7 @@ import Input
 
 /// ImageAnalyzer provides a method for analyzing an image.
 /// ImageAnalyzer does not store any internal state; everything is passed via method parameters.
-///
+
 enum ImageAnalyzer {
 
     /// Analyze the image. Use the hints to accomplish more performant or better analysis.
