@@ -8,13 +8,13 @@
 
 public final class ConstantTracker: PolyTracker {
     /// Default initializer.
-    public init(maxDataPoints: Int = .max) {
-        super.init(maxDataPoints: maxDataPoints, degree: 0)
+    public init(maxDataPoints: Int = .max, tolerancePoints: Int = 0) {
+        super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints)
     }
     
     /// Convenience method, ignoring the time component.
-    public func isValue(_ value: Value, validWithTolerance tolerance: Value) -> Bool {
-        return isValue(value, at: 0, validWithTolerance: tolerance)
+    public func value(_ value: Value, isValidWithTolerance tolerance: Value) -> Bool {
+        return self.value(value, isValidWithTolerance: tolerance, at: 0)
     }
     
     /// Convenience method, ignoring the time component.

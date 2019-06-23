@@ -73,7 +73,7 @@ public final class JumpTracker {
             let (gravity, jumpVelocity) = (-2 * currentJump.a, currentJump.derivative.f(currentJumpStart))
             
             // Data point is inside - jump is continued
-            if tracker.isValue(value, at: time, validWithTolerance: jumpTolerance) {
+            if tracker.value(value, isValidWithTolerance: jumpTolerance, at: time) {
                 tracker.add(value: value, at: time)
                 
                 // Preliminary update: last jump exists
@@ -193,8 +193,8 @@ public final class JumpTracker {
         }
         
         // Check if values are in a good range (or if we are in the first jump, then each value is valid)
-        let gravityValid = isFirstJump || gravityTracker.isValue(gravity, validWithTolerance: gravityTracker.average! * valueRangeTolerance)
-        let jumpValid = isFirstJump || jumpVelocityTracker.isValue(jumpVelocity, validWithTolerance: jumpVelocityTracker.average! * valueRangeTolerance)
+        let gravityValid = isFirstJump || gravityTracker.value(gravity, isValidWithTolerance: gravityTracker.average! * valueRangeTolerance)
+        let jumpValid = isFirstJump || jumpVelocityTracker.value(jumpVelocity, isValidWithTolerance: jumpVelocityTracker.average! * valueRangeTolerance)
         
         // Update values if required
         if gravityValid && jumpValid {

@@ -33,11 +33,16 @@ public class PolyTracker {
     /// The current regression function, if available.
     public private(set) var regression: Polynomial<Value>?
 
+    /// States if a regression function is available.
+    public var hasRegression: Bool {
+        regression != nil
+    }
+
     // MARK: - Methods
 
-    /// States if a given data point would be valid inside the current regression function, given an absolute tolerance value.
-    /// Assumes that a regression function is available.
-    public func isValue(_ value: Value, at time: Time, validWithTolerance tolerance: Value) -> Bool {
+    /// States if a given data point would be valid with the current regression function, given an absolute tolerance value.
+    /// Only call when a regression function is available.
+    public func value(_ value: Value, isValidWithTolerance tolerance: Value, at time: Time) -> Bool {
         return abs(regression!.f(time) - value) <= tolerance
     }
     

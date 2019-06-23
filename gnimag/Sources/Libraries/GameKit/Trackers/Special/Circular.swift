@@ -5,17 +5,21 @@
 
 import Foundation
 
-/// Circular provides a wrapper around trackers whose value range is in [0, 2*pi). It converts angular values back into linear values.
+/// Circular provides a wrapper around trackers whose value range is in [0, 2*pi). It converts angular values into linear values (in R).
 
 public final class Circular<Tracker: PolyTracker> {
-    
     /// The internal tracker tracking the "linearified" values.
     /// Do not add values to it directly.
     private let tracker: Tracker
     
     /// The lastly added value.
     private var lastValue: Tracker.Value!
-    
+
+    /// States if a regression function is available.
+    public var hasRegression: Bool {
+        tracker.hasRegression
+    }
+
     /// Default initializer.
     public init(_ tracker: Tracker) {
         self.tracker = tracker
@@ -41,7 +45,14 @@ public final class Circular<Tracker: PolyTracker> {
             lastValue = value
         }
     }
-    
+
+    /// States if a given data point would be valid with the current regression function, given an absolute tolerance value.
+    /// Only call when a regression function is available.
+    public func value(_ value: Tracker.Value, isValidWithTolerance tolerance: Tracker.Value, at time: Tracker.Time) -> Bool {
+        fatalError("To-Do")
+    }
+
+    /*
     /// Convert a given angular value in [0, 2*pi) to a linear value that is directly near the current tracker value.
     /// Assumes that a regression function is available.
     public func linearifyToNextMatch(_ angle: Double, at time: Double) -> Double {
@@ -52,4 +63,5 @@ public final class Circular<Tracker: PolyTracker> {
         let angle = angle + rotations * 2 * .pi
         return angle
     }
+    */
 }
