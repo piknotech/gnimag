@@ -31,8 +31,10 @@ final class PlayerCourse {
             return .failure(error)
         }
 
+        // Add all values to trackers
         angle.add(value: player.angle, at: time)
-        height.add(value: player.height, at: player.angle) // TODO: linearify to next match (besseres tracker interface)
+        let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
+        height.add(value: player.height, at: linearAngle)
         size.add(value: player.size)
 
         return .success(())

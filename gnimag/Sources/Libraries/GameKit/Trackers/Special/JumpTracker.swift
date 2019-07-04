@@ -70,7 +70,7 @@ public final class JumpTracker {
         
         // Check if parabola for current jump exists
         if let currentJump = currentParabola { // -> tracker.hasRegression
-            let (gravity, jumpVelocity) = (-2 * currentJump.a, currentJump.derivative.f(currentJumpStart))
+            let (gravity, jumpVelocity) = (-2 * currentJump.a, currentJump.derivative.at(currentJumpStart))
             
             // Data point is inside - jump is continued
             if tracker.is(value, at: time, validWith: .absolute(tolerance: jumpTolerance)) {

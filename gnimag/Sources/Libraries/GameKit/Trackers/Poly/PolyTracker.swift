@@ -16,6 +16,9 @@ public class PolyTracker: Tracker {
     /// The data points, split into times and values.
     private var times = [Time]()
     private var values = [Value]()
+
+    /// Expose the latest added value.
+    var lastValue: Value? { values.last }
     
     /// The maximum number of data points; when this amount is reached, earliest data points are discarded.
     private let maxDataPoints: Int
@@ -44,7 +47,7 @@ public class PolyTracker: Tracker {
 
         // Calculate expected value either from regression or from specified fallback
         if let regression = regression {
-            expectedValue = regression.f(time)
+            expectedValue = regression.at(time)
         } else {
             switch fallbackWhenNoRegression {
             case .valid: return true

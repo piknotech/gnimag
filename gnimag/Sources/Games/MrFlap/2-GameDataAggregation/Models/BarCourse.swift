@@ -53,16 +53,20 @@ final class BarCourse {
             return .failure(error)
         }
 
+        // Add all values to trackers
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)
 
+         // Map angle from [0, 2pi) to R
+        let linearAngle = angle.linearify(bar.angle, at: time)
+
         switch state {
         case .appearing:
-            appearingHoleSize.add(value: bar.holeSize, at: bar.angle)
+            appearingHoleSize.add(value: bar.holeSize, at: linearAngle)
 
         case .normal:
-            holeSize.add(value: bar.holeSize, at: bar.angle)
-            yCenter.add(value: bar.yCenter, at: bar.angle)
+            holeSize.add(value: bar.holeSize, at: linearAngle)
+            yCenter.add(value: bar.yCenter, at: linearAngle)
         }
 
         return .success(())
