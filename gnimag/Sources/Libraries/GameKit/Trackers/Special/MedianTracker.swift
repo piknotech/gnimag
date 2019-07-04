@@ -5,7 +5,7 @@
 
 /// MedianTracker continuously calculates the median value of the given stream of data points.
 
-public class MedianTracker {
+public final class MedianTracker {
     public typealias Value = Double
 
     /// The sorted array of values.
@@ -16,7 +16,7 @@ public class MedianTracker {
     private let maxDataPoints: Int
     
     /// Default initializer.
-    public init(maxDataPoints: Int = .max) {
+    public init(maxDataPoints: Int = 100) {
         self.maxDataPoints = maxDataPoints
     }
     
@@ -46,7 +46,6 @@ public class MedianTracker {
 }
 
 fileprivate extension Array where Element: Comparable {
-    
     /// Find the index i so that self[0...i] is <= value, and that self[(i+1)...] is > value.
     /// Precondition: self is sorted ascending.
     func binarySearch(for value: Element) -> Index {

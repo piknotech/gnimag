@@ -8,7 +8,7 @@
 public final class Polynomial<Value> {
     /// The coefficients, beginning with the lowest one (x^0, x^1, ... x^n).
     public let coefficients: [Value]
-    
+
     /// The degree of the polynomial.
     public var degree: Int {
         return coefficients.count - 1
@@ -34,8 +34,8 @@ public final class Polynomial<Value> {
 
 extension Polynomial where Value == Double {
     /// Calculate the value at a given point.
-    public func f(_ x: Value) -> Value {
-        var result = Value(0)
+    public func at(_ x: Value) -> Value {
+        var result = Value.zero
         
         for i in stride(from: degree, through: 0, by: -1) {
             result *= x

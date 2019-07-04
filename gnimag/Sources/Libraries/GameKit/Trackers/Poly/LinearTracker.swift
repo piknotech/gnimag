@@ -5,10 +5,10 @@
 
 /// LinearTracker is a PolyTracker providing simple access to the calculated linear function.
 
-public class LinearTracker: PolyTracker {
+public final class LinearTracker: PolyTracker {
     /// Default initializer.
-    public init(maxDataPoints: Int = .max) {
-        super.init(maxDataPoints: maxDataPoints, degree: 1)
+    public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1) {
+        super.init(maxDataPoints: maxDataPoints, degree: 1, tolerancePoints: tolerancePoints)
     }
     
     /// The slope of the linear regression function.

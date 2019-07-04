@@ -17,4 +17,8 @@ struct Bar {
 
     /// The height of the solid outer part.
     let outerHeight: Double
+
+    /// The hole size and the y-center of the hole.
+    let holeSize: Double
+    let yCenter: Double
 }

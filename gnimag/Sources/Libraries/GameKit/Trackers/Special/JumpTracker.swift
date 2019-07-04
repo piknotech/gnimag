@@ -6,7 +6,7 @@
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.
 
-public class JumpTracker {
+public final class JumpTracker {
     public typealias Value = Double
     public typealias Time = Double
     
@@ -29,7 +29,7 @@ public class JumpTracker {
     private let jumpTolerance: Value
     
     /// Default initializer.
-    public init(maxDataPoints: Int = .max, valueRangeTolerance: Value, jumpTolerance: Value) {
+    public init(maxDataPoints: Int = 200, valueRangeTolerance: Value, jumpTolerance: Value) {
         tracker = PolyTracker(maxDataPoints: maxDataPoints, degree: 2)
         gravityTracker = ConstantTracker(maxDataPoints: maxDataPoints)
         jumpVelocityTracker = ConstantTracker(maxDataPoints: maxDataPoints)
@@ -69,11 +69,11 @@ public class JumpTracker {
         currentJumpStartBounds = currentJumpStartBounds ?? (time, time)
         
         // Check if parabola for current jump exists
-        if let currentJump = currentParabola { // -> tracker.regression != nil
-            let (gravity, jumpVelocity) = (-2 * currentJump.a, currentJump.derivative.f(currentJumpStart))
+        if let currentJump = currentParabola { // -> tracker.hasRegression
+            let (gravity, jumpVelocity) = (-2 * currentJump.a, currentJump.derivative.at(currentJumpStart))
             
             // Data point is inside - jump is continued
-            if tracker.isValue(value, at: time, validWithTolerance: jumpTolerance) {
+            if tracker.is(value, at: time, validWith: .absolute(tolerance: jumpTolerance)) {
                 tracker.add(value: value, at: time)
                 
                 // Preliminary update: last jump exists
@@ -135,7 +135,7 @@ public class JumpTracker {
         lastTime = time
     }
     
-    /// Calculate the intersection point of the current and the last jump, and bound it to "currentJumpStartBounds".
+    /// Calculate the intersection point of the current and the last jump, and clamp it to "currentJumpStartBounds".
     private var currentJumpStart: Time {
         let bounds = currentJumpStartBounds!
         
@@ -150,8 +150,8 @@ public class JumpTracker {
         // Clamp a value to bounds
         let clamp: (Double) -> Double = { return min(max($0, bounds.0), bounds.1) }
         
-        // Linear equation (won't happen)
-        if current.a == last.a {
+        // Linear equation if quadratic factor is identical
+        if abs(current.a - last.a) <= 1e-5 {
             let slope = current.b - last.b
             let intercept = current.c - last.c
             
@@ -193,14 +193,14 @@ public class JumpTracker {
         }
         
         // Check if values are in a good range (or if we are in the first jump, then each value is valid)
-        let gravityValid = isFirstJump || gravityTracker.isValue(gravity, validWithTolerance: gravityTracker.average! * valueRangeTolerance)
-        let jumpValid = isFirstJump || jumpVelocityTracker.isValue(jumpVelocity, validWithTolerance: jumpVelocityTracker.average! * valueRangeTolerance)
+        let gravityValid = isFirstJump || gravityTracker.is(gravity, validWith: .relative(tolerance: valueRangeTolerance))
+        let jumpValid = isFirstJump || jumpVelocityTracker.is(jumpVelocity, validWith: .relative(tolerance: valueRangeTolerance))
         
         // Update values if required
         if gravityValid && jumpValid {
             gravityTracker.add(value: gravity)
             jumpVelocityTracker.add(value: jumpVelocity)
-            currentEstimationsAreInTheTrackers = isPreliminary // On a definite update, the updated values cannot be removed lateron
+            currentEstimationsAreInTheTrackers = isPreliminary // On a definite update, the updated values cannot be removed later on
         }
         else {
             currentEstimationsAreInTheTrackers = false

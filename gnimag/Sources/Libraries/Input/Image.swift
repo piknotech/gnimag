@@ -22,7 +22,7 @@ open class Image {
     }
 
     /// Get the color at a given point; (0, 0) is the upper left corner.
-    /// Precondition: the pixel must be inside of the image.
+    /// Precondition: the pixel must be inside the image.
     @inline(__always)
     open func color(at point: Point) -> Color {
         fatalError("Image is an abstract class – please override this method.")

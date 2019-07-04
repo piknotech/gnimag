@@ -8,8 +8,9 @@ import Foundation
 /// Player describes the position of the bird.
 
 struct Player {
-    /// The center of the player.
-    let position: CGPoint
+    /// The center of the player, repsective to the playfield's center.
+    let height: Double
+    let angle: Double
     
     /// The width and height of the quadratic bird.
     let size: Double
