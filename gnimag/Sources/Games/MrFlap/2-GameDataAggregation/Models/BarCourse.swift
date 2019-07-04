@@ -72,9 +72,8 @@ final class BarCourse {
         return .success(())
     }
 
-    /// Check if the given values all match the trackers. If not, return an error.
+    /// Check if all given values match the trackers. If not, return an error.
     private func integrityCheck(with bar: Bar, at time: Double) -> Result<Void, UpdateError> {
-        // TODO: %-werte global machen in AnalysisSettings
         guard angle.is(bar.angle, at: time, validWith: .absolute(tolerance: 2% * .pi)) else {
             return .failure(.wrongAngle)
         }

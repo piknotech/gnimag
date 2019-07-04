@@ -103,14 +103,4 @@ public class PolyTracker: Tracker {
             regression = Regression.polyRegression(x: times, y: values, n: degree)
         }
     }
-    
-    /// TODO: Remove
-    /// Print the values of the tracker as a dictionary. Use for debugging.
-    public func print() {
-        var dict = [Time: Value]()
-        for (time, value) in zip(times, values) {
-            dict[time] = value
-        }
-        Swift.print(dict)
-    }
 }
