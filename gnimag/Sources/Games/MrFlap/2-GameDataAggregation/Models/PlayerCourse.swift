@@ -27,6 +27,19 @@ final class PlayerCourse {
     /// Update the trackers with the values from the given player.
     /// When one of the values does not match into the tracked course, discard the values and return an error.
     func update(with player: Player, at time: Double) -> Result<Void, UpdateError> {
+        if case let .failure(error) = integrityCheck(with: player, at: time) {
+            return .failure(error)
+        }
+
+        angle.add(value: player.angle, at: time)
+        height.add(value: player.height, at: player.angle) // TODO: linearify to next match (besseres tracker interface)
+        size.add(value: player.size)
+
+        return .success(())
+    }
+
+    /// Check if the given values all match the trackers. If not, return an error.
+    private func integrityCheck(with player: Player, at time: Double) -> Result<Void, UpdateError> {
         guard !angle.hasRegression || angle.value(player.angle, isValidWithTolerance: 2% * .pi, at: time) else {
             return .failure(.wrongAngle)
         }
@@ -35,12 +48,9 @@ final class PlayerCourse {
             return .failure(.wrongSize)
         }
 
-        angle.add(value: player.angle, at: time)
-        height.add(value: player.height, at: time)
-        size.add(value: player.size)
-
         return .success(())
     }
+
 
     /// Errors that can occur when calling "update" with malformed values.
     enum UpdateError: Error {

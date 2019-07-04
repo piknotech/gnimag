@@ -5,7 +5,7 @@
 
 import Surge
 
-/// Regression encapsulates capabilities of calculating linear and polynomial regression, using Surge
+/// Regression encapsulates capabilities of calculating linear and polynomial regression, using Surge.
 /// (Surge: https://github.com/mattt/Surge).
 
 public enum Regression {

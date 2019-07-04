@@ -16,4 +16,9 @@ struct Playfield {
 
     /// The radius of the outer circle.
     let fullRadius: Double
+
+    /// The free space in-between the two concentric circles.
+    var freeSpace: Double {
+        fullRadius - innerRadius
+    }
 }

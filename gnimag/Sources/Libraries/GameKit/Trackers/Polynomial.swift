@@ -8,7 +8,7 @@
 public final class Polynomial<Value> {
     /// The coefficients, beginning with the lowest one (x^0, x^1, ... x^n).
     public let coefficients: [Value]
-    
+
     /// The degree of the polynomial.
     public var degree: Int {
         return coefficients.count - 1

@@ -7,8 +7,8 @@
 
 public final class LinearTracker: PolyTracker {
     /// Default initializer.
-    public init(maxDataPoints: Int = .max) {
-        super.init(maxDataPoints: maxDataPoints, degree: 1)
+    public init(maxDataPoints: Int = .max, tolerancePoints: Int = 1) {
+        super.init(maxDataPoints: maxDataPoints, degree: 1, tolerancePoints: tolerancePoints)
     }
     
     /// The slope of the linear regression function.
