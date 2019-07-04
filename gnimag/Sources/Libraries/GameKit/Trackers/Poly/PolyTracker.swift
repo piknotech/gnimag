@@ -5,12 +5,9 @@
 
 /// PolyTracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it maps this course to a specific polynomial regression function. Then, irregular points can be filtered out, and future values can be predicted.
 
-public class PolyTracker {
-    public typealias Value = Double
-    public typealias Time = Double
-    
+public class PolyTracker: Tracker {
     /// Default initializer.
-    public init(maxDataPoints: Int = .max, degree: Int, tolerancePoints: Int = 1) {
+    public init(maxDataPoints: Int = 500, degree: Int, tolerancePoints: Int = 1) {
         self.maxDataPoints = maxDataPoints
         self.degree = degree
         self.tolerancePoints = tolerancePoints
@@ -40,12 +37,33 @@ public class PolyTracker {
 
     // MARK: - Methods
 
-    /// States if a given data point would be valid with the current regression function, given an absolute tolerance value.
-    /// Only call when a regression function is available.
-    public func value(_ value: Value, isValidWithTolerance tolerance: Value, at time: Time) -> Bool {
-        return abs(regression!.f(time) - value) <= tolerance
+    /// Check if a value will be valid (compared to the expected value) at a given time, using the existing regression.
+    /// If there is no regression, use the specified fallback.
+    override public func `is`(_ value: Value, at time: Time, validWith tolerance: Tolerance, fallbackWhenNoRegression: FallbackMethod = .valid) -> Bool {
+        var expectedValue: Value!
+
+        // Calculate expected value either from regression or from specified fallback
+        if let regression = regression {
+            expectedValue = regression.f(time)
+        } else {
+            switch fallbackWhenNoRegression {
+            case .valid: return true
+            case .invalid: return false
+            case .useLastValue: expectedValue = values.last! // Crash when no last value available
+            }
+        }
+
+        // Calculate allowed difference
+        var allowedDifference: Value
+        switch tolerance {
+        case let .absolute(maxDiff): allowedDifference = maxDiff
+        case let .relative(tolerance): allowedDifference = abs(expectedValue) * tolerance
+        }
+
+        let difference = abs(value - expectedValue)
+        return difference <= allowedDifference
     }
-    
+
     /// Clear all data points and discard the current regression function.
     /// Use it e.g. when recent data points do not match the regression function anymore.
     public func clear() {

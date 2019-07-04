@@ -29,7 +29,7 @@ public final class JumpTracker {
     private let jumpTolerance: Value
     
     /// Default initializer.
-    public init(maxDataPoints: Int = .max, valueRangeTolerance: Value, jumpTolerance: Value) {
+    public init(maxDataPoints: Int = 200, valueRangeTolerance: Value, jumpTolerance: Value) {
         tracker = PolyTracker(maxDataPoints: maxDataPoints, degree: 2)
         gravityTracker = ConstantTracker(maxDataPoints: maxDataPoints)
         jumpVelocityTracker = ConstantTracker(maxDataPoints: maxDataPoints)
@@ -73,7 +73,7 @@ public final class JumpTracker {
             let (gravity, jumpVelocity) = (-2 * currentJump.a, currentJump.derivative.f(currentJumpStart))
             
             // Data point is inside - jump is continued
-            if tracker.value(value, isValidWithTolerance: jumpTolerance, at: time) {
+            if tracker.is(value, at: time, validWith: .absolute(tolerance: jumpTolerance)) {
                 tracker.add(value: value, at: time)
                 
                 // Preliminary update: last jump exists
@@ -135,7 +135,7 @@ public final class JumpTracker {
         lastTime = time
     }
     
-    /// Calculate the intersection point of the current and the last jump, and bind it to "currentJumpStartBounds".
+    /// Calculate the intersection point of the current and the last jump, and clamp it to "currentJumpStartBounds".
     private var currentJumpStart: Time {
         let bounds = currentJumpStartBounds!
         
@@ -150,8 +150,8 @@ public final class JumpTracker {
         // Clamp a value to bounds
         let clamp: (Double) -> Double = { return min(max($0, bounds.0), bounds.1) }
         
-        // Linear equation (won't happen)
-        if current.a == last.a {
+        // Linear equation if quadratic factor is identical
+        if abs(current.a - last.a) <= 1e-5 {
             let slope = current.b - last.b
             let intercept = current.c - last.c
             
@@ -193,8 +193,8 @@ public final class JumpTracker {
         }
         
         // Check if values are in a good range (or if we are in the first jump, then each value is valid)
-        let gravityValid = isFirstJump || gravityTracker.value(gravity, isValidWithTolerance: gravityTracker.average! * valueRangeTolerance)
-        let jumpValid = isFirstJump || jumpVelocityTracker.value(jumpVelocity, isValidWithTolerance: jumpVelocityTracker.average! * valueRangeTolerance)
+        let gravityValid = isFirstJump || gravityTracker.is(gravity, validWith: .relative(tolerance: valueRangeTolerance))
+        let jumpValid = isFirstJump || jumpVelocityTracker.is(jumpVelocity, validWith: .relative(tolerance: valueRangeTolerance))
         
         // Update values if required
         if gravityValid && jumpValid {

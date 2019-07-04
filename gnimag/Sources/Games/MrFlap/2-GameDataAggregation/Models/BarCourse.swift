@@ -36,11 +36,11 @@ final class BarCourse {
     // Default initializer.
     init(playfield: Playfield) {
         state = .normal
-        angle = Circular(LinearTracker(maxDataPoints: 500))
-        yCenter = LinearTracker(maxDataPoints: 500)
-        width = ConstantTracker(maxDataPoints: 50)
-        holeSize = ConstantTracker(maxDataPoints: 50)
-        appearingHoleSize = LinearTracker(maxDataPoints: 50, tolerancePoints: 0) // No tolerance points because the appearing phase is really short
+        angle = Circular(LinearTracker())
+        yCenter = LinearTracker()
+        width = ConstantTracker()
+        holeSize = ConstantTracker()
+        appearingHoleSize = LinearTracker(tolerancePoints: 0) // No tolerance points because the appearing phase is really short
         self.playfield = playfield
     }
 
@@ -71,28 +71,28 @@ final class BarCourse {
     /// Check if the given values all match the trackers. If not, return an error.
     private func integrityCheck(with bar: Bar, at time: Double) -> Result<Void, UpdateError> {
         // TODO: %-werte global machen in AnalysisSettings
-        guard !angle.hasRegression || angle.value(bar.angle, isValidWithTolerance: 2% * .pi, at: time) else {
+        guard angle.is(bar.angle, at: time, validWith: .absolute(tolerance: 2% * .pi)) else {
             return .failure(.wrongAngle)
         }
 
-        guard width.hasRegression || width.value(bar.width, isValidWithTolerance: 10% * width.average!) else {
+        guard width.is(bar.width, validWith: .relative(tolerance: 10%)) else {
             return .failure(.wrongWidth)
         }
 
         switch state {
         case .appearing:
             // If the appaering hole size does not match (but the angle and width did), the appearing state has ended; switch to normal state
-            if appearingHoleSize.hasRegression && !appearingHoleSize.value(bar.holeSize, isValidWithTolerance: 5% * playfield.freeSpace, at: bar.angle) {
+            if !appearingHoleSize.is(bar.holeSize, at: bar.angle, validWith: .absolute(tolerance: 5% * playfield.freeSpace)) {
                 print("state switch!")
                 state = .normal
             }
 
         case .normal:
-            guard !holeSize.hasRegression || holeSize.value(bar.holeSize, isValidWithTolerance: 5% * holeSize.average!) else {
+            guard holeSize.is(bar.width, at: bar.angle, validWith: .relative(tolerance: 5%)) else {
                 return .failure(.wrongHoleSize)
             }
 
-            guard !yCenter.hasRegression || yCenter.value(bar.yCenter, isValidWithTolerance: 2% * playfield.freeSpace, at: bar.angle) else {
+            guard yCenter.is(bar.yCenter, at: bar.angle, validWith: .absolute(tolerance: 2% * playfield.freeSpace)) else {
                 return .failure(.wrongYCenter)
             }
         }

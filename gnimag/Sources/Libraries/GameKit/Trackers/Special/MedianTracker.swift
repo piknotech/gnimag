@@ -16,7 +16,7 @@ public final class MedianTracker {
     private let maxDataPoints: Int
     
     /// Default initializer.
-    public init(maxDataPoints: Int = .max) {
+    public init(maxDataPoints: Int = 100) {
         self.maxDataPoints = maxDataPoints
     }
     
@@ -46,7 +46,6 @@ public final class MedianTracker {
 }
 
 fileprivate extension Array where Element: Comparable {
-    
     /// Find the index i so that self[0...i] is <= value, and that self[(i+1)...] is > value.
     /// Precondition: self is sorted ascending.
     func binarySearch(for value: Element) -> Index {

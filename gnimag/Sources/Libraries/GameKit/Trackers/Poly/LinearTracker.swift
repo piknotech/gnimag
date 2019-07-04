@@ -7,7 +7,7 @@
 
 public final class LinearTracker: PolyTracker {
     /// Default initializer.
-    public init(maxDataPoints: Int = .max, tolerancePoints: Int = 1) {
+    public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1) {
         super.init(maxDataPoints: maxDataPoints, degree: 1, tolerancePoints: tolerancePoints)
     }
     

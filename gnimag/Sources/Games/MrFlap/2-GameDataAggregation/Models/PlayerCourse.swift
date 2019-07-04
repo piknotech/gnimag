@@ -17,9 +17,9 @@ final class PlayerCourse {
 
     /// Default initializer.
     init(playfield: Playfield) {
-        angle = Circular(LinearTracker(maxDataPoints: 500))
-        height = JumpTracker(maxDataPoints: 500, valueRangeTolerance: 10%, jumpTolerance: 2% * playfield.fullRadius)
-        size = ConstantTracker(maxDataPoints: 50)
+        angle = Circular(LinearTracker())
+        height = JumpTracker(valueRangeTolerance: 10%, jumpTolerance: 2% * playfield.freeSpace)
+        size = ConstantTracker()
     }
 
     // MARK: Updating
@@ -40,11 +40,11 @@ final class PlayerCourse {
 
     /// Check if the given values all match the trackers. If not, return an error.
     private func integrityCheck(with player: Player, at time: Double) -> Result<Void, UpdateError> {
-        guard !angle.hasRegression || angle.value(player.angle, isValidWithTolerance: 2% * .pi, at: time) else {
+        guard angle.is(player.angle, at: time, validWith: .absolute(tolerance: 2% * .pi)) else {
             return .failure(.wrongAngle)
         }
 
-        guard !size.hasRegression || size.value(player.angle, isValidWithTolerance: 10% * size.average!) else {
+        guard size.is(player.size, validWith: .relative(tolerance: 10%)) else {
             return .failure(.wrongSize)
         }
 

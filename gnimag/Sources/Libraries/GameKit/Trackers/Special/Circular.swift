@@ -7,10 +7,10 @@ import Foundation
 
 /// Circular provides a wrapper around trackers whose value range is in [0, 2*pi). It converts angular values into linear values (in R).
 
-public final class Circular<Tracker: PolyTracker> {
+public final class Circular<Other: PolyTracker>: Tracker {
     /// The internal tracker tracking the "linearified" values.
     /// Do not add values to it directly.
-    private let tracker: Tracker
+    private let tracker: Other
     
     /// The lastly added value.
     private var lastValue: Tracker.Value!
@@ -21,7 +21,7 @@ public final class Circular<Tracker: PolyTracker> {
     }
 
     /// Default initializer.
-    public init(_ tracker: Tracker) {
+    public init(_ tracker: Other) {
         self.tracker = tracker
     }
     
