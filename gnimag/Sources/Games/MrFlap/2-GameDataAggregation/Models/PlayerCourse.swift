@@ -33,9 +33,9 @@ final class PlayerCourse {
 
         // Add all values to trackers
         angle.add(value: player.angle, at: time)
+        size.add(value: player.size)
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
         height.add(value: player.height, at: linearAngle)
-        size.add(value: player.size)
 
         return .success(())
     }
