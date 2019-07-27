@@ -3,9 +3,9 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-/// Point represents a point on an image, only consisting of integral values.
+/// Pixel represents a point on an image, only consisting of integral values.
 
-public struct Point {
+public struct Pixel {
     public var x: Int
     public var y: Int
     
@@ -16,16 +16,16 @@ public struct Point {
     }
 }
 
-extension Point: Equatable {
-    /// Compare two point instances.
-    public static func ==(lhs: Point, rhs: Point) -> Bool {
+extension Pixel: Equatable {
+    /// Compare two pixel instances.
+    public static func ==(lhs: Pixel, rhs: Pixel) -> Bool {
         return lhs.x == rhs.x && lhs.y == rhs.y
     }
 }
 
-extension Point: CustomStringConvertible {
-    /// Describe the point.
+extension Pixel: CustomStringConvertible {
+    /// Describe the pixel.
     public var description: String {
-        return "Point(\(x) , \(y))"
+        return "Pixel(\(x) , \(y))"
     }
 }

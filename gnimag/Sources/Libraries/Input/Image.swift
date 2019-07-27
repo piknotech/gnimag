@@ -16,16 +16,16 @@ open class Image {
         self.height = height
     }
 
-    /// Convenience method to check if a given point is inside the image.
-    public final func contains(_ point: Point) -> Bool {
-        return 0 <= point.x && point.x < width && 0 <= point.y && point.y < height
+    /// Convenience method to check if a given pixel is inside the image.
+    public final func contains(_ pixel: Pixel) -> Bool {
+        return 0 <= pixel.x && pixel.x < width && 0 <= pixel.y && pixel.y < height
     }
 
-    /// Get the color at a given point; (0, 0) is the upper left corner.
+    /// Get the color at a given pixel; (0, 0) is the upper left corner.
     /// Precondition: the pixel must be inside the image.
     /// TODO: wird es geinlined obwohl es in einem anderen target ist? - whole-module-optiminzations?
     @inline(__always)
-    open func color(at point: Point) -> Color {
+    open func color(at pixel: Pixel) -> Color {
         fatalError("Image is an abstract class – please override this method.")
     }
 }
