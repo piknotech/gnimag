@@ -9,16 +9,18 @@
 open class Image {
     public let width: Int
     public let height: Int
+    public let bounds: Bounds
 
     /// Default initializer.
     public init(width: Int, height: Int) {
         self.width = width
         self.height = height
+        self.bounds = Bounds(minX: 0, minY: 0, width: width, height: height)
     }
 
     /// Convenience method to check if a given pixel is inside the image.
     public final func contains(_ pixel: Pixel) -> Bool {
-        return 0 <= pixel.x && pixel.x < width && 0 <= pixel.y && pixel.y < height
+        bounds.contains(pixel)
     }
 
     /// Get the color at a given pixel; (0, 0) is the upper left corner.
