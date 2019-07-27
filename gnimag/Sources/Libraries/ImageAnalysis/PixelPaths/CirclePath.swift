@@ -33,34 +33,44 @@ public struct CirclePath: PixelPath {
     /// If the circle is not fully inside bounds, pixels are either skipped or the path is stopped, depending on pixelsOutsideBoundsMode.
     public let pixelsOutsideBoundsMode: PixelsOutsideBoundsMode
 
+    /// Default initializer.
+    public init(circle: Circle, numberOfPixels: Int, startAngle: Double, bounds: Bounds, pixelsOutsideBoundsMode: PixelsOutsideBoundsMode) {
+        self.circle = circle
+        self.numberOfPixels = numberOfPixels
+        self.startAngle = startAngle
+        self.bounds = bounds
+        self.pixelsOutsideBoundsMode = pixelsOutsideBoundsMode
+    }
+
     // MARK: PixelPath
 
     /// The number of pixels that already have been traversed.
     private var currentStep = 0
 
-    /// Return the next pixels on the path.
-    public mutating func next(_ num: Int) -> [Pixel] {
-        var result = [Pixel]()
+    /// Return the next pixel on the path.
+    public mutating func next() -> Pixel? {
+        while currentStep < numberOfPixels {
+            if let next = nextOnCircle() {
+                return next
+            }
 
-        // While loop stops either after "num" pixels have been accumulated or all pixels on the circle have been traversed
-        while result.count < num && currentStep < numberOfPixels {
-            if let next = next() {
-                result.append(next)
-            } else {
-                // Either skip pixel or stop path
-                switch pixelsOutsideBoundsMode {
-                case .skip: continue
-                case .stopPath: break
-                }
+            // Point was outside bounds
+            switch pixelsOutsideBoundsMode {
+            case .skip:
+                continue // Try next pixcel
+            case .stopPath:
+                currentStep -= 1 // Undo the increment done by "nextOnCircle"
+                return nil
             }
         }
 
-        return result
+        // While loop exited: "numberOfPixels" has been reached, path has ended
+        return nil
     }
 
-    /// Return the single next pixel on the path.
+    /// Return the next pixel on the circle.
     /// If the bounds are surpassed, return nil.
-    private mutating func next() -> Pixel? {
+    private mutating func nextOnCircle() -> Pixel? {
         let delta = 2 * .pi / Double(numberOfPixels)
         let angle = startAngle + Double(currentStep) * delta
 

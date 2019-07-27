@@ -50,22 +50,9 @@ public struct StraightPath: PixelPath {
     /// The number of steps that have been taken already.
     private var steps: Int
 
-    /// Return the next pixels on the path.
-    public mutating func next(_ num: Int) -> [Pixel] {
-        var result = [Pixel]()
-
-        // Get next pixel "num" times
-        for _ in 0 ..< num {
-            guard let next = next() else { break }
-            result.append(next)
-        }
-
-        return result
-    }
-
-    /// Return the single next pixel on the path.
-    /// If the bounds are surpassed, return nil
-    private mutating func next() -> Pixel? {
+    /// Return the next pixel on the path.
+    /// If the bounds are surpassed, return nil.
+    public mutating func next() -> Pixel? {
         let x = Double(start.x) + cos(angle) * speed * Double(steps)
         let y = Double(start.y) - sin(angle) * speed * Double(steps)
         let pixel = Pixel(Int(round(x)), Int(round(y)))

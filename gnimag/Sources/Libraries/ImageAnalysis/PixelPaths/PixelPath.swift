@@ -9,7 +9,7 @@ import Input
 /// The path can be retrieved sequentially, each time as many pixels as desired.
 
 public protocol PixelPath {
-    /// Return the specified amount of pixels following in the path.
-    /// If the walk ends during this request, cut the array so it contains between 0 and num-1 elements.
-    mutating func next(_ num: Int) -> [Pixel]
+    /// Proceed to the next pixel of the path and return it.
+    /// Once the path has finished and no more pixels are available, return nil on each subsequent call.
+    mutating func next() -> Pixel?
 }

@@ -11,7 +11,7 @@ import Foundation
 public enum EnclosingShape {
     /// Calculate the smallest circle that contains a given (non-empty) set of points.
     /// This requires linear time.
-    static func circle(from points: [CGPoint]) -> Circle {
+    public static func circle(from points: [CGPoint]) -> Circle {
         SmallestCircle.containing(points)
     }
 }
