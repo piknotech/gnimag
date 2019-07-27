@@ -6,7 +6,7 @@
 import Foundation
 import Input
 
-/// A PixelPath that contains of a straight line. The path stops when the given bounds have been reached.
+/// A PixelPath that consists of a straight line. The path stops when the given bounds have been reached.
 
 public struct StraightPath: PixelPath {
     /// The start pixel. It must be inside the bounds, else the walk is empty.
