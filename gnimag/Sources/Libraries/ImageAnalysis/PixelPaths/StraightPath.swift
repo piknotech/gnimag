@@ -27,7 +27,6 @@ public struct StraightPath: PixelPath {
         self.start = start
         self.angle = angle
         self.bounds = bounds
-        self.steps = 0
 
         // If the walk is i.e. diagonal, speed must be multiplied with 1.41 to avoid returning pixels twice.
         // Therefore, each step is exactly so long that either in x- or in y-direction, exactly one new pixel is hit each time.
@@ -48,7 +47,7 @@ public struct StraightPath: PixelPath {
     // MARK: PixelPath
 
     /// The number of steps that have been taken already.
-    private var steps: Int
+    private var steps = 0
 
     /// Return the next pixel on the path.
     /// If the bounds are surpassed, return nil.
