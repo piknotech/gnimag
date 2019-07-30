@@ -27,7 +27,7 @@ public struct CirclePath: PixelPath {
     /// The angle of the first pixel on the circle.
     public let startAngle: Double
 
-    /// The bounds in which the walk should be performed.
+    /// The bounds in which the path should be.
     public let bounds: Bounds
 
     /// If the circle is not fully inside bounds, pixels are either skipped or the path is stopped, depending on pixelsOutsideBoundsMode.
@@ -57,7 +57,7 @@ public struct CirclePath: PixelPath {
             // Point was outside bounds
             switch pixelsOutsideBoundsMode {
             case .skip:
-                continue // Try next pixcel
+                continue // Try next pixel
             case .stopPath:
                 currentStep -= 1 // Undo the increment done by "nextOnCircle"
                 return nil
@@ -77,11 +77,7 @@ public struct CirclePath: PixelPath {
         let pixel = circle.pixel(at: angle)
         currentStep += 1
 
-        if bounds.contains(pixel) {
-            return pixel
-        } else {
-            return nil
-        }
+        return bounds.contains(pixel) ? pixel : nil
     }
 }
 

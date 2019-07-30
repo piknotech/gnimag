@@ -2,7 +2,6 @@
 //  Created by David Knothe on 27.07.19.
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
-//
 
 import Input
 
