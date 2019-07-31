@@ -74,7 +74,7 @@ public struct CirclePath: PixelPath {
         let delta = 2 * .pi / Double(numberOfPixels)
         let angle = startAngle + Double(currentStep) * delta
 
-        let pixel = circle.pixel(at: angle)
+        let pixel = circle.point(at: angle).nearestPixel
         currentStep += 1
 
         return bounds.contains(pixel) ? pixel : nil
@@ -89,7 +89,7 @@ extension CirclePath {
 
         return (0 ..< numberOfPixels).map {
             let angle = startAngle + Double($0) * delta
-            return circle.pixel(at: angle)
+            return circle.point(at: angle).nearestPixel
         }
     }
 
