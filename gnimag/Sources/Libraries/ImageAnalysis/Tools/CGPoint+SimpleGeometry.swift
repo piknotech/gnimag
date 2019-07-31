@@ -7,13 +7,13 @@ import Foundation
 
 public extension CGPoint {
     /// Return the distance to the given point.
-    func distance(to other: CGPoint) -> Double {
-        Double((self - other).length)
+    func distance(to other: CGPoint) -> CGFloat {
+        (self - other).length
     }
 
     /// Return the z component of the cross product with another point.
-    func cross(_ other: CGPoint) -> Double {
-        Double(x * other.y - y * other.x)
+    func cross(_ other: CGPoint) -> CGFloat {
+        x * other.y - y * other.x
     }
 
     /// The dot product of self and other, where self and other are interpreted as vectors.

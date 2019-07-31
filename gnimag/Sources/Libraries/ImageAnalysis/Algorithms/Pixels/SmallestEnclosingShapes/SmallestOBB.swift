@@ -19,7 +19,7 @@ public enum SmallestOBB {
         // Calculate and use the convex hull as the smallest OBB of the set of points is the same as the smallest OBB of their convex hull
         let hull = ConvexHull.from(points)
 
-        var bestValue = Double.infinity
+        var bestValue = CGFloat.infinity
         var bestOBB: OBB?
 
         // Iterate through each line segment and construct an OBB containing this line segment
@@ -46,7 +46,7 @@ public enum SmallestOBB {
             let rotatedCenter = center.rotated(by: -angle)
 
             // Compare OBB with previous ones
-            let obb = OBB(center: rotatedCenter, width: Double(aabb.rect.width), height: Double(aabb.rect.height), rotation: Double(angle))
+            let obb = OBB(center: rotatedCenter, width: aabb.rect.width, height: aabb.rect.height, rotation: angle)
             let rating = value(of: minimizingProperty, of: obb)
             if rating < bestValue {
                 bestValue = rating
@@ -58,7 +58,7 @@ public enum SmallestOBB {
     }
 
     /// Calculate the value of the specified property of an OBB.
-    private static func value(of property: MinimizingProperty, of obb: OBB) -> Double {
+    private static func value(of property: MinimizingProperty, of obb: OBB) -> CGFloat {
         switch property {
         case .area:
             return obb.width * obb.height

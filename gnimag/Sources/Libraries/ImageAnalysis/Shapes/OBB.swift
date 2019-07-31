@@ -9,14 +9,14 @@ import Foundation
 
 public struct OBB {
     public let center: CGPoint
-    public let width: Double
-    public let height: Double
+    public let width: CGFloat
+    public let height: CGFloat
 
     /// The rotation, counterclockwise, in [-pi/2, pi/2].
-    public let rotation: Double
+    public let rotation: CGFloat
 
     /// Default initializer.
-    public init(center: CGPoint, width: Double, height: Double, rotation: Double) {
+    public init(center: CGPoint, width: CGFloat, height: CGFloat, rotation: CGFloat) {
         self.center = center
         self.width = width
         self.height = height
