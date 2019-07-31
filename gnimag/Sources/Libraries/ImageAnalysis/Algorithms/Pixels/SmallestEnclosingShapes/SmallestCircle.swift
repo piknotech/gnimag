@@ -6,10 +6,10 @@
 
 import Foundation
 
-internal class SmallestCircle {
+public enum SmallestCircle {
     /// Calculate the smallest circle that contains a given (non-empty) set of points.
-    /// This requires linear time.
-    static func containing(_ points: [CGPoint]) -> Circle {
+    /// This runs in expected O(n) time.
+    public static func containing(_ points: [CGPoint]) -> Circle {
         // Shuffle the list of points
         var points = points
         points.shuffle()

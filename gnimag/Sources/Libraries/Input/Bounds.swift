@@ -11,6 +11,14 @@ public struct Bounds {
     public let width: Int
     public let height: Int
 
+    /// Default initializer.
+    public init(minX: Int, minY: Int, width: Int, height: Int) {
+        self.minX = minX
+        self.minY = minY
+        self.width = width
+        self.height = height
+    }
+    
     /// Check if a pixel is inside the bounds.
     /// minX and minY are inide the bounds, whereas minX + width and minY + height are outside the bounds.
     public func contains(_ pixel: Pixel) -> Bool {

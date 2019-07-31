@@ -62,7 +62,7 @@ public enum ContourDetectionViaEquidistantRays {
         var contour = [Pixel]()
 
         for i in 0 ..< arguments.numberOfRays {
-            // Construct StraightPath and get points
+            // Construct StraightPath in correct direction
             let angle = 2 * .pi * Double(i) / Double(arguments.numberOfRays)
             var path: PixelPath = StraightPath(start: arguments.detectionCenter, angle: angle, bounds: image.bounds, speed: Double(arguments.raySpeed))
 
@@ -70,8 +70,8 @@ public enum ContourDetectionViaEquidistantRays {
             let result = image.follow(path: &path, untilFulfillingSequence: arguments.colorSequence)
 
             switch result {
-            case let .fulfilled(previousPixel: pixel, _):
-                contour.append(pixel!) // Found the pixel on the shape edge as desired
+            case let .fulfilled(previousPixel: pixel, fulfilledPixel: backup):
+                contour.append(pixel ?? backup) // Found the pixel on the shape edge as desired
 
             case let .notFulfilled(lastPixelOfPath: pixel, _):
                 // Sequence was not fulfilled --> ray has hit the bounds
