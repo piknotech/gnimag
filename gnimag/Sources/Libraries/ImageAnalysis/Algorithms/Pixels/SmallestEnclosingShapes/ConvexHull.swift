@@ -9,7 +9,7 @@ import Foundation
 public enum ConvexHull {
     /// Calculate the convex hull of a given set of points using Andrew's monotone chain convex hull algorithm.
     /// This runs in O(n log n) time.
-    public static func from(points: [CGPoint]) -> Polygon {
+    public static func from(_ points: [CGPoint]) -> Polygon {
         // Exit early if there aren’t enough points to work with
         guard points.count > 2 else { return Polygon(points: points) }
 
@@ -26,7 +26,8 @@ public enum ConvexHull {
             while lower.count >= 2 {
                 let a = lower[lower.count - 2]
                 let b = lower[lower.count - 1]
-                if cross(a, b, point) > 0 { break }
+                if cross(a, b, point) > 0 { break } // TODO: check ob point am ende counterclockwise sind (weil coordinate system oben links beginnt!)
+                // TODO: Irgendwo festhalten dass coordinate system oben links beginnt; sowohl bei Image als auch ImageAnalysis
                 lower.removeLast()
             }
             lower.append(point)
@@ -50,12 +51,4 @@ public enum ConvexHull {
         // Join the arrays to form the convex hull
         return Polygon(points: lower + upper)
     }
-
-}
-
-/// Calculate the cross product of (a-o) and (b-o) and return the resulting z value.
-fileprivate func cross(_ o: CGPoint, _ a: CGPoint, _ b: CGPoint) -> CGFloat {
-    let lhs = (a.x - o.x) * (b.y - o.y)
-    let rhs = (a.y - o.y) * (b.x - o.x)
-    return lhs - rhs
 }

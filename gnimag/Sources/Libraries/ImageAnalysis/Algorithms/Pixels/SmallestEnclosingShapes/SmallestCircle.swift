@@ -115,31 +115,3 @@ public enum SmallestCircle {
         return Circle(center: p, radius: r)
     }
 }
-
-// MARK: Extensions
-
-fileprivate extension Circle {
-    /// Check if the circle contains a given point.
-    func contains(_ point: CGPoint) -> Bool {
-        return center.distance(to: point) <= radius
-    }
-}
-
-fileprivate extension CGPoint {
-    /// Return the distance to the given point.
-    func distance(to point: CGPoint) -> Double {
-        let dx = x - point.x
-        let dy = y - point.y
-        return Double(sqrt(dx * dx + dy * dy))
-    }
-
-    /// Return the cross product with another point.
-    func cross(_ point: CGPoint) -> Double {
-        return Double(x * point.y - y * point.x)
-    }
-
-    /// Return the difference between two points.
-    static func -(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
-        return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
-    }
-}

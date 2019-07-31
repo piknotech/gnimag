@@ -24,4 +24,9 @@ public struct Circle {
         let y = Double(center.y) - sin(angle) * radius
         return CGPoint(x: x, y: y)
     }
+
+    /// Check if the circle contains a given point.
+    public func contains(_ point: CGPoint) -> Bool {
+        center.distance(to: point) <= radius
+    }
 }
