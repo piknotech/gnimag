@@ -8,9 +8,7 @@ import Foundation
 public extension CGPoint {
     /// Return the distance to the given point.
     func distance(to other: CGPoint) -> Double {
-        let dx = x - other.x
-        let dy = y - other.y
-        return Double(sqrt(dx * dx + dy * dy))
+        Double((self - other).length)
     }
 
     /// Return the z component of the cross product with another point.
@@ -29,6 +27,11 @@ public extension CGPoint {
             x: x * cos(angle) - y * sin(angle),
             y: x * sin(angle) + y * cos(angle)
         )
+    }
+
+    /// Return the length of the point interpreted as vector.
+    var length: CGFloat {
+        sqrt(x * x + y * y)
     }
 
     /// Return the difference between two points.

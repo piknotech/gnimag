@@ -26,8 +26,7 @@ public enum ConvexHull {
             while lower.count >= 2 {
                 let a = lower[lower.count - 2]
                 let b = lower[lower.count - 1]
-                if cross(a, b, point) > 0 { break } // TODO: check ob point am ende counterclockwise sind (weil coordinate system oben links beginnt!)
-                // TODO: Irgendwo festhalten dass coordinate system oben links beginnt; sowohl bei Image als auch ImageAnalysis
+                if (b - a).cross(point - a) > 0 { break } // TODO: check ob point am ende counterclockwise sind (weil coordinate system oben links beginnt!)
                 lower.removeLast()
             }
             lower.append(point)
@@ -38,7 +37,7 @@ public enum ConvexHull {
             while upper.count >= 2 {
                 let a = upper[upper.count - 2]
                 let b = upper[upper.count - 1]
-                if cross(a, b, point) > 0 { break }
+                if (b - a).cross(point - a) > 0 { break }
                 upper.removeLast()
             }
             upper.append(point)
