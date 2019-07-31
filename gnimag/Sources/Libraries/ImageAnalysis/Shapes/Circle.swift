@@ -11,6 +11,12 @@ public struct Circle {
     public let center: CGPoint
     public let radius: Double
 
+    /// Default initializer.
+    public init(center: CGPoint, radius: Double) {
+        self.center = center
+        self.radius = radius
+    }
+
     /// Return the point on the circle at the given angle.
     /// 0 means going right, pi/2 means going up, etc. (counterclockwise).
     public func point(at angle: Double) -> CGPoint {
