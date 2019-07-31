@@ -32,12 +32,12 @@ public enum ConnectedChunks {
 
     /// The result of a split-into-connected-chunks algorithm.
     public struct Result<T: DistanceMeasurable> {
-        let chunks: [Chunk<T>]
+        let chunks: [Chunk<T>] // The chunks, sorted by size.
         let maxChunkSize: Int
         let maxChunkDiameter: Double
     }
 
-    /// Split an array of objects into connected chunks.
+    /// Split an array of objects into connected chunks. Return all chunks, sorted by their size.
     /// In each chunk, any two objects are connected via a path; in this path, all two consecutive objects are apart by not more than "maxDistance".
     /// This means that, in any chunk, there could be objects with an arbitrary distance – as long as they are connected with a path as described above.
     /// This function runs in O(n^2).
@@ -71,9 +71,11 @@ public enum ConnectedChunks {
             }
         }
 
+        // Sort chunks by size and return result
+        chunks.sort { $0.objects.count > $1.objects.count }
         return Result(
             chunks: chunks,
-            maxChunkSize: chunks.map { $0.objects.count }.max() ?? 0,
+            maxChunkSize: chunks.first?.objects.count ?? 0,
             maxChunkDiameter: chunks.map { $0.diameter }.max() ?? 0
         )
     }
