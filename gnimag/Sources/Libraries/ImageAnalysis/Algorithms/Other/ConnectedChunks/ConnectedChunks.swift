@@ -11,8 +11,8 @@ public enum ConnectedChunks {
         /// The maximum distance between any of the objects in the chunk.
         public private(set) var diameter: Double = 0
 
-        /// Initialize the chunk with the given objects. Calculate the diameter.
-        public init(objects: [T]) {
+        /// Initialize the chunk with the given objects. Calculate the diameter in O(n^2).
+        init(objects: [T]) {
             self.objects = objects
 
             // Calculate maximum distance between any two points, requiring O(n^2) in total
@@ -37,7 +37,7 @@ public enum ConnectedChunks {
         let maxChunkDiameter: Double
     }
 
-    /// Split a (non-empty) array of objects into connected chunks.
+    /// Split an array of objects into connected chunks.
     /// In each chunk, any two objects are connected via a path; in this path, all two consecutive objects are apart by not more than "maxDistance".
     /// This means that, in any chunk, there could be objects with an arbitrary distance – as long as they are connected with a path as described above.
     /// This function runs in O(n^2).
@@ -73,12 +73,13 @@ public enum ConnectedChunks {
 
         return Result(
             chunks: chunks,
-            maxChunkSize: chunks.map { $0.objects.count }.max()!,
-            maxChunkDiameter: chunks.map { $0.diameter }.max()!
+            maxChunkSize: chunks.map { $0.objects.count }.max() ?? 0,
+            maxChunkDiameter: chunks.map { $0.diameter }.max() ?? 0
         )
     }
 
     /// Calculate the maximum distance of an object to an array of other objects.
+    /// This requires O(n) time.
     private static func maxDistance<T: DistanceMeasurable>(from object: T, to others: [T]) -> Double {
         others.map(object.distance(to:)).max() ?? 0
     }
