@@ -25,7 +25,7 @@ public struct CirclePath: PixelPath {
     public let numberOfPixels: Int
 
     /// The angle of the first pixel on the circle.
-    public let startAngle: Double
+    public let startAngle: CGFloat
 
     /// The bounds in which the path should be.
     public let bounds: Bounds
@@ -34,7 +34,7 @@ public struct CirclePath: PixelPath {
     public let pixelsOutsideBoundsMode: PixelsOutsideBoundsMode
 
     /// Default initializer.
-    public init(circle: Circle, numberOfPixels: Int, startAngle: Double, bounds: Bounds, pixelsOutsideBoundsMode: PixelsOutsideBoundsMode) {
+    public init(circle: Circle, numberOfPixels: Int, startAngle: CGFloat, bounds: Bounds, pixelsOutsideBoundsMode: PixelsOutsideBoundsMode) {
         self.circle = circle
         self.numberOfPixels = numberOfPixels
         self.startAngle = startAngle
@@ -71,8 +71,8 @@ public struct CirclePath: PixelPath {
     /// Return the next pixel on the circle.
     /// If the bounds are surpassed, return nil.
     private mutating func nextOnCircle() -> Pixel? {
-        let delta = 2 * .pi / Double(numberOfPixels)
-        let angle = startAngle + Double(currentStep) * delta
+        let delta = 2 * .pi / CGFloat(numberOfPixels)
+        let angle = startAngle + CGFloat(currentStep) * delta
 
         let pixel = circle.point(at: angle).nearestPixel
         currentStep += 1
@@ -84,11 +84,11 @@ public struct CirclePath: PixelPath {
 // MARK: Equidistant Pixels
 extension CirclePath {
     /// Return "numberOfPixels" equidistant pixels on a circle.
-    public static func equidistantPixels(on circle: Circle, numberOfPixels: Int, startAngle: Double = 0) -> [Pixel] {
-        let delta = 2 * .pi / Double(numberOfPixels)
+    public static func equidistantPixels(on circle: Circle, numberOfPixels: Int, startAngle: CGFloat = 0) -> [Pixel] {
+        let delta = 2 * .pi / CGFloat(numberOfPixels)
 
         return (0 ..< numberOfPixels).map {
-            let angle = startAngle + Double($0) * delta
+            let angle = startAngle + CGFloat($0) * delta
             return circle.point(at: angle).nearestPixel
         }
     }

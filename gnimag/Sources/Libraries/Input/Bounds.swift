@@ -4,6 +4,7 @@
 //
 
 /// Bounds describe the bounds of a rectangular region on an image.
+/// Bounds are LLO, meaning that the origin (minX, minY) is in the lower-left corner.
 
 public struct Bounds {
     public let minX: Int

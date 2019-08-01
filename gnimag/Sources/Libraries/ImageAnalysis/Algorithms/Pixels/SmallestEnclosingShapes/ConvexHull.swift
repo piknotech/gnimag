@@ -26,7 +26,7 @@ public enum ConvexHull {
             while lower.count >= 2 {
                 let a = lower[lower.count - 2]
                 let b = lower[lower.count - 1]
-                if (b - a).cross(point - a) > 0 { break } // TODO: check ob point am ende counterclockwise sind (weil coordinate system oben links beginnt!)
+                if (b - a).cross(point - a) > 0 { break } // TODO: check ob point am ende counterclockwise sind (weil coordinate system unten links beginnt!)
                 lower.removeLast()
             }
             lower.append(point)

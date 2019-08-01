@@ -53,7 +53,7 @@ public struct StraightPath: PixelPath {
     /// If the bounds are surpassed, return nil.
     public mutating func next() -> Pixel? {
         let x = Double(start.x) + cos(angle) * speed * Double(steps)
-        let y = Double(start.y) - sin(angle) * speed * Double(steps)
+        let y = Double(start.y) + sin(angle) * speed * Double(steps)
         let pixel = Pixel(Int(round(x)), Int(round(y)))
 
         // Boundary check

@@ -23,7 +23,8 @@ open class Image {
         bounds.contains(pixel)
     }
 
-    /// Get the color at a given pixel; (0, 0) is the upper left corner.
+    /// Get the color at a given pixel.
+    /// (0, 0) is the lower left corner, (width-1, height-1) is the upper-right corner.
     /// Precondition: the pixel must be inside the image.
     /// TODO: wird es geinlined obwohl es in einem anderen target ist? - whole-module-optiminzations?
     @inline(__always)

@@ -21,7 +21,7 @@ public struct Circle {
     /// 0 means going right, pi/2 means going up, etc. (counterclockwise).
     public func point(at angle: CGFloat) -> CGPoint {
         let x = center.x + cos(angle) * radius
-        let y = center.y - sin(angle) * radius
+        let y = center.y + sin(angle) * radius
         return CGPoint(x: x, y: y)
     }
 

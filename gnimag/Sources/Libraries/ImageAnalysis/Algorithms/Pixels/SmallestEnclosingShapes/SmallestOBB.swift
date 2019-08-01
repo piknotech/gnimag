@@ -14,7 +14,7 @@ public enum SmallestOBB {
     }
 
     /// Calculate the smallest OBB that contains a given (non-empty) set of points.
-    /// This runs in TODO time.
+    /// This runs in O(n log n + nh) time where h is the number of points on the convex hull.
     public static func containing(_ points: [CGPoint], minimizing minimizingProperty: MinimizingProperty) -> OBB {
         // Calculate and use the convex hull as the smallest OBB of the set of points is the same as the smallest OBB of their convex hull
         let hull = ConvexHull.from(points)
@@ -24,16 +24,17 @@ public enum SmallestOBB {
 
         // Iterate through each line segment and construct an OBB containing this line segment
         for i in 0 ..< hull.points.count {
+            // Get line segment (start, end), having direction "dir"
             let start = hull.points[i]
             let end = hull.points[(i + 1) % hull.points.count]
             let dir = end - start
-            if start == end { continue } // Safety check
+            if dir == .zero { continue } // Safety check
 
             // Calculate directed angle between dir and x-axis
             // Angle is in [-pi/2, pi/2]
             var angle = acos(dir.x / dir.length)
             if angle > .pi / 2 { angle = .pi - angle }
-            if dir.x * dir.y > 0 { angle = -angle }
+            if dir.x * dir.y < 0 { angle = -angle }
 
             // Rotate all points by the angle (counterclockwise); this will rotate the coordinate system so that (start, end) is parallel to the x-axis
             let rotated = points.map { $0.rotated(by: angle) }
