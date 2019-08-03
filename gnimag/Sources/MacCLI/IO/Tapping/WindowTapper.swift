@@ -7,7 +7,7 @@ import Foundation
 import Tapping
 
 /// An implementation of ITapper that clicks on the center of an arbitrary macOS application.
-struct WindowTapper: Tapper {
+class WindowTapper: Tapper {
     /// The ID that corresponds to the desired window of the application.
     private let windowID: CGWindowID
 
