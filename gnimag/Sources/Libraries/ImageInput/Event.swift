@@ -16,6 +16,10 @@ public final class Event<T> {
     /// All subscribers of the event.
     private var subscribers = [Subscriber]()
 
+    /// Default initializer.
+    public init() {
+    }
+
     /// Subscribe to the event.
     /// Each time the event is fired, the callback is called – on the same thread from which the event has been triggered. DO NOT block this thread!
     public func subscribe(_ subscriber: @escaping Subscriber) {
