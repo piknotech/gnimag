@@ -13,7 +13,7 @@ public class PolyTracker: Tracker {
         self.tolerancePoints = tolerancePoints
     }
     
-    /// The data points, split into times and values.
+    /// The data points, split into times and values. These are always the same size.
     private var times = [Time]()
     private var values = [Value]()
 
@@ -50,17 +50,17 @@ public class PolyTracker: Tracker {
             expectedValue = regression.at(time)
         } else {
             switch fallbackWhenNoRegression {
-            case .valid: return true
-            case .invalid: return false
-            case .useLastValue: expectedValue = values.last! // Crash when no last value available
+                case .valid: return true
+                case .invalid: return false
+                case .useLastValue: expectedValue = values.last! // Crash when no last value available
             }
         }
 
         // Calculate allowed difference
         var allowedDifference: Value
         switch tolerance {
-        case let .absolute(maxDiff): allowedDifference = maxDiff
-        case let .relative(tolerance): allowedDifference = abs(expectedValue) * tolerance
+            case let .absolute(maxDiff): allowedDifference = maxDiff
+            case let .relative(tolerance): allowedDifference = abs(expectedValue) * tolerance
         }
 
         let difference = abs(value - expectedValue)
@@ -72,7 +72,7 @@ public class PolyTracker: Tracker {
     public func clear() {
         times.removeAll()
         values.removeAll()
-        regression = nil
+        updateRegression()
     }
     
     /// Add a data point to the tracker. Update the regression function with the new data point.
@@ -80,16 +80,13 @@ public class PolyTracker: Tracker {
         times.append(time)
         values.append(value)
         
-        // Check number of data points
+        // Check maximum number of data points
         if times.count > maxDataPoints {
             times.removeFirst()
             values.removeFirst()
         }
         
-        // Calculate regression
-        if times.count > degree + tolerancePoints {
-            regression = Regression.polyRegression(x: times, y: values, n: degree)
-        }
+        updateRegression()
     }
     
     /// Remove the last data point of the tracker. Update the regression function.
@@ -97,10 +94,16 @@ public class PolyTracker: Tracker {
     public func removeLast() {
         times.removeLast()
         values.removeLast()
-        
-        // Calculate regression
-        if times.count > degree {
+        updateRegression()
+    }
+
+    /// Update the regression function.
+    /// If not enough data points are available, the regression is set to nil.
+    private func updateRegression() {
+        if times.count > degree + tolerancePoints {
             regression = Regression.polyRegression(x: times, y: values, n: degree)
+        } else {
+            regression = nil
         }
     }
 }

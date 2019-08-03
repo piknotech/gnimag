@@ -1,5 +1,5 @@
 //
-//  Created by David Knothe on 22.07.19.
+//  Created by David Knothe on 22.06.19.
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
@@ -9,22 +9,26 @@
 open class Image {
     public let width: Int
     public let height: Int
+    public let bounds: Bounds
 
     /// Default initializer.
     public init(width: Int, height: Int) {
         self.width = width
         self.height = height
+        self.bounds = Bounds(minX: 0, minY: 0, width: width, height: height)
     }
 
-    /// Convenience method to check if a given point is inside the image.
-    public final func contains(_ point: Point) -> Bool {
-        return 0 <= point.x && point.x < width && 0 <= point.y && point.y < height
+    /// Convenience method to check if a given pixel is inside the image.
+    public final func contains(_ pixel: Pixel) -> Bool {
+        bounds.contains(pixel)
     }
 
-    /// Get the color at a given point; (0, 0) is the upper left corner.
+    /// Get the color at a given pixel.
+    /// (0, 0) is the lower left corner, (width-1, height-1) is the upper-right corner.
     /// Precondition: the pixel must be inside the image.
+    /// TODO: wird es geinlined obwohl es in einem anderen target ist? - whole-module-optiminzations?
     @inline(__always)
-    open func color(at point: Point) -> Color {
+    open func color(at pixel: Pixel) -> Color {
         fatalError("Image is an abstract class – please override this method.")
     }
 }
