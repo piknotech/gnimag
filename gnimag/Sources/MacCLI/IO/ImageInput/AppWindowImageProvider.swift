@@ -25,7 +25,7 @@ class AppWindowScreenProvider: ImageProvider {
 
     /// Default initializer.
     /// Precondition: the given app is running and onscreen.
-    init(appName: String, windowNameHint: String! = nil) {
+    init(appName: String, windowNameHint: String = "") {
         windowID = WindowHelper.mainWindowID(forApp: appName, windowNameHint: windowNameHint)
 
         // Start display link
