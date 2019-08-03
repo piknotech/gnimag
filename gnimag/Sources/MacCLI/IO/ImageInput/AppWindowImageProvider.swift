@@ -26,24 +26,7 @@ class AppWindowScreenProvider: ImageProvider {
     /// Default initializer.
     /// Precondition: the given app is running and onscreen.
     init(appName: String, windowNameHint: String! = nil) {
-        // Get window ID
-        let info = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as! [[String: Any]]
-        let windows = info.filter {
-            $0["kCGWindowOwnerName"] as! String == appName &&
-                (windowNameHint == nil || ($0["kCGWindowName"] as! String).contains(windowNameHint))
-        }
-
-        switch windows.count {
-        case ...0:
-            fatalError("No window found for the desired application \"\(appName)\"")
-        case 1:
-            ()
-        default: // (case 2...)
-            fatalError("More than one window found for the desired application \"\(appName)\"")
-        }
-
-        let window = windows.first!
-        windowID = window["kCGWindowNumber"] as! CGWindowID
+        windowID = WindowHelper.mainWindowID(forApp: appName, windowNameHint: windowNameHint)
 
         // Start display link
         CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &displayLink)
