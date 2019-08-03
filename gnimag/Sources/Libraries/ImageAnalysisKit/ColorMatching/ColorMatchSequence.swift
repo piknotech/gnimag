@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import Input
+import ImageInput
 
 /// ColorMatchSequence is a sequential collection of ColorMatches.
 public struct ColorMatchSequence {

@@ -1,4 +1,4 @@
-## ImageAnalysis
+## ImageAnalysisKit
 
 This module does blah blah
 

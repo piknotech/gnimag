@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import Input
+import ImageInput
 
 /// A PixelPath that consists of equidistant pixels on a circle. The circle is traversed exactly once.
 /// Only pixels inside the given bounds are traversed.

@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import Input
+import ImageInput
 
 public extension Pixel {
     /// Convert the Pixel to a CGPoint.

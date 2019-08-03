@@ -6,6 +6,6 @@
 postfix operator %
 
 /// Use % to write tolerance values, e.g. 5%.
-postfix func %(a: Double) -> Double {
+public postfix func %(a: Double) -> Double {
     return a * 0.01
 }
