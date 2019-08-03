@@ -16,6 +16,10 @@ class AppWindowScreenProvider: ImageProvider {
     /// The display link that triggers periodical callbacks.
     private var displayLink: CVDisplayLink?
 
+    /// When true, 22px of the top of the image are removed.
+    var removeUpperWindowBorder = false
+    private let topWindowBorder = 22
+
     /// The event that is called each time a new image is available.
     var newImage = Event<(Image, Time)>()
 
@@ -28,6 +32,16 @@ class AppWindowScreenProvider: ImageProvider {
             $0["kCGWindowOwnerName"] as! String == appName &&
                 (windowNameHint == nil || ($0["kCGWindowName"] as! String).contains(windowNameHint))
         }
+
+        switch windows.count {
+        case ...0:
+            fatalError("No window found for the desired application \"\(appName)\"")
+        case 1:
+            ()
+        default: // (case 2...)
+            fatalError("More than one window found for the desired application \"\(appName)\"")
+        }
+
         let window = windows.first!
         windowID = window["kCGWindowNumber"] as! CGWindowID
 
@@ -38,14 +52,20 @@ class AppWindowScreenProvider: ImageProvider {
 
     /// Capture the current window content.
     var currentImage: CGImage {
-        return CGWindowListCreateImage(.zero, .optionIncludingWindow, windowID, .boundsIgnoreFraming)!
+        let image = CGWindowListCreateImage(.zero, .optionIncludingWindow, windowID, .boundsIgnoreFraming)!
+
+        if removeUpperWindowBorder {
+            return image.cropping(to: CGRect(x: 0, y: topWindowBorder, width: image.width, height: image.height - topWindowBorder))!
+        } else {
+            return image
+        }
     }
 
     /// Called each time the display link fires.
     private func displayLinkFire(_: CVDisplayLink, _: UnsafePointer<CVTimeStamp>, _: UnsafePointer<CVTimeStamp>, _: CVOptionFlags, _: UnsafeMutablePointer<CVOptionFlags>) -> CVReturn {
         // Get image and call block (on same thread)
-        let image = NativeImage(currentImage)
         let time = CACurrentMediaTime()
+        let image = NativeImage(currentImage)
         newImage.trigger(with: (image, time))
 
         return 0
