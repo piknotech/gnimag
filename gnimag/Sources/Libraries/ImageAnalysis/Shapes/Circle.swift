@@ -30,3 +30,10 @@ public struct Circle {
         center.distance(to: point) <= radius
     }
 }
+
+extension Circle: Shape {
+    /// Calculate the unsigned distance to a point.
+    public func distance(to point: CGPoint) -> CGFloat {
+        abs(center.distance(to: point) - radius)
+    }
+}

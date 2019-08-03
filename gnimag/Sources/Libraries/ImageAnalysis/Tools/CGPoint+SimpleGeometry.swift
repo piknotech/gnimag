@@ -22,11 +22,11 @@ public extension CGPoint {
     }
 
     /// Rotate this point by an angle, counterclockwise, around the origin.
-    func rotated(by angle: CGFloat) -> CGPoint {
-        CGPoint(
-            x: x * cos(angle) - y * sin(angle),
-            y: x * sin(angle) + y * cos(angle)
-        )
+    func rotated(by angle: CGFloat, around center: CGPoint = .zero) -> CGPoint {
+        let diff = self - center
+        let rotX = diff.x * cos(angle) - diff.y * sin(angle)
+        let rotY = diff.x * sin(angle) + diff.y * cos(angle)
+        return CGPoint(x: center.x + rotX, y: center.y + rotY)
     }
 
     /// Return the length of the point interpreted as vector.

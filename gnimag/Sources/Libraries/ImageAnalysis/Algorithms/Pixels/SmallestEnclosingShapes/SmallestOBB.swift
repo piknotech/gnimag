@@ -47,7 +47,7 @@ public enum SmallestOBB {
             let rotatedCenter = center.rotated(by: -angle)
 
             // Compare OBB with previous ones
-            let obb = OBB(center: rotatedCenter, width: aabb.rect.width, height: aabb.rect.height, rotation: angle)
+            let obb = OBB(center: rotatedCenter, width: aabb.width, height: aabb.height, rotation: angle)
             let rating = value(of: minimizingProperty, of: obb)
             if rating < bestValue {
                 bestValue = rating
