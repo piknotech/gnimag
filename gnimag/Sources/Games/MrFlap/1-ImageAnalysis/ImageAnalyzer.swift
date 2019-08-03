@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import Input
+import ImageInput
 
 /// ImageAnalyzer provides a method for analyzing an image.
 

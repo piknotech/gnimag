@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import Input
+import ImageInput
 
 /// A PixelPath that consists of a straight line. The path stops when the given bounds have been reached.
 

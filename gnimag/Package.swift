@@ -12,11 +12,11 @@ let package = Package(
     targets: [
         .target(
             name: "MacCLI",
-            dependencies: ["MrFlap", "Input", "Output"]
+            dependencies: ["MrFlap", "ImageInput", "Tapping"]
         ),
         .target(
             name: "MrFlap",
-            dependencies: ["Input", "Output", "ImageAnalysis", "GameKit"],
+            dependencies: ["ImageInput", "Tapping", "ImageAnalysisKit", "GameKit"],
             path: "Sources/Games/MrFlap"
         ),
         .target(
@@ -25,17 +25,17 @@ let package = Package(
             path: "Sources/Libraries/GameKit"
         ),
         .target(
-            name: "Input",
-            path: "Sources/Libraries/Input"
+            name: "ImageInput",
+            path: "Sources/Libraries/ImageInput"
         ),
         .target(
-            name: "Output",
-            path: "Sources/Libraries/Output"
+            name: "Tapping",
+            path: "Sources/Libraries/Tapping"
         ),
         .target(
-            name: "ImageAnalysis",
-            dependencies: ["Input"],
-            path: "Sources/Libraries/ImageAnalysis"
+            name: "ImageAnalysisKit",
+            dependencies: ["ImageInput"],
+            path: "Sources/Libraries/ImageAnalysisKit"
         )
     ]
 )

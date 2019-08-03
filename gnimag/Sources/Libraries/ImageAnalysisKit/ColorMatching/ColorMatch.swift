@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import Input
+import ImageInput
 
 /// ColorMatch describes a function that maps color values onto {true, false}.
 

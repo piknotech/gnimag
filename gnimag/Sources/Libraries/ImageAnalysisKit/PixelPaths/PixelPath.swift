@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import Input
+import ImageInput
 
 /// PixelPath describes a sequence of arbitrary many pixels.
 /// The path can be retrieved sequentially, each time as many pixels as desired.

@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import Input
+import ImageInput
 
 /// Coloring describes the color scheme of the playfield.
 /// It also contains game mode-specific colors used for analysis.
