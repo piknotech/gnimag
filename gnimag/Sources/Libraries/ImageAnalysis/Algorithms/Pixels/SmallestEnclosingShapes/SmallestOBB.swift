@@ -23,11 +23,8 @@ public enum SmallestOBB {
         var bestOBB: OBB?
 
         // Iterate through each line segment and construct an OBB containing this line segment
-        for i in 0 ..< hull.points.count {
-            // Get line segment (start, end), having direction "dir"
-            let start = hull.points[i]
-            let end = hull.points[(i + 1) % hull.points.count]
-            let dir = end - start
+        for line in hull.lineSegments {
+            let dir = line.p2 - line.p1
             if dir == .zero { continue } // Safety check
 
             // Calculate directed angle between dir and x-axis
