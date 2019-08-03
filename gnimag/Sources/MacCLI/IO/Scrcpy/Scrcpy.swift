@@ -4,6 +4,7 @@
 //
 
 import ImageInput
+import Tapping
 
 /// Scrcpy provides input and output classes if you want to use the scrcpy application to communicate with an Android device.
 enum Scrcpy {
@@ -18,6 +19,6 @@ enum Scrcpy {
     /// Create a new Tapper that taps on the scrcpy application window.
     /// scrcpy must be running and streaming.
     static var tapper: Tapper {
-        WindowTapper("scrcpy")
+        WindowTapper(appName: "scrcpy")
     }
 }
