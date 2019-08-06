@@ -46,7 +46,6 @@ extension NativeImage: ConvertibleToCGImage {
     /// Create a new CGImage from the raw byte data.
     /// Required for MacTestingTools.
     public func toCGImage() -> CGImage {
-        let colorspace = CGColorSpaceCreateDeviceRGB()
         let rgba = 4
         let numBytes = height * width * rgba
         let rgbData = CFDataCreate(nil, [UInt8](data), numBytes)!
@@ -58,7 +57,7 @@ extension NativeImage: ConvertibleToCGImage {
             bitsPerComponent: 8,
             bitsPerPixel: 8 * rgba,
             bytesPerRow: width * rgba,
-            space: colorspace,
+            space: CGColorSpaceCreateDeviceRGB(),
             bitmapInfo: [CGBitmapInfo.byteOrder32Little, CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)],
             provider: provider,
             decode: nil,
