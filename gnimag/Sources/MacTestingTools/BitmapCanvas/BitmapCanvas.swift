@@ -18,7 +18,7 @@ public final class BitmapCanvas {
     public init(width: Int, height: Int) {
         let rgba = 4
         context = CGContext(
-            data: nil,
+            data: nil, // TODO: ist das default alles schwarz?
             width: width,
             height: height,
             bitsPerComponent: 8,
@@ -46,6 +46,32 @@ public final class BitmapCanvas {
 
         // Draw image onto context
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: cgImage.width, height: cgImage.height))
+    }
+
+    /// Create a new bitmap canvas where all pixels that have a small enough distance to a given color are filled in a specific (other) color.
+    /// When "doDistanceBasedGreyscaleForOtherPixels" = true, the other pixels are white for really near and black for far away pixels (continuous). Else, all other pixels are black.
+    public static func createByFillingAllPixels(_ fillColor: Color, whereDistanceTo comparingColor: Color, in image: Image, isAtMost threshold: Double, doDistanceBasedGreyscaleForOtherPixels: Bool = true) -> BitmapCanvas {
+        let canvas = BitmapCanvas(width: image.width, height: image.height)
+
+        // Fill pixel for pixel
+        for x in 0 ..< image.width {
+            for y in 0 ..< image.height {
+                let pixel = Pixel(x, y)
+                let diff = image.color(at: pixel).euclideanDifference(to: comparingColor)
+
+                if diff <= threshold {
+                    // Color matches: fill with "fillColor"
+                    canvas.fill(pixel, with: fillColor)
+                } else if doDistanceBasedGreyscaleForOtherPixels {
+                    // Fill grey, distance-based
+                    let p = (diff - threshold) / (1 - threshold) // p in (0, 1]
+                    let color = Color(1-p, 1-p, 1-p)
+                    canvas.fill(pixel, with: color)
+                } // Else, leave pixel black as is
+            }
+        }
+
+        return canvas
     }
 
     // MARK: Drawing Operations
