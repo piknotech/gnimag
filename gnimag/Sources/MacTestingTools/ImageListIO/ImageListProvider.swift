@@ -6,14 +6,14 @@
 import Cocoa
 import ImageInput
 
-/// ImageListProvider provides a list of images in a folder, one by one, with a user-defined framerate.
-/// The images are sorted and must be of the form "1.png", "2.png", etc.
-internal class ImageListProvider: ImageProvider {
-    /// The folder path.
-    private let folderPath: String
+/// ImageListProvider provides a list of images in a directory, one by one, with a user-defined framerate.
+/// The images are sorted and must be of the form "1.png", "2.png", etc. Use an ImageListCreator to easily create such a directory.
+public final class ImageListProvider: ImageProvider {
+    /// The directory path.
+    private let directoryPath: String
 
-    /// The current image.
-    private var i = 0
+    /// The next image to consume.
+    private var i = 1
 
     /// The framerate with which images are provided.
     private let framerate: Int
@@ -22,21 +22,25 @@ internal class ImageListProvider: ImageProvider {
     private var timer: Timer?
 
     /// The event that is called each time a new image is available.
-    var newImage = Event<(Image, Time)>()
+    public var newImage = Event<(Image, Time)>()
+
+    /// Conversion block from CGImages to Images.
+    private let imageFromCGImage: (CGImage) -> Image
 
     /// Default initializer.
-    init(folderPath: String, framerate: Int) {
-        self.folderPath = folderPath
+    public init(directoryPath: String, framerate: Int, imageFromCGImage: @escaping (CGImage) -> Image) {
+        self.directoryPath = directoryPath
         self.framerate = framerate
+        self.imageFromCGImage = imageFromCGImage
     }
 
-    /// Return the next image in the folder.
+    /// Return the next image in the directory.
     private var nextImage: CGImage? {
-        i += 1
-        let path = folderPath + "/\(i).png"
+        let path = directoryPath + "/\(i).png"
         print("image: \(i)")
 
         if let image = NSImage(contentsOfFile: path)?.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+            i += 1
             return image
         } else {
             // All images consumed
@@ -46,20 +50,20 @@ internal class ImageListProvider: ImageProvider {
     }
 
     /// Start or continue providing images.
-    func start() {
+    public func start() {
         pause()
 
         // Start timer
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(framerate), repeats: true) { _ in
             let time = Double(self.i) / Double(self.framerate)
             if let image = self.nextImage {
-                self.newImage.trigger(with: (NativeImage(image), time))
+                self.newImage.trigger(with: (self.imageFromCGImage(image), time))
             }
         }
     }
 
     /// Pause providing images.
-    func pause() {
+    public func pause() {
         timer?.invalidate()
         timer = nil
     }

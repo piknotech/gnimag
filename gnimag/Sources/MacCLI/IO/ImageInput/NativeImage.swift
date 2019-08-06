@@ -5,6 +5,7 @@
 
 import Foundation
 import ImageInput
+import MacTestingTools
 
 /// NativeImage is an Image effectively wrapping a CGImage using bitmap data.
 /// Currently, the wrapped CGImage must have a BGRA pixel layout.
@@ -38,5 +39,11 @@ final class NativeImage: Image {
         let green = data[offset + 1]
         let blue = data[offset + 2]
         return Color(Double(red) / 255, Double(green) / 255, Double(blue) / 255)
+    }
+}
+
+extension NativeImage: ConvertibleToCGImage {
+    public func toCGImage() -> CGImage {
+        fatalError()
     }
 }
