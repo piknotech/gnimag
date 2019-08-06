@@ -12,7 +12,7 @@ import MacTestingTools
 
 final class NativeImage: Image {
     /// The raw pixel data.
-    private let data: Data
+    fileprivate let data: Data
 
     /// Number of bytes per row of the raw pixel data.
     private let bytesPerRow: Int
@@ -43,7 +43,27 @@ final class NativeImage: Image {
 }
 
 extension NativeImage: ConvertibleToCGImage {
+    /// Create a new CGImage from the raw byte data.
+    /// Required for MacTestingTools.
     public func toCGImage() -> CGImage {
-        fatalError()
+        let colorspace = CGColorSpaceCreateDeviceRGB()
+        let rgba = 4
+        let numBytes = height * width * rgba
+        let rgbData = CFDataCreate(nil, [UInt8](data), numBytes)!
+        let provider = CGDataProvider(data: rgbData)!
+
+        return CGImage(
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bitsPerPixel: 8 * rgba,
+            bytesPerRow: width * rgba,
+            space: colorspace,
+            bitmapInfo: [CGBitmapInfo.byteOrder32Little, CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)],
+            provider: provider,
+            decode: nil,
+            shouldInterpolate: true,
+            intent: CGColorRenderingIntent.defaultIntent
+        )!
     }
 }
