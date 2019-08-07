@@ -3,6 +3,8 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import MacTestingTools
+
 /// PolyTracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it maps this course to a specific polynomial regression function. Then, irregular points can be filtered out, and future values can be predicted.
 public class PolyTracker: Tracker {
     /// Default initializer.
@@ -13,8 +15,8 @@ public class PolyTracker: Tracker {
     }
     
     /// The data points, split into times and values. These are always the same size.
-    private var times = [Time]()
-    private var values = [Value]()
+    fileprivate var times = [Time]()
+    fileprivate var values = [Value]()
 
     /// Expose the latest added value.
     var lastValue: Value? { values.last }
@@ -104,5 +106,13 @@ public class PolyTracker: Tracker {
         } else {
             regression = nil
         }
+    }
+}
+
+// MARK: Has2DDataSet (for MacTestingTools)
+extension PolyTracker: Has2DDataSet {
+    /// Return the current raw data from the tracker.
+    public func yieldDataSet() -> (xValues: [Double], yValues: [Double]) {
+        return (times, values)
     }
 }

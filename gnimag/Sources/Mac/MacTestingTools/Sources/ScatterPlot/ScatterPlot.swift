@@ -1,5 +1,5 @@
 //
-//  Created by David Knothe on 06.08.19.
+//  Created by David Knothe on 07.08.19.
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
@@ -7,6 +7,13 @@ import Cocoa
 import Charts
 
 public enum ScatterPlot {
+    /// Create a scatter plot with the given Has2DDataSet object and save it to a file.
+    /// The scatter plot is black and is drawn on a white background.
+    public static func create(from object: Has2DDataSet, scatterCircleSize: CGFloat, outputImageSize: CGSize, saveTo file: String) {
+        let (xValues, yValues) = object.yieldDataSet()
+        create(withXValues: xValues, yValues: yValues, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize, saveTo: file)
+    }
+
     /// Create a scatter plot with the given data and save it to a file.
     /// The scatter plot is black and is drawn on a white background.
     public static func create(withXValues xValues: [Double], yValues: [Double], scatterCircleSize: CGFloat, outputImageSize: CGSize, saveTo file: String) {

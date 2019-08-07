@@ -6,6 +6,9 @@
 /// ConstantTracker is a PolyTracker providing simple access to the calculated average value.
 /// Because data points only consist of values here (time is irrelevant), ConstantTracker provides respective convenience methods.
 public final class ConstantTracker: PolyTracker {
+    /// The number of values that have already been added.
+    private var count: Double = 0
+
     /// Default initializer.
     public init(maxDataPoints: Int = 50, tolerancePoints: Int = 0) {
         super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints)
@@ -18,7 +21,8 @@ public final class ConstantTracker: PolyTracker {
     
     /// Convenience method, ignoring the time component.
     public func add(value: Value) {
-        add(value: value, at: 0)
+        add(value: value, at: count)
+        count += 1
     }
     
     /// The average value, which is the result of the regression.

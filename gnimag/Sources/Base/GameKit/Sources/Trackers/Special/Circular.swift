@@ -4,13 +4,14 @@
 //
 
 import Foundation
+import MacTestingTools
 
 /// Circular provides a wrapper around trackers whose value range is in [0, 2pi).
 /// It maps those angular values to linear values (in R).
 public final class Circular<Other: PolyTracker>: Tracker {
     /// The internal tracker tracking the linearified values.
     /// Do not add values to it directly.
-    private let tracker: Other
+    fileprivate let tracker: Other
 
     /// States if a regression function is available.
     public var hasRegression: Bool {
@@ -43,5 +44,13 @@ public final class Circular<Other: PolyTracker>: Tracker {
         let rotations = floor((distance + .pi) / (2 * .pi))
         let linearValue = value + rotations * 2 * .pi
         return linearValue
+    }
+}
+
+// MARK: Has2DDataSet (for MacTestingTools)
+extension Circular: Has2DDataSet {
+    /// Return the current raw data from the tracker.
+    public func yieldDataSet() -> (xValues: [Double], yValues: [Double]) {
+        return tracker.yieldDataSet()
     }
 }

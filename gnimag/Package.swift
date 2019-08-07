@@ -27,7 +27,7 @@ let package = Package(
         ),
         .target(
             name: "GameKit",
-            dependencies: ["Surge"],
+            dependencies: ["Surge", "MacTestingTools"],
             path: "Sources/Base/GameKit"
         ),
         .target(

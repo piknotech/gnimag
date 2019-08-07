@@ -3,12 +3,14 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import MacTestingTools
+
 /// MedianTracker continuously calculates the median value of the given stream of data points.
 public final class MedianTracker {
     public typealias Value = Double
 
     /// The sorted array of values.
-    private var values = [Value]()
+    fileprivate var values = [Value]()
     
     /// The maximum number of data points.
     /// When reaching this limit, half of the elements will be removed.
@@ -44,6 +46,18 @@ public final class MedianTracker {
     public private(set) var median: Value?
 }
 
+
+// MARK: Has2DDataSet (for MacTestingTools)
+extension MedianTracker: Has2DDataSet {
+    /// Return the current raw data from the tracker.
+    /// The data is, by design, monotonically increasing.
+    public func yieldDataSet() -> (xValues: [Double], yValues: [Double]) {
+        let x = (0 ..< values.count).map(Double.init)
+        return (x, values)
+    }
+}
+
+// MARK: Array+BinarySearch
 fileprivate extension Array where Element: Comparable {
     /// Find the index i so that self[0...i] is <= value, and that self[(i+1)...] is > value.
     /// Precondition: self is sorted ascending.
