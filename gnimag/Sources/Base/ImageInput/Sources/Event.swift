@@ -7,9 +7,6 @@
 /// Events can have an arbitrary number of subscribers.
 /// When the event is triggered, all (currently) registered callbacks are executed (synchronously on the same thread).
 /// Events are not "retained", so, if an event is fired while having no subscribers, the event is lost.
-
-/// The main difference between an Event<T> and a Promise<T> is that an event can be triggered multiple times with different values, while a promise can just be fullfilled once.
-
 public final class Event<T> {
     public typealias Subscriber = (T) -> Void
 

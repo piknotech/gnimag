@@ -8,7 +8,6 @@ import ImageInput
 
 /// An implementation of ImageProvider using a macOS app and capturing it's window content.
 /// The subscriber is notified in sync with the display update cycle.
-
 class AppWindowScreenProvider: ImageProvider {
     /// The window ID that corresponds to the desired window of the application.
     private let windowID: CGWindowID

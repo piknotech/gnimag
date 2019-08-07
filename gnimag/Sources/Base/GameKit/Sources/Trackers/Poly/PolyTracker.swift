@@ -4,7 +4,6 @@
 //
 
 /// PolyTracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it maps this course to a specific polynomial regression function. Then, irregular points can be filtered out, and future values can be predicted.
-
 public class PolyTracker: Tracker {
     /// Default initializer.
     public init(maxDataPoints: Int = 500, degree: Int, tolerancePoints: Int = 1) {

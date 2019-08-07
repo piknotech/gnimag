@@ -6,7 +6,6 @@
 import Foundation
 
 /// Player describes the position of the bird.
-
 struct Player {
     /// The center of the player, repsective to the playfield's center.
     let height: Double

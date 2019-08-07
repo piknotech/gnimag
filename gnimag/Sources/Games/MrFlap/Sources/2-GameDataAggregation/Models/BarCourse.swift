@@ -6,7 +6,6 @@
 import GameKit
 
 /// BarCourse bundles trackers for a single bar.
-
 final class BarCourse {
     /// The state the bar is currently in.
     /// Only trackers with a "normal" state should be considered by prediction algorithms.

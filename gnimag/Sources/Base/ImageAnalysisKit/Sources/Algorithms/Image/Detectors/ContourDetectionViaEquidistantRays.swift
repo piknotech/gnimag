@@ -9,7 +9,6 @@ import ImageInput
 /// ContourDetectionViaEquidistantRays uses information about the inside of a shape to detect its boundaries.
 /// A starting point INSIDE the shape is used. Then, equidistant rays are cast in all directions. For each ray, a color match sequence is used to detect when the outside of the shape has been reached.
 /// These points on the edge will then be returned as the contour of the shape.
-
 public enum ContourDetectionViaEquidistantRays {
     // MARK: Arguments
     public struct Arguments {

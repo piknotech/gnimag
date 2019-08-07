@@ -4,7 +4,6 @@
 //
 
 /// Polynomial describes a collection of coefficients representing a polynomial.
-
 public final class Polynomial<Value> {
     /// The coefficients, beginning with the lowest one (x^0, x^1, ... x^n).
     public let coefficients: [Value]
@@ -30,7 +29,7 @@ public final class Polynomial<Value> {
     public var e: Value { return coefficients[degree - 4] }
 }
 
-// MARK: - Calculation
+// MARK: Calculation
 
 extension Polynomial where Value == Double {
     /// Calculate the value at a given point.
@@ -62,7 +61,7 @@ extension Polynomial where Value == Double {
     }
 }
 
-// MARK: - CustomStringConvertible
+// MARK: CustomStringConvertible
 
 extension Polynomial: CustomStringConvertible {
     /// Describe the polynomial.

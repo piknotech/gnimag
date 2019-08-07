@@ -7,7 +7,6 @@ import Foundation
 import ImageInput
 
 /// A PixelPath that consists of a straight line. The path stops when the given bounds have been reached.
-
 public struct StraightPath: PixelPath {
     /// The start pixel. It must be inside the bounds, else the path is empty.
     public let start: Pixel

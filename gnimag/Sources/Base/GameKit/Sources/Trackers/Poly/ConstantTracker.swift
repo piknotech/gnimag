@@ -5,7 +5,6 @@
 
 /// ConstantTracker is a PolyTracker providing simple access to the calculated average value.
 /// Because data points only consist of values here (time is irrelevant), ConstantTracker provides respective convenience methods.
-
 public final class ConstantTracker: PolyTracker {
     /// Default initializer.
     public init(maxDataPoints: Int = 50, tolerancePoints: Int = 0) {

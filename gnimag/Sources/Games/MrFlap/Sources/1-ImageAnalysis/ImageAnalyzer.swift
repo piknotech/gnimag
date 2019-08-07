@@ -6,7 +6,6 @@
 import ImageInput
 
 /// ImageAnalyzer provides a method for analyzing an image.
-
 class ImageAnalyzer {
     /// The shared playfield. It does not change during the game.
     private var playfield: Playfield!

@@ -5,7 +5,6 @@
 
 /// Image describes an abstract image providing direct-pixel access.
 /// Override this class to provide an implementation.
-
 open class Image {
     public let width: Int
     public let height: Int

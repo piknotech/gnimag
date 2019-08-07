@@ -7,7 +7,6 @@ import Foundation
 
 /// Circular provides a wrapper around trackers whose value range is in [0, 2pi).
 /// It maps those angular values to linear values (in R).
-
 public final class Circular<Other: PolyTracker>: Tracker {
     /// The internal tracker tracking the linearified values.
     /// Do not add values to it directly.

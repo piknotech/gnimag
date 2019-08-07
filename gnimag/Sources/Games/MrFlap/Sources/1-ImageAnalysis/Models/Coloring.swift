@@ -7,7 +7,6 @@ import ImageInput
 
 /// Coloring describes the color scheme of the playfield.
 /// It also contains game mode-specific colors used for analysis.
-
 struct Coloring {
     /// The color of the bars and of the bird.
     /// Can change during the game.

@@ -6,7 +6,6 @@
 import Foundation
 
 /// A Shape allows measuring the distance from its border to a point.
-
 public protocol Shape {
     /// Calculate the unsigned distance to a point.
     /// 0 means the point is on the border, >0 means the point is either inside or outside the shape.

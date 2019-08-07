@@ -4,7 +4,6 @@
 //
 
 /// Pixel represents a point on an image, only consisting of integral values.
-
 public struct Pixel {
     public var x: Int
     public var y: Int

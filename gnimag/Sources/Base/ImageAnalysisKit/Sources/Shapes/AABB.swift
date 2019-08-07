@@ -6,7 +6,6 @@
 import Foundation
 
 /// An axis-aligned bounding box.
-
 public struct AABB {
     /// The bounds of the box. The bounds are LLO, meaning the origin is in the lower left corner.
     public let rect: CGRect

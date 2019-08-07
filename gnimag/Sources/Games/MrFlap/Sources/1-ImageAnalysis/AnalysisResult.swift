@@ -5,7 +5,6 @@
 
 /// The result that ImageAnalyzer will yield for each analyzed image.
 /// It is a simple raw result; further processing is done by GameDataAssembly.
-
 struct AnalysisResult {
     let player: Player
     let playfield: Playfield

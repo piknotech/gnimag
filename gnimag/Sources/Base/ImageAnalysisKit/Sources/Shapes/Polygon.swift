@@ -7,7 +7,6 @@ import Foundation
 
 /// An arbitrary polygon underlying no specific restrictions.
 /// The points of the polygon are stored in a counterclockwise manner.
-
 public struct Polygon {
     /// The points defining the edges of the polygon. Any two consecutive points define one edge.
     /// Also, the last and the first point in this array define an edge.

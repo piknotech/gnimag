@@ -4,7 +4,6 @@
 //
 
 /// The full, up-to-date model of the running game.
-
 final class GameModel {
     /// The playfield. It does not change during the game and is used to filter out malformed input values.
     let playfield: Playfield

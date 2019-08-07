@@ -6,7 +6,6 @@
 import Foundation
 
 /// A circle in R^2.
-
 public struct Circle {
     public let center: CGPoint
     public let radius: CGFloat

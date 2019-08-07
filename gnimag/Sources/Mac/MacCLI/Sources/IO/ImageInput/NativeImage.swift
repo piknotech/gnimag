@@ -9,7 +9,6 @@ import MacTestingTools
 
 /// NativeImage is an Image effectively wrapping a CGImage using bitmap data.
 /// Currently, the wrapped CGImage must have a BGRA pixel layout.
-
 final class NativeImage: Image {
     /// The raw pixel data.
     fileprivate let data: Data

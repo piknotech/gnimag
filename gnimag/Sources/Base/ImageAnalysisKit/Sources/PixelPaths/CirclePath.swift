@@ -8,7 +8,6 @@ import ImageInput
 
 /// A PixelPath that consists of equidistant pixels on a circle. The circle is traversed exactly once.
 /// Only pixels inside the given bounds are traversed.
-
 public struct CirclePath: PixelPath {
     /// Possible ways to procced with pixels that are on the circle but outside bounds.
     public enum PixelsOutsideBoundsMode {

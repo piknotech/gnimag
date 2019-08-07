@@ -4,7 +4,6 @@
 //
 
 /// LinearTracker is a PolyTracker providing simple access to the calculated linear function.
-
 public final class LinearTracker: PolyTracker {
     /// Default initializer.
     public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1) {

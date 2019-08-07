@@ -5,7 +5,6 @@
 
 /// Color represents a simple RGB color.
 /// The channel values are in the range [0, 1].
-
 public struct Color {
     public let red: Double
     public let green: Double

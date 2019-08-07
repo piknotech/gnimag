@@ -6,7 +6,6 @@
 import GameKit
 
 /// PlayerCourse bundles trackers for the player position which is defined by angle and height.
-
 final class PlayerCourse {
     /// The angle and height trackers.
     let angle: Circular<LinearTracker>

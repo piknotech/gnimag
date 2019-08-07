@@ -6,7 +6,6 @@
 import Foundation
 
 /// An oriented bounding box.
-
 public struct OBB {
     /// The AABB, which must be rotated around its center to retrieve the actual OBB.
     public let aabb: AABB

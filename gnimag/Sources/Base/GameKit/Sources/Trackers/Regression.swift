@@ -7,9 +7,7 @@ import Surge
 
 /// Regression encapsulates capabilities of calculating linear and polynomial regression, using Surge.
 /// (Surge: https://github.com/mattt/Surge).
-
 public enum Regression {
-    
     /// Perform a polynomial regression.
     public static func polyRegression(x: [Double], y: [Double], n: Int) -> Polynomial<Double> {
         switch n {

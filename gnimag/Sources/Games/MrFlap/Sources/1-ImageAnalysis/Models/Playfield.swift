@@ -6,7 +6,6 @@
 import Foundation
 
 /// Playfield describes the measures of the playfield.
-
 struct Playfield {
     /// The center of the concentric circles.
     let center: CGPoint

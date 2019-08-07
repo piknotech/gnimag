@@ -4,6 +4,5 @@
 //
 
 /// Hints that are given to ImageAnalyzer.
-
 struct AnalysisHints {
 }

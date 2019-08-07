@@ -4,7 +4,6 @@
 //
 
 /// Bar describes the measurements of a vertical bar.
-
 struct Bar {
     /// The width of the bar.
     let width: Double

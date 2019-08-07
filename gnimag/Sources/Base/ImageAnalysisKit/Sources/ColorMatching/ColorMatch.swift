@@ -6,7 +6,6 @@
 import ImageInput
 
 /// ColorMatch describes a function that maps color values onto {true, false}.
-
 public indirect enum ColorMatch {
     case block((Color) -> Bool)
     case color(Color, threshold: Double)
