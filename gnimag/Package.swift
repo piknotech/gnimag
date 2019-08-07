@@ -12,7 +12,11 @@ let package = Package(
     targets: [
         .target(
             name: "MacCLI",
-            dependencies: ["MrFlap", "ImageInput", "Tapping"]
+            dependencies: ["MacTestingTools", "MrFlap", "ImageInput", "Tapping"]
+        ),
+        .target(
+            name: "MacTestingTools",
+            dependencies: ["ImageInput"]
         ),
         .target(
             name: "MrFlap",

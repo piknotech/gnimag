@@ -1,0 +1,41 @@
+//
+//  Created by David Knothe on 06.08.19.
+//  Copyright © 2019 Piknotech. All rights reserved.
+//
+
+import Cocoa
+import ImageInput
+
+/// As a counterpart to ImageListProvider, this class is used to create a directory with enumerated images in the first place.
+/// Create an ImageListCreator and link it to any existing ImageProvider; then, the ImageListCreator will tap every image produced by the ImageProvider and save it to the specified directory.
+public final class ImageListCreator {
+    /// The directory path.
+    private let directoryPath: String
+
+    /// The next image to create.
+    private var i = 1
+
+    /// The maximum number of images to write.
+    private let maxImages: Int
+
+    /// Default initializer.
+    public init(directoryPath: String, maxImages: Int = Int.max) {
+        self.directoryPath = directoryPath
+        self.maxImages = maxImages
+
+        try! FileManager.default.createDirectory(atPath: directoryPath, withIntermediateDirectories: true)
+    }
+
+    /// Tap every image produced by the ImageProvider and save it to the specified directory.
+    /// Attention: The produced images MUST be ConvertibleToCGImage.
+    public func link(to provider: ImageProvider) {
+        provider.newImage += { image in
+            if self.i > self.maxImages { return }
+
+            let cgImage = (image as! ConvertibleToCGImage).toCGImage()
+            let path = self.directoryPath + "/\(self.i).png"
+            cgImage.write(to: path)
+            self.i += 1
+        }
+    }
+}
