@@ -6,7 +6,7 @@ Well now you can! `gnimag` is a game-auto-player. It takes screen input from you
 
 Only a few games are implemented at the moment. You can help extending by contributing! (TODO: Link) As there is an [uncountable infinity](https://www.statista.com/statistics/780229/number-of-available-gaming-apps-in-the-google-play-store-quarter/) of mobile games out there, you can contribute very easily – just pick any game and start coding! See here(TODO) on how to start.
 
-### Project Structure
+## Project Structure
 
 The project consists of the following parts:
 
@@ -17,7 +17,7 @@ The project consists of the following parts:
 
 ---
 
-### Game Structure
+## Game Structure
 
 See here(TODO) for how a game is built and how you can easily implement your own game.
 
