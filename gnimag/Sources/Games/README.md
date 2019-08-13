@@ -75,7 +75,7 @@ ImageAnalysisKit is a good tool for simple games which consist of little differe
 
 In the end, is up to your preferences which library you use.
 
-Currently, we are still looking for a better way to organize the xcodeproject to make the different games and libraries more independent of each other (see #1). This would make it easier to use specific libraries for different games, such as OpenCV.
+Currently, we are still looking for a better way to organize the xcodeproject to make the different games and libraries more independent of each other (see [#8](https://github.com/knothed/gnimag/issues/8)). This would make it easier to use specific libraries for different games, such as OpenCV.
 
 
 
