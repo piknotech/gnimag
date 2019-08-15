@@ -10,26 +10,7 @@ let package = Package(
         .package(url: "https://github.com/mattt/Surge", .upToNextMajor(from: "2.2.0"))
     ],
     targets: [
-        .target(
-            name: "MacCLI",
-            dependencies: ["MacTestingTools", "MrFlap", "ImageInput", "Tapping"],
-            path: "Sources/Mac/MacCLI"
-        ),
-        .target(
-            name: "MacTestingTools",
-            dependencies: ["ImageInput"],
-            path: "Sources/Mac/MacTestingTools"
-        ),
-        .target(
-            name: "MrFlap",
-            dependencies: ["ImageInput", "Tapping", "ImageAnalysisKit", "GameKit"],
-            path: "Sources/Games/MrFlap"
-        ),
-        .target(
-            name: "GameKit",
-            dependencies: ["Surge", "MacTestingTools"],
-            path: "Sources/Base/GameKit"
-        ),
+        // MARK: Base Libraries
         .target(
             name: "ImageInput",
             path: "Sources/Base/ImageInput"
@@ -42,6 +23,30 @@ let package = Package(
             name: "ImageAnalysisKit",
             dependencies: ["ImageInput"],
             path: "Sources/Base/ImageAnalysisKit"
+        ),
+        .target(
+            name: "GameKit",
+            dependencies: ["Surge", "MacTestingTools"],
+            path: "Sources/Base/GameKit"
+        ),
+
+        // MARK: Mac-specific
+        .target(
+            name: "MacTestingTools",
+            dependencies: ["ImageInput"],
+            path: "Sources/Mac/MacTestingTools"
+        ),
+        .target(
+            name: "MacCLI",
+            dependencies: ["MacTestingTools", "MrFlap", "ImageInput", "Tapping"],
+            path: "Sources/Mac/MacCLI"
+        ),
+
+        // MARK: Games
+        .target(
+            name: "MrFlap",
+            dependencies: ["ImageInput", "Tapping", "ImageAnalysisKit", "GameKit"],
+            path: "Sources/Games/MrFlap"
         )
     ]
 )
