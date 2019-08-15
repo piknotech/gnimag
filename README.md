@@ -4,7 +4,7 @@ Have you ever wanted to beat your friends' highscores in mobile games? Maybe wit
 
 Well now you can! `gnimag` is a game-auto-player. It takes screen input from your mobile device, analyses it and simulates touches to play the game as far as possible.
 
-Only a few games are implemented at the moment. You can help extending by [contributing](gnimag/Sources/Games)! As there is an [uncountable infinity](https://www.statista.com/statistics/780229/number-of-available-gaming-apps-in-the-google-play-store-quarter/) of mobile games out there, you can contribute very easily – just pick any game and start coding! See [here](gnimag/Sources/Games) on how to start.
+Only a few games are implemented at the moment. You can help extending by [contributing](gnimag/Sources/Games)! As there is an [uncountable infinity](https://www.statista.com/statistics/268251/number-of-apps-in-the-itunes-app-store-since-2008/) of mobile games out there, you can contribute very easily – just pick any game and start coding! See [here](gnimag/Sources/Games) on how to start.
 
 ## Project Structure
 
