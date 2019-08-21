@@ -44,3 +44,35 @@ extension Color: Equatable {
         return lhs.red == rhs.red && lhs.green == rhs.green && lhs.blue == rhs.blue
     }
 }
+
+// MARK: Color Arithmetic
+extension Color {
+    /// Zero (black) color.
+    public static let zero = Color(0, 0, 0)
+
+    /// Add two colors.
+    public static func +(lhs: Color, rhs: Color) -> Color {
+        return Color(lhs.red + rhs.red, lhs.green + rhs.green, lhs.blue + rhs.blue)
+    }
+
+    /// Subtract two colorrs.
+    public static func -(lhs: Color, rhs: Color) -> Color {
+        return Color(lhs.red - rhs.red, lhs.green - rhs.green, lhs.blue - rhs.blue)
+    }
+
+    /// Negate a color (mirror it at zero).
+    /// This is NOT the complementary color; use "Color.white - color" to negate "color".
+    public static prefix func -(a: Color) -> Color {
+        return Color(-a.red, -a.green, -a.blue)
+    }
+
+    /// Multiply a color by a scalar.
+    public static func *(lhs: Double, rhs: Color) -> Color {
+        return Color(lhs * rhs.red, lhs * rhs.green, lhs * rhs.blue)
+    }
+
+    /// Divide a color by a scalar.
+    public static func /(lhs: Color, rhs: Double) -> Color {
+        return Color(lhs.red / rhs, lhs.green / rhs, lhs.blue / rhs)
+    }
+}

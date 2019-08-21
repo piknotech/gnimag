@@ -32,9 +32,10 @@ public enum ConnectedChunks {
 
     /// The result of a split-into-connected-chunks algorithm.
     public struct Result<T: DistanceMeasurable> {
-        let chunks: [Chunk<T>] // The chunks, sorted by size.
-        let maxChunkSize: Int
-        let maxChunkDiameter: Double
+        public var largestChunk: Chunk<T> { return chunks.first! }
+        public let chunks: [Chunk<T>] // The chunks, sorted by size.
+        public let maxChunkSize: Int
+        public let maxChunkDiameter: Double
     }
 
     /// Split an array of objects into connected chunks. Return all chunks, sorted by their size.

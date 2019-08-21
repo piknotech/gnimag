@@ -11,6 +11,11 @@ public struct Bounds {
     public let width: Int
     public let height: Int
 
+    /// One of the center pixels.
+    public var center: Pixel {
+        Pixel(minX + width / 2, minY + height / 2)
+    }
+
     /// Default initializer.
     public init(minX: Int, minY: Int, width: Int, height: Int) {
         self.minX = minX
