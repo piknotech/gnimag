@@ -31,7 +31,7 @@ public final class BitmapCanvas {
     /// Create a canvas directly from the given image.
     /// The image MUST be ConvertibleToCGImage.
     public init(image: Image) {
-        let cgImage = (image as! ConvertibleToCGImage).toCGImage()
+        let cgImage = (image as! ConvertibleToCGImage).CGImage
 
         let rgba = 4
         context = CGContext(
@@ -41,7 +41,7 @@ public final class BitmapCanvas {
             bitsPerComponent: 8,
             bytesPerRow: cgImage.width * rgba,
             space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue
+            bitmapInfo: cgImage.bitmapInfo.rawValue
         )!
 
         // Draw image onto context

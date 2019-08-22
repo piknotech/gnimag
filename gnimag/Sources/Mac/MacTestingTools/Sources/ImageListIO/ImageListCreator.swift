@@ -32,7 +32,7 @@ public final class ImageListCreator {
         provider.newImage += { image in
             if self.i > self.maxImages { return }
 
-            let cgImage = (image as! ConvertibleToCGImage).toCGImage()
+            let cgImage = (image as! ConvertibleToCGImage).CGImage
             let path = self.directoryPath + "/\(self.i).png"
             cgImage.write(to: path)
             self.i += 1

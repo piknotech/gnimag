@@ -9,9 +9,10 @@ import MacTestingTools
 
 /// NativeImage is an Image effectively wrapping a CGImage using bitmap data.
 /// Currently, the wrapped CGImage must have a BGRA pixel layout.
-final class NativeImage: Image {
-    /// The raw pixel data.
-    fileprivate let data: Data
+final class NativeImage: Image, ConvertibleToCGImage {
+    /// The raw pixel data and CGImage.
+    private let data: Data
+    public let CGImage: CGImage
 
     /// Number of bytes per row of the raw pixel data.
     private let bytesPerRow: Int
@@ -21,7 +22,8 @@ final class NativeImage: Image {
         // Get raw pixel data
         data = image.dataProvider!.data! as Data
         bytesPerRow = image.bytesPerRow
-        
+        CGImage = image
+
         super.init(width: image.width, height: image.height)
     }
 
@@ -33,30 +35,5 @@ final class NativeImage: Image {
         let green = data[offset + 1]
         let blue = data[offset + 2]
         return Color(Double(red) / 255, Double(green) / 255, Double(blue) / 255)
-    }
-}
-
-extension NativeImage: ConvertibleToCGImage {
-    /// Create a new CGImage from the raw byte data.
-    /// Required for MacTestingTools.
-    public func toCGImage() -> CGImage {
-        let rgba = 4
-        let numBytes = height * width * rgba
-        let rgbData = CFDataCreate(nil, [UInt8](data), numBytes)!
-        let provider = CGDataProvider(data: rgbData)!
-
-        return CGImage(
-            width: width,
-            height: height,
-            bitsPerComponent: 8,
-            bitsPerPixel: 8 * rgba,
-            bytesPerRow: width * rgba,
-            space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: [CGBitmapInfo.byteOrder32Little, CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)],
-            provider: provider,
-            decode: nil,
-            shouldInterpolate: true,
-            intent: CGColorRenderingIntent.defaultIntent
-        )!
     }
 }

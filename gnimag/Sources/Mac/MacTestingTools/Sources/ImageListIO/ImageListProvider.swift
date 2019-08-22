@@ -28,10 +28,13 @@ public final class ImageListProvider: ImageProvider {
     private let imageFromCGImage: (CGImage) -> Image
 
     /// Default initializer.
+    /// Start providing images immediately.
     public init(directoryPath: String, framerate: Int, imageFromCGImage: @escaping (CGImage) -> Image) {
         self.directoryPath = directoryPath
         self.framerate = framerate
         self.imageFromCGImage = imageFromCGImage
+
+        `continue`()
     }
 
     /// Return the next image in the directory.
@@ -50,7 +53,7 @@ public final class ImageListProvider: ImageProvider {
     }
 
     /// Start or continue providing images.
-    public func start() {
+    public func `continue`() {
         pause()
 
         // Start timer

@@ -21,7 +21,7 @@ let package = Package(
         ),
         .target(
             name: "ImageAnalysisKit",
-            dependencies: ["ImageInput"],
+            dependencies: ["ImageInput", "MacTestingTools"],
             path: "Sources/Base/ImageAnalysisKit"
         ),
         .target(

@@ -6,6 +6,7 @@
 import Foundation
 import ImageInput
 import ImageAnalysisKit
+import MacTestingTools
 
 /// ImageAnalyzer provides a method for analyzing an image.
 class ImageAnalyzer {
@@ -21,6 +22,10 @@ class ImageAnalyzer {
 
         print(coloring.theme, coloring.secondary)
 
+        let canvas = BitmapCanvas(image: image)
+        canvas.drawCircle(center: CGPoint(x: 100, y: 50), radius: 30, with: .white)
+        canvas.write(to: "/Users/David/Desktop/test.png")
+        
         return .failure(.unspecified)
     }
 
