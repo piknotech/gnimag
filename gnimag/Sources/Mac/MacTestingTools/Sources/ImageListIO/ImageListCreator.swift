@@ -7,7 +7,7 @@ import Cocoa
 import ImageInput
 
 /// As a counterpart to ImageListProvider, this class is used to create a directory with enumerated images in the first place.
-/// Create an ImageListCreator and link it to any existing ImageProvider; then, the ImageListCreator will tap every image produced by the ImageProvider and save it to the specified directory.
+/// Create an ImageListCreator and link it to any existing ImageProvider; then, the ImageListCreator will take every image produced by the ImageProvider and save it to the specified directory.
 public final class ImageListCreator {
     /// The directory path.
     private let directoryPath: String
@@ -26,7 +26,7 @@ public final class ImageListCreator {
         try! FileManager.default.createDirectory(atPath: directoryPath, withIntermediateDirectories: true)
     }
 
-    /// Tap every image produced by the ImageProvider and save it to the specified directory.
+    /// Listen for images produced by the ImageProvider and save each image to the specified directory.
     /// Attention: The produced images MUST be ConvertibleToCGImage.
     public func link(to provider: ImageProvider) {
         provider.newImage += { image in

@@ -18,15 +18,10 @@ final class NativeImage: Image {
 
     /// Default initializer.
     init(_ image: CGImage) {
-        // Check if BGRA layout matches
-        guard image.bitmapInfo.contains(.byteOrder32Little) && image.alphaInfo == .premultipliedFirst else {
-            fatalError("NativeImage.init – CGImage byte layout is incorrect (must be BGRA)")
-        }
-
         // Get raw pixel data
         data = image.dataProvider!.data! as Data
         bytesPerRow = image.bytesPerRow
-
+        
         super.init(width: image.width, height: image.height)
     }
 

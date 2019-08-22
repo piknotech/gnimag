@@ -15,4 +15,5 @@ struct AnalysisResult {
 enum AnalysisError: Error {
     case playfieldNotFound
     case playerNotFound
+    case unspecified
 }

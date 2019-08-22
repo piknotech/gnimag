@@ -9,11 +9,12 @@ import Foundation
 enum WindowHelper {
     /// Get the window ID of a window of a given application.
     /// The app must be running and have a single on-screen window whose name contains the windowNameHint.
-    static func mainWindowID(forApp appName: String, windowNameHint: String = "") -> CGWindowID {
+    static func mainWindowID(forApp appName: String, windowNameHint: String? = nil) -> CGWindowID {
         let info = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as! [[String: Any]]
+
         let windows = info.filter {
             ($0["kCGWindowOwnerName"] as! String) == appName &&
-            ($0["kCGWindowName"] as! String).contains(windowNameHint)
+            (windowNameHint == nil || ($0["kCGWindowName"] as! String).contains(windowNameHint!))
         }
 
         switch windows.count {

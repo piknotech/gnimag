@@ -3,7 +3,9 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Foundation
 import ImageInput
+import ImageAnalysisKit
 
 /// ImageAnalyzer provides a method for analyzing an image.
 class ImageAnalyzer {
@@ -12,13 +14,35 @@ class ImageAnalyzer {
     
     /// Analyze the image. Use the hints to accomplish more performant or better analysis.
     func analyze(image: Image, hints: AnalysisHints) -> Result<AnalysisResult, AnalysisError> {
-        fatalError("Not yet implemented")
+        guard let coloring = findColoring(in: image) else {
+            // ...
+            return .failure(.unspecified) // DON'T FAIL, use last coloring!?
+        }
+
+        print(coloring.theme, coloring.secondary)
+
+        return .failure(.unspecified)
     }
 
     /// Find the coloring of the game.
-    private func findColoring() -> Coloring? {
-        // Erstes: statischer punkt, zweites: CircleWalk um mitte des screens mit screenWidth/4 radius (25 punkte), häufigste farbe nehmen (10% tolerance)
-        return nil
+    private func findColoring(in image: Image) -> Coloring? {
+        // Step 1: use static pixel to find the main (theme) color
+        let bottomLeft = Pixel(10, 10)
+        let theme = image.color(at: bottomLeft)
+
+        // Step 2: consider 21 pixels and determine their most frequent color to find the secondary color
+        let circle = Circle(center: image.bounds.center.CGPoint, radius: CGFloat(image.width) / 4)
+        let pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 21)
+        let colors = pixels.map(image.color(at:))
+        let result = ConnectedChunks.from(colors, maxDistance: 0.05)
+
+        // Find largest chunk; must contain at least half of the pixels
+        if result.maxChunkSize < 11 { return nil }
+        let averageColor = result.largestChunk.objects.reduce(Color.zero) { sum, newColor in
+            return sum + newColor / Double(result.maxChunkSize)
+        }
+
+        return Coloring(theme: theme, secondary: averageColor)
     }
 
     /// Find the playfield.

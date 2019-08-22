@@ -13,7 +13,7 @@ class WindowTapper: Tapper {
 
     /// Default initializer.
     /// The app must be running and have an on-screen window.
-    init(appName: String, windowNameHint: String = "") {
+    init(appName: String, windowNameHint: String? = nil) {
         windowID = WindowHelper.mainWindowID(forApp: appName, windowNameHint: windowNameHint)
     }
 

@@ -49,10 +49,11 @@ public enum ConnectedChunks {
             var matchingChunkIndices = [Int]()
 
             // Check for each chunk if the object is near enough
-            for (index, chunk) in chunks.enumerated() {
+            chunks: for (index, chunk) in chunks.enumerated() {
                 for existing in chunk.objects {
                     if object.distance(to: existing) <= maxDistance {
                         matchingChunkIndices.append(index)
+                        continue chunks
                     }
                 }
             }
