@@ -52,12 +52,29 @@ class ImageAnalyzer {
 
     /// Find the playfield.
     /// Call this method only once, at the start of the game.
-    private func findPlayfield() -> Playfield? {
+    private func findPlayfield(in image: Image, with coloring: Coloring) -> Playfield? {
         precondition(playfield == nil)
-        // inner circle: Nehme screen-mitte; ziehe 16 strahlen so weit raus wie möglich (2 mal pro strahl wegen schwarzer 0).
-        // outer circle: Nehme screen-mitte; ziehe 16 strahlen so weit raus wie möglich (3 mal pro strahl).
-        // --> ColorMatchSequence für DetectShapeFromInside algorithm
-        // (DetectShapeFromInside: findet 16 punkte, macht enclosing form. Dann: check goodness (wie viele der punkte sind nahe genug am rand).
+
+        // Go downwards from the screen center until finding the beginning of the "0"
+        let screenCenter = Pixel(image.width / 2, image.height / 2)
+        var downwardsPath: PixelPath = StraightPath(start: screenCenter, angle: .pi, bounds: image.bounds)
+        let zeroPosition = image.findFirstPixel(matching: coloring.secondary.withTolerance(0.1), on: &downwardsPath)!
+
+        // Now find the edge of the inner circle (further going downwards)
+        let innerEdge = EdgeDetector.search(in: image, shapeColor: coloring.theme.withTolerance(0.1), from: zeroPosition, angle: .pi)
+        let innerCircle = SmallestCircle.containing(innerEdge.map { $0.CGPoint })
+
+        // Go lower, now being outside the inner circle
+        var outsidePosition = innerCircle.center.nearestPixel
+        outsidePosition.y += Int(innerCircle.radius) + 2
+        let outerEdge = EdgeDetector.search(in: image, shapeColor: coloring.secondary.withTolerance(0.1), from: outsidePosition, angle: .pi)
+        let outerCircle = SmallestCircle.containing(outerEdge.map { $0.CGPoint })
+
+        // Centers should be (nearly) identical
+        var center = innerCircle.center + outerCircle.center
+        center = CGPoint(x: center.x / 2, y: center.y / 2)
+
+        playfield = Playfield(center: center, innerRadius: Double(innerCircle.radius), fullRadius: Double(outerCircle.radius))
         return playfield
     }
 

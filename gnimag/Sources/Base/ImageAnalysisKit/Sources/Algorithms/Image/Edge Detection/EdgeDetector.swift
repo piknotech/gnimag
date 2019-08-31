@@ -14,7 +14,7 @@ public enum EdgeDetector {
     public static func search(
         in image: Image,
         shapeColor: ColorMatch,
-        startingPixel: Pixel,
+        from startingPixel: Pixel,
         angle: Double = 0,
         searchSpeed: Int = 1
     ) -> [Pixel] {
