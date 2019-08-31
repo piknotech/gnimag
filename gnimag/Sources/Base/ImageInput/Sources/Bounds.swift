@@ -32,4 +32,15 @@ public struct Bounds {
         pixel.x < minX + width &&
         pixel.y < minY + height
     }
+
+    /// Inset the bounds by the given amount on each side.
+    /// Providing a negative amount will make the bounds larger.
+    public func inset(by: (x: Int, y: Int)) -> Bounds {
+        return Bounds(
+            minX: minX + by.x,
+            minY: minY + by.y,
+            width: width - 2 * by.x,
+            height: height - 2 * by.y
+        )
+    }
 }

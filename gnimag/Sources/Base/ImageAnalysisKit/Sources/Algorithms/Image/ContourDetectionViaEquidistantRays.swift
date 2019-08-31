@@ -30,7 +30,7 @@ public enum ContourDetectionViaEquidistantRays {
 
         public enum RayHasHitBoundsMode {
             /// Ignore this ray and use the information from the other rays.
-            case ignore
+            case ignoreRay
 
             /// Use the point where the ray has hit the bounds as outside of the shape. This means, the shape will (partly) be defined by the bounds of the image.
             case treatBoundsAsContour
@@ -57,7 +57,8 @@ public enum ContourDetectionViaEquidistantRays {
 
     // MARK: Algorithm
     /// Detect a contour inside the image using the given arguments.
-    public static func detectContour(in image: Image, arguments: Arguments) -> Result<[Pixel], ContourDetectionViaEquidistantRays.Error> {
+    /// Can only return `nil` if arguments.rayHasHitBoundsMode = .fail.
+    public static func detectContour(in image: Image, arguments: Arguments) -> [Pixel]? {
         var contour = [Pixel]()
 
         for i in 0 ..< arguments.numberOfRays {
@@ -75,21 +76,22 @@ public enum ContourDetectionViaEquidistantRays {
             case let .notFulfilled(lastPixelOfPath: pixel, _):
                 // Sequence was not fulfilled --> ray has hit the bounds
                 switch arguments.rayHasHitBoundsMode {
-                case .fail: return .failure(.hitImageBounds)
-                case .ignore: continue
+                case .fail: return nil
+                case .ignoreRay: continue
                 case .treatBoundsAsContour: contour.append(pixel!)
                 }
             }
 
         }
 
-        return .success(contour)
+        return contour
     }
 }
 
 extension Image {
     /// Detect a contour inside the image using the given arguments.
-    public func detectContourViaEquidistantRays(arguments: ContourDetectionViaEquidistantRays.Arguments) -> Result<[Pixel], ContourDetectionViaEquidistantRays.Error> {
+    /// Can only return `nil` if arguments.rayHasHitBoundsMode = .fail.
+    public func detectContourViaEquidistantRays(arguments: ContourDetectionViaEquidistantRays.Arguments) -> [Pixel]? {
         ContourDetectionViaEquidistantRays.detectContour(in: self, arguments: arguments)
     }
 }
