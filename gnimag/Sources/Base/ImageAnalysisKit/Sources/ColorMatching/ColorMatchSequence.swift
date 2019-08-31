@@ -20,6 +20,11 @@ public struct ColorMatchSequence {
     public init(_ sequence: ColorMatch...) {
         self.sequence = sequence
     }
+
+    /// Initialize with a tolerance and a sequence of colors or anti-colors (!blue).
+    public init(tolerance: Double, colors: [NeedsToleranceValue]) {
+        self.sequence = colors.map { $0.withTolerance(tolerance) }
+    }
 }
 
 extension Image {
