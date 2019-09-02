@@ -20,10 +20,11 @@ class ImageAnalyzer {
             return .failure(.unspecified) // DON'T FAIL, use last coloring!?
         }
 
-        print(coloring.theme, coloring.secondary)
+        let playfield = findPlayfield(in: image, with: coloring)!
 
         let canvas = BitmapCanvas(image: image)
-        canvas.drawCircle(center: CGPoint(x: 100, y: 50), radius: 30, with: .white)
+        canvas.drawCircle(center: playfield.center, radius: CGFloat(playfield.innerRadius), with: .black, alpha: 1, strokeWidth: 2)
+        canvas.drawCircle(center: playfield.center, radius: CGFloat(playfield.fullRadius), with: .black, alpha: 1, strokeWidth: 2)
         canvas.write(to: "/Users/David/Desktop/test.png")
         
         return .failure(.unspecified)
@@ -61,14 +62,14 @@ class ImageAnalyzer {
         let zeroPosition = image.findFirstPixel(matching: coloring.secondary.withTolerance(0.1), on: &downwardsPath)!
 
         // Now find the edge of the inner circle (further going downwards)
-        let innerEdge = EdgeDetector.search(in: image, shapeColor: coloring.theme.withTolerance(0.1), from: zeroPosition, angle: .pi)
-        let innerCircle = SmallestCircle.containing(innerEdge.map { $0.CGPoint })
+        let innerEdge = EdgeDetector.search(in: image, shapeColor: coloring.theme.withTolerance(0.1), from: zeroPosition, angle: .pi)!
+        let innerCircle = SmallestCircle.containing(innerEdge.map(CGPoint.init))
 
         // Go lower, now being outside the inner circle
         var outsidePosition = innerCircle.center.nearestPixel
         outsidePosition.y += Int(innerCircle.radius) + 2
-        let outerEdge = EdgeDetector.search(in: image, shapeColor: coloring.secondary.withTolerance(0.1), from: outsidePosition, angle: .pi)
-        let outerCircle = SmallestCircle.containing(outerEdge.map { $0.CGPoint })
+        let outerEdge = EdgeDetector.search(in: image, shapeColor: coloring.secondary.withTolerance(0.1), from: outsidePosition, angle: .pi)!
+        let outerCircle = SmallestCircle.containing(outerEdge.map(CGPoint.init))
 
         // Centers should be (nearly) identical
         var center = innerCircle.center + outerCircle.center

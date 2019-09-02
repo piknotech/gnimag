@@ -10,21 +10,27 @@ import ImageInput
 /// Where the image bounds are hit, the edge continues outside the bounds.
 /// TODO: Inverse edges are not yet supported.
 public enum EdgeDetector {
+    public enum DetectionLimit {
+        case maxPixelsOnEdge(Int)
+        case distance(to: Pixel, maximum: Double)
+        case none
+    }
     /// The starting pixel must match the shapeColor. angle is the angle that will be walked until finding a pixel outisde the shape. When inverse = true, outside bounds will count as matching shapeColor.
     public static func search(
         in image: Image,
         shapeColor: ColorMatch,
         from startingPixel: Pixel,
+        limit: DetectionLimit = .none,
         angle: Double = 0,
         searchSpeed: Int = 1
-    ) -> [Pixel] {
+    ) -> [Pixel]? {
         guard let (inside, outside) = findPointOnTheEdge(image: image, shapeColor: shapeColor, from: startingPixel, angle: angle) else {
-            return [] // Empty edge
+            return nil
         }
         
-        // Create context, find edge
-        var context = createTraverserFromStartingPoints(points: (inside, outside), image: image, shapeColor: shapeColor)
-        let edge = findEdge(from: &context, image: image, shapeColor: shapeColor, searchSpeed: searchSpeed)
+        // Create traverser, find edge
+        var traverser = createTraverserFromStartingPoints(points: (inside, outside), image: image, shapeColor: shapeColor)
+        let edge = findEdge(from: &traverser, image: image, shapeColor: shapeColor, limit: limit, searchSpeed: searchSpeed)
         
         return edge
     }
@@ -96,20 +102,30 @@ public enum EdgeDetector {
         }
     }
     
-    /// STEP FOUR: Walk on context until hitting the starting point again, each time adding the new point to the edge.
-    private static func findEdge(from context: inout EdgeTraverser, image: Image, shapeColor: ColorMatch, searchSpeed: Int) -> [Pixel] {
-        let startingPixel = context.pixel
+    /// Walk on the context until hitting the starting point again, each time adding the new point to the edge.
+    private static func findEdge(from traverser: inout EdgeTraverser, image: Image, shapeColor: ColorMatch, limit: DetectionLimit, searchSpeed: Int) -> [Pixel]? {
+        let startingPixel = traverser.pixel
         var edge = [startingPixel]
         
         // Iterate until hitting starting point again
         while true {
-            context.iterate(image: image, color: shapeColor, speed: searchSpeed)
+            traverser.iterate(image: image, color: shapeColor, speed: searchSpeed)
 
-            if context.pixel == startingPixel {
-                return edge
+            // Check limit
+            switch limit {
+            case let .maxPixelsOnEdge(maxPixels):
+                if edge.count > maxPixels { return nil }
+
+            case let .distance(to: pixel, maximum: maximum):
+                if traverser.pixel.distance(to: pixel) > maximum { return nil }
+
+            case .none:
+                ()
             }
-            
-            edge.append(context.pixel)
+
+            // Add pixel; stop if starting point was reached
+            if traverser.pixel == startingPixel { return edge }
+            edge.append(traverser.pixel)
         }
     }
 }

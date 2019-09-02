@@ -18,4 +18,9 @@ public extension CGPoint {
     var nearestPixel: Pixel {
         Pixel(Int(round(x)), Int(round(y)))
     }
+
+    /// Initialize the CGPoint from a Pixel.
+    init(_ pixel: Pixel) {
+        self = pixel.CGPoint
+    }
 }
