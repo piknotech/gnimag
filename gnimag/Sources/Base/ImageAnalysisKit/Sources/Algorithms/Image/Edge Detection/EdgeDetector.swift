@@ -7,37 +7,36 @@ import ImageInput
 
 /// EdgeDetector detects the edge of a shape which has a uniform color.
 /// A starting point that is already at the edge is required.
-/// Where the image bounds are hit, the edge continues outside the bounds.
-/// TODO: Inverse edges are not yet supported.
+/// Where the image bounds are hit, the edge continues outside the bounds, unless inverse is true.
 public enum EdgeDetector {
     public enum DetectionLimit {
         case maxPixelsOnEdge(Int)
         case distance(to: Pixel, maximum: Double)
         case none
     }
-    /// The starting pixel must match the shapeColor. angle is the angle that will be walked until finding a pixel outisde the shape. When inverse = true, outside bounds will count as matching shapeColor.
+
+    /// NOTE: If inverse = true, outside the bounds will count as belonging to the shape. Use it when detecting a shape from outside, i.e. when detecting the "inverse" shape.
     public static func search(
         in image: Image,
         shapeColor: ColorMatch,
         from startingPixel: Pixel,
         limit: DetectionLimit = .none,
-        angle: Double = 0,
+        inverse: Bool = false,
+        angle: Double,
         searchSpeed: Int = 1
     ) -> [Pixel]? {
-        guard let (inside, outside) = findPointOnTheEdge(image: image, shapeColor: shapeColor, from: startingPixel, angle: angle) else {
+        guard let (inside, outside) = findPointOnTheEdge(image: image, shapeColor: shapeColor, from: startingPixel, inverse: inverse, angle: angle) else {
             return nil
         }
-        
-        // Create traverser, find edge
-        var traverser = createTraverserFromStartingPoints(points: (inside, outside), image: image, shapeColor: shapeColor)
-        let edge = findEdge(from: &traverser, image: image, shapeColor: shapeColor, limit: limit, searchSpeed: searchSpeed)
-        
-        return edge
+
+        let traverser = createTraverserFromStartingPoints(points: (inside, outside), image: image, shapeColor: shapeColor, inverse: inverse, speed: searchSpeed)
+
+        return traverser.findEdge(limit: limit)
     }
 
     /// Walk (using angle) until hitting a pixel that has NOT the required shape color (or hitting the image wall). Then we have found the beginning of the edge.
     /// Return (point inside the shape, point outside the shape), or nil if it was not found.
-    private static func findPointOnTheEdge(image: Image, shapeColor: ColorMatch, from pixel: Pixel, angle: Double) -> (inside: Pixel, outside: Pixel)? {
+    private static func findPointOnTheEdge(image: Image, shapeColor: ColorMatch, from pixel: Pixel, inverse: Bool, angle: Double) -> (inside: Pixel, outside: Pixel)? {
         precondition(shapeColor.matches(image.color(at: pixel)), "The starting pixel (\(pixel)) must be inside the shape!")
 
         let extendedBounds = image.bounds.inset(by: (-1, -1))
@@ -49,7 +48,7 @@ public enum EdgeDetector {
         while let pixel = path.next() {
             // Outside bounds: either inside or outside shape, depending on `inverse`
             if !image.contains(pixel) {
-                /* if inverse { return nil } – TODO */
+                if inverse { return nil }
                 return (lastPixel, pixel)
             }
 
@@ -66,66 +65,42 @@ public enum EdgeDetector {
     }
 
     /// Check if the found starting points are either adjacent horizontally or vertically; else (diagonally), change the starting points.
-    /// If clockwise = true, swap the 
     /// Return the EdgeTraverser that can now be used to traverse the edge.
-    private static func createTraverserFromStartingPoints(points: (inside: Pixel, outside: Pixel), image: Image, shapeColor: ColorMatch) -> EdgeTraverser {
+    private static func createTraverserFromStartingPoints(points: (inside: Pixel, outside: Pixel), image: Image, shapeColor: ColorMatch, inverse: Bool, speed: Int) -> EdgeTraverser {
         let delta = points.outside - points.inside
 
-        // Check the alignment
+        // Choose matching rotation
+        let rotation: Rotation?
         switch (delta.dx, delta.dy) {
         case let (x, y) where x == 0 && y > 0: // Outside is below inside
-            return EdgeTraverser(pixel: points.inside, rotation: .down)
-            
+            rotation = .down
         case let (x, y) where x == 0 && y < 0: // Outside is above inside
-            return EdgeTraverser(pixel: points.inside, rotation: .up)
-
+            rotation = .up
         case let (x, y) where x > 0 && y == 0: // Outside is right of inside
-            return EdgeTraverser(pixel: points.inside, rotation: .right)
-
+            rotation = .right
         case let (x, y) where x < 0 && y == 0: // Outside is left of inside
-            return EdgeTraverser(pixel: points.inside, rotation: .left)
-            
-        case let (x, y) where abs(x) == abs(y): // Diagonally
-            // Get a point that is directly adjacent to both points
-            let third = Pixel(points.inside.x, points.outside.y)
-            
-            if image.contains(third) && shapeColor.matches(image.color(at: third)) {
-                // Inside the shape: use (third, outside)
-                return createTraverserFromStartingPoints(points: (third, points.outside), image: image, shapeColor: shapeColor)
-            } else {
-                // Outside the shape: use (inside, third)
-                return createTraverserFromStartingPoints(points: (points.inside, third), image: image, shapeColor: shapeColor)
-            }
-            
-        default: // Impossible
-            fatalError()
+            rotation = .left
+        default:
+            rotation = nil // Diagonally adjacent
         }
-    }
-    
-    /// Walk on the context until hitting the starting point again, each time adding the new point to the edge.
-    private static func findEdge(from traverser: inout EdgeTraverser, image: Image, shapeColor: ColorMatch, limit: DetectionLimit, searchSpeed: Int) -> [Pixel]? {
-        let startingPixel = traverser.pixel
-        var edge = [startingPixel]
-        
-        // Iterate until hitting starting point again
-        while true {
-            traverser.iterate(image: image, color: shapeColor, speed: searchSpeed)
 
-            // Check limit
-            switch limit {
-            case let .maxPixelsOnEdge(maxPixels):
-                if edge.count > maxPixels { return nil }
-
-            case let .distance(to: pixel, maximum: maximum):
-                if traverser.pixel.distance(to: pixel) > maximum { return nil }
-
-            case .none:
-                ()
-            }
-
-            // Add pixel; stop if starting point was reached
-            if traverser.pixel == startingPixel { return edge }
-            edge.append(traverser.pixel)
+        if let rotation = rotation {
+            return EdgeTraverser(initialPixel: points.inside, initialRotation: rotation, image: image, speed: speed, color: shapeColor, inverse: inverse)
         }
+
+        // Else: |x| = |y|, diagonally adjacent
+
+        // Get a point that is directly adjacent to both points
+        let third = Pixel(points.inside.x, points.outside.y)
+        let newPoints: (Pixel, Pixel)
+
+        // Either use (third, outside) or (inside, third), depending on whether third is inside the shape or not
+        if image.contains(third) && shapeColor.matches(image.color(at: third)) {
+            newPoints = (third, points.outside)
+        } else {
+            newPoints = (points.inside, third)
+        }
+
+        return createTraverserFromStartingPoints(points: newPoints, image: image, shapeColor: shapeColor, inverse: inverse, speed: speed)
     }
 }
