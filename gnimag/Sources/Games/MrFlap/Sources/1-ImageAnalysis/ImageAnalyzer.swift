@@ -53,16 +53,19 @@ class ImageAnalyzer {
 
     /// Find the playfield.
     /// Call this method only once, at the start of the game.
+    /// Because this method is only called once (not once per frame), there do not need to be any performance optimizations.
+    /// Also, there is no error handling – we just assume that the image meets our expectations.
     private func findPlayfield(in image: Image, with coloring: Coloring) -> Playfield? {
         precondition(playfield == nil)
 
         // Go downwards from the screen center until finding the beginning of the "0"
         let screenCenter = Pixel(image.width / 2, image.height / 2)
         var downwardsPath: PixelPath = StraightPath(start: screenCenter, angle: .pi, bounds: image.bounds)
-        let zeroPosition = image.findFirstPixel(matching: coloring.secondary.withTolerance(0.1), on: &downwardsPath)!
-
+        let pathOutsideZero = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme]) // blue, white (zero), blue (outside zero)
+        let outsideZeroPosition = image.follow(path: &downwardsPath, untilFulfillingSequence: pathOutsideZero).fulfilledPixel!
+        
         // Now find the edge of the inner circle (further going downwards)
-        let innerEdge = EdgeDetector.search(in: image, shapeColor: coloring.theme.withTolerance(0.1), from: zeroPosition, angle: .pi)!
+        let innerEdge = EdgeDetector.search(in: image, shapeColor: coloring.theme.withTolerance(0.1), from: outsideZeroPosition, angle: .pi)!
         let innerCircle = SmallestCircle.containing(innerEdge.map(CGPoint.init))
 
         // Go lower, now being outside the inner circle

@@ -77,17 +77,21 @@ public final class BitmapCanvas {
     // MARK: Drawing Operations
 
     /// Fill a single pixel with the given color.
-    public func fill(_ pixel: Pixel, with color: Color, alpha: Double = 1) {
+    @discardableResult
+    public func fill(_ pixel: Pixel, with color: Color, alpha: Double = 1) -> BitmapCanvas {
         context.setFillColor(color.NSColor(withAlpha: alpha).cgColor)
         context.fill(CGRect(x: pixel.x, y: pixel.y, width: 1, height: 1))
+        return self
     }
 
     /// Draw the outline of a circle.
-    public func drawCircle(center: CGPoint, radius: CGFloat, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) {
+    @discardableResult
+    public func drawCircle(center: CGPoint, radius: CGFloat, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) -> BitmapCanvas {
         let rect = CGRect(x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius)
         context.setLineWidth(CGFloat(strokeWidth))
         context.setStrokeColor(color.NSColor(withAlpha: alpha).cgColor)
         context.strokeEllipse(in: rect)
+        return self
     }
 
     // MARK: Write to File

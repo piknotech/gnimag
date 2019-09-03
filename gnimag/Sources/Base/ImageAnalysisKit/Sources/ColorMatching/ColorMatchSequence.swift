@@ -65,5 +65,11 @@ extension Image {
 
         /// The sequence has not been fulfilled; return the last pixel of the path and the highest sequence index that has been fulfilled (this may be -1 if nothing has been matched).
         case notFulfilled(lastPixelOfPath: Pixel?, highestFulfilledSequenceIndex: Int)
+
+        /// Return the pixel which fulfilled the sequence, or nil if the sequence was not fulfilled.
+        public var fulfilledPixel: Pixel? {
+            guard case let .fulfilled(_, fulfilledPixel: pixel) = self else { return nil }
+            return pixel
+        }
     }
 }
