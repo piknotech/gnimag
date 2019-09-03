@@ -37,8 +37,8 @@ public struct LimitedPath: PixelPath {
 // MARK: PixelPath Extension
 extension PixelPath {
     /// Limit this path by a maximum length after which the path will stop.
-    /// After the limited path is exhausted, you can call "limit(by:)" again to limit the path again, starting at its current state.
-    public func limit(by maxLength: Int) -> PixelPath {
+    /// After the limited path is exhausted, you can call "limited(by:)" again to limit the path again, starting at its current state.
+    public func limited(by maxLength: Int) -> PixelPath {
         LimitedPath(path: self, maxLength: maxLength)
     }
 }

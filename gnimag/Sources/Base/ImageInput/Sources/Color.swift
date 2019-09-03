@@ -30,12 +30,12 @@ public struct Color {
     }
 
     // MARK: Static members
-    
-    /// White color.
     public static let white = Color(1, 1, 1)
-    
-    /// Black color.
     public static let black = Color(0, 0, 0)
+    public static let blue = Color(0, 0, 1)
+    public static let green = Color(0, 1, 0)
+    public static let yellow = Color(1, 1, 0)
+    public static let red = Color(1, 0, 0)
 }
 
 extension Color: Equatable {

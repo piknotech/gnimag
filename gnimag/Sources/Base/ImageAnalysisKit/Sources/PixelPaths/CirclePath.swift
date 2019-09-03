@@ -33,12 +33,12 @@ public struct CirclePath: PixelPath {
     public let pixelsOutsideBoundsMode: PixelsOutsideBoundsMode
 
     /// Default initializer.
-    public init(circle: Circle, numberOfPixels: Int, startAngle: CGFloat, bounds: Bounds, pixelsOutsideBoundsMode: PixelsOutsideBoundsMode) {
+    public init(circle: Circle, numberOfPixels: Int, startAngle: CGFloat, bounds: Bounds, pixelsOutsideBounds: PixelsOutsideBoundsMode) {
         self.circle = circle
         self.numberOfPixels = numberOfPixels
         self.startAngle = startAngle
         self.bounds = bounds
-        self.pixelsOutsideBoundsMode = pixelsOutsideBoundsMode
+        self.pixelsOutsideBoundsMode = pixelsOutsideBounds
     }
 
     // MARK: PixelPath
@@ -90,12 +90,5 @@ extension CirclePath {
             let angle = startAngle + CGFloat($0) * delta
             return circle.point(at: angle).nearestPixel
         }
-    }
-
-    /// Calculate the maximum number of pixels for a call to "equidistantPixels:on:numberOfPixels:startAngle:" such that no pixels are returned twice.
-    /// This is circa 2pi x r / sqrt(2). The factor of sqrt(2) is required because of diagonal pixels, for example at 45°.
-    public static func maxNumberOfPixels(forCircleWithRadius radius: Double) -> Int {
-        let minAngle = 2 * tan(sqrt(0.5) / radius)
-        return Int(2 * .pi / minAngle)
     }
 }
