@@ -14,11 +14,11 @@ public final class BitmapCanvas {
 
     // MARK: Initialization
 
-    /// Create a blank canvas with the given width and height.
+    /// Create an empty (= transparent) canvas with the given width and height.
     public init(width: Int, height: Int) {
         let rgba = 4
         context = CGContext(
-            data: nil, // TODO: ist das default alles schwarz?
+            data: nil,
             width: width,
             height: height,
             bitsPerComponent: 8,

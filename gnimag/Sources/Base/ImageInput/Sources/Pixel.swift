@@ -28,3 +28,6 @@ extension Pixel: CustomStringConvertible {
         return "Pixel(\(x) , \(y))"
     }
 }
+
+extension Pixel: Hashable {
+}

@@ -58,21 +58,17 @@ class ImageAnalyzer {
     private func findPlayfield(in image: Image, with coloring: Coloring) -> Playfield? {
         precondition(playfield == nil)
 
-        // Go downwards from the screen center until finding the beginning of the "0"
         let screenCenter = Pixel(image.width / 2, image.height / 2)
-        var downwardsPath: PixelPath = StraightPath(start: screenCenter, angle: .pi, bounds: image.bounds)
-        let pathOutsideZero = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme]) // blue, white (zero), blue (outside zero)
-        let outsideZeroPosition = image.follow(path: &downwardsPath, untilFulfillingSequence: pathOutsideZero).fulfilledPixel!
-        
-        // Now find the edge of the inner circle (further going downwards)
-        let innerEdge = EdgeDetector.search(in: image, shapeColor: coloring.theme.withTolerance(0.1), from: outsideZeroPosition, angle: .pi)!
-        let innerCircle = SmallestCircle.containing(innerEdge.map(CGPoint.init))
 
-        // Go lower, now being outside the inner circle
-        var outsidePosition = innerCircle.center.nearestPixel
-        outsidePosition.y += Int(innerCircle.radius) + 2
-        let outerEdge = EdgeDetector.search(in: image, shapeColor: coloring.secondary.withTolerance(0.1), from: outsidePosition, angle: .pi)!
-        let outerCircle = SmallestCircle.containing(outerEdge.map(CGPoint.init))
+        // Find inner circle with the following sequence: [blue, white, blue, white]
+        let innerSequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary])
+        let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence)!
+        let innerCircle = SmallestCircle.containing(innerContour.map(CGPoint.init))
+
+        // Find outer circle with the following sequence: [blue, white, blue, white, blue]
+        let outerSequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary, coloring.theme])
+        let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence)!
+        let outerCircle = SmallestCircle.containing(outerContour.map(CGPoint.init))
 
         // Centers should be (nearly) identical
         var center = innerCircle.center + outerCircle.center
