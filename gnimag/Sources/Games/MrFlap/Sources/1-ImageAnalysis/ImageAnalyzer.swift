@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import GameKit
 import ImageInput
 import ImageAnalysisKit
 import MacTestingTools
@@ -20,13 +21,22 @@ class ImageAnalyzer {
             return .failure(.unspecified) // DON'T FAIL, use last coloring!?
         }
 
-        let playfield = findPlayfield(in: image, with: coloring)!
+        // Find playfield at first call
+        playfield = playfield ?? findPlayfield(in: image, with: coloring)!
+        if playfield == nil {
+            return .failure(.playfieldNotFound)
+        }
 
-        let canvas = BitmapCanvas(image: image)
-        canvas.drawCircle(center: playfield.center, radius: CGFloat(playfield.innerRadius), with: .black, alpha: 1, strokeWidth: 2)
-        canvas.drawCircle(center: playfield.center, radius: CGFloat(playfield.fullRadius), with: .black, alpha: 1, strokeWidth: 2)
-        canvas.write(to: "/Users/David/Desktop/test.png")
-        
+        // Find player
+        Measurement.begin(id: "Fun")
+        let yCenter = playfield.center.y + CGFloat(playfield.innerRadius + playfield.fullRadius) / 2
+        let initialHint = Pixel(image.bounds.width / 2, Int(yCenter))
+        guard let player = findPlayer(in: image, with: coloring, searchCenter: initialHint) else {
+            return .failure(.playerNotFound)
+        }
+        Measurement.end(id: "Fun")
+
+        BitmapCanvas(image: image).drawCircle(center: player.coords.position(respectiveTo: playfield.center), radius: CGFloat(player.size * 0.707), with: .yellow).write(to: "/Users/David/Desktop/t.png")
         return .failure(.unspecified)
     }
 
@@ -56,8 +66,6 @@ class ImageAnalyzer {
     /// Because this method is only called once (not once per frame), there do not need to be any performance optimizations.
     /// Also, there is no error handling – we just assume that the image meets our expectations.
     private func findPlayfield(in image: Image, with coloring: Coloring) -> Playfield? {
-        precondition(playfield == nil)
-
         let screenCenter = Pixel(image.width / 2, image.height / 2)
 
         // Find inner circle with the following sequence: [blue, white, blue, white]
@@ -79,12 +87,20 @@ class ImageAnalyzer {
     }
 
     /// Find the player.
-    private func findPlayer() -> Player? {
-        // flügel oder auge detecten! entweder weiss oder schwarz je nach mode --> unique color
-        // vorschlagene position im hint als start benutzen; dann: Batched SpiralWalk oder ExtendingCircleWalk
-        // batched = immer 50 nächste werte direkt berechnet und in array gespeichert; trotzdem: performance vom next-call?
-        // --> dann von dort aus so lange extenden in 16 richtungen bis farbe nicht mehr passt (ColorMatchSequence, wie oben), dann: enclosing quadrat
-        return nil
+    private func findPlayer(in image: Image, with coloring: Coloring, searchCenter: Pixel) -> Player? {
+        // Find eye or wing pixel via its unique color
+        var path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
+        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: &path) else { return nil }
+
+        // Find contour of player
+        let sequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary])
+        let contour = RayShooter.findContour(in: image, center: eye, numRays: 15, colorSequence: sequence)!
+        let obb = SmallestOBB.containing(contour.map(CGPoint.init))
+
+        // Calculate player properties
+        let coords = PolarCoordinates(position: obb.center, center: playfield.center)
+        let size = Double(obb.width + obb.height) / 2
+        return Player(coords: coords, size: size)
     }
 
     /// Find all bars.

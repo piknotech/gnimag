@@ -4,12 +4,14 @@
 //
 
 import Foundation
+import GameKit
 
 /// Player describes the position of the bird.
 struct Player {
-    /// The center of the player, repsective to the playfield's center.
-    let height: Double
-    let angle: Double
+    /// The position of the player, repsective to the playfield's center.
+    let coords: PolarCoordinates
+    var angle: Double { Double(coords.angle) }
+    var height: Double { Double(coords.height) }
     
     /// The width and height of the quadratic bird.
     let size: Double

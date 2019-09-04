@@ -15,7 +15,7 @@ public enum SmallestOBB {
 
     /// Calculate the smallest OBB that contains a given (non-empty) set of points.
     /// This runs in O(n log n + nh) time where h is the number of points on the convex hull.
-    public static func containing(_ points: [CGPoint], minimizing minimizingProperty: MinimizingProperty) -> OBB {
+    public static func containing(_ points: [CGPoint], minimizing minimizingProperty: MinimizingProperty = .area) -> OBB {
         // Calculate and use the convex hull as the smallest OBB of the set of points is the same as the smallest OBB of their convex hull
         let hull = ConvexHull.from(points)
 
