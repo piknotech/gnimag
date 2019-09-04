@@ -30,7 +30,7 @@ final class NativeImage: Image, ConvertibleToCGImage {
     /// Get the color value at the given pixel.
     override func color(at pixel: Pixel) -> Color {
         // Read pixel data (using BGRA layout)
-        let offset = bytesPerRow * pixel.y + 4 * pixel.x
+        let offset = bytesPerRow * (height - 1 - pixel.y) + 4 * pixel.x
         let red = data[offset]
         let green = data[offset + 1]
         let blue = data[offset + 2]
