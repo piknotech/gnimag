@@ -25,7 +25,7 @@ extension Pixel: Equatable {
 extension Pixel: CustomStringConvertible {
     /// Describe the pixel.
     public var description: String {
-        return "Pixel(\(x) , \(y))"
+        return "(\(x), \(y))"
     }
 }
 

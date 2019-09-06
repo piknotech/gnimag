@@ -28,15 +28,14 @@ class ImageAnalyzer {
         }
 
         // Find player
-        Measurement.begin(id: "Fun")
         let yCenter = playfield.center.y + CGFloat(playfield.innerRadius + playfield.fullRadius) / 2
         let initialHint = Pixel(image.bounds.width / 2, Int(yCenter))
         guard let player = findPlayer(in: image, with: coloring, searchCenter: initialHint) else {
             return .failure(.playerNotFound)
         }
-        Measurement.end(id: "Fun")
 
-        BitmapCanvas(image: image).drawCircle(center: player.coords.position(respectiveTo: playfield.center), radius: CGFloat(player.size * 0.707), with: .yellow).write(to: "/Users/David/Desktop/t.png")
+        print(player.coords, player.size)
+
         return .failure(.unspecified)
     }
 
@@ -92,8 +91,8 @@ class ImageAnalyzer {
         var path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
         guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: &path) else { return nil }
 
-        // Find contour of player
-        let sequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary])
+        // Find contour of player with the following sequence: [blue, !blue]
+        let sequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, !coloring.theme])
         let contour = RayShooter.findContour(in: image, center: eye, numRays: 15, colorSequence: sequence)!
         let obb = SmallestOBB.containing(contour.map(CGPoint.init))
 
