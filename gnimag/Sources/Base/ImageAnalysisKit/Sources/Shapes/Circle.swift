@@ -23,16 +23,16 @@ public struct Circle {
         let y = center.y + sin(angle) * radius
         return CGPoint(x: x, y: y)
     }
-
-    /// Check if the circle contains a given point.
-    public func contains(_ point: CGPoint) -> Bool {
-        center.distance(to: point) <= radius
-    }
 }
 
 extension Circle: Shape {
     /// Calculate the unsigned distance to a point.
     public func distance(to point: CGPoint) -> CGFloat {
         abs(center.distance(to: point) - radius)
+    }
+
+    /// Check if the point is inside the shape.
+    public func contains(_ point: CGPoint) -> Bool {
+        return center.distance(to: point) <= radius
     }
 }

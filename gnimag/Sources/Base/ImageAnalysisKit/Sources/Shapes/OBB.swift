@@ -36,4 +36,10 @@ extension OBB: Shape {
         let point = point.rotated(by: -rotation, around: center)
         return aabb.distance(to: point)
     }
+
+    /// Check if the point is inside the shape.
+    public func contains(_ point: CGPoint) -> Bool {
+        let point = point.rotated(by: -rotation, around: center)
+        return aabb.contains(point)
+    }
 }

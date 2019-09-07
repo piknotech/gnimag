@@ -11,4 +11,8 @@ public protocol Shape {
     /// 0 means the point is on the border, >0 means the point is either inside or outside the shape.
     /// The distance cannot be negative.
     func distance(to point: CGPoint) -> CGFloat
+
+    /// Check if the point is inside the shape.
+    /// If the point is on the edge, behavior is unspecified.
+    func contains(_ point: CGPoint) -> Bool
 }

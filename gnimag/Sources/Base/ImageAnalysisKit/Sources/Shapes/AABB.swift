@@ -28,8 +28,20 @@ public struct AABB {
 extension AABB: Shape {
     /// Calculate the unsigned distance to a point.
     public func distance(to point: CGPoint) -> CGFloat {
+        if contains(point) {
+            let dx1 = point.x - rect.minX, dx2 = rect.maxX - point.x
+            let dy1 = point.y - rect.minY, dy2 = rect.maxY - point.y
+            return min(dx1, dx2, dy1, dy2)
+        }
+
+        // Distance calculation for points outside the rectangle
         let dx = max(abs(point.x - center.x) - width / 2, 0)
         let dy = max(abs(point.y - center.y) - height / 2, 0)
         return sqrt(dx * dx + dy * dy)
+    }
+
+    /// Check if the point is inside the shape.
+    public func contains(_ point: CGPoint) -> Bool {
+        return rect.contains(point)
     }
 }
