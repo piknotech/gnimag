@@ -23,13 +23,15 @@ class AppWindowScreenProvider: ImageProvider {
     var newImage = Event<(Image, Time)>()
 
     /// Default initializer.
+    /// Start providing images immediately.
     /// Precondition: the given app is running and onscreen.
-    init(appName: String, windowNameHint: String = "") {
+    init(appName: String, windowNameHint: String? = nil) {
         windowID = WindowHelper.mainWindowID(forApp: appName, windowNameHint: windowNameHint)
 
         // Start display link
         CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &displayLink)
         CVDisplayLinkSetOutputHandler(displayLink!, displayLinkFire)
+        CVDisplayLinkStart(displayLink!)
     }
 
     /// Capture the current window content.

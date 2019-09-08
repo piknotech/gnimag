@@ -1,52 +1,34 @@
-// swift-tools-version:5.1
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
+// swift-tools-version:5.0
 import PackageDescription
 
 let package = Package(
     name: "gnimag",
-    platforms: [.macOS(.v10_14)],
-    dependencies: [
-        .package(url: "https://github.com/mattt/Surge", .upToNextMajor(from: "2.2.0"))
+    products: [
+        // .executable(name: "MacCLI", targets: ["MacCLI"])
     ],
+    dependencies: [
+        /// A Swift library that uses the Accelerate framework to provide high-performance functions for matrix math, digital signal processing, and image manipulation.
+        .package(url: "https://github.com/mattt/Surge", .upToNextMajor(from: "2.0.0")),
+
+        /// Beautiful charts for iOS/tvOS/OSX! The Apple side of the crossplatform MPAndroidChart.
+        .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.3.0"))
+    ],
+
     targets: [
-        // MARK: Base Libraries
-        .target(
-            name: "ImageInput",
-            path: "Sources/Base/ImageInput"
-        ),
-        .target(
-            name: "Tapping",
-            path: "Sources/Base/Tapping"
-        ),
-        .target(
-            name: "ImageAnalysisKit",
-            dependencies: ["ImageInput", "MacTestingTools"],
-            path: "Sources/Base/ImageAnalysisKit"
-        ),
         .target(
             name: "GameKit",
-            dependencies: ["Surge", "MacTestingTools"],
+            dependencies: [
+                "Surge"
+            ],
             path: "Sources/Base/GameKit"
         ),
 
-        // MARK: Mac-specific
         .target(
             name: "MacTestingTools",
-            dependencies: ["ImageInput"],
+            dependencies: [
+                "Charts"
+            ],
             path: "Sources/Mac/MacTestingTools"
-        ),
-        .target(
-            name: "MacCLI",
-            dependencies: ["MacTestingTools", "MrFlap", "ImageInput", "Tapping"],
-            path: "Sources/Mac/MacCLI"
-        ),
-
-        // MARK: Games
-        .target(
-            name: "MrFlap",
-            dependencies: ["ImageInput", "Tapping", "ImageAnalysisKit", "GameKit"],
-            path: "Sources/Games/MrFlap"
         )
     ]
 )
