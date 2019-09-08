@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import GameKit
+import Geometry
 
 /// Player describes the position of the bird.
 struct Player {

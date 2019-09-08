@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import Geometry
 
 extension Array where Element == CGPoint {
     /// Quality requirements that allow deciding if a shape approximates a point set good enough or not.

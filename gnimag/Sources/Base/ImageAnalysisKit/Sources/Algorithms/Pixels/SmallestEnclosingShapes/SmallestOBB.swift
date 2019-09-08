@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import Geometry
 
 public enum SmallestOBB {
     /// Properties of an OBB that can be minimized when calculating the smallest (respective to this property) OBB.

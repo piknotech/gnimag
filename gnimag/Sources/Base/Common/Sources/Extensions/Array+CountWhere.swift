@@ -7,7 +7,7 @@ import Foundation
 
 extension Collection {
     /// Count the number of objects where "predicate" is fulfilled.
-    internal func count(where predicate: (Element) -> Bool) -> Int {
+    public func count(where predicate: (Element) -> Bool) -> Int {
         filter(predicate).count
     }
 }

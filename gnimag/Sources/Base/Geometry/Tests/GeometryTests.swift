@@ -1,14 +1,12 @@
 //
-//  CommonUtilsTests.swift
-//  CommonUtilsTests
-//
 //  Created by David Knothe on 08.09.19.
-//
+//  Copyright © 2019 Piknotech. All rights reserved.
+//  
 
 import XCTest
-@testable import CommonUtils
+@testable import Geometry
 
-class CommonUtilsTests: XCTestCase {
+class GeometryTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

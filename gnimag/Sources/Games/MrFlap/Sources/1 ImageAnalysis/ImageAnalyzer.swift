@@ -4,9 +4,9 @@
 //
 
 import Foundation
-import GameKit
-import ImageInput
+import Geometry
 import ImageAnalysisKit
+import ImageInput
 import MacTestingTools
 
 /// ImageAnalyzer provides a method for analyzing an image.

@@ -5,11 +5,12 @@
 // Taken from https://en.m.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
 
 import Foundation
+import Geometry
 
 public enum ConvexHull {
     /// Calculate the convex hull of a given set of points using Andrew's monotone chain convex hull algorithm.
     /// This runs in O(n log n) time.
-    public static func from(_ points: [CGPoint]) -> Polygon {
+    public static func from(_ points: [CGPoint]) -> Geometry.Polygon {
         guard points.count > 2 else { return Polygon(points: points) }
 
         var lower = [CGPoint]()

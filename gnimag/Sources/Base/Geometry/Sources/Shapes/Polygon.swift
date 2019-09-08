@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 
 /// An arbitrary polygon underlying no specific restrictions.
@@ -47,7 +48,7 @@ extension Polygon: Shape {
         let scale = aabb.width + aabb.height // Can be replaced once "Ray" is introduced as a Shape/LineType
         let p2 = CGPoint(x: point.x + sin(angle) * scale, y: cos(angle) * scale)
         let ray = LineSegment(p1: point, p2: p2)
-
+        
         let intersections = lineSegments.count(where: ray.intersects(with:))
         return !intersections.isMultiple(of: 2)
     }

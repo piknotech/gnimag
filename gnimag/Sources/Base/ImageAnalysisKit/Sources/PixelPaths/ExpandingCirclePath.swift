@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import Geometry
 import ImageInput
 
 /// A PixelPath that creates circles of increasing radii.
