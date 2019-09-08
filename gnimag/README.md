@@ -6,5 +6,8 @@ All libraries are defined as targets. Dependencies are managed via [Accio](https
 
 Currently, building all targets simultaneously does not work due to an Xcode bug. Therefore, you must build all targets manually. Therefore, select the according scheme and build it. Do this iteratively until reaching MacCLI, the highest-level module.
 
-This is the module graph:
-TODO
+This is the module import graph:
+
+![](Images/ModuleImportGraph.png)
+
+All import relations are transitive. Build the graph from the bottom to the top.
