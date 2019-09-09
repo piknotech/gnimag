@@ -7,7 +7,7 @@ import Cocoa
 
 extension CGImage {
     /// Write the image to a given destination.
-    func write(to file: String) {
+    public func write(to file: String) {
         let rep = NSBitmapImageRep(cgImage: self)
         let data = rep.representation(using: .png, properties: [:])!
         NSData(data: data).write(toFile: file, atomically: true)

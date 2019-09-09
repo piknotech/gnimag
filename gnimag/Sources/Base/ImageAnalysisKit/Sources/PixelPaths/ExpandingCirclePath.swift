@@ -4,7 +4,8 @@
 //
 
 import Foundation
-import ImageInput
+import Geometry
+import Image
 
 /// A PixelPath that creates circles of increasing radii.
 /// It happens that some pixels are traversed multiple times (from two adjacent circles), and some pixels are not traversed at all.

@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ImageInput
+import Image
 
 /// A PixelPath that consists of a straight line. The path stops when the given bounds have been reached.
 public struct StraightPath: PixelPath {

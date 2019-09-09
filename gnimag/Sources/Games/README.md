@@ -6,25 +6,25 @@ This README contains information about how games are built and **gives a startin
 
 The structure of most games is similar. A game consists of three parts: image analysis, game model construction and tapping prediction.
 
-- Image analysis: Here, you provide a method that has an `Image` as input and outputs raw information about things that were found in the image, for example player positions, background color, and any relevant game data you need.
+- **Image Analysis**: Here, you provide a method that has an `Image` as input and outputs raw information about things that were found in the image, for example player positions, background color, and any relevant game data you need.
 
-  ImageAnalysisKit helps with simple analysis tasks. You may be able to do most of the analysis with methods provided by ImageAnalysisKit. If not, you are welcome to contribute and extend ImageAnalysisKit itself(LINK).
+  `ImageAnalysisKit` helps with simple analysis tasks. You may be able to do most of the analysis with methods provided by ImageAnalysisKit. If not, you are welcome to contribute and extend ImageAnalysisKit itself(LINK).
 
   You do not further process the analysed data in this step. Also, your image analysis class should not save any state. Any input parameters (like starting points for object search) should be provided by game model construction or tapping prediction.
 
-- Game model construction: here, you take the information provided by image analysis and use it to build and update an up-to-date game model. This game model contains any parameters and values that you need to fully comprehend the running game, for example player positions or physics values.
+- **Game Model Construction**: here, you take the information provided by image analysis and use it to build and update an up-to-date game model. This game model contains any parameters and values that you need to fully comprehend the running game, for example player positions or physics values.
 
   When receiving data from the image analysis step, first check for data integrity, i.e. if all measured values are approximately what they should be. When data is obviously invalid, the image analysis yielded wrong values – discard the data and hope that the next data frame is valid again.
 
-  A very useful tool for checking for integrity and then storing and processing data are `Tracker`s (from GameKit). Trackers take time-value pairs and provide a matching regression function, for example a linear or quadratic curve. These can be used to continuously extract and update physical parameters, such as player speed (using a linear curve) or the environmental gravity (quadratic curve).
+  A very useful tool for checking for integrity and then storing and processing data are `Tracker`s (from `GameKit`). Trackers take time-value pairs and provide a matching regression function, for example a linear or quadratic curve. These can be used to continuously extract and update physical parameters, such as player speed (using a linear curve) or the environmental gravity (quadratic curve).
 
   All in all, you update the game model and calculate physics and game-related parameters, but do not process them further.
 
-- Tapping prediction: here, you take the game model and schedule future taps. You think about what sequence of taps you need to survive the current game situation, and schedule or reschedule the taps accordingly. Also, do you keep track of Time Delay? Oder woanders?
+- **Tapping Prediction**: here, you take the game model and schedule future taps. You think about what sequence of taps you need to survive the current game situation, and schedule or reschedule the taps accordingly. Also, do you keep track of Time Delay? Oder woanders?
 
-Having these three independent components, you can finally create your public `Game` class. It requires `ImageProvider` and `Tapper` instances which will be provided by the user of the game library (for example MacCLI).
+Having these three independent components, you can finally create your public `Game` class. It requires `ImageProvider` and `Tapper` instances which will be provided by the user of the game library (for example `MacCLI`).
 
-You can use an `ImageQueue` (GameKit) for simple asynchronous image processing; i.e., each time a new frame is available (e.g. at a rate of 60fps), the work of image analysis, game model construction and tapping prediction is done in the background, but still at a high priority.
+You can use an `ImageQueue` (`GameKit`) for simple asynchronous image processing; i.e., each time a new frame is available (e.g. at a rate of 60fps), the work of image analysis, game model construction and tapping prediction is done in the background, but still at a high priority.
 
 The Game directs the output from image analysis to game model construction, and feeds the data from game model construction into tapping prediction.
 
@@ -33,6 +33,8 @@ Also, the Game provides events which may be of interest to the user, like „lev
 ---
 
 As a good and simple starting point, we suggest you to look at [MrFlap](MrFlap), which is a simple game in most aspects. Try understanding the exact structure and logic; it is not very hard.
+
+TODO: code examples
 
 ---
 
@@ -71,11 +73,9 @@ There is a simple way to determine this delay: TODO.
 
 If you want to use OpenCV or similar libraries, keep in mind that gnimag is a live tool: your game should be able to process images at a frame rate of up to 60fps.
 
-ImageAnalysisKit is a good tool for simple games which consist of little different colors and that do not require very complex image analysis. If all relevant game objects are clearly distinguishable just by their colors, you may be well served by ImageAnalysisKit. Look at the MrFlap implementation – it provides a good example of how to use ImageAnalysisKit for simple tasks (MrFlap consists of just two different relevant colors).
+`ImageAnalysisKit` is a good tool for simple games which consist of little different colors and that do not require very complex image analysis. If all relevant game objects are clearly distinguishable just by their colors, you may be well served by `ImageAnalysisKit`. Look at the `MrFlap` implementation – it provides a good example of how to use `ImageAnalysisKit` for simple tasks (MrFlap consists of just two different relevant colors).
 
-In the end, is up to your preferences which library you use.
-
-Currently, we are still looking for a better way to organize the xcodeproject to make the different games and libraries more independent of each other (see [#8](https://github.com/knothed/gnimag/issues/8)). This would make it easier to use specific libraries for different games, such as OpenCV.
+In the end, is up to your preferences which library you use, while `ImageAnalysisKit` is preferred when possible. You are welcome to contribute to `ImageAnalysisKit`! There are always things that are still missing and waiting to be implemented.
 
 
 
@@ -83,4 +83,4 @@ Currently, we are still looking for a better way to organize the xcodeproject to
 
 Have a look at the code of [MrFlap](MrFlap). It is a simple and well-documented example of a working game. Then, try sticking to the principles outlined in this document and start coding!
 
-If you have any questions, please ask, we’re here to help. Contact @knothed via email or write a question on GitHub.
+If you have any questions, please ask, we’re here to help. Contact [@knothed](https://github.com/knothed) via email or write a question on GitHub.

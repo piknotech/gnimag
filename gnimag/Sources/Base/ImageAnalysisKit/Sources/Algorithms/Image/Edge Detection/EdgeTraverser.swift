@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 /// EdgeTraverser holds the context of a microscopic edge checking operation, always involving one pixel inside and one pixel outside the shape.
 /// Depending on the color of the surrounding pixels, the context is moved, rotated, etc. to gain the next meaningful context that can be checked. This is done in a counter-clockwise manner.

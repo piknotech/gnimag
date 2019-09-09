@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 /// EdgeDetector detects the edge of a shape which has a uniform color.
 /// A starting point that is already at the edge is required.
@@ -61,7 +61,7 @@ public enum EdgeDetector {
         }
 
         // Before the path ends, it returned a pixel outside bounds --> the method has definitely returned already
-        fatalError()
+        preconditionFailure()
     }
 
     /// Check if the found starting points are either adjacent horizontally or vertically; else (diagonally), change the starting points.

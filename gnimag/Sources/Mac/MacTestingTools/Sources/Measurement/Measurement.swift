@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 
 public enum Measurement {
@@ -19,9 +20,9 @@ public enum Measurement {
 
         if let index = runningMeasurements.index(forKey: id) {
             let (_, startTime) = runningMeasurements.remove(at: index)
-            print("Task \"\(id)\" took \(1000 * (time - startTime)) ms!")
+            log(.nice, "Task \"\(id)\" took \(1000 * (time - startTime)) ms!")
         } else {
-            print("There is no task named \"\(id)\"!")
+            log(.warning, "There is no task named \"\(id)\"!")
         }
     }
 }

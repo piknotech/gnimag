@@ -2,6 +2,12 @@ Here lives the Xcode project.
 
 The project uses Swift 5.1; you need Xcode 11 for building and running gnimag.
 
-Currently, the project is managed using SwiftPM. All libraries are defined as different targets in [Package.swift](./Package.swift).
+All libraries are defined as targets. Dependencies are managed via [Accio](https://github.com/JamitLabs/Accio). Call `accio update` to fetch dependencies.
 
-To start, create an xcodeproj with `swift package generate-xcodeproj`. Then call `swift package update` to fetch dependencies. Then, you can select the `MacCLI` scheme in Xcode and build or run it.
+Currently, building all targets simultaneously does not work due to an Xcode bug. Therefore, you must build all targets manually. Therefore, select the according scheme and build it. Do this iteratively until reaching MacCLI, the highest-level module.
+
+This is the module import graph:
+
+![](Images/ModuleImportGraph.png)
+
+All import relations are transitive. Build the graph from the bottom to the top.

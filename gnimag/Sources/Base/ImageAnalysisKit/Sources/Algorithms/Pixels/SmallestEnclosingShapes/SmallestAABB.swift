@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import Geometry
 
 public enum SmallestAABB {
     /// Calculate the smallest AABB that contains a given (non-empty) set of points.

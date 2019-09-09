@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ImageInput
+import Image
 
 /// LimitedPath allows paths to be limited to a certain number of pixels after which they should stop.
 public struct LimitedPath: PixelPath {

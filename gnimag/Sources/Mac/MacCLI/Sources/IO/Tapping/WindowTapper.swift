@@ -14,7 +14,7 @@ class WindowTapper: Tapper {
     /// Default initializer.
     /// The app must be running and have an on-screen window.
     init(appName: String, windowNameHint: String? = nil) {
-        windowID = WindowHelper.mainWindowID(forApp: appName, windowNameHint: windowNameHint)
+        windowID = WindowHelper.windowID(forApp: appName, windowNameHint: windowNameHint)
     }
 
     /// Tap on the center of the window.

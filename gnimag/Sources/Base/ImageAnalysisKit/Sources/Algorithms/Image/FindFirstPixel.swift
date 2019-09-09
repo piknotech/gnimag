@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 /// FindFirstPixel searches for a single pixel with a given color.
 extension Image {

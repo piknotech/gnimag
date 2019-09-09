@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 /// Direction defines a simple direction used in pixel-wise operations.
 /// Direction can also be used as a rotation (going counter-clockwise), using multiples of 90°.
@@ -31,14 +31,7 @@ public enum Direction {
     /// Construct the Direction from a given delta.
     /// Assumes the delta is valid (i.e. has the length 1).
     private static func from(delta: Delta) -> Direction {
-        for direction in Direction.all {
-            if delta == direction.delta {
-                return direction
-            }
-        }
-        
-        // Invalid delta
-        fatalError()
+        return Direction.all.first { $0.delta == delta }!
     }
 }
 

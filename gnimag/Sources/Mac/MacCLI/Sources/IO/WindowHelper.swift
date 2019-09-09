@@ -9,7 +9,7 @@ import Foundation
 enum WindowHelper {
     /// Get the window ID of a window of a given application.
     /// The app must be running and have a single on-screen window whose name contains the windowNameHint.
-    static func mainWindowID(forApp appName: String, windowNameHint: String? = nil) -> CGWindowID {
+    static func windowID(forApp appName: String, windowNameHint: String? = nil) -> CGWindowID {
         let info = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as! [[String: Any]]
 
         let windows = info.filter {
@@ -19,11 +19,11 @@ enum WindowHelper {
 
         switch windows.count {
         case ...0:
-            fatalError("No window found for the desired application \"\(appName)\"")
+            exit(withMessage: "No window found for the desired application \"\(appName)\"")
         case 1:
             ()
         default: // (case 2...)
-            fatalError("More than one window found for the desired application \"\(appName)\"")
+            exit(withMessage: "More than one window found for the desired application \"\(appName)\"")
         }
 
         let window = windows.first!

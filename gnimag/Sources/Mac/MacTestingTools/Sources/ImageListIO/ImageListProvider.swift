@@ -4,7 +4,8 @@
 //
 
 import Cocoa
-import ImageInput
+import Common
+import Image
 
 /// ImageListProvider provides a list of images in a directory, one by one, with a user-defined framerate.
 /// The images are sorted and must be of the form "1.png", "2.png", etc. Use an ImageListCreator to easily create such a directory.
@@ -40,7 +41,7 @@ public final class ImageListProvider: ImageProvider {
     /// Return the next image in the directory.
     private var nextImage: CGImage? {
         let path = directoryPath + "/\(i).png"
-        print("image: \(i)")
+        log(.info, "Image \(i)")
 
         if let image = NSImage(contentsOfFile: path)?.cgImage(forProposedRect: nil, context: nil, hints: nil) {
             i += 1

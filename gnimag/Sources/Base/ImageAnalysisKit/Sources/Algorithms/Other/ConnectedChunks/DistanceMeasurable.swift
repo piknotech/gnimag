@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ImageInput
+import Image
 
 // MARK: DistanceMeasurable
 public protocol DistanceMeasurable {
