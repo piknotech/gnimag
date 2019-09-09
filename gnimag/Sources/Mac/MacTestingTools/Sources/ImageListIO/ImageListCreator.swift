@@ -4,7 +4,7 @@
 //
 
 import Cocoa
-import ImageInput
+import Image
 
 /// As a counterpart to ImageListProvider, this class is used to create a directory with enumerated images in the first place.
 /// Create an ImageListCreator and link it to any existing ImageProvider; then, the ImageListCreator will take every image produced by the ImageProvider and save it to the specified directory.

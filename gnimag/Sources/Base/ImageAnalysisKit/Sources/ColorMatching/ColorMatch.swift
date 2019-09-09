@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 /// ColorMatch describes a function that maps color values onto {true, false}.
 public indirect enum ColorMatch {

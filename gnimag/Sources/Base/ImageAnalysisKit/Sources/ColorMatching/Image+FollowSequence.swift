@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 extension Image {
     /// Continue a path inside the image until the whole ColorMatchSequence was matched.

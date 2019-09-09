@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 /// Direction defines a simple direction used in pixel-wise operations.
 /// Direction can also be used as a rotation (going counter-clockwise), using multiples of 90°.

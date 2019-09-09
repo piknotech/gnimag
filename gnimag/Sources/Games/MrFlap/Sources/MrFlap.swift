@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 import Tapping
 
 public class MrFlap {

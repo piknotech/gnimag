@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		631212BE23253DE300C126B4 /* ImageInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 631212BC23253DE300C126B4 /* ImageInput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		631212BE23253DE300C126B4 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 631212BC23253DE300C126B4 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631212D32325740000C126B4 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CD2325740000C126B4 /* Event.swift */; };
 		631212D42325740000C126B4 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CE2325740000C126B4 /* Image.swift */; };
 		631212D52325740000C126B4 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CF2325740000C126B4 /* ImageProvider.swift */; };
@@ -123,8 +123,8 @@
 
 /* Begin PBXFileReference section */
 		631212AD23253DC700C126B4 /* MacCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MacCLI; sourceTree = BUILT_PRODUCTS_DIR; };
-		631212BA23253DE300C126B4 /* ImageInput.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ImageInput.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		631212BC23253DE300C126B4 /* ImageInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageInput.h; sourceTree = "<group>"; };
+		631212BA23253DE300C126B4 /* Image.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Image.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		631212BC23253DE300C126B4 /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
 		631212BD23253DE300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631212C923256BDC00C126B4 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		631212CC2325731F00C126B4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -351,7 +351,7 @@
 			isa = PBXGroup;
 			children = (
 				631212AD23253DC700C126B4 /* MacCLI */,
-				631212BA23253DE300C126B4 /* ImageInput.framework */,
+				631212BA23253DE300C126B4 /* Image.framework */,
 				631212DF2325746B00C126B4 /* Tapping.framework */,
 				631212F22325768000C126B4 /* Common.framework */,
 				63121311232577E900C126B4 /* ImageAnalysisKit.framework */,
@@ -373,14 +373,14 @@
 			path = MacCLI;
 			sourceTree = "<group>";
 		};
-		631212BB23253DE300C126B4 /* ImageInput */ = {
+		631212BB23253DE300C126B4 /* Image */ = {
 			isa = PBXGroup;
 			children = (
 				631212D92325742B00C126B4 /* README.md */,
 				631212C223253DEE00C126B4 /* Sources */,
 				631212C323253DF600C126B4 /* SupportingFiles */,
 			);
-			path = ImageInput;
+			path = Image;
 			sourceTree = "<group>";
 		};
 		631212C223253DEE00C126B4 /* Sources */ = {
@@ -399,7 +399,7 @@
 		631212C323253DF600C126B4 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				631212BC23253DE300C126B4 /* ImageInput.h */,
+				631212BC23253DE300C126B4 /* Image.h */,
 				631212BD23253DE300C126B4 /* Info.plist */,
 			);
 			path = SupportingFiles;
@@ -412,7 +412,7 @@
 				6312140F232587E300C126B4 /* Geometry */,
 				6312136F2325791700C126B4 /* GameKit */,
 				63121312232577EA00C126B4 /* ImageAnalysisKit */,
-				631212BB23253DE300C126B4 /* ImageInput */,
+				631212BB23253DE300C126B4 /* Image */,
 				631212E02325746B00C126B4 /* Tapping */,
 			);
 			path = Base;
@@ -980,7 +980,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				631212BE23253DE300C126B4 /* ImageInput.h in Headers */,
+				631212BE23253DE300C126B4 /* Image.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1060,9 +1060,9 @@
 			productReference = 631212AD23253DC700C126B4 /* MacCLI */;
 			productType = "com.apple.product-type.tool";
 		};
-		631212B923253DE300C126B4 /* ImageInput */ = {
+		631212B923253DE300C126B4 /* Image */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 631212BF23253DE400C126B4 /* Build configuration list for PBXNativeTarget "ImageInput" */;
+			buildConfigurationList = 631212BF23253DE400C126B4 /* Build configuration list for PBXNativeTarget "Image" */;
 			buildPhases = (
 				631212B523253DE300C126B4 /* Headers */,
 				631212B623253DE300C126B4 /* Sources */,
@@ -1074,9 +1074,9 @@
 			);
 			dependencies = (
 			);
-			name = ImageInput;
+			name = Image;
 			productName = ImageInput;
-			productReference = 631212BA23253DE300C126B4 /* ImageInput.framework */;
+			productReference = 631212BA23253DE300C126B4 /* Image.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		631212DE2325746B00C126B4 /* Tapping */ = {
@@ -1281,7 +1281,7 @@
 			projectRoot = "";
 			targets = (
 				631212AC23253DC700C126B4 /* MacCLI */,
-				631212B923253DE300C126B4 /* ImageInput */,
+				631212B923253DE300C126B4 /* Image */,
 				631212DE2325746B00C126B4 /* Tapping */,
 				631212F12325768000C126B4 /* Common */,
 				63121310232577E900C126B4 /* ImageAnalysisKit */,
@@ -1777,7 +1777,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/Base/ImageInput/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Base/Image/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1788,7 +1788,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.ImageInput;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.Image;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -1857,7 +1857,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/Base/ImageInput/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Base/Image/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1867,7 +1867,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.ImageInput;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.Image;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -3154,7 +3154,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		631212BF23253DE400C126B4 /* Build configuration list for PBXNativeTarget "ImageInput" */ = {
+		631212BF23253DE400C126B4 /* Build configuration list for PBXNativeTarget "Image" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				631212C023253DE400C126B4 /* Debug */,

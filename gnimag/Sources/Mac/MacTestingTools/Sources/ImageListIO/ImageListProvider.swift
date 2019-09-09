@@ -4,7 +4,7 @@
 //
 
 import Cocoa
-import ImageInput
+import Image
 
 /// ImageListProvider provides a list of images in a directory, one by one, with a user-defined framerate.
 /// The images are sorted and must be of the form "1.png", "2.png", etc. Use an ImageListCreator to easily create such a directory.

@@ -4,7 +4,7 @@
 //
 
 import QuartzCore
-import ImageInput
+import Image
 
 /// An implementation of ImageProvider using a macOS app and capturing it's window content.
 /// The subscriber is notified in sync with the display update cycle.

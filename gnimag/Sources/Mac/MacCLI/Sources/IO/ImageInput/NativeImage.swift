@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ImageInput
+import Image
 import MacTestingTools
 
 /// NativeImage is an Image effectively wrapping a CGImage using bitmap data.

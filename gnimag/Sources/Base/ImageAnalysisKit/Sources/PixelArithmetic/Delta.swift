@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 /// Delta describes the distance between two Pixels, using integral values.
 public struct Delta: Equatable, CustomStringConvertible {

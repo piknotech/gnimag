@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ImageInput
+import Image
 
 /// Implement this protocol for Trackers or other objects that have 2-dimensional data you are interested in plotting using ScatterPlot.
 public protocol Has2DDataSet {

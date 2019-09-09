@@ -4,7 +4,7 @@
 //
 
 import Cocoa
-import ImageInput
+import Image
 
 extension Color {
     /// Convert the Color to an NSColor with the given alpha component.

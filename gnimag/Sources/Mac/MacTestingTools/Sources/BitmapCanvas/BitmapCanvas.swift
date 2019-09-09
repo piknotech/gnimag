@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ImageInput
+import Image
 
 /// BitmapCanvas defines a drawing area which can be created by an Image.
 /// It can be manipulated using methods similar like those of CGContext.

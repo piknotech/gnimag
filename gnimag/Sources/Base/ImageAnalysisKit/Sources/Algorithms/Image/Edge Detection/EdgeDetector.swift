@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 
 /// EdgeDetector detects the edge of a shape which has a uniform color.
 /// A starting point that is already at the edge is required.

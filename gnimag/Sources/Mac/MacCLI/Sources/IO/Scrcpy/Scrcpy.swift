@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import ImageInput
+import Image
 import Tapping
 
 /// Scrcpy provides input and output classes if you want to use the scrcpy application to communicate with an Android device.
