@@ -35,12 +35,3 @@ public struct PolarCoordinates {
         return CGPoint(x: x, y: y)
     }
 }
-
-fileprivate extension CGPoint {
-    /// Return the distance to the given point.
-    func distance(to point: CGPoint) -> Double {
-        let dx = x - point.x
-        let dy = y - point.y
-        return Double(sqrt(dx * dx + dy * dy))
-    }
-}

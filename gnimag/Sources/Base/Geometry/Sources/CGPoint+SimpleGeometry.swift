@@ -43,5 +43,10 @@ public extension CGPoint {
     static func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
         return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
+
+    /// Scale the point by a scalar factor.
+    static func *(lhs: CGFloat, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs * rhs.x, y: lhs * rhs.y)
+    }
 }
 

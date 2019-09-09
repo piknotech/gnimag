@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 
 /// WindowHelper provides helper methods for both image input and tapping.

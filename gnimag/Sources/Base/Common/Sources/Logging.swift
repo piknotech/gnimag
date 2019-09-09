@@ -27,7 +27,7 @@ extension LoggingSeverity: CustomStringConvertible {
         switch self {
         case .party: return "🎉"
         case .nice: return "✅"
-        case .info: return "ℹ️ " // There's something strange about this emoji causing the need for a trailing whitespace
+        case .info: return "ℹ️"
         case .warning: return "⚠️"
         case .error: return "❌"
         case .fatal: return "⛔️⛔️⛔️⛔️⛔️"
