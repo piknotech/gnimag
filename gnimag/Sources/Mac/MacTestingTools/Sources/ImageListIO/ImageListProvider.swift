@@ -4,6 +4,7 @@
 //
 
 import Cocoa
+import Common
 import Image
 
 /// ImageListProvider provides a list of images in a directory, one by one, with a user-defined framerate.
@@ -40,7 +41,7 @@ public final class ImageListProvider: ImageProvider {
     /// Return the next image in the directory.
     private var nextImage: CGImage? {
         let path = directoryPath + "/\(i).png"
-        print("image: \(i)")
+        log(.info, "Image \(i)")
 
         if let image = NSImage(contentsOfFile: path)?.cgImage(forProposedRect: nil, context: nil, hints: nil) {
             i += 1

@@ -13,7 +13,6 @@ let package = Package(
         /// Beautiful charts for iOS/tvOS/OSX! The Apple side of the crossplatform MPAndroidChart.
         .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.3.0"))
     ],
-
     targets: [
         .target(
             name: "GameKit",

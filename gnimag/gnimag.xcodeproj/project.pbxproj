@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		631212BE23253DE300C126B4 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 631212BC23253DE300C126B4 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		631212D32325740000C126B4 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CD2325740000C126B4 /* Event.swift */; };
 		631212D42325740000C126B4 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CE2325740000C126B4 /* Image.swift */; };
 		631212D52325740000C126B4 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CF2325740000C126B4 /* ImageProvider.swift */; };
 		631212D62325740000C126B4 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212D02325740000C126B4 /* Pixel.swift */; };
@@ -95,6 +94,9 @@
 		631214312325885F00C126B4 /* PolarCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213862325793100C126B4 /* PolarCoordinates.swift */; };
 		631214322325885F00C126B4 /* CGPoint+SimpleGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312133B2325785000C126B4 /* CGPoint+SimpleGeometry.swift */; };
 		6312143523258A3200C126B4 /* Array+CountWhere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312133A2325785000C126B4 /* Array+CountWhere.swift */; };
+		631214372326678700C126B4 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CD2325740000C126B4 /* Event.swift */; };
+		631214392326686A00C126B4 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Logging.swift */; };
+		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
 /* End PBXBuildFile section */
@@ -239,6 +241,8 @@
 		63121416232587E300C126B4 /* GeometryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeometryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6312141B232587E300C126B4 /* GeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryTests.swift; sourceTree = "<group>"; };
 		6312141D232587E300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		631214382326686A00C126B4 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
 		9A8B5AE54AE4C6A103DA27FF /* Surge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Surge.framework; path = Dependencies/macOS/Surge.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -386,12 +390,11 @@
 		631212C223253DEE00C126B4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				631212D22325740000C126B4 /* Bounds.swift */,
 				631212D12325740000C126B4 /* Color.swift */,
-				631212CD2325740000C126B4 /* Event.swift */,
+				631212D02325740000C126B4 /* Pixel.swift */,
+				631212D22325740000C126B4 /* Bounds.swift */,
 				631212CE2325740000C126B4 /* Image.swift */,
 				631212CF2325740000C126B4 /* ImageProvider.swift */,
-				631212D02325740000C126B4 /* Pixel.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -485,6 +488,9 @@
 		63121309232576AD00C126B4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				6312143A232669B800C126B4 /* AsyncTools.swift */,
+				631212CD2325740000C126B4 /* Event.swift */,
+				631214382326686A00C126B4 /* Logging.swift */,
 				6312143423258A2600C126B4 /* Extensions */,
 			);
 			path = Sources;
@@ -804,8 +810,8 @@
 			isa = PBXGroup;
 			children = (
 				631213C123257EB600C126B4 /* WindowHelper.swift */,
+				631213C223257EB600C126B4 /* Image */,
 				631213BD23257EB600C126B4 /* Tapping */,
-				631213C223257EB600C126B4 /* ImageInput */,
 				631213C523257EB600C126B4 /* Scrcpy */,
 			);
 			path = IO;
@@ -821,13 +827,13 @@
 			path = Tapping;
 			sourceTree = "<group>";
 		};
-		631213C223257EB600C126B4 /* ImageInput */ = {
+		631213C223257EB600C126B4 /* Image */ = {
 			isa = PBXGroup;
 			children = (
 				631213C323257EB600C126B4 /* NativeImage.swift */,
 				631213C423257EB600C126B4 /* AppWindowImageProvider.swift */,
 			);
-			path = ImageInput;
+			path = Image;
 			sourceTree = "<group>";
 		};
 		631213C523257EB600C126B4 /* Scrcpy */ = {
@@ -1390,7 +1396,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 		46E360BE94AD138BD006AB52 /* Accio */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1406,7 +1412,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1432,7 +1438,6 @@
 			files = (
 				631212D52325740000C126B4 /* ImageProvider.swift in Sources */,
 				631212D82325740000C126B4 /* Bounds.swift in Sources */,
-				631212D32325740000C126B4 /* Event.swift in Sources */,
 				631212D62325740000C126B4 /* Pixel.swift in Sources */,
 				631212D42325740000C126B4 /* Image.swift in Sources */,
 				631212D72325740000C126B4 /* Color.swift in Sources */,
@@ -1451,6 +1456,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				631214372326678700C126B4 /* Event.swift in Sources */,
+				631214392326686A00C126B4 /* Logging.swift in Sources */,
+				6312143B232669B900C126B4 /* AsyncTools.swift in Sources */,
 				6312143523258A3200C126B4 /* Array+CountWhere.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

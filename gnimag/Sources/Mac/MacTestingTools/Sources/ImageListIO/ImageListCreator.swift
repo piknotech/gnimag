@@ -4,6 +4,7 @@
 //
 
 import Cocoa
+import Common
 import Image
 
 /// As a counterpart to ImageListProvider, this class is used to create a directory with enumerated images in the first place.

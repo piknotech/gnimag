@@ -3,7 +3,8 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import QuartzCore
+import Common
+import Foundation
 import Image
 
 /// An implementation of ImageProvider using a macOS app and capturing it's window content.
@@ -26,7 +27,7 @@ class AppWindowScreenProvider: ImageProvider {
     /// Start providing images immediately.
     /// Precondition: the given app is running and onscreen.
     init(appName: String, windowNameHint: String? = nil) {
-        windowID = WindowHelper.mainWindowID(forApp: appName, windowNameHint: windowNameHint)
+        windowID = WindowHelper.windowID(forApp: appName, windowNameHint: windowNameHint)
 
         // Start display link
         CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &displayLink)
