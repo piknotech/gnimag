@@ -61,7 +61,7 @@ public enum EdgeDetector {
         }
 
         // Before the path ends, it returned a pixel outside bounds --> the method has definitely returned already
-        fatalError()
+        preconditionFailure()
     }
 
     /// Check if the found starting points are either adjacent horizontally or vertically; else (diagonally), change the starting points.

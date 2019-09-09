@@ -31,14 +31,7 @@ public enum Direction {
     /// Construct the Direction from a given delta.
     /// Assumes the delta is valid (i.e. has the length 1).
     private static func from(delta: Delta) -> Direction {
-        for direction in Direction.all {
-            if delta == direction.delta {
-                return direction
-            }
-        }
-        
-        // Invalid delta
-        fatalError()
+        return Direction.all.first { $0.delta == delta }!
     }
 }
 

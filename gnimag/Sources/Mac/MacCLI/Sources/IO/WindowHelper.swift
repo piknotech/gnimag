@@ -19,11 +19,11 @@ enum WindowHelper {
 
         switch windows.count {
         case ...0:
-            fatalError("No window found for the desired application \"\(appName)\"")
+            exit(withMessage: "No window found for the desired application \"\(appName)\"")
         case 1:
             ()
         default: // (case 2...)
-            fatalError("More than one window found for the desired application \"\(appName)\"")
+            exit(withMessage: "More than one window found for the desired application \"\(appName)\"")
         }
 
         let window = windows.first!
