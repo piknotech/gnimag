@@ -87,17 +87,9 @@ public final class BitmapCanvas {
         return self
     }
 
-    /// Fill a single pixel with the given color.
-    @discardableResult
-    public func fill(_ pixel: Pixel, with color: Color, alpha: Double = 1) -> BitmapCanvas {
-        context.setFillColor(color.CGColor(withAlpha: alpha))
-        context.fill(CGRect(x: pixel.x, y: pixel.y, width: 1, height: 1))
-        return self
-    }
-
     /// Fill each pixel with a new random color.
     @discardableResult
-    public func fillWithRandomColorPattern(alpha: Double = 1) -> BitmapCanvas {
+    public func randomBackground(alpha: Double = 1) -> BitmapCanvas {
         for x in 0 ..< context.width {
             for y in 0 ..< context.height {
                 let color = Color(.random(in: 0...1), .random(in: 0...1), .random(in: 0...1))
@@ -107,11 +99,25 @@ public final class BitmapCanvas {
         return self
     }
 
+    /// Fill a single pixel with the given color.
+    @discardableResult
+    public func fill(_ pixel: Pixel, with color: Color, alpha: Double = 1) -> BitmapCanvas {
+        context.setFillColor(color.CGColor(withAlpha: alpha))
+        context.fill(CGRect(x: pixel.x, y: pixel.y, width: 1, height: 1))
+        return self
+    }
+
     // MARK: Write to File
 
     /// Write the current canvas content to a file.
     public func write(to file: String) {
         let image = context.makeImage()!
         image.write(to: file)
+    }
+
+    /// Write the current canvas content to the users desktop.
+    public func writeToDesktop(name: String) {
+        let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
+        write(to: desktop + "/" + name)
     }
 }
