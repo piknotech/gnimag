@@ -27,7 +27,7 @@ public struct OBB {
 
     public var center: CGPoint { aabb.center }
     public var width: CGFloat { aabb.width }
-    public var height: CGFloat { aabb.width }
+    public var height: CGFloat { aabb.height }
 }
 
 extension OBB: Shape {

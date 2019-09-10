@@ -22,7 +22,9 @@ extension BitmapCanvas {
     public func stroke(_ strokable: Strokable, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) -> BitmapCanvas {
         context.setLineWidth(CGFloat(strokeWidth))
         context.setStrokeColor(color.CGColor(withAlpha: alpha))
+        context.translateBy(x: 0.5, y: 0.5) // Pixel <-> CGPoint conversion
         strokable.stroke(onto: context)
+        context.translateBy(x: -0.5, y: -0.5)
         return self
     }
 
@@ -31,7 +33,9 @@ extension BitmapCanvas {
     public func fill(_ fillable: Fillable, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) -> BitmapCanvas {
         context.setStrokeColor(color.CGColor(withAlpha: alpha)) // Could be required for filling
         context.setFillColor(color.CGColor(withAlpha: alpha))
+        context.translateBy(x: 0.5, y: 0.5) // Pixel <-> CGPoint conversion
         fillable.fill(on: context)
+        context.translateBy(x: -0.5, y: -0.5)
         return self
     }
 }

@@ -11,23 +11,23 @@ import Image
 
 extension Circle: Strokable, Fillable {
     public func stroke(onto context: CGContext) {
-        context.strokeEllipse(in: enclosingRect.offsetBy(dx: 0.5, dy: 0.5))
+        context.strokeEllipse(in: enclosingRect)
     }
 
     public func fill(on context: CGContext) {
-        let extended = enclosingRect.insetBy(dx: -0.5, dy: -0.5).offsetBy(dx: 0.5, dy: 0.5)
-        context.fillEllipse(in: extended)
+        let smaller = enclosingRect.insetBy(dx: -0.5, dy: -0.5)
+        context.fillEllipse(in: smaller)
     }
 }
 
 extension AABB: Strokable, Fillable {
     public func stroke(onto context: CGContext) {
-        context.stroke(rect.offsetBy(dx: 0.5, dy: 0.5))
+        context.stroke(rect)
     }
 
     public func fill(on context: CGContext) {
-        let extended = rect.insetBy(dx: -0.5, dy: -0.5).offsetBy(dx: 0.5, dy: 0.5)
-        context.fill(extended)
+        let smaller = rect.insetBy(dx: -0.5, dy: -0.5)
+        context.fill(smaller)
     }
 }
 
@@ -40,7 +40,7 @@ extension OBB: Strokable, Fillable {
 
     public func stroke(onto context: CGContext) {
         rotate(context: context, around: center, angle: rotation)
-        aabb.stroke(onto: context)
+        context.stroke(aabb.rect)
         rotate(context: context, around: center, angle: -rotation)
     }
 
@@ -59,17 +59,13 @@ extension Geometry.Polygon: Strokable, Fillable {
     }
 
     public func stroke(onto context: CGContext) {
-        context.translateBy(x: 0.5, y: 0.5)
         createPath(on: context)
         context.strokePath()
-        context.translateBy(x: -0.5, y: -0.5)
     }
 
     public func fill(on context: CGContext) {
-        context.translateBy(x: 0.5, y: 0.5)
         createPath(on: context)
         context.drawPath(using: .fillStroke) // Only calling "fillPath" will not draw the path's border
-        context.translateBy(x: -0.5, y: -0.5)
     }
 }
 
