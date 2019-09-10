@@ -11,9 +11,6 @@ let package = Package(
 
         /// Beautiful charts for iOS/tvOS/OSX! The Apple side of the crossplatform MPAndroidChart.
         .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.3.0")),
-
-        /// Handy Swift features that didn't make it into the Swift standard library.
-        .package(url: "https://github.com/Flinesoft/HandySwift", .upToNextMajor(from: "3.1.0"))
     ],
     targets: [
         .target(
@@ -22,14 +19,6 @@ let package = Package(
                 "Surge"
             ],
             path: "Sources/Base/GameKit"
-        ),
-
-        .target(
-            name: "Common",
-            dependencies: [
-                "HandySwift"
-            ],
-            path: "Sources/Base/Common"
         ),
 
         .target(
