@@ -95,6 +95,18 @@ public final class BitmapCanvas {
         return self
     }
 
+    /// Fill each pixel with a random color.
+    @discardableResult
+    public func fillWithRandomColorPattern(alpha: Double = 1) -> BitmapCanvas {
+        for x in 0 ..< context.width {
+            for y in 0 ..< context.height {
+                let color = Color(.random(in: 0...1), .random(in: 0...1), .random(in: 0...1))
+                fill(Pixel(x, y), with: color, alpha: alpha)
+            }
+        }
+        return self
+    }
+
     // MARK: Write to File
 
     /// Write the current canvas content to a file.

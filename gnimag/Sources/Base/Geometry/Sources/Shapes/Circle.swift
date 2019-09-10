@@ -10,6 +10,10 @@ public struct Circle {
     public let center: CGPoint
     public let radius: CGFloat
 
+    public var enclosingRect: CGRect {
+        CGRect(x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius)
+    }
+
     /// Default initializer.
     public init(center: CGPoint, radius: CGFloat) {
         self.center = center
