@@ -100,7 +100,6 @@
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
-		9768B790D0EBAD3DEF619F8B /* HandySwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 671ADA6D5EF52448399201D6 /* HandySwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,7 +314,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9768B790D0EBAD3DEF619F8B /* HandySwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

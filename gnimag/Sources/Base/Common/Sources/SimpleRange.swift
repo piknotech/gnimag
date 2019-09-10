@@ -6,13 +6,18 @@
 /// SimpleRange defines a ClosedRange and provides some utilities.
 /// When using floating-point types, it is also possible to create unbounded ranges using .infinity.
 public struct SimpleRange<Bound: SignedNumeric & Comparable> {
-    let lower: Bound
-    let upper: Bound
+    public let lower: Bound
+    public let upper: Bound
 
     /// Default initializer.
     public init(from lower: Bound, to upper: Bound) {
         self.lower = lower
         self.upper = upper
+    }
+
+    /// States if the range is empty.
+    public var isEmpty: Bool {
+        upper > lower
     }
 
     /// Negate the range in the following sense:
@@ -28,7 +33,18 @@ public struct SimpleRange<Bound: SignedNumeric & Comparable> {
     }
 
     /// Check if the element is in the range.
-    public func contains(element: Bound) -> Bool {
+    public func contains(_ element: Bound) -> Bool {
         return lower <= element && element <= upper
+    }
+
+    /// Intersect this range with another range.
+    public func intersection(with other: SimpleRange<Bound>) -> SimpleRange<Bound> {
+        return SimpleRange(from: max(lower, other.lower), to: min(upper, other.upper))
+    }
+
+    /// Clamp the element to [lower, upper].
+    /// Only works when `isEmpty = false`.
+    public func clamp(_ element: Bound) -> Bound {
+        return min(max(element, lower), upper)
     }
 }

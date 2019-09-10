@@ -34,6 +34,13 @@ public extension CGPoint {
         sqrt(x * x + y * y)
     }
 
+    /// Normalize the point. If it is zero, return zero.
+    var normalized: CGPoint {
+        return length == 0 ? self : self / length
+    }
+
+    // MARK: Arithmetic
+
     /// Return the difference between two points.
     static func -(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
         return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
@@ -47,6 +54,11 @@ public extension CGPoint {
     /// Scale the point by a scalar factor.
     static func *(lhs: CGFloat, rhs: CGPoint) -> CGPoint {
         return CGPoint(x: lhs * rhs.x, y: lhs * rhs.y)
+    }
+
+    /// Divide the point by a scalar factor.
+    static func /(lhs: CGPoint, rhs: CGFloat) -> CGPoint {
+        return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
     }
 }
 
