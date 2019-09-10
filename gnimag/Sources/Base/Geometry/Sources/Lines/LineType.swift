@@ -9,28 +9,30 @@ import Foundation
 public protocol LineType {
     /// The starting point of the line, or any point on the line if the line has no starting point.
     /// When the line has no starting point, that means that `normalizedBounds` are just the real numbers.
-    var zeroPoint: CGPoint { get }
+    var startPoint: CGPoint { get }
 
-    /// True iff the direction is zero, which means that the line is actually just a single point (`zeroPoint`).
-    var directionIsZero: Bool { get }
+    /// True iff the direction is zero, which means that the line is actually just a single point, i.e. `startPoint`.
+    var isTrivial: Bool { get }
 
     /// The direction of the line, normalized.
     /// When the `directionIsZero`, the result is unspecified.
     var normalizedDirection: CGPoint { get }
 
-    /// The range of the line, in respect to zeroPoint and normalizedDirection.
-    /// This means: for any `t` inside `normalizedBounds`: `zeroPoint + t * normalizedDirection` is on the line.
+    /// The range of the line, in respect to startPoint and normalizedDirection.
+    /// This means: for any `t` inside `normalizedBounds`: `startPoint + t * normalizedDirection` is on the line.
     var normalizedBounds: SimpleRange<CGFloat> { get }
 }
+
+// MARK: Distance and Intersection
 
 public extension LineType {
     /// Calculate the unsigned distance to a point.
     func distance(to point: CGPoint) -> CGFloat {
-        if directionIsZero { return zeroPoint.distance(to: point) }
+        if isTrivial { return startPoint.distance(to: point) }
 
-        let t = normalizedDirection.dot(point - zeroPoint)
+        let t = normalizedDirection.dot(point - startPoint)
         let clamped = normalizedBounds.clamp(t)
-        let projection = zeroPoint + clamped * normalizedDirection
+        let projection = startPoint + clamped * normalizedDirection
         return projection.distance(to: point)
     }
 
@@ -38,19 +40,19 @@ public extension LineType {
     /// If there are multiple (the lines are collinear), return one of them.
     func intersection(with other: LineType) -> CGPoint? {
         // Check for zero directions before starting the real intersection check
-        switch (directionIsZero, other.directionIsZero) {
+        switch (isTrivial, other.isTrivial) {
         case (true, true):
-            return zeroPoint == other.zeroPoint ? zeroPoint : nil
+            return startPoint == other.startPoint ? startPoint : nil
         case (true, false):
-            return distance(to: other.zeroPoint) == 0 ? other.zeroPoint : nil
+            return distance(to: other.startPoint) == 0 ? other.startPoint : nil
         case (false, true):
-            return other.distance(to: zeroPoint) == 0 ? zeroPoint : nil
+            return other.distance(to: startPoint) == 0 ? startPoint : nil
         case (false, false):
             () // Perform the actual intersection test
         }
 
-        let num1 = (other.zeroPoint - zeroPoint).cross(normalizedDirection)
-        let num2 = (other.zeroPoint - zeroPoint).cross(other.normalizedDirection)
+        let num1 = (other.startPoint - startPoint).cross(normalizedDirection)
+        let num2 = (other.startPoint - startPoint).cross(other.normalizedDirection)
         let denom = normalizedDirection.cross(other.normalizedDirection)
 
         // Lines are collinear, check if points are contained in the other line
@@ -68,9 +70,9 @@ public extension LineType {
         let t = num2 / denom
         print(normalizedBounds, other.normalizedBounds, u, t)
         if normalizedBounds.contains(u) && other.normalizedBounds.contains(t) {
-            print(zeroPoint + u * normalizedDirection)
-            print(other.zeroPoint + t * other.normalizedDirection)
-            return zeroPoint + u * normalizedDirection
+            print(startPoint + u * normalizedDirection)
+            print(other.startPoint + t * other.normalizedDirection)
+            return startPoint + u * normalizedDirection
         }
 
         return nil
@@ -78,15 +80,15 @@ public extension LineType {
 
     /// The intersection implementation for two lines which are collinear.
     private func collinearIntersection(with other: LineType) -> CGPoint? {
-        if zeroPoint == other.zeroPoint { return zeroPoint }
+        if startPoint == other.startPoint { return startPoint }
 
         // If required, negate other.bounds so that the effective direction is the same (namely self.normalizedDirection)
         var otherBounds = directionsAreInTheSameHemisphere(normalizedDirection, other.normalizedDirection) ? other.normalizedBounds : other.normalizedBounds.negated
 
         // Check which of the starting points is before the other, in respect to the shared direction
-        let zeroPointDiff = other.zeroPoint - zeroPoint
-        let selfComesFirst = directionsAreInTheSameHemisphere(zeroPointDiff.normalized, normalizedDirection)
-        let shiftDistance = (selfComesFirst ? +1 : -1) * zeroPointDiff.length
+        let startPointDiff = other.startPoint - startPoint
+        let selfComesFirst = directionsAreInTheSameHemisphere(startPointDiff.normalized, normalizedDirection)
+        let shiftDistance = (selfComesFirst ? +1 : -1) * startPointDiff.length
 
         // Shift the range of the other line so that it starts from the zero-point of this line and check for intersection
         otherBounds = otherBounds.shifted(by: shiftDistance)
@@ -96,7 +98,7 @@ public extension LineType {
         if intersection.isEmpty {
             return nil
         } else {
-            return zeroPoint + intersection.lower * normalizedDirection
+            return startPoint + intersection.lower * normalizedDirection
         }
     }
 

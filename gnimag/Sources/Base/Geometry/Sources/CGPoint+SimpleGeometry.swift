@@ -36,7 +36,12 @@ public extension CGPoint {
 
     /// Normalize the point. If it is zero, return zero.
     var normalized: CGPoint {
-        return length == 0 ? self : self / length
+        return isZero ? self : self / length
+    }
+
+    /// True if the point is the (0,0) point.
+    var isZero: Bool {
+        return length == 0
     }
 
     // MARK: Arithmetic

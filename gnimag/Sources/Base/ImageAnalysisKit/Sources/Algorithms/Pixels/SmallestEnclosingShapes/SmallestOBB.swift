@@ -25,12 +25,12 @@ public enum SmallestOBB {
 
         // Iterate through each line segment and construct an OBB containing this line segment
         for line in hull.lineSegments {
-            let dir = line.p2 - line.p1
-            if dir == .zero { continue } // Safety check
+            if line.isTrivial { continue }
+            let dir = line.normalizedDirection
 
             // Calculate directed angle between dir and x-axis
             // Angle is in [-pi/2, pi/2]
-            var angle = acos(dir.x / dir.length)
+            var angle = acos(dir.x)
             if angle > .pi / 2 { angle = .pi - angle }
             if dir.x * dir.y < 0 { angle = -angle }
 
