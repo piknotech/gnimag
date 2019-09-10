@@ -11,21 +11,23 @@ import Image
 
 extension Circle: Strokable, Fillable {
     public func stroke(onto context: CGContext) {
-        context.strokeEllipse(in: enclosingRect.insetBy(dx: 0.5, dy: 0.5))
+        context.strokeEllipse(in: enclosingRect.offsetBy(dx: 0.5, dy: 0.5))
     }
 
     public func fill(on context: CGContext) {
-        context.fillEllipse(in: enclosingRect)
+        let extended = enclosingRect.insetBy(dx: -0.5, dy: -0.5).offsetBy(dx: 0.5, dy: 0.5)
+        context.fillEllipse(in: extended)
     }
 }
 
 extension AABB: Strokable, Fillable {
     public func stroke(onto context: CGContext) {
-        context.stroke(rect.insetBy(dx: 0.5, dy: 0.5))
+        context.stroke(rect.offsetBy(dx: 0.5, dy: 0.5))
     }
 
     public func fill(on context: CGContext) {
-        context.fill(rect)
+        let extended = rect.insetBy(dx: -0.5, dy: -0.5).offsetBy(dx: 0.5, dy: 0.5)
+        context.fill(extended)
     }
 }
 
@@ -38,13 +40,13 @@ extension OBB: Strokable, Fillable {
 
     public func stroke(onto context: CGContext) {
         rotate(context: context, around: center, angle: rotation)
-        context.stroke(aabb.rect.insetBy(dx: 0.5, dy: 0.5))
+        aabb.stroke(onto: context)
         rotate(context: context, around: center, angle: -rotation)
     }
 
     public func fill(on context: CGContext) {
         rotate(context: context, around: center, angle: rotation)
-        context.fill(aabb.rect)
+        aabb.fill(on: context)
         rotate(context: context, around: center, angle: -rotation)
     }
 }
@@ -52,7 +54,7 @@ extension OBB: Strokable, Fillable {
 extension Geometry.Polygon: Strokable, Fillable {
     private func createPath(on context: CGContext) {
         context.beginPath()
-        context.addLines(between: points) // TESTEN MIT 0/1 objekten
+        context.addLines(between: points)
         context.closePath()
     }
 
