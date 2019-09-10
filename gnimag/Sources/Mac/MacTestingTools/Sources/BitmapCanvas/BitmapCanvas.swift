@@ -95,7 +95,7 @@ public final class BitmapCanvas {
         return self
     }
 
-    /// Fill each pixel with a random color.
+    /// Fill each pixel with a new random color.
     @discardableResult
     public func fillWithRandomColorPattern(alpha: Double = 1) -> BitmapCanvas {
         for x in 0 ..< context.width {

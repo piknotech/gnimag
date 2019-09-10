@@ -100,7 +100,7 @@
 		634AD0152327C8C400D87BAB /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0122327C8C000D87BAB /* Line.swift */; };
 		634AD0172327C8D000D87BAB /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0162327C8D000D87BAB /* Ray.swift */; };
 		634AD0192327D75200D87BAB /* Strokable+Fillable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0182327D75200D87BAB /* Strokable+Fillable.swift */; };
-		634AD01B2327E78C00D87BAB /* Shape+Line Conformances.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD01A2327E78C00D87BAB /* Shape+Line Conformances.swift */; };
+		634AD01B2327E78C00D87BAB /* Drawing Shapes+Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
@@ -252,7 +252,7 @@
 		634AD0122327C8C000D87BAB /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		634AD0162327C8D000D87BAB /* Ray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
 		634AD0182327D75200D87BAB /* Strokable+Fillable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strokable+Fillable.swift"; sourceTree = "<group>"; };
-		634AD01A2327E78C00D87BAB /* Shape+Line Conformances.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+Line Conformances.swift"; sourceTree = "<group>"; };
+		634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawing Shapes+Lines.swift"; sourceTree = "<group>"; };
 		6364934423270ABA00FEF664 /* SimpleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRange.swift; sourceTree = "<group>"; };
 		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
@@ -782,7 +782,7 @@
 				631213A223257A2F00C126B4 /* Color+Conversion.swift */,
 				631213A323257A2F00C126B4 /* BitmapCanvas.swift */,
 				634AD0182327D75200D87BAB /* Strokable+Fillable.swift */,
-				634AD01A2327E78C00D87BAB /* Shape+Line Conformances.swift */,
+				634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */,
 			);
 			path = BitmapCanvas;
 			sourceTree = "<group>";
@@ -1528,7 +1528,7 @@
 			files = (
 				631213B623257A2F00C126B4 /* ImageListCreator.swift in Sources */,
 				631213B023257A2F00C126B4 /* BitmapCanvas.swift in Sources */,
-				634AD01B2327E78C00D87BAB /* Shape+Line Conformances.swift in Sources */,
+				634AD01B2327E78C00D87BAB /* Drawing Shapes+Lines.swift in Sources */,
 				631213AF23257A2F00C126B4 /* Color+Conversion.swift in Sources */,
 				631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */,
 				631213B423257A2F00C126B4 /* Has2DDataSet.swift in Sources */,

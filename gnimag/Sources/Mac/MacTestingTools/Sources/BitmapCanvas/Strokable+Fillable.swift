@@ -29,6 +29,7 @@ extension BitmapCanvas {
     /// Fill the interior of the Fillable.
     @discardableResult
     public func fill(_ fillable: Fillable, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) -> BitmapCanvas {
+        context.setStrokeColor(color.CGColor(withAlpha: alpha)) // Could be required for filling
         context.setFillColor(color.CGColor(withAlpha: alpha))
         fillable.fill(on: context)
         return self
