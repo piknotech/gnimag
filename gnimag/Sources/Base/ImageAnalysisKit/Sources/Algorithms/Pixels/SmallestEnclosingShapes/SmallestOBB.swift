@@ -21,16 +21,16 @@ public enum SmallestOBB {
         let hull = ConvexHull.from(points)
 
         var bestValue = CGFloat.infinity
-        var bestOBB: OBB?
+        var bestOBB = OBB(center: hull.points.first!, width: 0, height: 0, rotation: 0) // Solution for the case that the polygon consists of just a single point
 
         // Iterate through each line segment and construct an OBB containing this line segment
         for line in hull.lineSegments {
-            let dir = line.p2 - line.p1
-            if dir == .zero { continue } // Safety check
+            if line.isTrivial { continue }
+            let dir = line.normalizedDirection
 
             // Calculate directed angle between dir and x-axis
             // Angle is in [-pi/2, pi/2]
-            var angle = acos(dir.x / dir.length)
+            var angle = acos(dir.x)
             if angle > .pi / 2 { angle = .pi - angle }
             if dir.x * dir.y < 0 { angle = -angle }
 
@@ -45,7 +45,7 @@ public enum SmallestOBB {
             let rotatedCenter = center.rotated(by: -angle)
 
             // Compare OBB with previous ones
-            let obb = OBB(center: rotatedCenter, width: aabb.width, height: aabb.height, rotation: angle)
+            let obb = OBB(center: rotatedCenter, width: aabb.width, height: aabb.height, rotation: -angle)
             let rating = value(of: minimizingProperty, of: obb)
             if rating < bestValue {
                 bestValue = rating
@@ -53,7 +53,7 @@ public enum SmallestOBB {
             }
         }
 
-        return bestOBB!
+        return bestOBB
     }
 
     /// Calculate the value of the specified property of an OBB.

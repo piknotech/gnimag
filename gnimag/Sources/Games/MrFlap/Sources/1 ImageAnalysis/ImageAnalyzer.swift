@@ -34,8 +34,6 @@ class ImageAnalyzer {
             return .failure(.playerNotFound)
         }
 
-        print(player.coords, player.size)
-
         return .failure(.unspecified)
     }
 

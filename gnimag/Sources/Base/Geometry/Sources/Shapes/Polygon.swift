@@ -18,8 +18,8 @@ public struct Polygon {
     public var lineSegments: [LineSegment] {
         (0 ..< points.count).map { i in
             LineSegment(
-                p1: points[i],
-                p2: points[(i + 1) % points.count]
+                from: points[i],
+                to: points[(i + 1) % points.count]
             )
         }
     }
@@ -43,16 +43,19 @@ extension Polygon: Shape {
         let aabb = self.aabb
         if !aabb.contains(point) { return false }
 
+        // Special check: is point exactly on the edge?
+        if distance(to: point) == 0 { return true }
+
         // Create random ray and test number of intersections with the polygon
         let angle = CGFloat.random(in: 0 ..< 2 * .pi)
-        let scale = aabb.width + aabb.height // Can be replaced once "Ray" is introduced as a Shape/LineType
-        let p2 = CGPoint(x: point.x + sin(angle) * scale, y: cos(angle) * scale)
-        let ray = LineSegment(p1: point, p2: p2)
+        let direction = CGPoint(x: sin(angle), y: cos(angle))
+        let ray = Ray(startPoint: point, direction: direction)
         
         let intersections = lineSegments.count(where: ray.intersects(with:))
         return !intersections.isMultiple(of: 2)
     }
 
+    /// The bounding box of the polygon.
     private var aabb: AABB {
         let xs = points.map { $0.x }
         let ys = points.map { $0.y }

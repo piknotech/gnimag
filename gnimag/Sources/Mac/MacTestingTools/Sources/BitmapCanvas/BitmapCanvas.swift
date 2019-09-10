@@ -10,7 +10,7 @@ import Image
 /// It can be manipulated using methods similar like those of CGContext.
 public final class BitmapCanvas {
     /// The underlying CGContext.
-    private let context: CGContext
+    internal let context: CGContext
 
     // MARK: Initialization
 
@@ -49,8 +49,8 @@ public final class BitmapCanvas {
     }
 
     /// Create a new bitmap canvas where all pixels that have a small enough distance to a given color are filled in a specific (other) color.
-    /// When "doDistanceBasedGreyscaleForOtherPixels" = true, the other pixels are white for really near and black for far away pixels (continuous). Else, all other pixels are black.
-    public static func createByFillingAllPixels(_ fillColor: Color, whereDistanceTo comparingColor: Color, in image: Image, isAtMost threshold: Double, doDistanceBasedGreyscaleForOtherPixels: Bool = true) -> BitmapCanvas {
+    /// When "createDistanceBasedGreyscaleForOtherPixels" = true, the other pixels are white for really near and black for far away pixels (continuous). Else, all other pixels are black.
+    public static func createByFillingAllPixels(_ fillColor: Color, whereDistanceTo comparingColor: Color, in image: Image, isAtMost threshold: Double, createDistanceBasedGreyscaleForOtherPixels: Bool = true) -> BitmapCanvas {
         let canvas = BitmapCanvas(width: image.width, height: image.height)
 
         // Fill pixel for pixel
@@ -59,39 +59,60 @@ public final class BitmapCanvas {
                 let pixel = Pixel(x, y)
                 let diff = image.color(at: pixel).euclideanDifference(to: comparingColor)
 
+                // Fill pixel either with `fillColor`, gray or `.black`.
                 if diff <= threshold {
-                    // Color matches: fill with "fillColor"
                     canvas.fill(pixel, with: fillColor)
-                } else if doDistanceBasedGreyscaleForOtherPixels {
-                    // Fill grey, distance-based
+                }
+                else if createDistanceBasedGreyscaleForOtherPixels {
                     let p = (diff - threshold) / (1 - threshold) // p in (0, 1]
                     let color = Color(1-p, 1-p, 1-p)
                     canvas.fill(pixel, with: color)
-                } // Else, leave pixel black as is
+                }
+                else {
+                    canvas.fill(pixel, with: .black)
+                }
             }
         }
 
         return canvas
     }
 
-    // MARK: Drawing Operations
+    // MARK: Simple Color Operations
+
+    /// Fill the whole canvas with the given color.
+    @discardableResult
+    public func background(_ color: Color, alpha: Double = 1) -> BitmapCanvas {
+        context.setFillColor(color.CGColor(withAlpha: alpha))
+        context.fill(CGRect(x: 0, y: 0, width: context.width, height: context.height))
+        return self
+    }
+
+    /// Fill each pixel with a new random color.
+    @discardableResult
+    public func randomBackground(alpha: Double = 1) -> BitmapCanvas {
+        for x in 0 ..< context.width {
+            for y in 0 ..< context.height {
+                let color = Color(.random(in: 0...1), .random(in: 0...1), .random(in: 0...1))
+                fill(Pixel(x, y), with: color, alpha: alpha)
+            }
+        }
+        return self
+    }
 
     /// Fill a single pixel with the given color.
     @discardableResult
     public func fill(_ pixel: Pixel, with color: Color, alpha: Double = 1) -> BitmapCanvas {
-        context.setFillColor(color.NSColor(withAlpha: alpha).cgColor)
+        context.setFillColor(color.CGColor(withAlpha: alpha))
         context.fill(CGRect(x: pixel.x, y: pixel.y, width: 1, height: 1))
         return self
     }
 
-    /// Draw the outline of a circle.
+    /// Fill a list of pixels with the given color.
     @discardableResult
-    public func drawCircle(center: CGPoint, radius: CGFloat, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) -> BitmapCanvas {
-        let rect = CGRect(x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius)
-        context.setLineWidth(CGFloat(strokeWidth))
-        context.setStrokeColor(color.NSColor(withAlpha: alpha).cgColor)
-        context.strokeEllipse(in: rect)
-        return self
+    public func fill(_ pixels: [Pixel], with color: Color, alpha: Double = 1) -> BitmapCanvas {
+        pixels.reduce(self) { (self, pixel) in
+            self.fill(pixel, with: color, alpha: alpha)
+        }
     }
 
     // MARK: Write to File
@@ -100,5 +121,11 @@ public final class BitmapCanvas {
     public func write(to file: String) {
         let image = context.makeImage()!
         image.write(to: file)
+    }
+
+    /// Write the current canvas content to the users desktop.
+    public func writeToDesktop(name: String) {
+        let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
+        write(to: desktop + "/" + name)
     }
 }
