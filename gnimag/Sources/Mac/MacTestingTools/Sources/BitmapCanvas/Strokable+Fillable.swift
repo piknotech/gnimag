@@ -17,11 +17,16 @@ public protocol Fillable {
 }
 
 extension BitmapCanvas {
+    private func setupStroke(color: Color, alpha: Double, strokeWidth: Double) {
+        context.setLineCap(.round)
+        context.setLineWidth(CGFloat(strokeWidth))
+        context.setStrokeColor(color.CGColor(withAlpha: alpha))
+    }
+
     /// Draw the outline of the Strokable.
     @discardableResult
     public func stroke(_ strokable: Strokable, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) -> BitmapCanvas {
-        context.setLineWidth(CGFloat(strokeWidth))
-        context.setStrokeColor(color.CGColor(withAlpha: alpha))
+        setupStroke(color: color, alpha: alpha, strokeWidth: strokeWidth)
         context.translateBy(x: 0.5, y: 0.5) // Pixel <-> CGPoint conversion
         strokable.stroke(onto: context)
         context.translateBy(x: -0.5, y: -0.5)
@@ -30,9 +35,9 @@ extension BitmapCanvas {
 
     /// Fill the interior of the Fillable.
     @discardableResult
-    public func fill(_ fillable: Fillable, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) -> BitmapCanvas {
-        context.setStrokeColor(color.CGColor(withAlpha: alpha)) // Could be required for filling
+    public func fill(_ fillable: Fillable, with color: Color, alpha: Double = 1) -> BitmapCanvas {
         context.setFillColor(color.CGColor(withAlpha: alpha))
+        setupStroke(color: color, alpha: alpha, strokeWidth: 1) // Could be required for filling, e.g for CGPaths
         context.translateBy(x: 0.5, y: 0.5) // Pixel <-> CGPoint conversion
         fillable.fill(on: context)
         context.translateBy(x: -0.5, y: -0.5)

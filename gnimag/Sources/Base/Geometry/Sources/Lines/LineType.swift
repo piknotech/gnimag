@@ -51,13 +51,25 @@ public extension LineType {
             () // Perform the actual intersection test
         }
 
+        if let t = tForIntersection(with: other) {
+            return startPoint + t * normalizedDirection
+        } else {
+            return nil
+        }
+    }
+
+    /// Find `t` such that `startPoint + t * normalizedDirection` lies on the other line.
+    /// If the line is trivial, return nil.
+    func tForIntersection(with other: LineType) -> CGFloat? {
+        if isTrivial { return nil }
+
         let num1 = (other.startPoint - startPoint).cross(normalizedDirection)
         let num2 = (other.startPoint - startPoint).cross(other.normalizedDirection)
         let denom = normalizedDirection.cross(other.normalizedDirection)
 
         // Lines are collinear, check if points are contained in the other line
         if num1 == 0 && denom == 0 {
-            return collinearIntersection(with: other)
+            return tForCollinearIntersection(with: other)
         }
 
         // Lines are parallel, but not collinear
@@ -66,21 +78,26 @@ public extension LineType {
         }
 
         // Lines may have one intersection – check if intersection is inside the bounds
-        let u = num1 / denom
         let t = num2 / denom
-        print(normalizedBounds, other.normalizedBounds, u, t)
-        if normalizedBounds.contains(u) && other.normalizedBounds.contains(t) {
-            print(startPoint + u * normalizedDirection)
-            print(other.startPoint + t * other.normalizedDirection)
-            return startPoint + u * normalizedDirection
-        }
+        let u = num1 / denom
 
-        return nil
+        if normalizedBounds.contains(t) && other.normalizedBounds.contains(u) {
+            return t
+        } else {
+            return nil
+        }
     }
 
+    /// Check if the two lines intersect or have a point in common.
+    func intersects(with other: LineType) -> Bool {
+        return intersection(with: other) != nil
+    }
+}
+
+extension LineType {
     /// The intersection implementation for two lines which are collinear.
-    private func collinearIntersection(with other: LineType) -> CGPoint? {
-        if startPoint == other.startPoint { return startPoint }
+    private func tForCollinearIntersection(with other: LineType) -> CGFloat? {
+        if startPoint == other.startPoint { return 0 }
 
         // If required, negate other.bounds so that the effective direction is the same (namely self.normalizedDirection)
         var otherBounds = directionsAreInTheSameHemisphere(normalizedDirection, other.normalizedDirection) ? other.normalizedBounds : other.normalizedBounds.negated
@@ -98,7 +115,7 @@ public extension LineType {
         if intersection.isEmpty {
             return nil
         } else {
-            return startPoint + intersection.lower * normalizedDirection
+            return intersection.lower // Anything inside the intersection range would be valid
         }
     }
 
@@ -106,10 +123,5 @@ public extension LineType {
     /// Only call this method with directions which are normalized!
     private func directionsAreInTheSameHemisphere(_ dir1: CGPoint, _ dir2: CGPoint) -> Bool {
         return dir1.distance(to: dir2) <= sqrt(2)
-    }
-
-    /// Check if the two lines intersect or have a point in common.
-    func intersects(with other: LineType) -> Bool {
-        return intersection(with: other) != nil
     }
 }

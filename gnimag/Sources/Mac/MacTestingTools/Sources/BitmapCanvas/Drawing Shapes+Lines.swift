@@ -70,3 +70,56 @@ extension Geometry.Polygon: Strokable, Fillable {
 }
 
 // MARK: Lines
+
+extension LineSegment: Strokable {
+    public func stroke(onto context: CGContext) {
+        context.move(to: startPoint)
+        context.addLine(to: endPoint)
+        context.strokePath()
+    }
+}
+
+extension Ray: Strokable {
+    public func stroke(onto context: CGContext) {
+        if isTrivial { return }
+        let tValues = [0] + tValuesForIntersection(with: context)
+        strokeIfPossible(validTValues: tValues, context: context)
+    }
+}
+
+extension Line: Strokable {
+    public func stroke(onto context: CGContext) {
+        if isTrivial { return }
+        let tValues = tValuesForIntersection(with: context)
+        strokeIfPossible(validTValues: tValues, context: context)
+    }
+}
+
+fileprivate extension LineType {
+    /// Get all t-values where `startPoint + t * normalizedDirection` intersects with one of the bounds of the context.
+    func tValuesForIntersection(with context: CGContext) -> [CGFloat] {
+        let lineWidth: CGFloat = 50 // The maximum line width any reasonable user would use. Any large value would work here.
+
+        // Four corners of the context, inset by -maxLineWidth
+        let ll = CGPoint(x: -lineWidth, y: -lineWidth)
+        let lr = CGPoint(x: CGFloat(context.width) + lineWidth, y: -lineWidth)
+        let ul = CGPoint(x: -lineWidth, y: CGFloat(context.height) + lineWidth)
+        let ur = CGPoint(x: CGFloat(context.width) + lineWidth, y: CGFloat(context.height) + lineWidth)
+
+        // Get intersection parameters for the four edges
+        let polygon = Polygon(points: [ll, lr, ur, ul])
+        return polygon.lineSegments.compactMap(tForIntersection(with:))
+    }
+
+    /// Stroke the points defined by `validTValues` if there are 2 or more elements.
+    func strokeIfPossible(validTValues: [CGFloat], context: CGContext) {
+        if validTValues.count >= 2 {
+            let min = validTValues.min()!, max = validTValues.max()!
+            let start = startPoint + min * normalizedDirection
+            let end = startPoint + max * normalizedDirection
+            context.move(to: start)
+            context.addLine(to: end)
+            context.strokePath()
+        }
+    }
+}
