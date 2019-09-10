@@ -43,6 +43,9 @@ extension Polygon: Shape {
         let aabb = self.aabb
         if !aabb.contains(point) { return false }
 
+        // Special check: is point exactly on the edge?
+        if distance(to: point) == 0 { return true }
+
         // Create random ray and test number of intersections with the polygon
         let angle = CGFloat.random(in: 0 ..< 2 * .pi)
         let direction = CGPoint(x: sin(angle), y: cos(angle))
@@ -52,6 +55,7 @@ extension Polygon: Shape {
         return !intersections.isMultiple(of: 2)
     }
 
+    /// The bounding box of the polygon.
     private var aabb: AABB {
         let xs = points.map { $0.x }
         let ys = points.map { $0.y }

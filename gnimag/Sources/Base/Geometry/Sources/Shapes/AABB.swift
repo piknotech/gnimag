@@ -41,7 +41,11 @@ extension AABB: Shape {
     }
 
     /// Check if the point is inside the shape.
+    /// NOTE: This does not use CGRect.contains because it does not fully consider the rect's borders.
     public func contains(_ point: CGPoint) -> Bool {
-        return rect.contains(point)
+        rect.minX <= point.x &&
+        rect.minY <= point.y &&
+        point.x <= rect.maxX &&
+        point.y <= rect.maxY
     }
 }
