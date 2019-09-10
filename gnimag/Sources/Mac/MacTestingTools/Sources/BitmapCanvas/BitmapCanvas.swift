@@ -107,6 +107,14 @@ public final class BitmapCanvas {
         return self
     }
 
+    /// Fill a list of pixels with the given color.
+    @discardableResult
+    public func fill(_ pixels: [Pixel], with color: Color, alpha: Double = 1) -> BitmapCanvas {
+        pixels.reduce(self) { (self, pixel) in
+            self.fill(pixel, with: color, alpha: alpha)
+        }
+    }
+
     // MARK: Write to File
 
     /// Write the current canvas content to a file.
