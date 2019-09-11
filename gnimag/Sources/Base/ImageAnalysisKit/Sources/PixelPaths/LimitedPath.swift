@@ -6,6 +6,8 @@
 import Foundation
 import Image
 
+// TODO: because paths are structs, this dos not allow to .limit(by:) a path multiple times successively (as the original path is not modified, but copied each time – this is not the desired behavior)
+
 /// LimitedPath allows paths to be limited to a certain number of pixels after which they should stop.
 public struct LimitedPath: PixelPath {
     /// The path that is being limited.
@@ -37,7 +39,7 @@ public struct LimitedPath: PixelPath {
 // MARK: PixelPath Extension
 extension PixelPath {
     /// Limit this path by a maximum length after which the path will stop.
-    /// After the limited path is exhausted, you can call "limited(by:)" again to limit the path again, starting at its current state.
+    /// After the limited path is exhausted, you can (NO! CURRENTLY NOT! (AS PATHS ARE STRUCTS)) call "limited(by:)" again to limit the path again, starting at its new state.
     public func limited(by maxLength: Int) -> PixelPath {
         LimitedPath(path: self, maxLength: maxLength)
     }
