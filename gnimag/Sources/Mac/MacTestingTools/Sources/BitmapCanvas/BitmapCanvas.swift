@@ -99,18 +99,20 @@ public final class BitmapCanvas {
 
     /// Fill a single pixel with the given color.
     @discardableResult
-    public func fill(_ pixel: Pixel, with color: Color, alpha: Double = 1) -> BitmapCanvas {
+    public func fill(_ pixel: Pixel, with color: Color, alpha: Double = 1, width: CGFloat = 1) -> BitmapCanvas {
         context.setFillColor(color.CGColor(withAlpha: alpha))
-        context.fill(CGRect(x: pixel.x, y: pixel.y, width: 1, height: 1))
+        context.translateBy(x: 0.5, y: 0.5) // Pixel <-> CGPoint conversion
+        context.fill(CGRect(x: CGFloat(pixel.x) - width / 2, y: CGFloat(pixel.y) - width / 2, width: width, height: width))
+        context.translateBy(x: -0.5, y: -0.5)
         return self
     }
 
     /// Fill a sequence of pixels with the given color.
     /// For example, you can stroke a PixelPath.
     @discardableResult
-    public func stroke<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1) -> BitmapCanvas where S.Element == Pixel {
+    public func stroke<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1, width: CGFloat = 1) -> BitmapCanvas where S.Element == Pixel {
         pixels.reduce(self) { (_, pixel) in
-            fill(pixel, with: color, alpha: alpha)
+            fill(pixel, with: color, alpha: alpha, width: width)
         }
     }
 

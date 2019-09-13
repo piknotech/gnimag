@@ -893,19 +893,19 @@
 		631213E323257F4000C126B4 /* 2 GameDataAggregation */ = {
 			isa = PBXGroup;
 			children = (
-				631213E423257F4000C126B4 /* Models */,
+				631213E423257F4000C126B4 /* Trackers */,
 				631213E723257F4000C126B4 /* GameModel.swift */,
 			);
 			path = "2 GameDataAggregation";
 			sourceTree = "<group>";
 		};
-		631213E423257F4000C126B4 /* Models */ = {
+		631213E423257F4000C126B4 /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
 				631213E523257F4000C126B4 /* BarCourse.swift */,
 				631213E623257F4000C126B4 /* PlayerCourse.swift */,
 			);
-			path = Models;
+			path = Trackers;
 			sourceTree = "<group>";
 		};
 		631213E823257F4000C126B4 /* 1 ImageAnalysis */ = {
