@@ -28,13 +28,18 @@ class ImageAnalyzer {
         }
 
         // Find player
-        let yCenter = playfield.center.y + CGFloat(playfield.innerRadius + playfield.fullRadius) / 2
-        let initialHint = Pixel(image.bounds.width / 2, Int(yCenter))
-        guard let player = findPlayer(in: image, with: coloring, searchCenter: initialHint) else {
+        let searchHint = hints.expectedPlayerPosition.position(respectiveTo: playfield.center).nearestPixel
+        guard let (player, playerOBB) = findPlayer(in: image, with: coloring, searchCenter: searchHint) else {
             return .failure(.playerNotFound)
         }
 
-        return .failure(.unspecified)
+        print(player)
+
+        // Find bars
+        let bars = findBars(in: image, with: coloring, playerOBB: playerOBB)
+        print(bars)
+
+        return .success(AnalysisResult(player: player, playfield: playfield, coloring: coloring, bars: bars))
     }
 
     /// Find the coloring of the game.
@@ -96,14 +101,61 @@ class ImageAnalyzer {
         // Calculate player properties
         let coords = PolarCoordinates(position: obb.center, center: playfield.center)
         let size = Double(obb.width + obb.height) / 2
-        return Player(coords: coords, size: size)
+        return (Player(coords: coords, size: size), obb)
     }
 
     /// Find all bars.
-    private func findBars() -> [Bar] {
-        // zb. 48 punkte im kreis (c=playfield.center, r=playfield.innerRadius+5) anschauen; alles wo matcht speichern
-        // dann: die matches (linearified) verklumpen --> 4 klumpen
-        // jeden klumpen finalizen: mitte finden, von oben und unten schauen wie lang
-        return []
+    private func findBars(in image: Image, with coloring: Coloring, playerOBB: OBB) -> [Bar] {
+        // Step 1: consider 48 pixels directly above the inner circle and pack them together into bunches
+        let circle = Circle(center: image.bounds.center.CGPoint, radius: CGFloat(playfield.innerRadius) + 5)
+        var pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 48)
+
+        pixels.removeAll { pixel in // Filter pixels which do not belong to any bar
+            playerOBB.contains(pixel.CGPoint) ||
+            image.color(at: pixel).distance(to: coloring.theme) > 0.1
+        }
+
+        let upperBoundForBarWidth = .pi / 8 * playfield.innerRadius // works for up to 8 bars
+        let result = ConnectedChunks.from(pixels, maxDistance: upperBoundForBarWidth)
+
+        // Step 2: fully locate each bar based on a chunk
+        return result.chunks.compactMap {
+            locateBar(from: $0.any, in: image, with: coloring)
+        }
+    }
+
+    /// Find the bar which contains the given `startPixel`.
+    private func locateBar(from startPixel: Pixel, in image: Image, with coloring: Coloring) -> Bar? {
+        let insideBar = coloring.theme.withTolerance(0.1)
+
+        /// Step 1: find center point by moving left and right as far as possible
+        var angle = PolarCoordinates.angle(for: startPixel.CGPoint, respectiveTo: playfield.center)
+        let left = StraightPath(start: startPixel, angle: angle + .pi / 2, bounds: image.bounds)
+        let right = StraightPath(start: startPixel, angle: angle - .pi / 2, bounds: image.bounds)
+
+        guard let a = image.findFirstPixel(matching: .not(insideBar), on: left),
+              let b = image.findFirstPixel(matching: .not(insideBar), on: right) else { return nil }
+
+        // Use correct angle to go upwards
+        let center = (a.CGPoint + b.CGPoint) / 2
+        angle = PolarCoordinates.angle(for: center, respectiveTo: playfield.center)
+        let upwards: PixelPath = StraightPath(start: center.nearestPixel, angle: angle, bounds: image.bounds)
+
+        // Step 2: find the bottom edge, then go further to find the top edge of the hole
+        let bottomEdge = image.follow(path: upwards, untilFulfillingSequence: ColorMatchSequence(!insideBar))
+        let topEdge = image.follow(path: upwards, untilFulfillingSequence: ColorMatchSequence(insideBar))
+
+        guard let bottom = bottomEdge.beforeFulfillment, let top = topEdge.beforeFulfillment else { return nil }
+
+        let innerHeight = Double(bottom.CGPoint.distance(to: playfield.center)) - playfield.innerRadius
+        let holeSize = top.distance(to: bottom)
+
+        return Bar(
+            width: a.distance(to: b), // Not 100% correct, but doesn't matter for small bar widths DOCH! FIXEN
+            angle: Double(angle),
+            innerHeight: innerHeight,
+            outerHeight: playfield.freeSpace - innerHeight - holeSize,
+            holeSize: holeSize
+        )
     }
 }

@@ -19,5 +19,6 @@ struct Bar {
 
     /// The hole size and the y-center of the hole.
     let holeSize: Double
-    let yCenter: Double
+
+    var yCenter: Double { innerHeight + holeSize / 2 }
 }

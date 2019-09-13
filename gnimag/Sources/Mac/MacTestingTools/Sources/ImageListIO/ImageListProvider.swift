@@ -14,9 +14,10 @@ public final class ImageListProvider: ImageProvider {
     private let directoryPath: String
 
     /// The next image to consume.
-    private var i = 1
+    private var i: Int
+    private let speed: Int
 
-    /// The framerate with which images are provided.
+    /// The framerate with which images are provided (in Hertz).
     private let framerate: Int
 
     /// The timer firing the callback block.
@@ -30,10 +31,12 @@ public final class ImageListProvider: ImageProvider {
 
     /// Default initializer.
     /// Start providing images immediately.
-    public init(directoryPath: String, framerate: Int, imageFromCGImage: @escaping (CGImage) -> Image) {
+    public init(directoryPath: String, framerate: Int, startingAt: Int = 1, speed: Int = 1, imageFromCGImage: @escaping (CGImage) -> Image) {
         self.directoryPath = directoryPath
         self.framerate = framerate
         self.imageFromCGImage = imageFromCGImage
+        self.speed = speed
+        i = startingAt
 
         `continue`()
     }
@@ -44,7 +47,7 @@ public final class ImageListProvider: ImageProvider {
         log(.info, "Image \(i)")
 
         if let image = NSImage(contentsOfFile: path)?.cgImage(forProposedRect: nil, context: nil, hints: nil) {
-            i += 1
+            i += speed
             return image
         } else {
             // All images consumed
@@ -59,7 +62,7 @@ public final class ImageListProvider: ImageProvider {
 
         // Start timer
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(framerate), repeats: true) { _ in
-            let time = Double(self.i) / Double(self.framerate)
+            let time = Double(self.i) / Double(self.framerate * self.speed)
             if let image = self.nextImage {
                 self.newImage.trigger(with: (self.imageFromCGImage(image), time))
             }
