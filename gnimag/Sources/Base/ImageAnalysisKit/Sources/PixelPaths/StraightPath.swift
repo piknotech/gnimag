@@ -7,7 +7,7 @@ import Foundation
 import Image
 
 /// A PixelPath that consists of a straight line. The path stops when the given bounds have been reached.
-public struct StraightPath: PixelPath {
+public class StraightPath: PixelPath {
     /// The start pixel. It must be inside the bounds, else the path is empty.
     public let start: Pixel
 
@@ -21,22 +21,31 @@ public struct StraightPath: PixelPath {
     /// The bounds in which the path should be.
     public let bounds: Bounds
 
+    /// For performance reasons, instead of calculating sin/cos each time, the next pixel is calculated incrementally from the last one.
+    private var current: CGPoint
+    private let sin: CGFloat
+    private let cos: CGFloat
+
     /// Default initializer.
     public init(start: Pixel, angle: Double, bounds: Bounds, speed: Double = 1) {
         self.start = start
         self.angle = angle
         self.bounds = bounds
 
+        current = start.CGPoint
+        sin = Foundation.sin(CGFloat(angle))
+        cos = Foundation.cos(CGFloat(angle))
+
         // If the ray is i.e. diagonal, speed must be multiplied with 1.41 to avoid returning pixels twice.
         // Therefore, each step is exactly so long that either in x- or in y-direction, exactly one new pixel is hit each time.
         let mod = abs(angle).truncatingRemainder(dividingBy: .pi) // 0 <= mod < 180°
         let slope = (mod < .pi / 4 || mod > .pi * 3/4) ? tan(angle) : tan(angle - .pi / 2)
         let multiplicator = sqrt(1 + slope * slope)
-        self.speed = Double(speed) * multiplicator
+        self.speed = speed * multiplicator
     }
 
     /// Convenience initializer. Instead of the angle, here you pass another point where the ray should pass through.
-    public init(start: Pixel, through: Pixel, bounds: Bounds, speed: Double = 1) {
+    public convenience init(start: Pixel, through: Pixel, bounds: Bounds, speed: Double = 1) {
         let dy = Double(through.y - start.y)
         let dx = Double(through.x - start.x)
         let angle = atan2(dy, dx)
@@ -50,10 +59,10 @@ public struct StraightPath: PixelPath {
 
     /// Return the next pixel on the path.
     /// If the bounds are surpassed, return nil.
-    public mutating func next() -> Pixel? {
-        let x = Double(start.x) + cos(angle) * speed * Double(steps)
-        let y = Double(start.y) + sin(angle) * speed * Double(steps)
-        let pixel = Pixel(Int(round(x)), Int(round(y)))
+    public override func next() -> Pixel? {
+        current.x += CGFloat(speed) * cos
+        current.y += CGFloat(speed) * sin
+        let pixel = current.nearestPixel
 
         // Boundary check
         guard bounds.contains(pixel) else { return nil }

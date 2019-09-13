@@ -40,7 +40,7 @@ public enum EdgeDetector {
         precondition(shapeColor.matches(image.color(at: pixel)), "The starting pixel (\(pixel)) must be inside the shape!")
 
         let extendedBounds = image.bounds.inset(by: (-1, -1))
-        var path = StraightPath(start: pixel, angle: angle, bounds: extendedBounds) // This is done exactly (speed 1)
+        let path = StraightPath(start: pixel, angle: angle, bounds: extendedBounds) // This is done exactly (speed 1)
 
         var lastPixel = pixel
         

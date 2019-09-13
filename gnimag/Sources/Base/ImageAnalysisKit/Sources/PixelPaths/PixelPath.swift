@@ -5,10 +5,12 @@
 
 import Image
 
-/// PixelPath describes a sequence of arbitrary many pixels.
-/// The path can be retrieved sequentially, each time as many pixels as desired.
-public protocol PixelPath {
+/// PixelPath describes a (not necessarily finite) sequence of pixels.
+open class PixelPath: Sequence, IteratorProtocol {
+    public typealias Element = Pixel
+    public typealias Iterator = PixelPath
+
     /// Proceed to the next pixel of the path and return it.
     /// Once the path has finished and no more pixels are available, return nil on each subsequent call.
-    mutating func next() -> Pixel?
+    open func next() -> Pixel? { nil }
 }

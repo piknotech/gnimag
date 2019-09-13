@@ -19,7 +19,7 @@
 		63121315232577EA00C126B4 /* ImageAnalysisKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63121313232577EA00C126B4 /* ImageAnalysisKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631213492325785000C126B4 /* ConnectedChunks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312131F2325785000C126B4 /* ConnectedChunks.swift */; };
 		6312134A2325785000C126B4 /* DistanceMeasurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213202325785000C126B4 /* DistanceMeasurable.swift */; };
-		6312134B2325785000C126B4 /* FindFirstPixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213222325785000C126B4 /* FindFirstPixel.swift */; };
+		6312134B2325785000C126B4 /* FindSinglePixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213222325785000C126B4 /* FindSinglePixel.swift */; };
 		6312134C2325785000C126B4 /* RayShooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213242325785000C126B4 /* RayShooter.swift */; };
 		6312134D2325785000C126B4 /* EdgeTraverser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213252325785000C126B4 /* EdgeTraverser.swift */; };
 		6312134E2325785000C126B4 /* EdgeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213262325785000C126B4 /* EdgeDetector.swift */; };
@@ -157,7 +157,7 @@
 		6312131A2325785000C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6312131F2325785000C126B4 /* ConnectedChunks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectedChunks.swift; sourceTree = "<group>"; };
 		631213202325785000C126B4 /* DistanceMeasurable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceMeasurable.swift; sourceTree = "<group>"; };
-		631213222325785000C126B4 /* FindFirstPixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindFirstPixel.swift; sourceTree = "<group>"; };
+		631213222325785000C126B4 /* FindSinglePixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindSinglePixel.swift; sourceTree = "<group>"; };
 		631213242325785000C126B4 /* RayShooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RayShooter.swift; sourceTree = "<group>"; };
 		631213252325785000C126B4 /* EdgeTraverser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeTraverser.swift; sourceTree = "<group>"; };
 		631213262325785000C126B4 /* EdgeDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EdgeDetector.swift; sourceTree = "<group>"; };
@@ -580,7 +580,7 @@
 		631213212325785000C126B4 /* Image */ = {
 			isa = PBXGroup;
 			children = (
-				631213222325785000C126B4 /* FindFirstPixel.swift */,
+				631213222325785000C126B4 /* FindSinglePixel.swift */,
 				631213232325785000C126B4 /* Edge Detection */,
 			);
 			path = Image;
@@ -1481,7 +1481,7 @@
 			files = (
 				631213542325785000C126B4 /* OutlierExtinctionForCircularPointSets.swift in Sources */,
 				631213502325785000C126B4 /* SmallestAABB.swift in Sources */,
-				6312134B2325785000C126B4 /* FindFirstPixel.swift in Sources */,
+				6312134B2325785000C126B4 /* FindSinglePixel.swift in Sources */,
 				631213662325785000C126B4 /* ColorMatch.swift in Sources */,
 				631213642325785000C126B4 /* ExpandingCirclePath.swift in Sources */,
 				631213622325785000C126B4 /* LimitedPath.swift in Sources */,

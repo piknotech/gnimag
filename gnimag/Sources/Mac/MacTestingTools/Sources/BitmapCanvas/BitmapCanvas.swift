@@ -107,11 +107,11 @@ public final class BitmapCanvas {
         return self
     }
 
-    /// Fill a list of pixels with the given color.
+    /// Fill a sequence of pixels with the given color.
     @discardableResult
-    public func fill(_ pixels: [Pixel], with color: Color, alpha: Double = 1) -> BitmapCanvas {
-        pixels.reduce(self) { (self, pixel) in
-            self.fill(pixel, with: color, alpha: alpha)
+    public func fill<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1) -> BitmapCanvas where S.Element == Pixel {
+        pixels.reduce(self) { (_, pixel) in
+            fill(pixel, with: color, alpha: alpha)
         }
     }
 

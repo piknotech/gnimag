@@ -9,7 +9,7 @@ import Geometry
 
 /// A PixelPath that consists of equidistant pixels on a circle. The circle is traversed exactly once.
 /// Only pixels inside the given bounds are traversed.
-public struct CirclePath: PixelPath {
+public final class CirclePath: PixelPath {
     /// Possible ways to procced with pixels that are on the circle but outside bounds.
     public enum PixelsOutsideBoundsMode {
         case skip
@@ -48,7 +48,7 @@ public struct CirclePath: PixelPath {
     private var currentStep = 0
 
     /// Return the next pixel on the path.
-    public mutating func next() -> Pixel? {
+    public override func next() -> Pixel? {
         while currentStep < numberOfPixels {
             if let next = nextOnCircle() {
                 return next
@@ -70,7 +70,7 @@ public struct CirclePath: PixelPath {
 
     /// Return the next pixel on the circle.
     /// If the bounds are surpassed, return nil.
-    private mutating func nextOnCircle() -> Pixel? {
+    private func nextOnCircle() -> Pixel? {
         let delta = 2 * .pi / CGFloat(numberOfPixels)
         let angle = startAngle + CGFloat(currentStep) * delta
 

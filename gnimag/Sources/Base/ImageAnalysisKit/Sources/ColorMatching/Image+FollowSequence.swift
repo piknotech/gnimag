@@ -8,7 +8,7 @@ import Image
 extension Image {
     /// Continue a path inside the image until the whole ColorMatchSequence was matched.
     /// When the last match of the sequence has been hit, return the last pixel and the current pixel.
-    public func follow(path: inout PixelPath, untilFulfillingSequence sequence: ColorMatchSequence) -> SequenceFulfillmentResult {
+    public func follow(path: PixelPath, untilFulfillingSequence sequence: ColorMatchSequence) -> SequenceFulfillmentResult {
         var currentSequenceIndexToMatch = 0
         var lastPixel: Pixel?
 
@@ -48,6 +48,12 @@ extension Image {
         public var fulfilledPixel: Pixel? {
             guard case let .fulfilled(_, fulfilledPixel: pixel) = self else { return nil }
             return pixel
+        }
+
+        /// Return the pixel before the one which fulfilled the sequence, or nil if the sequence was not fulfilled or was fulfilled immediately (by the first pixel).
+        public var beforeFulfillment: Pixel? {
+            guard case let .fulfilled(previousPixel: pixel, _) = self else { return nil }
+            return pixel // Can be nil
         }
     }
 }

@@ -9,7 +9,7 @@ import Image
 
 /// A PixelPath that creates circles of increasing radii.
 /// It happens that some pixels are traversed multiple times (from two adjacent circles), and some pixels are not traversed at all.
-public struct ExpandingCirclePath: PixelPath {
+public final class ExpandingCirclePath: PixelPath {
     private let center: Pixel
     private let bounds: Bounds
     private let discardRatio: Double
@@ -27,7 +27,7 @@ public struct ExpandingCirclePath: PixelPath {
     }
 
     /// Return the next pixel on the path.
-    public mutating func next() -> Pixel? {
+    public override func next() -> Pixel? {
         if let next = currentCirclePath?.next() {
             return next
         } else {
@@ -37,7 +37,7 @@ public struct ExpandingCirclePath: PixelPath {
     }
 
     /// Increase the radius and create a new circle path.
-    private mutating func createNextCirclePath() {
+    private func createNextCirclePath() {
         currentRadius += radiusSpeed
         let circle = Circle(center: center.CGPoint, radius: CGFloat(currentRadius))
         let numPixels = (1 - discardRatio) * 2 * .pi * Double(currentRadius)
