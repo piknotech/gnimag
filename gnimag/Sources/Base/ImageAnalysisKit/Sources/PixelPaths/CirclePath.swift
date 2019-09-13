@@ -34,9 +34,10 @@ public final class CirclePath: PixelPath {
     public let pixelsOutsideBoundsMode: PixelsOutsideBoundsMode
 
     /// Default initializer.
-    public init(circle: Circle, numberOfPixels: Int, startAngle: CGFloat, bounds: Bounds, pixelsOutsideBounds: PixelsOutsideBoundsMode) {
+    /// If `numberOfPixels` is nil, it is set to `2 * .pi * circle.radius`, yielding each point on the circle once.
+    public init(circle: Circle, numberOfPixels: Int? = nil, startAngle: CGFloat, bounds: Bounds, pixelsOutsideBounds: PixelsOutsideBoundsMode) {
         self.circle = circle
-        self.numberOfPixels = numberOfPixels
+        self.numberOfPixels = numberOfPixels ?? Int(ceil(2 * .pi * circle.radius))
         self.startAngle = startAngle
         self.bounds = bounds
         self.pixelsOutsideBoundsMode = pixelsOutsideBounds

@@ -76,18 +76,17 @@ class ImageAnalyzer {
         let outerCircle = SmallestCircle.containing(outerContour.map(CGPoint.init))
 
         // Centers should be (nearly) identical
-        var center = innerCircle.center + outerCircle.center
-        center = CGPoint(x: center.x / 2, y: center.y / 2)
+        let center = (innerCircle.center + outerCircle.center) / 2
 
         playfield = Playfield(center: center, innerRadius: Double(innerCircle.radius), fullRadius: Double(outerCircle.radius))
         return playfield
     }
 
-    /// Find the player.
-    private func findPlayer(in image: Image, with coloring: Coloring, searchCenter: Pixel) -> Player? {
+    /// Find the player; also, return its OBB for further analysis.
+    private func findPlayer(in image: Image, with coloring: Coloring, searchCenter: Pixel) -> (Player, OBB)? {
         // Find eye or wing pixel via its unique color
-        var path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
-        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: &path) else { return nil }
+        let path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
+        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: path) else { return nil }
 
         // Find contour of player with the following sequence: [blue, !blue]
         let sequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, !coloring.theme])

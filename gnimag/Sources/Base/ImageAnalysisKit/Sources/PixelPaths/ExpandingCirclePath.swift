@@ -41,6 +41,6 @@ public final class ExpandingCirclePath: PixelPath {
         currentRadius += radiusSpeed
         let circle = Circle(center: center.CGPoint, radius: CGFloat(currentRadius))
         let numPixels = (1 - discardRatio) * 2 * .pi * Double(currentRadius)
-        currentCirclePath = CirclePath(circle: circle, numberOfPixels: Int(numPixels), startAngle: 0, bounds: bounds, pixelsOutsideBounds: .skip)
+        currentCirclePath = CirclePath(circle: circle, numberOfPixels: Int(ceil(numPixels)), startAngle: 0, bounds: bounds, pixelsOutsideBounds: .skip)
     }
 }

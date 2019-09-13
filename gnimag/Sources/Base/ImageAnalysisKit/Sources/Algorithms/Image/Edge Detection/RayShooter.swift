@@ -43,8 +43,8 @@ public enum RayShooter {
 
         for i in 0 ..< numRays {
             // Construct StraightPath in correct direction
-            let angle = 2 * .pi * Double(i) / Double(numRays)
-            let path = StraightPath(start: detectionCenter, angle: angle, bounds: image.bounds, speed: Double(raySpeed))
+            let angle = 2 * .pi * CGFloat(i) / CGFloat(numRays)
+            let path = StraightPath(start: detectionCenter, angle: angle, bounds: image.bounds, speed: CGFloat(raySpeed))
 
             // Run through the path until the ColorMatchSequence is fulfilled
             let result = image.follow(path: path, untilFulfillingSequence: colorSequence)

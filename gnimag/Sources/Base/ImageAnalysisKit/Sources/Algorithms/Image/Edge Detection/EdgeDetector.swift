@@ -22,7 +22,7 @@ public enum EdgeDetector {
         from startingPixel: Pixel,
         limit: DetectionLimit = .none,
         inverse: Bool = false,
-        angle: Double,
+        angle: CGFloat,
         searchSpeed: Int = 1
     ) -> [Pixel]? {
         guard let (inside, outside) = findPointOnTheEdge(image: image, shapeColor: shapeColor, from: startingPixel, inverse: inverse, angle: angle) else {
@@ -36,7 +36,7 @@ public enum EdgeDetector {
 
     /// Walk (using angle) until hitting a pixel that has NOT the required shape color (or hitting the image wall). Then we have found the beginning of the edge.
     /// Return (point inside the shape, point outside the shape), or nil if it was not found.
-    private static func findPointOnTheEdge(image: Image, shapeColor: ColorMatch, from pixel: Pixel, inverse: Bool, angle: Double) -> (inside: Pixel, outside: Pixel)? {
+    private static func findPointOnTheEdge(image: Image, shapeColor: ColorMatch, from pixel: Pixel, inverse: Bool, angle: CGFloat) -> (inside: Pixel, outside: Pixel)? {
         precondition(shapeColor.matches(image.color(at: pixel)), "The starting pixel (\(pixel)) must be inside the shape!")
 
         let extendedBounds = image.bounds.inset(by: (-1, -1))
