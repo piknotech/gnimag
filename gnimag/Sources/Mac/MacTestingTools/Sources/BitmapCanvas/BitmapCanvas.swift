@@ -13,7 +13,6 @@ public final class BitmapCanvas {
     internal let context: CGContext
 
     // MARK: Initialization
-
     /// Create an empty (= transparent) canvas with the given width and height.
     public init(width: Int, height: Int) {
         let rgba = 4
@@ -57,7 +56,7 @@ public final class BitmapCanvas {
         for x in 0 ..< image.width {
             for y in 0 ..< image.height {
                 let pixel = Pixel(x, y)
-                let diff = image.color(at: pixel).euclideanDifference(to: comparingColor)
+                let diff = image.color(at: pixel).distance(to: comparingColor)
 
                 // Fill pixel either with `fillColor`, gray or `.black`.
                 if diff <= threshold {
@@ -78,7 +77,6 @@ public final class BitmapCanvas {
     }
 
     // MARK: Simple Color Operations
-
     /// Fill the whole canvas with the given color.
     @discardableResult
     public func background(_ color: Color, alpha: Double = 1) -> BitmapCanvas {
@@ -108,15 +106,15 @@ public final class BitmapCanvas {
     }
 
     /// Fill a sequence of pixels with the given color.
+    /// For example, you can stroke a PixelPath.
     @discardableResult
-    public func fill<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1) -> BitmapCanvas where S.Element == Pixel {
+    public func stroke<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1) -> BitmapCanvas where S.Element == Pixel {
         pixels.reduce(self) { (_, pixel) in
             fill(pixel, with: color, alpha: alpha)
         }
     }
 
     // MARK: Write to File
-
     /// Write the current canvas content to a file.
     public func write(to file: String) {
         let image = context.makeImage()!

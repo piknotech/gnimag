@@ -24,7 +24,7 @@ struct Coloring {
         self.secondary = secondary
 
         /// Determine eyeColor
-        if secondary.euclideanDifference(to: .black) < secondary.euclideanDifference(to: .white) {
+        if secondary.distance(to: .black) < secondary.distance(to: .white) {
             // Mode: hardcore
             eye = .white
         } else {

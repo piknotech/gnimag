@@ -18,12 +18,17 @@ public indirect enum ColorMatch {
             return block(color)
 
         case let .color(allowed, tolerance):
-            return color.euclideanDifference(to: allowed) <= tolerance
+            return color.distance(to: allowed) <= tolerance
 
         case let .not(other):
             return !other.matches(color)
         }
     }
+}
+
+/// Negate a ColorMatch.
+public prefix func !(match: ColorMatch) -> ColorMatch {
+    return .not(match)
 }
 
 // MARK: Syntactic Sugar for ColorMatchSequence

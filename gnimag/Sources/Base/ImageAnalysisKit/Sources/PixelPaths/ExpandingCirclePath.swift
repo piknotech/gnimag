@@ -12,25 +12,29 @@ import Image
 public final class ExpandingCirclePath: PixelPath {
     private let center: Pixel
     private let bounds: Bounds
-    private let discardRatio: Double
-    private let radiusSpeed: Int
+    private let onCircleSpeed: CGFloat
+    private let radiusSpeed: CGFloat
 
-    private var currentRadius = 0
+    private var currentRadius: CGFloat = 0
     private var currentCirclePath: CirclePath?
 
+    private var isFirstNextCallOnNewCircle = false
+
     /// Default initializer.
-    public init(center: Pixel, bounds: Bounds, discardRatio: Double = 0, radiusSpeed: Int = 1) {
+    public init(center: Pixel, bounds: Bounds, onCircleSpeed: CGFloat = 1, radiusSpeed: CGFloat = 1) {
         self.center = center
         self.bounds = bounds
-        self.discardRatio = discardRatio
+        self.onCircleSpeed = onCircleSpeed
         self.radiusSpeed = radiusSpeed
     }
 
     /// Return the next pixel on the path.
     public override func next() -> Pixel? {
         if let next = currentCirclePath?.next() {
+            isFirstNextCallOnNewCircle = false
             return next
         } else {
+            if isFirstNextCallOnNewCircle { return nil } // Circle radius large than bounds allow
             createNextCirclePath()
             return next()
         }
@@ -39,8 +43,8 @@ public final class ExpandingCirclePath: PixelPath {
     /// Increase the radius and create a new circle path.
     private func createNextCirclePath() {
         currentRadius += radiusSpeed
-        let circle = Circle(center: center.CGPoint, radius: CGFloat(currentRadius))
-        let numPixels = (1 - discardRatio) * 2 * .pi * Double(currentRadius)
-        currentCirclePath = CirclePath(circle: circle, numberOfPixels: Int(ceil(numPixels)), startAngle: 0, bounds: bounds, pixelsOutsideBounds: .skip)
+        let circle = Circle(center: center.CGPoint, radius: currentRadius)
+        currentCirclePath = CirclePath(circle: circle, speed: onCircleSpeed, bounds: bounds, pixelsOutsideBounds: .skip)
+        isFirstNextCallOnNewCircle = true
     }
 }

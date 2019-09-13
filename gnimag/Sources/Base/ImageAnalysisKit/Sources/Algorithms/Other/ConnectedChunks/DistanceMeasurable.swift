@@ -15,9 +15,6 @@ public protocol DistanceMeasurable {
 
 // MARK: Color
 extension Color: DistanceMeasurable {
-    public func distance(to other: Color) -> Double {
-        euclideanDifference(to: other)
-    }
 }
 
 // MARK: Pixel

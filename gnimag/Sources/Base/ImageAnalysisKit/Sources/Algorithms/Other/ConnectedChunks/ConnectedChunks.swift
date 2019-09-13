@@ -11,7 +11,11 @@ public enum ConnectedChunks {
         /// The maximum distance between any of the objects in the chunk.
         public private(set) var diameter: Double = 0
 
-        /// Initialize the chunk with the given objects. Calculate the diameter in O(n^2).
+        /// As chunks are never empty, this returns any object in the chunk.
+        public var any: T { objects.first! }
+
+        /// Initialize the chunk with the given objects (at least one). Calculate the diameter in O(n^2).
+        /// `objects` may not be empty!
         init(objects: [T]) {
             self.objects = objects
 
