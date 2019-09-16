@@ -81,8 +81,6 @@
 		631213FA23257F4000C126B4 /* Coloring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213EE23257F4000C126B4 /* Coloring.swift */; };
 		631213FB23257F4000C126B4 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213EF23257F4000C126B4 /* Player.swift */; };
 		631213FC23257F4000C126B4 /* AnalysisHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213F023257F4000C126B4 /* AnalysisHints.swift */; };
-		63121417232587E300C126B4 /* Geometry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6312140E232587E300C126B4 /* Geometry.framework */; };
-		6312141C232587E300C126B4 /* GeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312141B232587E300C126B4 /* GeometryTests.swift */; };
 		6312141E232587E300C126B4 /* Geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 63121410232587E300C126B4 /* Geometry.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631214272325883500C126B4 /* LineSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213322325785000C126B4 /* LineSegment.swift */; };
 		631214282325883500C126B4 /* LineType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214072325870100C126B4 /* LineType.swift */; };
@@ -105,16 +103,6 @@
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		63121418232587E300C126B4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 631212A323253DA100C126B4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6312140D232587E300C126B4;
-			remoteInfo = Geometry;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		631212AB23253DC700C126B4 /* CopyFiles */ = {
@@ -244,9 +232,6 @@
 		6312140E232587E300C126B4 /* Geometry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Geometry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63121410232587E300C126B4 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
 		63121411232587E300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		63121416232587E300C126B4 /* GeometryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeometryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6312141B232587E300C126B4 /* GeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryTests.swift; sourceTree = "<group>"; };
-		6312141D232587E300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631214382326686A00C126B4 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
 		634AD0122327C8C000D87BAB /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -325,14 +310,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		63121413232587E300C126B4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				63121417232587E300C126B4 /* Geometry.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -376,7 +353,6 @@
 				631213972325798E00C126B4 /* MacTestingTools.framework */,
 				631213D623257EF600C126B4 /* MrFlap.framework */,
 				6312140E232587E300C126B4 /* Geometry.framework */,
-				63121416232587E300C126B4 /* GeometryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -945,19 +921,9 @@
 			isa = PBXGroup;
 			children = (
 				631214262325881C00C126B4 /* Sources */,
-				6312141A232587E300C126B4 /* Tests */,
 				631214252325880100C126B4 /* SupportingFiles */,
 			);
 			path = Geometry;
-			sourceTree = "<group>";
-		};
-		6312141A232587E300C126B4 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				6312141B232587E300C126B4 /* GeometryTests.swift */,
-				6312141D232587E300C126B4 /* Info.plist */,
-			);
-			path = Tests;
 			sourceTree = "<group>";
 		};
 		631214252325880100C126B4 /* SupportingFiles */ = {
@@ -1239,24 +1205,6 @@
 			productReference = 6312140E232587E300C126B4 /* Geometry.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		63121415232587E300C126B4 /* GeometryTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 63121422232587E300C126B4 /* Build configuration list for PBXNativeTarget "GeometryTests" */;
-			buildPhases = (
-				63121412232587E300C126B4 /* Sources */,
-				63121413232587E300C126B4 /* Frameworks */,
-				63121414232587E300C126B4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				63121419232587E300C126B4 /* PBXTargetDependency */,
-			);
-			name = GeometryTests;
-			productName = GeometryTests;
-			productReference = 63121416232587E300C126B4 /* GeometryTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1294,9 +1242,6 @@
 					6312140D232587E300C126B4 = {
 						CreatedOnToolsVersion = 11.0;
 					};
-					63121415232587E300C126B4 = {
-						CreatedOnToolsVersion = 11.0;
-					};
 				};
 			};
 			buildConfigurationList = 631212A623253DA100C126B4 /* Build configuration list for PBXProject "gnimag" */;
@@ -1321,7 +1266,6 @@
 				631213962325798E00C126B4 /* MacTestingTools */,
 				631213D523257EF600C126B4 /* MrFlap */,
 				6312140D232587E300C126B4 /* Geometry */,
-				63121415232587E300C126B4 /* GeometryTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1377,13 +1321,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6312140C232587E300C126B4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		63121414232587E300C126B4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1576,23 +1513,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		63121412232587E300C126B4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6312141C232587E300C126B4 /* GeometryTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		63121419232587E300C126B4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6312140D232587E300C126B4 /* Geometry */;
-			targetProxy = 63121418232587E300C126B4 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		631212A723253DA100C126B4 /* Debug */ = {
@@ -3036,145 +2957,6 @@
 			};
 			name = Release;
 		};
-		63121423232587E300C126B4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = TD9G758WXJ;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/Base/Geometry/Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.GeometryTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		63121424232587E300C126B4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = TD9G758WXJ;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/Base/Geometry/Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.GeometryTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3264,15 +3046,6 @@
 			buildConfigurations = (
 				63121420232587E300C126B4 /* Debug */,
 				63121421232587E300C126B4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		63121422232587E300C126B4 /* Build configuration list for PBXNativeTarget "GeometryTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				63121423232587E300C126B4 /* Debug */,
-				63121424232587E300C126B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
