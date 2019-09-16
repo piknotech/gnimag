@@ -106,7 +106,7 @@ class ImageAnalyzer {
 
     /// Find all bars.
     private func findBars(in image: Image, with coloring: Coloring, playerOBB: OBB) -> [Bar] {
-        // Step 1: consider 48 pixels directly above the inner circle and pack them together into bunches
+        // Step 1: consider 48 pixels directly above the inner circle and check which of them belong to bars
         let circle = Circle(center: image.bounds.center.CGPoint, radius: CGFloat(playfield.innerRadius) + 5)
         var pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 48)
 
@@ -115,6 +115,7 @@ class ImageAnalyzer {
             image.color(at: pixel).distance(to: coloring.theme) > 0.1
         }
 
+        // Merge together into chunks, each of which describes one bar
         let upperBoundForBarWidth = .pi / 8 * playfield.innerRadius // works for up to 8 bars
         let result = ConnectedChunks.from(pixels, maxDistance: upperBoundForBarWidth)
 
@@ -129,21 +130,23 @@ class ImageAnalyzer {
         let insideBar = coloring.theme.withTolerance(0.1)
 
         /// Step 1: find center point by moving left and right as far as possible
-        var angle = PolarCoordinates.angle(for: startPixel.CGPoint, respectiveTo: playfield.center)
-        let left = StraightPath(start: startPixel, angle: angle + .pi / 2, bounds: image.bounds)
-        let right = StraightPath(start: startPixel, angle: angle - .pi / 2, bounds: image.bounds)
+        let angleApprox = PolarCoordinates.angle(for: startPixel.CGPoint, respectiveTo: playfield.center)
+        let left = StraightPath(start: startPixel, angle: angleApprox + .pi / 2, bounds: image.bounds)
+        let right = StraightPath(start: startPixel, angle: angleApprox - .pi / 2, bounds: image.bounds)
 
         guard let a = image.findFirstPixel(matching: .not(insideBar), on: left),
               let b = image.findFirstPixel(matching: .not(insideBar), on: right) else { return nil }
 
         // Use correct angle to go upwards
         let center = (a.CGPoint + b.CGPoint) / 2
-        angle = PolarCoordinates.angle(for: center, respectiveTo: playfield.center)
-        let upwards: PixelPath = StraightPath(start: center.nearestPixel, angle: angle, bounds: image.bounds)
+        let angle = PolarCoordinates.angle(for: center, respectiveTo: playfield.center)
+        let upwards = StraightPath(start: center.nearestPixel, angle: angle, bounds: image.bounds)
+        let up = PolarCoordinates.position(atAngle: angle, height: CGFloat(playfield.fullRadius), respectiveTo: playfield.center)
+        let downwards = StraightPath(start: up.nearestPixel, angle: .pi + angle, bounds: image.bounds)
 
-        // Step 2: find the bottom edge, then go further to find the top edge of the hole
+        // Step 2: find the bottom edge and the top edge
         let bottomEdge = image.follow(path: upwards, untilFulfillingSequence: ColorMatchSequence(!insideBar))
-        let topEdge = image.follow(path: upwards, untilFulfillingSequence: ColorMatchSequence(insideBar))
+        let topEdge = image.follow(path: downwards, untilFulfillingSequence: ColorMatchSequence(!insideBar))
 
         guard let bottom = bottomEdge.beforeFulfillment, let top = topEdge.beforeFulfillment else { return nil }
 
@@ -151,7 +154,7 @@ class ImageAnalyzer {
         let holeSize = top.distance(to: bottom)
 
         return Bar(
-            width: a.distance(to: b), // Not 100% correct, but doesn't matter for small bar widths DOCH! FIXEN
+            width: a.distance(to: b), // Not 100% correct, but doesn't matter for small bar widths
             angle: Double(angle),
             innerHeight: innerHeight,
             outerHeight: playfield.freeSpace - innerHeight - holeSize,

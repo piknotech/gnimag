@@ -25,9 +25,7 @@ public struct PolarCoordinates {
 
     /// Calculate the cartesian position respective to the center point.
     public func position(respectiveTo center: CGPoint) -> CGPoint {
-        let x = center.x + cos(angle) * height
-        let y = center.y + sin(angle) * height
-        return CGPoint(x: x, y: y)
+        return PolarCoordinates.position(atAngle: angle, height: height, respectiveTo: center)
     }
 
     // MARK: Static
@@ -40,5 +38,13 @@ public struct PolarCoordinates {
         
         let atan = atan2(dy, dx)
         return atan < 0 ? atan + 2 * .pi : atan // in [0, 2pi)
+    }
+
+    /// Convert the given angle and position back to cartesian coordinates.
+    /// Angle = 0° means right, going counterclockise until 2pi.
+    public static func position(atAngle angle: CGFloat, height: CGFloat, respectiveTo center: CGPoint) -> CGPoint {
+        let x = center.x + cos(angle) * height
+        let y = center.y + sin(angle) * height
+        return CGPoint(x: x, y: y)
     }
 }
