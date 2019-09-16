@@ -6,15 +6,15 @@
 import Foundation
 import Tapping
 
-/// An implementation of ITapper that clicks on the center of an arbitrary macOS application.
+/// An implementation of Tapper that clicks on the center of an arbitrary macOS application.
 class WindowTapper: Tapper {
     /// The ID that corresponds to the desired window of the application.
     private let windowID: CGWindowID
 
     /// Default initializer.
     /// The app must be running and have an on-screen window.
-    init(appName: String, windowNameHint: String = "") {
-        windowID = WindowHelper.mainWindowID(forApp: appName, windowNameHint: windowNameHint)
+    init(appName: String, windowNameHint: String? = nil) {
+        windowID = WindowHelper.windowID(forApp: appName, windowNameHint: windowNameHint)
     }
 
     /// Tap on the center of the window.

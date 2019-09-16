@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Charts",
+        "repositoryURL": "https://github.com/danielgindi/Charts",
+        "state": {
+          "branch": null,
+          "revision": "cd1120b004cc6aac40d889fa665c0e495e463b13",
+          "version": "3.3.0"
+        }
+      },
+      {
         "package": "Surge",
         "repositoryURL": "https://github.com/mattt/Surge",
         "state": {

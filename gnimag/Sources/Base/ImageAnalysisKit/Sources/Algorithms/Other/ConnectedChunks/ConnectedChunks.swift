@@ -11,7 +11,11 @@ public enum ConnectedChunks {
         /// The maximum distance between any of the objects in the chunk.
         public private(set) var diameter: Double = 0
 
-        /// Initialize the chunk with the given objects. Calculate the diameter in O(n^2).
+        /// As chunks are never empty, this returns any object in the chunk.
+        public var any: T { objects.first! }
+
+        /// Initialize the chunk with the given objects (at least one). Calculate the diameter in O(n^2).
+        /// `objects` may not be empty!
         init(objects: [T]) {
             self.objects = objects
 
@@ -32,9 +36,10 @@ public enum ConnectedChunks {
 
     /// The result of a split-into-connected-chunks algorithm.
     public struct Result<T: DistanceMeasurable> {
-        let chunks: [Chunk<T>] // The chunks, sorted by size.
-        let maxChunkSize: Int
-        let maxChunkDiameter: Double
+        public var largestChunk: Chunk<T> { return chunks.first! }
+        public let chunks: [Chunk<T>] // The chunks, sorted by size.
+        public let maxChunkSize: Int
+        public let maxChunkDiameter: Double
     }
 
     /// Split an array of objects into connected chunks. Return all chunks, sorted by their size.
@@ -48,10 +53,11 @@ public enum ConnectedChunks {
             var matchingChunkIndices = [Int]()
 
             // Check for each chunk if the object is near enough
-            for (index, chunk) in chunks.enumerated() {
+            chunks: for (index, chunk) in chunks.enumerated() {
                 for existing in chunk.objects {
                     if object.distance(to: existing) <= maxDistance {
                         matchingChunkIndices.append(index)
+                        continue chunks
                     }
                 }
             }

@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ImageInput
+import Image
 
 public extension Pixel {
     /// Convert the Pixel to a CGPoint.
@@ -17,5 +17,10 @@ public extension CGPoint {
     /// Convert the CGPoint to a Pixel by rounding the values to the nearest integer.
     var nearestPixel: Pixel {
         Pixel(Int(round(x)), Int(round(y)))
+    }
+
+    /// Initialize the CGPoint from a Pixel.
+    init(_ pixel: Pixel) {
+        self = pixel.CGPoint
     }
 }

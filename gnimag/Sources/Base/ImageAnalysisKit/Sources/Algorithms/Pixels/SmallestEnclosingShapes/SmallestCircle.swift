@@ -5,6 +5,7 @@
 // Taken from https://www.nayuki.io/res/smallest-enclosing-circle/SmallestEnclosingCircle.cs
 
 import Foundation
+import Geometry
 
 public enum SmallestCircle {
     /// Calculate the smallest circle that contains a given (non-empty) set of points.

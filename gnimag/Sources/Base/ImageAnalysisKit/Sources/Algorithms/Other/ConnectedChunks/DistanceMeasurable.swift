@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import ImageInput
+import Image
 
 // MARK: DistanceMeasurable
 public protocol DistanceMeasurable {
@@ -15,9 +15,6 @@ public protocol DistanceMeasurable {
 
 // MARK: Color
 extension Color: DistanceMeasurable {
-    public func distance(to other: Color) -> Double {
-        euclideanDifference(to: other)
-    }
 }
 
 // MARK: Pixel
