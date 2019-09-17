@@ -3,10 +3,14 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Foundation
 import GameKit
 
 /// BarCourse bundles trackers for a single bar.
 final class BarCourse {
+    /// Just for hashing
+    fileprivate let id = UUID()
+
     /// The state the bar is currently in.
     /// Only trackers with a "normal" state should be considered by prediction algorithms.
     private(set) var state: State
@@ -94,5 +98,15 @@ final class BarCourse {
         }
 
         return true
+    }
+}
+
+extension BarCourse: Hashable {
+    static func == (lhs: BarCourse, rhs: BarCourse) -> Bool {
+        return lhs === rhs
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
