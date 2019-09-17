@@ -83,7 +83,7 @@ final class BarCourse {
 
         switch state {
         case .appearing:
-            // If the appaering hole size does not match (but the angle and width did), the appearing state has ended; switch to normal state
+            // If the appearing hole size does not match (but the angle and width did), the appearing state has ended; switch to normal state
             if !appearingHoleSize.is(bar.holeSize, at: bar.angle, validWith: .absolute(tolerance: 5% * playfield.freeSpace)) {
                 print("state switch!")
                 state = .normal

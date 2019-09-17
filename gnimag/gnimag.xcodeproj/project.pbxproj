@@ -861,18 +861,18 @@
 			children = (
 				631213E223257F4000C126B4 /* MrFlap.swift */,
 				631213E823257F4000C126B4 /* 1 ImageAnalysis */,
-				631213E323257F4000C126B4 /* 2 GameDataAggregation */,
+				631213E323257F4000C126B4 /* 2 GameModelCollection */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		631213E323257F4000C126B4 /* 2 GameDataAggregation */ = {
+		631213E323257F4000C126B4 /* 2 GameModelCollection */ = {
 			isa = PBXGroup;
 			children = (
 				631213E423257F4000C126B4 /* Trackers */,
 				631213E723257F4000C126B4 /* GameModel.swift */,
 			);
-			path = "2 GameDataAggregation";
+			path = "2 GameModelCollection";
 			sourceTree = "<group>";
 		};
 		631213E423257F4000C126B4 /* Trackers */ = {
