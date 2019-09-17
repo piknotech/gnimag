@@ -12,7 +12,7 @@ final class GameModel {
     let player: PlayerCourse
 
     /// All tracked bar objects.
-    let bars: [BarCourse]
+    var bars: [BarCourse]
 
     /// Default initializer.
     init(playfield: Playfield) {

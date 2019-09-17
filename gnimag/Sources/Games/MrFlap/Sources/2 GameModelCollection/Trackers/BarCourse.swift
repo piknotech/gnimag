@@ -46,13 +46,8 @@ final class BarCourse {
     // MARK: Updating
 
     /// Update the trackers with the values from the given bar.
-    /// When one of the values does not match into the tracked course, discard the values and return an error.
-    func update(with bar: Bar, at time: Double) -> Result<Void, UpdateError> {
-        if case let .failure(error) = integrityCheck(with: bar, at: time) {
-            return .failure(error)
-        }
-
-        // Add all values to trackers
+    /// Only call this AFTER a successful `integrityCheck`.
+    func update(with bar: Bar, at time: Double) {
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)
 
@@ -67,18 +62,17 @@ final class BarCourse {
             holeSize.add(value: bar.holeSize, at: linearAngle)
             yCenter.add(value: bar.yCenter, at: linearAngle)
         }
-
-        return .success(())
     }
 
-    /// Check if all given values match the trackers. If not, return an error.
-    private func integrityCheck(with bar: Bar, at time: Double) -> Result<Void, UpdateError> {
+    /// Check if all given values match the trackers.
+    /// NOTE: This changes the state from `.appearing` to `.normal` when necessary.
+    func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         guard angle.is(bar.angle, at: time, validWith: .absolute(tolerance: 2% * .pi)) else {
-            return .failure(.wrongAngle)
+            return false
         }
 
         guard width.is(bar.width, validWith: .relative(tolerance: 10%)) else {
-            return .failure(.wrongWidth)
+            return false
         }
 
         switch state {
@@ -91,23 +85,14 @@ final class BarCourse {
 
         case .normal:
             guard holeSize.is(bar.width, at: bar.angle, validWith: .relative(tolerance: 5%)) else {
-                return .failure(.wrongHoleSize)
+                return false
             }
 
             guard yCenter.is(bar.yCenter, at: bar.angle, validWith: .absolute(tolerance: 2% * playfield.freeSpace)) else {
-                return .failure(.wrongYCenter)
+                return false
             }
         }
 
-        return .success(())
-    }
-
-    /// Errors that can occur when calling "update" with malformed values.
-    /// wrongYCenter or wrongHoleSize indicate that the bar may be disappearing.
-    enum UpdateError: Error {
-        case wrongAngle
-        case wrongYCenter
-        case wrongWidth
-        case wrongHoleSize
+        return true
     }
 }
