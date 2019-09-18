@@ -16,7 +16,7 @@ class GameModelCollector {
     }
 
     /// Use the AnalysisResult to update the game model.
-    /// Before updating the game model, check for the integrity of the result.
+    /// Before actually updating the game model, the integrity of the result is checked.
     func accept(result: AnalysisResult, time: Double) {
         // Update player
         if model.player.integrityCheck(with: result.player, at: time) {

@@ -10,20 +10,18 @@ import MacTestingTools
 /// It maps those angular values to linear values (in R).
 public final class Circular<Other: PolyTracker>: Tracker {
     /// The internal tracker tracking the linearified values.
-    /// Do not add values to it directly.
     fileprivate let tracker: Other
 
-    /// States if a regression function is available.
-    public var hasRegression: Bool {
-        tracker.hasRegression
-    }
+    /// Get the linearified regression.
+    public var hasRegression: Bool { tracker.hasRegression }
+    public var regression: Polynomial<Value>? { tracker.regression }
 
     /// Default initializer.
     public init(_ tracker: Other) {
         self.tracker = tracker
     }
     
-    /// "Linearify" the value and add it to the tracker.
+    /// Linearify the value and add it to the tracker.
     public func add(value: Other.Value, at time: Other.Time) {
         let linearValue = linearify(value, at: time)
         tracker.add(value: linearValue, at: time)

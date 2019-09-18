@@ -33,11 +33,8 @@ class ImageAnalyzer {
             return .failure(.playerNotFound)
         }
 
-        print(player)
-
         // Find bars
         let bars = findBars(in: image, with: coloring, playerOBB: playerOBB)
-        print(bars)
 
         return .success(AnalysisResult(player: player, playfield: playfield, coloring: coloring, bars: bars))
     }
