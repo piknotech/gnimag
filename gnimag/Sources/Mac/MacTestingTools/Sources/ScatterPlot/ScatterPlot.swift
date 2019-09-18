@@ -14,6 +14,20 @@ public enum ScatterPlot {
         create(withXValues: xValues, yValues: yValues, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize, saveTo: file)
     }
 
+    /// Create a scatter plot with the given Has2DDataSet object and save it to the desktop.
+    /// The scatter plot is black and is drawn on a white background.
+    public static func create(from object: Has2DDataSet, scatterCircleSize: CGFloat, outputImageSize: CGSize, saveToDesktop name: String) {
+        let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
+        create(from: object, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize, saveTo: desktop + "/" + name)
+    }
+
+    /// Create a scatter plot with the given data and save it to a file.
+    /// The scatter plot is black and is drawn on a white background.
+    public static func create(withXValues xValues: [Double], yValues: [Double], scatterCircleSize: CGFloat, outputImageSize: CGSize, saveToDesktop name: String) {
+        let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
+        create(withXValues: xValues, yValues: yValues, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize, saveTo: desktop + "/" + name)
+    }
+
     /// Create a scatter plot with the given data and save it to a file.
     /// The scatter plot is black and is drawn on a white background.
     public static func create(withXValues xValues: [Double], yValues: [Double], scatterCircleSize: CGFloat, outputImageSize: CGSize, saveTo file: String) {

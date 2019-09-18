@@ -101,7 +101,7 @@ public class PolyTracker: Tracker {
     /// Update the regression function.
     /// If not enough data points are available, the regression is set to nil.
     private func updateRegression() {
-        if times.count > degree + tolerancePoints {
+        if Set(times).count > degree + tolerancePoints { // Set(times) ignores duplicate entries for the same time
             regression = Regression.polyRegression(x: times, y: values, n: degree)
         } else {
             regression = nil

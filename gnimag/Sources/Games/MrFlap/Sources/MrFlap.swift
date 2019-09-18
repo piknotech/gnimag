@@ -51,10 +51,13 @@ public class MrFlap {
         switch state {
         case .beforeGame:
             startGame(image: image, time: time)
+
         case let .waitingForFirstMove(initialPlayerPos):
             checkForFirstMove(image: image, time: time, initialPlayerPos: initialPlayerPos)
+
         case .inGame:
             gameplayUpdate(image: image, time: time)
+
         case .finished:
             ()
         }
@@ -68,6 +71,7 @@ public class MrFlap {
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 
+        print(result.playfield)
         playfield = result.playfield
         gameModelCollector = GameModelCollector(playfield: playfield)
         state = .waitingForFirstMove(initialPlayerPos: result.player)
@@ -90,7 +94,6 @@ public class MrFlap {
     private func distance(between player1: Player, and player2: Player) -> CGFloat {
         let pos1 = player1.coords.position(respectiveTo: playfield.center)
         let pos2 = player2.coords.position(respectiveTo: playfield.center)
-        print(pos1, pos2, pos1.distance(to: pos2))
         return pos1.distance(to: pos2)
     }
 

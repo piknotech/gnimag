@@ -8,17 +8,15 @@ import GameKit
 /// PlayerCourse bundles trackers for the player position which is defined by angle and height.
 final class PlayerCourse {
     /// The angle and height trackers.
-    let angle: Circular<LinearTracker>
+    let angle = Circular(LinearTracker())
     let height: JumpTracker
 
     /// The size of the player.
-    let size: ConstantTracker
+    let size = ConstantTracker()
 
     /// Default initializer.
     init(playfield: Playfield) {
-        angle = Circular(LinearTracker())
         height = JumpTracker(valueRangeTolerance: 10%, jumpTolerance: 2% * playfield.freeSpace)
-        size = ConstantTracker()
     }
 
     // MARK: Updating
@@ -29,12 +27,12 @@ final class PlayerCourse {
         angle.add(value: player.angle, at: time)
         size.add(value: player.size)
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
-        height.add(value: player.height, at: linearAngle)
+        height.add(value: player.height, at: linearAngle) // Use angle instead of time to account for small lags (which are really dangerous for exact jump tracking)
     }
 
     /// Check if all given values match the trackers.
     func integrityCheck(with player: Player, at time: Double) -> Bool {
-        angle.is(player.angle, at: time, validWith: .absolute(tolerance: 2% * .pi)) &&
+        return angle.is(player.angle, at: time, validWith: .absolute(tolerance: 2% * .pi)) &&
         size.is(player.size, validWith: .relative(tolerance: 10%))
     }
 }
