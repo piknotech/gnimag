@@ -39,9 +39,11 @@ extension Image {
 
     public enum SequenceFulfillmentResult {
         /// The sequence has been fulfilled; return the previous pixel and the pixel that triggered the fulfillment.
+        /// `previousPixel` can only be nil if the ColorMatchSequence only consists of one color match.
         case fulfilled(previousPixel: Pixel?, fulfilledPixel: Pixel)
 
-        /// The sequence has not been fulfilled; return the last pixel of the path and the highest sequence index that has been fulfilled (this may be -1 if nothing has been matched).
+        /// The sequence has not been fulfilled; return the last pixel of the path and the highest sequence index that has been fulfilled.
+        /// If no color match has been fulfilled, `highestFulfilledSequenceIndex` is -1.
         case notFulfilled(lastPixelOfPath: Pixel?, highestFulfilledSequenceIndex: Int)
 
         /// Return the pixel which fulfilled the sequence, or nil if the sequence was not fulfilled.

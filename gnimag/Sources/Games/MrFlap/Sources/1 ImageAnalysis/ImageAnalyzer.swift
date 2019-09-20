@@ -28,8 +28,7 @@ class ImageAnalyzer {
         }
 
         // Find player
-        let searchHint = hints.expectedPlayerPosition.position(respectiveTo: playfield.center).nearestPixel
-        guard let (player, playerOBB) = findPlayer(in: image, with: coloring, searchCenter: searchHint) else {
+        guard let (player, playerOBB) = findPlayer(in: image, with: coloring, expectedPlayer: hints.expectedPlayer) else {
             return .failure(.playerNotFound)
         }
 
@@ -85,15 +84,18 @@ class ImageAnalyzer {
     }
 
     /// Find the player; also, return its OBB for further analysis.
-    private func findPlayer(in image: Image, with coloring: Coloring, searchCenter: Pixel) -> (Player, OBB)? {
+    private func findPlayer(in image: Image, with coloring: Coloring, expectedPlayer: Player) -> (Player, OBB)? {
+        let searchCenter = expectedPlayer.coords.position(respectiveTo: playfield.center).nearestPixel
+
         // Find eye or wing pixel via its unique color
         let path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
         guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: path) else { return nil }
 
-        // Find contour of player with the following sequence: [blue, !blue]
-        let sequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, !coloring.theme])
-        let contour = RayShooter.findContour(in: image, center: eye, numRays: 15, colorSequence: sequence)!
-        let obb = SmallestOBB.containing(contour.map(CGPoint.init))
+        // Find edge of player and calculate its OBB
+        let blue = coloring.theme.withTolerance(0.1)
+        let limit = EdgeDetector.DetectionLimit.maxPixels(Int(6 * expectedPlayer.size)) // Normal is 4 * size
+        guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: expectedPlayer.coords.angle, limit: limit) else { return nil } // 6 * width is enough
+        let obb = SmallestOBB.containing(edge.map(CGPoint.init))
 
         // Calculate player properties
         let coords = PolarCoordinates(position: obb.center, center: playfield.center)

@@ -110,7 +110,7 @@ public final class BitmapCanvas {
     /// Fill a sequence of pixels with the given color.
     /// For example, you can stroke a PixelPath.
     @discardableResult
-    public func stroke<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1, width: CGFloat = 1) -> BitmapCanvas where S.Element == Pixel {
+    public func fillPixels<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1, width: CGFloat = 1) -> BitmapCanvas where S.Element == Pixel {
         pixels.reduce(self) { (_, pixel) in
             fill(pixel, with: color, alpha: alpha, width: width)
         }

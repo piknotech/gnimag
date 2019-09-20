@@ -120,13 +120,19 @@ public class MrFlap {
 
     /// Create the next AnalysisHint for the next call to the ImageAnalyzer.
     private func updateNextHint(for result: AnalysisResult) {
-        nextHints = AnalysisHints(expectedPlayerPosition: result.player.coords)
+        let expectedPlayer = Player(
+            coords: result.player.coords,
+            size: gameModelCollector?.model.player.size.average ?? result.player.size
+        )
+        nextHints = AnalysisHints(expectedPlayer: expectedPlayer)
     }
 
     /// Use approximated default values to create hints for the first image.
     private func initialHints(for image: Image) -> AnalysisHints {
-        AnalysisHints(
-            expectedPlayerPosition: PolarCoordinates(angle: .pi / 2, height: 0.2 * CGFloat(image.height))
+        let expectedPlayer = Player(
+            coords: PolarCoordinates(angle: .pi / 2, height: 0.2 * CGFloat(image.height)),
+            size: 0.25 * Double(image.width) // Larger than or equal to the actual player size
         )
+        return AnalysisHints(expectedPlayer: expectedPlayer)
     }
 }

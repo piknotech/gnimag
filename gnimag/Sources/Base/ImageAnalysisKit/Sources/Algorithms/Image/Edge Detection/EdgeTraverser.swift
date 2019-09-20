@@ -42,7 +42,7 @@ internal class EdgeTraverser {
 
             // Check limit
             switch limit {
-            case let .maxPixelsOnEdge(maxPixels):
+            case let .maxPixels(maxPixels):
                 if edge.count > maxPixels { return nil }
 
             case let .distance(to: pixel, maximum: maximum):

@@ -760,10 +760,10 @@
 		631213A123257A2F00C126B4 /* BitmapCanvas */ = {
 			isa = PBXGroup;
 			children = (
-				631213A223257A2F00C126B4 /* Color+Conversion.swift */,
 				631213A323257A2F00C126B4 /* BitmapCanvas.swift */,
 				634AD0182327D75200D87BAB /* Strokable+Fillable.swift */,
 				634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */,
+				631213A223257A2F00C126B4 /* Color+Conversion.swift */,
 			);
 			path = BitmapCanvas;
 			sourceTree = "<group>";
