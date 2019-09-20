@@ -6,31 +6,19 @@
 import Cocoa
 import Charts
 
-public enum ScatterPlot {
-    /// Create a scatter plot with the given Has2DDataSet object and save it to a file.
+public class ScatterPlot {
+    private let data: NSData
+
+    /// Create a scatter plot with the given Has2DDataSet object.
     /// The scatter plot is black and is drawn on a white background.
-    public static func create(from object: Has2DDataSet, scatterCircleSize: CGFloat, outputImageSize: CGSize, saveTo file: String) {
+    public convenience init(from object: Has2DDataSet, scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
         let (xValues, yValues) = object.yieldDataSet()
-        create(withXValues: xValues, yValues: yValues, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize, saveTo: file)
+        self.init(xValues: xValues, yValues: yValues, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize)
     }
 
-    /// Create a scatter plot with the given Has2DDataSet object and save it to the desktop.
+    /// Create a scatter plot with the given data.
     /// The scatter plot is black and is drawn on a white background.
-    public static func create(from object: Has2DDataSet, scatterCircleSize: CGFloat, outputImageSize: CGSize, saveToDesktop name: String) {
-        let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
-        create(from: object, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize, saveTo: desktop + "/" + name)
-    }
-
-    /// Create a scatter plot with the given data and save it to a file.
-    /// The scatter plot is black and is drawn on a white background.
-    public static func create(withXValues xValues: [Double], yValues: [Double], scatterCircleSize: CGFloat, outputImageSize: CGSize, saveToDesktop name: String) {
-        let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
-        create(withXValues: xValues, yValues: yValues, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize, saveTo: desktop + "/" + name)
-    }
-
-    /// Create a scatter plot with the given data and save it to a file.
-    /// The scatter plot is black and is drawn on a white background.
-    public static func create(withXValues xValues: [Double], yValues: [Double], scatterCircleSize: CGFloat, outputImageSize: CGSize, saveTo file: String) {
+    public init(xValues: [Double], yValues: [Double], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
         // Map values to ChartDataEntries
         let entries = zip(xValues, yValues).map { x, y in
             ChartDataEntry(x: x, y: y)
@@ -55,6 +43,17 @@ public enum ScatterPlot {
 
         let rep = NSBitmapImageRep(data: image.tiffRepresentation!)!
         let viewData = rep.representation(using: .png, properties: [:])!
-        NSData(data: viewData).write(toFile: file, atomically: true)
+        self.data = NSData(data: viewData)
+    }
+
+    /// Write the scatter plot to a given destination.
+    public func write(to file: String) {
+        data.write(toFile: file, atomically: true)
+    }
+
+    /// Write the scatter plot to the users desktop.
+    public func writeToDesktop(name: String) {
+        let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
+        write(to: desktop + "/" + name)
     }
 }
