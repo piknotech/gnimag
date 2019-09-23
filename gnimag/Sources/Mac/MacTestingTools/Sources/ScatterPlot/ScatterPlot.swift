@@ -20,9 +20,7 @@ public class ScatterPlot {
     /// The scatter plot is black and is drawn on a white background.
     public init(xValues: [Double], yValues: [Double], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
         // Map values to ChartDataEntries
-        let entries = zip(xValues, yValues).map { x, y in
-            ChartDataEntry(x: x, y: y)
-        }
+        let entries = zip(xValues, yValues).map(ChartDataEntry.init(x:y:))
 
         // Create DataSet and view
         let dataSet = ScatterChartDataSet(entries: entries, label: "DataSet")
@@ -33,6 +31,7 @@ public class ScatterPlot {
 
         let view = ScatterChartView(frame: CGRect(origin: .zero, size: outputImageSize))
         view.data = data
+        view.legend.enabled = false
 
         // Save view to file
         let image = NSImage(size: view.bounds.size)
