@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import MacTestingTools
 
 /// PolyTracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it maps this course to a specific polynomial regression function. Then, irregular points can be filtered out, and future values can be predicted.
@@ -101,7 +102,8 @@ public class PolyTracker: Tracker {
     /// Update the regression function.
     /// If not enough data points are available, the regression is set to nil.
     private func updateRegression() {
-        if Set(times).count > degree + tolerancePoints { // Set(times) ignores duplicate entries for the same time
+        let uniqueTimes = uniqueNumberOfElements(in: times, absoluteTolerance: 1/10_000)
+        if uniqueTimes > degree + tolerancePoints { // Ignores duplicate entries for the same time
             regression = Regression.polyRegression(x: times, y: values, n: degree)
         } else {
             regression = nil
@@ -115,4 +117,18 @@ extension PolyTracker: Has2DDataSet {
     public func yieldDataSet() -> (xValues: [Double], yValues: [Double]) {
         return (times, values)
     }
+}
+
+/// Count the unique number of elements in a set of doubles using a given tolerance for double comparison.
+/// When two values are apart by more than the tolerance, but could be reached by a valid tolerance-path through other values (e.g. 0, tolerance, 2*tolerance), the result depends on the order of elements in the set.
+private func uniqueNumberOfElements(in set: [Double], absoluteTolerance: Double) -> Int {
+    var set = set
+    var result = 0
+
+    while let first = set.first {
+        set.removeAll { $0.isAlmostEqual(to: first, tolerance: absoluteTolerance) }
+        result += 1
+    }
+
+    return result
 }

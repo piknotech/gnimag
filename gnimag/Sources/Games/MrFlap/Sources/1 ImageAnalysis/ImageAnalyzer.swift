@@ -13,23 +13,32 @@ import MacTestingTools
 class ImageAnalyzer {
     /// The shared playfield. It does not change during the game.
     private var playfield: Playfield!
-    
+
+    private var lastPlayer: Player?
+    private var lastColoring: Coloring?
+
     /// Analyze the image. Use the hints to accomplish more performant or better analysis.
     func analyze(image: Image, hints: AnalysisHints) -> Result<AnalysisResult, AnalysisError> {
-        guard let coloring = findColoring(in: image) else {
-            // ...
-            return .failure(.unspecified) // DON'T FAIL, use last coloring!?
+        guard let coloring = findColoring(in: image) ?? lastColoring else {
+            return .failure(.error)
         }
 
         // Find playfield at first call
         playfield = playfield ?? findPlayfield(in: image, with: coloring)!
         if playfield == nil {
-            return .failure(.playfieldNotFound)
+            return .failure(.error)
         }
 
         // Find player
         guard let (player, playerOBB) = findPlayer(in: image, with: coloring, expectedPlayer: hints.expectedPlayer) else {
-            return .failure(.playerNotFound)
+            return .failure(.error)
+        }
+
+        // Verify that player position has changed
+        if let old = lastPlayer, player.angle.isAlmostEqual(to: old.angle, tolerance: 1/1_000), player.height.isAlmostEqual(to: old.height, tolerance: 1/1_000) {
+            return .failure(.samePlayerPosition)
+        } else {
+            lastPlayer = player
         }
 
         // Find bars
