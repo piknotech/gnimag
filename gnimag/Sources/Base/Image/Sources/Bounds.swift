@@ -35,12 +35,12 @@ public struct Bounds {
 
     /// Inset the bounds by the given amount on each side.
     /// Providing a negative amount will make the bounds larger.
-    public func inset(by: (x: Int, y: Int)) -> Bounds {
+    public func inset(by: (dx: Int, dy: Int)) -> Bounds {
         return Bounds(
-            minX: minX + by.x,
-            minY: minY + by.y,
-            width: width - 2 * by.x,
-            height: height - 2 * by.y
+            minX: minX + by.dx,
+            minY: minY + by.dy,
+            width: width - 2 * by.dx,
+            height: height - 2 * by.dy
         )
     }
 }

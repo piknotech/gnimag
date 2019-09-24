@@ -37,6 +37,12 @@ public struct AABB {
     public var center: CGPoint { .init(x: rect.midX, y: rect.midY) }
     public var width: CGFloat { rect.width }
     public var height: CGFloat { rect.height }
+
+    /// Inset the AABB by the given amount on each side.
+    /// Providing a negative amount will make the AABB larger.
+    public func inset(by: (dx: CGFloat, dy: CGFloat)) -> AABB {
+        AABB(rect: rect.insetBy(dx: by.dx, dy: by.dy))
+    }
 }
 
 extension AABB: Shape {

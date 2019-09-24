@@ -23,6 +23,12 @@ public struct Circle {
         let y = center.y + sin(angle) * radius
         return CGPoint(x: x, y: y)
     }
+
+    /// Inset the circle by adjusting the radius by the given amount.
+    /// Providing a negative amount will make the cicle larger.
+    public func inset(by dr: CGFloat) -> Circle {
+        Circle(center: center, radius: radius - dr)
+    }
 }
 
 extension Circle: Shape {

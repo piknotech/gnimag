@@ -34,6 +34,14 @@ class ImageAnalyzer {
             return .failure(.error)
         }
 
+        // Awesome ShapeErasedImage
+        let innerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 2)
+        let outerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.fullRadius) - 2)
+        let insetOBB = playerOBB.inset(by: (-3, -3))
+        let image = ShapeErasedImage(image: image, shapes: [.shape(innerCircle), .anti(outerCircle), .shape(insetOBB)], color: .yellow)
+        BitmapCanvas(image: image).writeToDesktop(name: "test.png")
+        exit(1)
+
         // Verify that player position has changed
         if let old = lastPlayer, player.angle.isAlmostEqual(to: old.angle, tolerance: 1/1_000), player.height.isAlmostEqual(to: old.height, tolerance: 1/1_000) {
             return .failure(.samePlayerPosition)

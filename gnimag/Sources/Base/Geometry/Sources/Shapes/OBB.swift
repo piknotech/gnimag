@@ -29,6 +29,12 @@ public struct OBB {
     public var center: CGPoint { aabb.center }
     public var width: CGFloat { aabb.width }
     public var height: CGFloat { aabb.height }
+
+    /// Inset the OBB by the given amount on each side.
+    /// Providing a negative amount will make the OBB larger.
+    public func inset(by: (dx: CGFloat, dy: CGFloat)) -> OBB {
+        OBB(aabb: aabb.inset(by: by), rotation: rotation)
+    }
 }
 
 extension OBB: Shape {
