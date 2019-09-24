@@ -60,7 +60,7 @@ final class BarCourse {
     /// Check if all given values match the trackers.
     /// NOTE: This changes the state from `.appearing` to `.normal` when necessary.
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
-        guard angle.is(bar.angle, at: time, validWith: .absolute(tolerance: 1% * .pi)) else {
+        guard angle.is(bar.angle, at: time, validWith: .absolute(tolerance: 3% * .pi)) else {
             return false
         }
 
@@ -77,7 +77,7 @@ final class BarCourse {
             }
 
         case .normal:
-            guard holeSize.is(bar.holeSize, at: time, validWith: .relative(tolerance: 5%)) else {
+            guard holeSize.is(bar.holeSize, validWith: .relative(tolerance: 5%)) else {
                 return false
             }
 

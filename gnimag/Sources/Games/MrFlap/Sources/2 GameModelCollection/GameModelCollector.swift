@@ -25,12 +25,16 @@ class GameModelCollector {
             print("player not integer (\(result.player))")
         }
 
-        // Match model-bars to tracker-bars; update existing bars and add new bars
-        let (pairs, newBars) = match(bars: result.bars, to: model.bars, time: time)
+        // Bars: instead of using the game time, use the player angle for bar-related trackers. This is useful to prevent small lags (which stop both the player and the bars) from destroying all of the tracking.
+        let playerAngle = model.player.angle.linearify(result.player.angle, at: time) // Map angle from [0, 2pi) to R
 
+        // Match model-bars to tracker-bars; update existing bars and add new bars
+        let (pairs, newBars) = match(bars: result.bars, to: model.bars, time: playerAngle)
+        print(newBars)
+        
         for (tracker, bar) in pairs {
-            if tracker.integrityCheck(with: bar, at: time) {
-                tracker.update(with: bar, at: time)
+            if tracker.integrityCheck(with: bar, at: playerAngle) {
+                tracker.update(with: bar, at: playerAngle)
             } else {
                 print("bar not integer (\(bar))")
             }
@@ -38,7 +42,7 @@ class GameModelCollector {
 
         for bar in newBars {
             let tracker = BarCourse(playfield: model.playfield)
-            tracker.update(with: bar, at: time)
+            tracker.update(with: bar, at: playerAngle)
             model.bars.append(tracker)
         }
     }

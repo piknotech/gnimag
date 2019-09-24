@@ -25,8 +25,9 @@ public class ScatterPlot {
         // Create DataSet and view
         let dataSet = ScatterChartDataSet(entries: entries, label: "DataSet")
         dataSet.setScatterShape(.circle)
-        dataSet.colors = [.black]
         dataSet.scatterShapeSize = scatterCircleSize
+        dataSet.drawValuesEnabled = false
+        dataSet.colors = [.black]
         let data = ScatterChartData(dataSet: dataSet)
 
         let view = ScatterChartView(frame: CGRect(origin: .zero, size: outputImageSize))
