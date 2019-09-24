@@ -103,6 +103,7 @@
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		6375953A2331012C00ACA969 /* ??=.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* ??=.swift */; };
 		6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */; };
+		6375953F233A53D900ACA969 /* ShapeErasedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953E233A53D900ACA969 /* ShapeErasedImage.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
 /* End PBXBuildFile section */
@@ -245,6 +246,7 @@
 		6364934423270ABA00FEF664 /* SimpleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRange.swift; sourceTree = "<group>"; };
 		637595392331012C00ACA969 /* ??=.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "??=.swift"; sourceTree = "<group>"; };
 		6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+IsAlmostEqual.swift"; sourceTree = "<group>"; };
+		6375953E233A53D900ACA969 /* ShapeErasedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeErasedImage.swift; sourceTree = "<group>"; };
 		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
 		9A8B5AE54AE4C6A103DA27FF /* Surge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Surge.framework; path = Dependencies/macOS/Surge.framework; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 				6312133C2325785000C126B4 /* PixelArithmetic */,
 				6312133F2325785000C126B4 /* PixelPaths */,
 				631213452325785000C126B4 /* ColorMatching */,
+				6375953D233A539800ACA969 /* More */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -961,6 +964,14 @@
 				6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		6375953D233A539800ACA969 /* More */ = {
+			isa = PBXGroup;
+			children = (
+				6375953E233A53D900ACA969 /* ShapeErasedImage.swift */,
+			);
+			path = More;
 			sourceTree = "<group>";
 		};
 		63B49D5C23270B1200AFDF13 /* Recovered References */ = {
@@ -1428,6 +1439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				631213542325785000C126B4 /* OutlierExtinctionForCircularPointSets.swift in Sources */,
+				6375953F233A53D900ACA969 /* ShapeErasedImage.swift in Sources */,
 				631213502325785000C126B4 /* SmallestAABB.swift in Sources */,
 				6312134B2325785000C126B4 /* FindSinglePixel.swift in Sources */,
 				631213662325785000C126B4 /* ColorMatch.swift in Sources */,

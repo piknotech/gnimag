@@ -14,4 +14,7 @@ public protocol Shape {
 
     /// Check if the point is inside the shape or on the border.
     func contains(_ point: CGPoint) -> Bool
+
+    /// The AABB enclosing this shape.
+    var boundingBox: AABB { get }
 }

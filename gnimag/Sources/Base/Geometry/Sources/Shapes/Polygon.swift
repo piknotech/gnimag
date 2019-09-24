@@ -40,7 +40,7 @@ extension Polygon: Shape {
     /// Check if the point is inside the shape.
     public func contains(_ point: CGPoint) -> Bool {
         // First, check if point is in the bounding box
-        let aabb = self.aabb
+        let aabb = boundingBox
         if !aabb.contains(point) { return false }
 
         // Special check: is point exactly on the edge?
@@ -55,12 +55,8 @@ extension Polygon: Shape {
         return !intersections.isMultiple(of: 2)
     }
 
-    /// The bounding box of the polygon.
-    private var aabb: AABB {
-        let xs = points.map { $0.x }
-        let ys = points.map { $0.y }
-        let xMin = xs.min()!, yMin = ys.min()!
-        let xMax = xs.max()!, yMax = ys.max()!
-        return AABB(rect: CGRect(x: xMin, y: yMin, width: xMax - xMin, height: yMax - yMin))
+    /// The AABB enclosing this shape.
+    public var boundingBox: AABB {
+        AABB(containing: points)
     }
 }

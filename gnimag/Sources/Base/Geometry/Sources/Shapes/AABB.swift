@@ -20,6 +20,20 @@ public struct AABB {
         rect = CGRect(x: center.x - width / 2, y: center.y - height / 2, width: width, height: height)
     }
 
+    /// Initialize with the smallest AABB that contains the given (non-empty) set of points.
+    /// This runs in O(n) time.
+    public init(containing points: [CGPoint]) {
+        let xs = points.map { $0.x }
+        let ys = points.map { $0.y }
+
+        let minX = xs.min()!, minY = ys.min()!
+        let maxX = xs.max()!, maxY = ys.max()!
+
+        let origin = CGPoint(x: minX, y: minY)
+        let size = CGSize(width: maxX - minX, height: maxY - minY)
+        self.init(rect: CGRect(origin: origin, size: size))
+    }
+
     public var center: CGPoint { .init(x: rect.midX, y: rect.midY) }
     public var width: CGFloat { rect.width }
     public var height: CGFloat { rect.height }
@@ -48,4 +62,6 @@ extension AABB: Shape {
         point.x <= rect.maxX &&
         point.y <= rect.maxY
     }
+
+    public var boundingBox: AABB { self }
 }

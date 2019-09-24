@@ -10,10 +10,6 @@ public struct Circle {
     public let center: CGPoint
     public let radius: CGFloat
 
-    public var enclosingRect: CGRect {
-        CGRect(x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius)
-    }
-
     /// Default initializer.
     public init(center: CGPoint, radius: CGFloat) {
         self.center = center
@@ -38,5 +34,10 @@ extension Circle: Shape {
     /// Check if the point is inside the shape.
     public func contains(_ point: CGPoint) -> Bool {
         return center.distance(to: point) <= radius
+    }
+
+    /// The AABB enclosing this shape.
+    public var boundingBox: AABB {
+        AABB(rect: CGRect(x: center.x - radius, y: center.y - radius, width: 2 * radius, height: 2 * radius))
     }
 }

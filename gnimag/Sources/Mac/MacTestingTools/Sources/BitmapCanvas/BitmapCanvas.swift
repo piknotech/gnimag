@@ -128,4 +128,10 @@ public final class BitmapCanvas {
         let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
         write(to: desktop + "/" + name)
     }
+
+    // MARK: Get CGImage
+    /// Get the current CGImage representation of the canvas.
+    public var CGImage: CGImage {
+        context.makeImage()!
+    }
 }
