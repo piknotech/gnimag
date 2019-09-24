@@ -30,8 +30,8 @@ public final class JumpTracker {
     /// Default initializer.
     public init(maxDataPoints: Int = 200, valueRangeTolerance: Value, jumpTolerance: Value) {
         tracker = PolyTracker(maxDataPoints: maxDataPoints, degree: 2)
-        gravityTracker = ConstantTracker(maxDataPoints: maxDataPoints)
-        jumpVelocityTracker = ConstantTracker(maxDataPoints: maxDataPoints)
+        gravityTracker = ConstantTracker(maxDataPoints: maxDataPoints, tolerancePoints: 0)
+        jumpVelocityTracker = ConstantTracker(maxDataPoints: maxDataPoints, tolerancePoints: 0)
         self.valueRangeTolerance = valueRangeTolerance
         self.jumpTolerance = jumpTolerance
     }

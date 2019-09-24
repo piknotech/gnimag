@@ -10,7 +10,7 @@ public final class ConstantTracker: PolyTracker {
     private var count: Double = 0
 
     /// Default initializer.
-    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 0) {
+    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 1) {
         super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints)
     }
 

@@ -104,7 +104,7 @@ public class MrFlap {
         gameModelCollector.accept(result: result, time: time)
     }
 
-    // MARK: AnalysisHints
+    // MARK: Analysis & Hints
 
     /// Analyze an image using the ImageAnalyzer and the hints.
     private func analyze(image: Image) -> Result<AnalysisResult, AnalysisError> {
