@@ -32,7 +32,7 @@ public final class ShapeErasedImage: Image {
 
     /// Return the color of the original image, or return the erased color iff the pixel is inside the shape.
     override public func color(at pixel: Pixel) -> Color {
-        if (shapes.contains { $0.contains(pixel) }) {
+        if (shapes.any { $0.contains(pixel) }) {
             return color
         } else {
             return image.color(at: pixel)

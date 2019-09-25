@@ -30,7 +30,6 @@ class GameModelCollector {
 
         // Match model-bars to tracker-bars; update existing bars and add new bars
         let (pairs, newBars) = match(bars: result.bars, to: model.bars, time: playerAngle)
-        print(newBars)
         
         for (tracker, bar) in pairs {
             if tracker.integrityCheck(with: bar, at: playerAngle) {

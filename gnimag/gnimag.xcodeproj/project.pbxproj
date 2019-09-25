@@ -91,7 +91,7 @@
 		6312142D2325883A00C126B4 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213372325785000C126B4 /* Circle.swift */; };
 		631214312325885F00C126B4 /* PolarCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213862325793100C126B4 /* PolarCoordinates.swift */; };
 		631214322325885F00C126B4 /* CGPoint+SimpleGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312133B2325785000C126B4 /* CGPoint+SimpleGeometry.swift */; };
-		6312143523258A3200C126B4 /* Array+CountWhere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312133A2325785000C126B4 /* Array+CountWhere.swift */; };
+		6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312133A2325785000C126B4 /* Sequence+Extensions.swift */; };
 		631214372326678700C126B4 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CD2325740000C126B4 /* Event.swift */; };
 		631214392326686A00C126B4 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Logging.swift */; };
 		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
@@ -167,7 +167,7 @@
 		631213362325785000C126B4 /* Polygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
 		631213372325785000C126B4 /* Circle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		631213392325785000C126B4 /* Pixel+CGPointConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pixel+CGPointConversion.swift"; sourceTree = "<group>"; };
-		6312133A2325785000C126B4 /* Array+CountWhere.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+CountWhere.swift"; sourceTree = "<group>"; };
+		6312133A2325785000C126B4 /* Sequence+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Sequence+Extensions.swift"; sourceTree = "<group>"; };
 		6312133B2325785000C126B4 /* CGPoint+SimpleGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+SimpleGeometry.swift"; sourceTree = "<group>"; };
 		6312133D2325785000C126B4 /* Delta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Delta.swift; sourceTree = "<group>"; };
 		6312133E2325785000C126B4 /* Direction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
@@ -962,7 +962,7 @@
 		6312143423258A2600C126B4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				6312133A2325785000C126B4 /* Array+CountWhere.swift */,
+				6312133A2325785000C126B4 /* Sequence+Extensions.swift */,
 				6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */,
 			);
 			path = Extensions;
@@ -1431,7 +1431,7 @@
 				6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */,
 				631214392326686A00C126B4 /* Logging.swift in Sources */,
 				6312143B232669B900C126B4 /* AsyncTools.swift in Sources */,
-				6312143523258A3200C126B4 /* Array+CountWhere.swift in Sources */,
+				6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */,
 				6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */,
 				6375953A2331012C00ACA969 /* ??=.swift in Sources */,
 			);

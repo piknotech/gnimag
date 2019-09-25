@@ -86,6 +86,7 @@ class ImageAnalyzer {
         let outerCircle = SmallestCircle.containing(outerContour.map(CGPoint.init))
 
         // Centers should be (nearly) identical
+        precondition(innerCircle.center.distance(to: outerCircle.center) < 1, "Playfield detection – something went wrong!")
         let center = (innerCircle.center + outerCircle.center) / 2
 
         playfield = Playfield(center: center, innerRadius: Double(innerCircle.radius), fullRadius: Double(outerCircle.radius))
@@ -120,7 +121,7 @@ class ImageAnalyzer {
         let insetOBB = playerOBB.inset(by: (-2, -2))
         let image = ShapeErasedImage(image: image, shapes: [.shape(innerCircle), .anti(outerCircle), .shape(insetOBB)], color: .erase)
 
-        // Find a point inside each bar
+        // Find one (or more) point inside each bar
         let circle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 5)
         var pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 64)
 
@@ -128,17 +129,20 @@ class ImageAnalyzer {
             image.color(at: pixel).distance(to: coloring.theme) > 0.1
         }
 
-        // Merge together into chunks, each of which describes one bar
-        let result = ConnectedChunks.from(pixels, maxDistance: playfield.innerRadius * .pi / 16)
-
         // Fully locate each bar based on one interior pixel
-        return result.chunks.compactMap {
-            locateBar(from: $0.any, in: image, with: coloring)
+        var innerOBBs = [OBB]() // Once a bar was evaluated, any pixels inside this bar are dismissed
+
+        return pixels.compactMap { pixel in
+            guard (innerOBBs.none { $0.contains(pixel.CGPoint) }) else { return nil }
+            guard let (bar, innerOBB) = locateBar(from: pixel, in: image, with: coloring) else { return nil }
+            innerOBBs.append(innerOBB)
+            return bar
         }
     }
 
     /// Find the bar which is described by the given chunk.
-    private func locateBar(from pixel: Pixel, in image: Image, with coloring: Coloring) -> Bar? {
+    /// Also return the OBB of the inner part of the bar.
+    private func locateBar(from pixel: Pixel, in image: Image, with coloring: Coloring) -> (Bar, innerOBB: OBB)? {
         let insideBar = coloring.theme.withTolerance(0.1)
         let limit = EdgeDetector.DetectionLimit.distance(to: pixel, maximum: playfield.freeSpace)
 
@@ -153,30 +157,42 @@ class ImageAnalyzer {
         guard let outerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: upPosition, angle: 0, limit: limit) else { return nil }
         let outerOBB = SmallestOBB.containing(outerEdge.map(CGPoint.init))
 
-        // Integrity checks and bar construction
+        // Integrity checks, reorientate OBBs
         let angle2 = PolarCoordinates.angle(for: outerOBB.center, respectiveTo: playfield.center)
         guard angle1.isAlmostEqual(to: angle2, tolerance: 0.02) else { return nil }
 
         let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
         let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
         guard width1.isAlmostEqual(to: width2, tolerance: 1) else { return nil }
+        let width = Double(width1 + width2) / 2
 
-        return Bar(
-            width: Double(width1 + width2) / 2,
+        // The inner obb is a tiny bit too large because of the non-zero width of the box
+        let r = sqrt(playfield.innerRadius * playfield.innerRadius - 0.25 * width * width) // Pythagoras
+        let correctInnerHeight = 2 + Double(innerHeight) - playfield.innerRadius + r // r ≈ playfield.radius
+
+        let bar = Bar(
+            width: Double(width),
             angle: Double(angle1 + angle2) / 2,
-            innerHeight: Double(innerHeight), // TODO: genauer!
-            outerHeight: Double(outerHeight),
+            innerHeight: correctInnerHeight,
+            outerHeight: Double(outerHeight), // Does not need to be corrected
             holeSize: playfield.freeSpace - Double(innerHeight + outerHeight)
         )
+
+        return (bar, innerOBB)
     }
 
     /// Swap the width and height of the OBB to match with the given direction, if required.
-    /// TODO ...
-    func reorientate(obb: OBB, respectiveTo center: CGPoint) -> (width: CGFloat, height: CGFloat) {
-        if abs(obb.width - 51) < abs(obb.height - 51) {
+    /// This means: The OBB is aligned such that its "width" sides are about orthogonal to, and its "height" sides are about parallel to the direction from the obb's center to the given center point.
+    /// Instead of returning a new OBB, just return the width and the height (as the obb's center is not changed, just width and height may be swapped).
+    private func reorientate(obb: OBB, respectiveTo orientationCenter: CGPoint) -> (width: CGFloat, height: CGFloat) {
+        let rotatedCenter = orientationCenter.rotated(by: -obb.rotation, around: obb.center)
+        let angle = PolarCoordinates.angle(for: rotatedCenter, respectiveTo: obb.center)
+
+        // Angle in [1/4*pi, 3/4*pi) u [5/4*pi, 7/4*pi): orientation is correct (upper and lower quarter of the circle)
+        if [1, 2].contains(Int(angle * 4 / .pi) % 4) { // 1/2 is good, 0/3 isn't
             return (obb.width, obb.height)
         } else {
-            return (obb.height, obb.width)
+            return (obb.height, obb.width) // Swap
         }
     }
 }
