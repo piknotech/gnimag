@@ -17,6 +17,7 @@ public struct Delta: Equatable, CustomStringConvertible {
     }
     
     /// Rotate the delta by a given rotation.
+    @_transparent
     public func rotated(by rotation: Rotation) -> Delta {
         switch rotation {
         case .up: return Delta(dx, dy)
@@ -27,6 +28,7 @@ public struct Delta: Equatable, CustomStringConvertible {
     }
     
     /// Multiply the delta with a scalar.
+    @_transparent
     public func scaled(by scalar: Int) -> Delta {
         return Delta(dx * scalar, dy * scalar)
     }

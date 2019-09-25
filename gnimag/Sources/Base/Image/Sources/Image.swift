@@ -18,6 +18,7 @@ open class Image {
     }
 
     /// Convenience method to check if a given pixel is inside the image.
+    @inlinable @inline(__always)
     public final func contains(_ pixel: Pixel) -> Bool {
         bounds.contains(pixel)
     }
@@ -26,7 +27,7 @@ open class Image {
     /// (0, 0) is the lower left corner, (width-1, height-1) is the upper-right corner.
     /// Precondition: the pixel must be inside the image.
     /// TODO: wird es geinlined obwohl es in einem anderen target ist? - whole-module-optiminzations?
-    @inline(__always)
+    @inlinable @inline(__always)
     open func color(at pixel: Pixel) -> Color {
         fatalError("Image is an abstract class – please override this method.")
     }

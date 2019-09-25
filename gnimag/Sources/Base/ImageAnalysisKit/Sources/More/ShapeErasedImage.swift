@@ -10,14 +10,18 @@ import MacTestingTools
 /// An image that consists of another image, but has one or multiple shapes erased with a given color.
 public final class ShapeErasedImage: Image {
     /// The original image.
-    private let image: Image
+    @usableFromInline
+    let image: Image
 
     /// The shapes and the color with which the shapes will be erased from the image.
-    private let shapes: [ShapeErasureType]
-    private let color: Color
+    @usableFromInline
+    let shapes: [ShapeErasureType]
+
+    @usableFromInline
+    let color: Color
 
     /// Default initializer.
-    public init(image: Image, shapes: [ShapeErasureType], color: Color) {
+    public init(image: Image, shapes: [ShapeErasureType], color: Color = .erase) {
         self.image = image
         self.shapes = shapes
         self.color = color
@@ -26,11 +30,12 @@ public final class ShapeErasedImage: Image {
     }
 
     /// Convenience initializer, just using one shape.
-    public convenience init(image: Image, shape: ShapeErasureType, color: Color) {
+    public convenience init(image: Image, shape: ShapeErasureType, color: Color = .erase) {
         self.init(image: image, shapes: [shape], color: color)
     }
 
     /// Return the color of the original image, or return the erased color iff the pixel is inside the shape.
+    @inlinable @inline(__always)
     override public func color(at pixel: Pixel) -> Color {
         if (shapes.any { $0.contains(pixel) }) {
             return color

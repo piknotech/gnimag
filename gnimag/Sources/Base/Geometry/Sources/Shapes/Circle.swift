@@ -39,7 +39,9 @@ extension Circle: Shape {
 
     /// Check if the point is inside the shape.
     public func contains(_ point: CGPoint) -> Bool {
-        return center.distance(to: point) <= radius
+        let dx = point.x - center.x
+        let dy = point.y - center.y
+        return dx * dx + dy * dy <= radius * radius // Avoids square root
     }
 
     /// The AABB enclosing this shape.

@@ -26,6 +26,7 @@ public struct Bounds {
     
     /// Check if a pixel is inside the bounds.
     /// minX and minY are inide the bounds, whereas minX + width and minY + height are outside the bounds.
+    @_transparent
     public func contains(_ pixel: Pixel) -> Bool {
         minX <= pixel.x &&
         minY <= pixel.y &&

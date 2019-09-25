@@ -119,7 +119,7 @@ class ImageAnalyzer {
         let innerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 2)
         let outerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.fullRadius) - 2)
         let insetOBB = playerOBB.inset(by: (-2, -2))
-        let image = ShapeErasedImage(image: image, shapes: [.shape(innerCircle), .anti(outerCircle), .shape(insetOBB)], color: .erase)
+        let image = ShapeErasedImage(image: image, shapes: [.shape(innerCircle), .anti(outerCircle), .shape(insetOBB)])
 
         // Find one (or more) point inside each bar
         let circle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 5)

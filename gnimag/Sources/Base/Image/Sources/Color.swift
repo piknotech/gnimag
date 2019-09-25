@@ -20,13 +20,13 @@ public struct Color {
     /// The euclidean distance between this color and another color.
     /// 0 means that the colors are equal. 1 means that the difference is maximal.
     /// TODO: vlt. schnellere difference funktion benutzen
-    @inline(__always)
+    @_transparent
     public func distance(to color: Color) -> Double {
         let diff0 = red - color.red
         let diff1 = green - color.green
         let diff2 = blue - color.blue
         
-        return ((diff0 * diff0 + diff1 * diff1 + diff2 * diff2) / 3).squareRoot()
+        return sqrt((diff0 * diff0 + diff1 * diff1 + diff2 * diff2) / 3)
     }
 
     // MARK: Static members

@@ -30,6 +30,7 @@ public enum ShapeErasureType {
     }
 
     /// Check if the (anti-)shape contains the given pixel.
+    @_transparent @usableFromInline
     func contains(_ pixel: Pixel) -> Bool {
         switch self {
         case let .shape(shape):
