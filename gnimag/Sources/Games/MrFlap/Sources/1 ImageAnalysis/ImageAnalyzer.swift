@@ -34,14 +34,6 @@ class ImageAnalyzer {
             return .failure(.error)
         }
 
-        // Awesome ShapeErasedImage
-        let innerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 2)
-        let outerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.fullRadius) - 2)
-        let insetOBB = playerOBB.inset(by: (-3, -3))
-        let image = ShapeErasedImage(image: image, shapes: [.shape(innerCircle), .anti(outerCircle), .shape(insetOBB)], color: .yellow)
-        BitmapCanvas(image: image).writeToDesktop(name: "test.png")
-        exit(1)
-
         // Verify that player position has changed
         if let old = lastPlayer, player.angle.isAlmostEqual(to: old.angle, tolerance: 1/1_000), player.height.isAlmostEqual(to: old.height, tolerance: 1/1_000) {
             return .failure(.samePlayerPosition)
@@ -122,57 +114,69 @@ class ImageAnalyzer {
 
     /// Find all bars.
     private func findBars(in image: Image, with coloring: Coloring, playerOBB: OBB) -> [Bar] {
-        // Step 1: look at a circle directly above the inner circle and decide which of these pixels belong to bars
-        let circle = Circle(center: image.bounds.center.CGPoint, radius: CGFloat(playfield.innerRadius) + 5)
-        var pixels = Array(CirclePath(circle: circle, speed: 2, bounds: image.bounds, pixelsOutsideBounds: .skip))
+        // Erase all blue things, execept the bars, from the image
+        let innerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 2)
+        let outerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.fullRadius) - 2)
+        let insetOBB = playerOBB.inset(by: (-2, -2))
+        let image = ShapeErasedImage(image: image, shapes: [.shape(innerCircle), .anti(outerCircle), .shape(insetOBB)], color: .erase)
 
-        pixels.removeAll { pixel in // Filter pixels which do not belong to any bar
-            playerOBB.contains(pixel.CGPoint) ||
+        // Find a point inside each bar
+        let circle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 5)
+        var pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 64)
+
+        pixels.removeAll { pixel in // Remove pixels which do not belong to a bar
             image.color(at: pixel).distance(to: coloring.theme) > 0.1
         }
 
         // Merge together into chunks, each of which describes one bar
-        let result = ConnectedChunks.from(pixels, maxDistance: 5) // 5 is enough for CirclePath with speed = 2
+        let result = ConnectedChunks.from(pixels, maxDistance: playfield.innerRadius * .pi / 16)
 
-        // Step 2: fully locate each bar based on a chunk
+        // Fully locate each bar based on one interior pixel
         return result.chunks.compactMap {
-            locateBar(from: $0, in: image, with: coloring)
+            locateBar(from: $0.any, in: image, with: coloring)
         }
     }
 
     /// Find the bar which is described by the given chunk.
-    private func locateBar(from chunk: ConnectedChunks.Chunk<Pixel>, in image: Image, with coloring: Coloring) -> Bar? {
+    private func locateBar(from pixel: Pixel, in image: Image, with coloring: Coloring) -> Bar? {
         let insideBar = coloring.theme.withTolerance(0.1)
+        let limit = EdgeDetector.DetectionLimit.distance(to: pixel, maximum: playfield.freeSpace)
 
-        // Get center pixel and bar width
-        let center = (chunk.objects.reduce(CGPoint.zero) { $0 + $1.CGPoint }) / CGFloat(chunk.objects.count)
-        let barWidth = chunk.diameter + 1 // +1 because of speed = 2
+        // Find inner edge
+        guard let innerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: pixel, angle: 0, limit: limit) else { return nil }
+        let innerOBB = SmallestOBB.containing(innerEdge.map(CGPoint.init))
 
-        // Find bottom and top edge of the bar using paths through the center
-        let angle = PolarCoordinates.angle(for: center, respectiveTo: playfield.center)
-        let upwards = StraightPath(start: center.nearestPixel, angle: angle, bounds: image.bounds)
-        let upPosition = PolarCoordinates.position(atAngle: angle, height: CGFloat(playfield.fullRadius), respectiveTo: playfield.center)
-        let downwards = StraightPath(start: upPosition.nearestPixel, angle: .pi + angle, bounds: image.bounds)
+        let angle1 = PolarCoordinates.angle(for: innerOBB.center, respectiveTo: playfield.center)
 
-        // Cover edge cases; then follow upwards and downwards paths
-        guard insideBar.matches(image.color(at: center.nearestPixel)) else { return nil }
-        guard insideBar.matches(image.color(at: upPosition.nearestPixel)) else { return nil }
+        // Find outer edge
+        let upPosition = PolarCoordinates.position(atAngle: angle1, height: CGFloat(playfield.fullRadius - 5), respectiveTo: playfield.center).nearestPixel
+        guard let outerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: upPosition, angle: 0, limit: limit) else { return nil }
+        let outerOBB = SmallestOBB.containing(outerEdge.map(CGPoint.init))
 
-        let bottomEdge = image.follow(path: upwards, untilFulfillingSequence: ColorMatchSequence(!insideBar))
-        let topEdge = image.follow(path: downwards, untilFulfillingSequence: ColorMatchSequence(!insideBar))
+        // Integrity checks and bar construction
+        let angle2 = PolarCoordinates.angle(for: outerOBB.center, respectiveTo: playfield.center)
+        guard angle1.isAlmostEqual(to: angle2, tolerance: 0.02) else { return nil }
 
-        guard let bottom = bottomEdge.beforeFulfillment, let top = topEdge.beforeFulfillment else { return nil }
-
-        // Calculate remaining bar properties
-        let innerHeight = Double(bottom.CGPoint.distance(to: playfield.center)) - playfield.innerRadius
-        let holeSize = top.distance(to: bottom)
+        let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
+        let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
+        guard width1.isAlmostEqual(to: width2, tolerance: 1) else { return nil }
 
         return Bar(
-            width: barWidth,
-            angle: Double(angle),
-            innerHeight: innerHeight,
-            outerHeight: playfield.freeSpace - innerHeight - holeSize,
-            holeSize: holeSize
+            width: Double(width1 + width2) / 2,
+            angle: Double(angle1 + angle2) / 2,
+            innerHeight: Double(innerHeight), // TODO: genauer!
+            outerHeight: Double(outerHeight),
+            holeSize: playfield.freeSpace - Double(innerHeight + outerHeight)
         )
+    }
+
+    /// Swap the width and height of the OBB to match with the given direction, if required.
+    /// TODO ...
+    func reorientate(obb: OBB, respectiveTo center: CGPoint) -> (width: CGFloat, height: CGFloat) {
+        if abs(obb.width - 51) < abs(obb.height - 51) {
+            return (obb.width, obb.height)
+        } else {
+            return (obb.height, obb.width)
+        }
     }
 }
