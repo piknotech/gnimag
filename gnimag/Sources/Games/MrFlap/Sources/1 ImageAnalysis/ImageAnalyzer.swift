@@ -24,7 +24,7 @@ class ImageAnalyzer {
         }
 
         // Find playfield at first call
-        playfield = playfield ?? findPlayfield(in: image, with: coloring)!
+        playfield = playfield ?? findPlayfield(in: image, with: coloring)
         if playfield == nil {
             return .failure(.error)
         }
@@ -71,22 +71,21 @@ class ImageAnalyzer {
     /// Find the playfield.
     /// Call this method only once, at the start of the game.
     /// Because this method is only called once (not once per frame), there do not need to be any performance optimizations.
-    /// Also, there is no error handling – we just assume that the image meets our expectations.
     private func findPlayfield(in image: Image, with coloring: Coloring) -> Playfield? {
         let screenCenter = Pixel(image.width / 2, image.height / 2)
 
         // Find inner circle with the following sequence: [blue, white, blue, white]
         let innerSequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary])
-        let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence)!
+        guard let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence) else { return nil }
         let innerCircle = SmallestCircle.containing(innerContour.map(CGPoint.init))
 
         // Find outer circle with the following sequence: [blue, white, blue, white, blue]
         let outerSequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary, coloring.theme])
-        let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence)!
+        guard let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence) else { return nil }
         let outerCircle = SmallestCircle.containing(outerContour.map(CGPoint.init))
 
         // Centers should be (nearly) identical
-        precondition(innerCircle.center.distance(to: outerCircle.center) < 1, "Playfield detection – something went wrong!")
+        guard innerCircle.center.distance(to: outerCircle.center) < 1 else { return nil }
         let center = (innerCircle.center + outerCircle.center) / 2
 
         playfield = Playfield(center: center, innerRadius: Double(innerCircle.radius), fullRadius: Double(outerCircle.radius))

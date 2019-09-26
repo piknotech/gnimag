@@ -1554,6 +1554,7 @@
 		631212A823253DA100C126B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = fast;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

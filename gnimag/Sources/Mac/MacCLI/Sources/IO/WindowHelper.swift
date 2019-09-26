@@ -24,7 +24,8 @@ enum WindowHelper {
         case 1:
             ()
         default: // (case 2...)
-            exit(withMessage: "More than one window found for the desired application \"\(appName)\"")
+            let windowNames = windows.map { $0["kCGWindowName"] as! String }
+            exit(withMessage: "More than one window found for the desired application \"\(appName)\". (\(windowNames.joined(separator: ", ")))")
         }
 
         let window = windows.first!

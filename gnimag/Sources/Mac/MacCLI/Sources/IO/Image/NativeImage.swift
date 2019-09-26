@@ -22,7 +22,7 @@ final class NativeImage: Image, ConvertibleToCGImage {
     /// Default initializer.
     init(_ image: CGImage) {
         // Get raw pixel data
-        data = image.dataProvider!.data! as Data
+        data = image.dataProvider!.data!
         bytesPerRow = image.bytesPerRow
         CGImage = image
 

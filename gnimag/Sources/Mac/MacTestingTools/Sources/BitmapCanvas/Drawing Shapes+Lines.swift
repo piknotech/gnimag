@@ -11,11 +11,11 @@ import Image
 
 extension Circle: Strokable, Fillable {
     public func stroke(onto context: CGContext) {
-        context.strokeEllipse(in: enclosingRect)
+        context.strokeEllipse(in: boundingBox.rect)
     }
 
     public func fill(on context: CGContext) {
-        let smaller = enclosingRect.insetBy(dx: -0.5, dy: -0.5)
+        let smaller = boundingBox.rect.insetBy(dx: -0.5, dy: -0.5)
         context.fillEllipse(in: smaller)
     }
 }
