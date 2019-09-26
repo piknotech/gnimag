@@ -9,6 +9,7 @@ public struct Pixel {
     public var y: Int
     
     /// Default initializer.
+    @_transparent
     public init(_ x: Int, _ y: Int) {
         self.x = x
         self.y = y

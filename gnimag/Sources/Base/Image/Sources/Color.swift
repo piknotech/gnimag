@@ -11,6 +11,7 @@ public struct Color {
     public let blue: Double
     
     /// Default initializer.
+    @_transparent
     public init(_ red: Double, _ green: Double, _ blue: Double) {
         self.red = red
         self.green = green
