@@ -54,20 +54,15 @@ public class StraightPath: PixelPath {
 
     // MARK: PixelPath
 
-    /// The number of steps that have been taken already.
-    private var steps = 0
-
     /// Return the next pixel on the path.
     /// If the bounds are surpassed, return nil.
     public override func next() -> Pixel? {
-        current.x += speed * cosAngle
-        current.y += speed * sinAngle
         let pixel = current.nearestPixel
-
-        // Boundary check
         guard bounds.contains(pixel) else { return nil }
 
-        steps += 1
+        current.x += speed * cosAngle
+        current.y += speed * sinAngle
+
         return pixel
     }
 }
