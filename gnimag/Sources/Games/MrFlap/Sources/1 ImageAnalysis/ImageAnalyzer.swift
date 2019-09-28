@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import Geometry
 import Image
@@ -24,7 +25,7 @@ class ImageAnalyzer {
         }
 
         // Find playfield at first call
-        playfield = playfield ?? findPlayfield(in: image, with: coloring)
+        playfield ??= findPlayfield(in: image, with: coloring)
         if playfield == nil {
             return .failure(.error)
         }
