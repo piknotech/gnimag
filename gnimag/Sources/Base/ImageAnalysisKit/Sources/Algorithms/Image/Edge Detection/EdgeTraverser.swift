@@ -82,7 +82,11 @@ internal class EdgeTraverser {
         
         // Helper method
         func isInsideShape(_ pixel: Pixel) -> Bool {
-            return image.contains(pixel) && color.matches(image.color(at: pixel))
+            if !outsideBoundsIsInsideShape {
+                return image.contains(pixel) && color.matches(image.color(at: pixel)) // Normal
+            } else {
+                return !image.contains(pixel) || color.matches(image.color(at: pixel)) // Inverse
+            }
         }
         
         // Check 1

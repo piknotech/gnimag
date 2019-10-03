@@ -163,7 +163,7 @@ class ImageAnalyzer {
 
         let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
         let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
-        guard width1.isAlmostEqual(to: width2, tolerance: 1) else { return nil }
+        guard width1.isAlmostEqual(to: width2, tolerance: 2) else { return nil }
         let width = Double(width1 + width2) / 2
 
         // The inner obb is a tiny bit too large because of the non-zero width of the box
