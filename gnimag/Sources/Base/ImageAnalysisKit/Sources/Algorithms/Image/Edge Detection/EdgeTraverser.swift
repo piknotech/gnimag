@@ -52,8 +52,15 @@ internal class EdgeTraverser {
                 ()
             }
 
-            // Add pixel; stop if starting point was reached
-            if currentPixel == startingPixel { return edge }
+            // Possibly stop if starting point was reached
+            if currentPixel == startingPixel {
+                // Test if the next pixel is already in the edge; if not, continue
+                let last = currentPixel
+                iterate()
+                if edge.contains(currentPixel) { return edge } // Pixel already in the edge, stop
+                edge.append(last)
+            }
+
             edge.append(currentPixel)
         }
     }
