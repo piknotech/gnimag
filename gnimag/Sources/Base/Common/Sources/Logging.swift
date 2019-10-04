@@ -81,5 +81,6 @@ public func logNewline() {
 /// Write a fatal log using Logger.shared and stop the program execution.
 public func exit(withMessage message: String) -> Never {
     log(.fatal, message)
+    raise(SIGINT) // Enable debugging
     exit(1)
 }

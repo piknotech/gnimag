@@ -53,7 +53,7 @@ public enum EdgeDetector {
             if inverse { return nil }
 
             let extended = image.bounds.inset(by: (-1, -1))
-            let outside = StraightPath(start: inside!, angle: angle, bounds: extended).next()!
+            let outside = StraightPath(start: inside!, angle: angle, bounds: extended).first { $0 != inside }!
             return (inside!, outside) // index >= 0 enforces inside != nil
         }
     }

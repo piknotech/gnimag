@@ -1547,6 +1547,7 @@
 		631212A723253DA100C126B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=200";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1555,6 +1556,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = fast;
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=200";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

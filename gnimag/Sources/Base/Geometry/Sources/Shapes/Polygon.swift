@@ -44,7 +44,7 @@ extension Polygon: Shape {
         if !aabb.contains(point) { return false }
 
         // Special check: is point exactly on the edge?
-        if distance(to: point) == 0 { return true }
+        if distance(to: point) <= 1e-6 { return true }
 
         // Create random ray and test number of intersections with the polygon
         let angle = CGFloat.random(in: 0 ..< 2 * .pi)

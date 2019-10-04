@@ -22,7 +22,10 @@ class GameModelCollector {
         if model.player.integrityCheck(with: result.player, at: time) {
             model.player.update(with: result.player, at: time)
         } else {
+            // When the player is not integer, bar tracking cannot proceed correctly
+            // TODO: what happens when bar never leaves the appearing state? – detect this!
             print("player not integer (\(result.player))")
+            return
         }
 
         // Bars: instead of using the game time, use the player angle for bar-related trackers. This is useful to prevent small lags (which stop both the player and the bars) from destroying all of the tracking.

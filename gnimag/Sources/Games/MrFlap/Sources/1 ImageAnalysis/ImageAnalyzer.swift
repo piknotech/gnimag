@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import Geometry
 import Image
@@ -24,7 +25,7 @@ class ImageAnalyzer {
         }
 
         // Find playfield at first call
-        playfield = playfield ?? findPlayfield(in: image, with: coloring)
+        playfield ??= findPlayfield(in: image, with: coloring)
         if playfield == nil {
             return .failure(.error)
         }
@@ -76,16 +77,16 @@ class ImageAnalyzer {
 
         // Find inner circle with the following sequence: [blue, white, blue, white]
         let innerSequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary])
-        guard let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence) else { return nil }
+        guard let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence) else { return nil }
         let innerCircle = SmallestCircle.containing(innerContour.map(CGPoint.init))
 
         // Find outer circle with the following sequence: [blue, white, blue, white, blue]
         let outerSequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary, coloring.theme])
-        guard let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence) else { return nil }
+        guard let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence) else { return nil }
         let outerCircle = SmallestCircle.containing(outerContour.map(CGPoint.init))
 
         // Centers should be (nearly) identical
-        guard innerCircle.center.distance(to: outerCircle.center) < 1 else { return nil }
+        guard innerCircle.center.distance(to: outerCircle.center) < 1 else { return nil }
         let center = (innerCircle.center + outerCircle.center) / 2
 
         playfield = Playfield(center: center, innerRadius: Double(innerCircle.radius), fullRadius: Double(outerCircle.radius))
@@ -162,7 +163,7 @@ class ImageAnalyzer {
 
         let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
         let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
-        guard width1.isAlmostEqual(to: width2, tolerance: 1) else { return nil }
+        guard width1.isAlmostEqual(to: width2, tolerance: 2) else { return nil }
         let width = Double(width1 + width2) / 2
 
         // The inner obb is a tiny bit too large because of the non-zero width of the box
