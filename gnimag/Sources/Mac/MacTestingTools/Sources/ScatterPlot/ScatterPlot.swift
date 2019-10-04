@@ -19,8 +19,8 @@ public class ScatterPlot {
     /// Create a scatter plot with the given data.
     /// The scatter plot is black and is drawn on a white background.
     public init(xValues: [Double], yValues: [Double], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
-        // Map values to ChartDataEntries
-        let entries = zip(xValues, yValues).map(ChartDataEntry.init(x:y:))
+        // Map values to ChartDataEntries and sort by x-value
+        let entries = zip(xValues, yValues).map(ChartDataEntry.init(x:y:)).sorted { $0.x < $1.x }
 
         // Create DataSet and view
         let dataSet = ScatterChartDataSet(entries: entries, label: "DataSet")
