@@ -89,8 +89,7 @@ class ImageAnalyzer {
         guard innerCircle.center.distance(to: outerCircle.center) < 1 else { return nil }
         let center = (innerCircle.center + outerCircle.center) / 2
 
-        playfield = Playfield(center: center, innerRadius: Double(innerCircle.radius), fullRadius: Double(outerCircle.radius))
-        return playfield
+        return Playfield(center: center, innerRadius: Double(innerCircle.radius), fullRadius: Double(outerCircle.radius))
     }
 
     /// Find the player; also, return its OBB for further analysis.

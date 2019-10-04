@@ -6,6 +6,6 @@
 infix operator ??=
 
 /// Shorthand for lhs = lhs ?? rhs.
-public func ??=<T>(lhs: inout Optional<T>, rhs: Optional<T>) {
-    lhs = lhs ?? rhs
+public func ??=<T>(lhs: inout Optional<T>, rhs: @autoclosure () -> Optional<T>) {
+    lhs = lhs ?? rhs()
 }
