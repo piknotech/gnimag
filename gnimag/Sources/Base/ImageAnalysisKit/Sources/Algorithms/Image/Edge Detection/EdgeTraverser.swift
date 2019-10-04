@@ -34,7 +34,7 @@ internal class EdgeTraverser {
     /// Perform iterations until eiter hitting the starting pixel again or hitting the limit.
     func findEdge(limit: EdgeDetector.DetectionLimit) -> [Pixel]? {
         let startingPixel = currentPixel
-        var edge = [startingPixel]
+        var edge = Set([startingPixel])
 
         // Iterate until hitting starting point again
         while true {
@@ -54,14 +54,12 @@ internal class EdgeTraverser {
 
             // Possibly stop if starting point was reached
             if currentPixel == startingPixel {
-                // Test if the next pixel is already in the edge; if not, continue
-                let last = currentPixel
+                // Test if the next pixel is already in the edge; if yes, stop the process, else, continue
                 iterate()
-                if edge.contains(currentPixel) { return edge } // Pixel already in the edge, stop
-                edge.append(last)
+                if edge.contains(currentPixel) { return Array(edge) }
             }
 
-            edge.append(currentPixel)
+            edge.insert(currentPixel)
         }
     }
     
