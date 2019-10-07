@@ -55,21 +55,20 @@ public final class Polynomial: SmoothFunction {
     public var c: Value { return coefficients[degree - 2] }
     public var d: Value { return coefficients[degree - 3] }
     public var e: Value { return coefficients[degree - 4] }
+}
 
-    // MARK: CustomStringConvertible
+// MARK: CustomStringConvertible
+extension Polynomial: CustomStringConvertible {
     /// Describe the polynomial.
     public var description: String {
         // Trivial case
-        if degree < 0 {
-            return ""
-        }
+        if degree < 0 { return "" }
         
         var result = ""
         
         // Round coefficients
-        let coeffs = coefficients.map { (a) -> String in
-            let a = String(format: "%.3f", a)
-            return a
+        let coeffs = coefficients.map {
+            String(format: "%.3f", $0)
         }
         
         // Create description, using each coefficient
@@ -79,11 +78,8 @@ public final class Polynomial: SmoothFunction {
             }
         }
         
-        // Extra cases
-        if degree >= 1 {
-            result += "\(coeffs[1])x + "
-        }
-        
+        // Extra cases: x^1 and x^0
+        if degree >= 1 { result += "\(coeffs[1])x + " }
         result += "\(coeffs[0])"
         
         return result

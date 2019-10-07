@@ -6,7 +6,7 @@
 import Cocoa
 import Charts
 
-public class ScatterPlot {
+public final class ScatterPlot {
     private let data: NSData
 
     /// Create a scatter plot with the given Has2DDataSet object.

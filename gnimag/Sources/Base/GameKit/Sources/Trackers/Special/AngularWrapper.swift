@@ -7,7 +7,7 @@ import Foundation
 import MacTestingTools
 
 /// AngularWrapper provides a wrapper around simple trackers which would describe a simple function, but their values are angular, meaning a modulo-2-pi is applied.
-/// This tracker undoes the modulo-2-pi step to produce the real base function (whose codomain is R instead of [0, 2*pi)).
+/// This tracker undoes the modulo-2-pi step in order to produce the real base function (whose codomain is R instead of [0, 2*pi)).
 public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerProtocol {
     /// The internal tracker tracking the linearified values.
     private let tracker: Other

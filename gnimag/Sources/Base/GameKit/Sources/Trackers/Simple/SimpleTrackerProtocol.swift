@@ -20,7 +20,7 @@ public protocol SimpleTrackerProtocol: Has2DDataSet {
     /// After `maxDataPoints` have been added to the tracker, oldest values should be removed to keep the number of data points at `maxDataPoints`.
     var maxDataPoints: Int { get }
 
-    // This is a required, but not necessarily sufficient condition for a regression ot exist.
+    /// This is a required, but not necessarily sufficient condition in order for a regression to exist.
     var requiredPointsForCalculatingRegression: Int { get }
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
@@ -45,13 +45,13 @@ public protocol SimpleTrackerProtocol: Has2DDataSet {
 }
 
 // MARK: Has2DDataSet
+
 public extension SimpleTrackerProtocol {
     /// Conformance to Has2DDataSet.
     func yieldDataSet() -> (xValues: [Double], yValues: [Double]) {
         (values, times)
     }
 }
-
 
 // MARK: Subtypes
 // Swift doesn't allow protocols to have nested types.
