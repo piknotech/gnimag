@@ -706,14 +706,10 @@
 		631213782325793100C126B4 /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
-				6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */,
-				6312137E2325793100C126B4 /* SimpleDefaultTracker.swift */,
-				63F3CC1B234B36D000AA8228 /* SmoothFunction.swift */,
-				631213792325793100C126B4 /* Polynomial.swift */,
-				631213802325793100C126B4 /* Regression.swift */,
-				6312137F2325793100C126B4 /* Operators.swift */,
-				631213812325793100C126B4 /* Poly */,
+				63351A50234B4EB300E42762 /* Simple */,
+				631213812325793100C126B4 /* Polynomial */,
 				6312137A2325793100C126B4 /* Special */,
+				6312137F2325793100C126B4 /* Operators.swift */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -728,14 +724,16 @@
 			path = Special;
 			sourceTree = "<group>";
 		};
-		631213812325793100C126B4 /* Poly */ = {
+		631213812325793100C126B4 /* Polynomial */ = {
 			isa = PBXGroup;
 			children = (
+				631213792325793100C126B4 /* Polynomial.swift */,
+				631213802325793100C126B4 /* Regression.swift */,
 				631213842325793100C126B4 /* PolyTracker.swift */,
 				631213822325793100C126B4 /* LinearTracker.swift */,
 				631213832325793100C126B4 /* ConstantTracker.swift */,
 			);
-			path = Poly;
+			path = Polynomial;
 			sourceTree = "<group>";
 		};
 		631213982325798E00C126B4 /* MacTestingTools */ = {
@@ -972,6 +970,16 @@
 				6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		63351A50234B4EB300E42762 /* Simple */ = {
+			isa = PBXGroup;
+			children = (
+				6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */,
+				6312137E2325793100C126B4 /* SimpleDefaultTracker.swift */,
+				63F3CC1B234B36D000AA8228 /* SmoothFunction.swift */,
+			);
+			path = Simple;
 			sourceTree = "<group>";
 		};
 		6375953D233A539800ACA969 /* More */ = {

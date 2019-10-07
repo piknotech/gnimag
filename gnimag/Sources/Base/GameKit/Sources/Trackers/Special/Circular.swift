@@ -8,7 +8,7 @@ import MacTestingTools
 
 /// Circular provides a wrapper around trackers whose value range is in [0, 2pi).
 /// It maps those angular values to linear values (in R).
-public final class Circular<Other: PolyTracker>: Tracker {
+public final class Circular<Other: PolyTracker>: SimpleTracker {
     /// The internal tracker tracking the linearified values.
     fileprivate let tracker: Other
 
