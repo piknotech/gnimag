@@ -10,6 +10,9 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     public private(set) var times = [Time]()
     public private(set) var values = [Value]()
 
+    /// Time set ignoring duplicate time entries.
+    private var distinctTimes = Set<Double>()
+
     /// Data-point-related characteristics of the tracker.
     public let maxDataPoints: Int
     public let requiredPointsForCalculatingRegression: Int
@@ -27,11 +30,13 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     /// Add a data point to the tracker. Update the regression function with the new data point, if desired.
     public final func add(value: Value, at time: Time, updateRegression: Bool = true) {
         times.append(time)
+        distinctTimes.insert(value)
         values.append(value)
 
         // Check maximum number of data points
         if times.count > maxDataPoints {
-            times.removeFirst()
+            let first = times.removeFirst()
+            distinctTimes.remove(first)
             values.removeFirst()
         }
 
@@ -42,7 +47,7 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
 
     /// Explicitly update the regression function.
     public final func updateRegression() {
-        if Set(times).count >= requiredPointsForCalculatingRegression { // Ignores duplicate entries for the same time
+        if distinctTimes.count >= requiredPointsForCalculatingRegression {
             regression = calculateRegression()
         } else {
             regression = nil
@@ -52,6 +57,7 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     /// Clear all data points and discard the current regression function.
     public final func reset() {
         times.removeAll()
+        distinctTimes.removeAll()
         values.removeAll()
         updateRegression()
     }
@@ -59,7 +65,8 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     /// Remove the last data point of the tracker. Update the regression function.
     /// Assumes there is at least one data point.
     public final func removeLast() {
-        times.removeLast()
+        let last = times.removeLast()
+        distinctTimes.remove(last)
         values.removeLast()
         updateRegression()
     }

@@ -17,8 +17,10 @@ public protocol SimpleTrackerProtocol: Has2DDataSet {
     var times: [Time] { get }
     var values: [Value] { get }
 
-    /// Data-point-related characteristics of the tracker.
+    /// After `maxDataPoints` have been added to the tracker, oldest values should be removed to keep the number of data points at `maxDataPoints`.
     var maxDataPoints: Int { get }
+
+    // This is a required, but not necessarily sufficient condition for a regression ot exist.
     var requiredPointsForCalculatingRegression: Int { get }
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
