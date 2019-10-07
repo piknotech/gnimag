@@ -13,12 +13,12 @@ public final class LinearTracker: PolyTracker {
     /// The slope of the linear regression function.
     /// Nil if not enough data points are available.
     public var slope: Value? {
-        return regression?.a
+        return polynomial?.a
     }
     
     /// The intercept of the linear regression function.
     /// Nil if not enough data points are available.
     public var intercept: Value? {
-        return regression?.b
+        return polynomial?.b
     }
 }

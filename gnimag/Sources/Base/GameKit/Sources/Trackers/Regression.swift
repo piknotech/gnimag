@@ -9,7 +9,7 @@ import Surge
 /// (Surge: https://github.com/mattt/Surge).
 public enum Regression {
     /// Perform a polynomial regression.
-    public static func polyRegression(x: [Double], y: [Double], n: Int) -> Polynomial<Double> {
+    public static func polyRegression(x: [Double], y: [Double], n: Int) -> Polynomial {
         switch n {
         case 0:
             return Polynomial([mean(y)])
@@ -56,6 +56,6 @@ public enum Regression {
         
         // Calculate coefficient vector
         let reg = inv(mx * transpose(mx)) * mx * my
-        return reg[column: 0] // TOOD: oder row!
+        return reg[column: 0]
     }
 }

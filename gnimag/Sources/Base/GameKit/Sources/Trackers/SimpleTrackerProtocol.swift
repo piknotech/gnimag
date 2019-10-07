@@ -5,8 +5,8 @@
 
 import MacTestingTools
 
-/// SimpleTrackerProtocol defines a common interface for simple trackers.
-/// "Simple" means that these trackers track ONE simple, closed-form, smooth mathematical function like sin, exp, or a polynomial. Trackers which consist of multiple compound functions are not included here – see CompositeTracker.
+/// A simple tracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it can map this data to a specific (smooth) regression function.
+/// "Simple" means that these trackers track ONE simple, closed-form, smooth mathematical function like sin, exp, or a polynomial. Trackers which consist of multiple compound functions are not desired here – see CompositeTracker.
 public protocol SimpleTrackerProtocol: Has2DDataSet {
     typealias Time = Double
     typealias Value = Double

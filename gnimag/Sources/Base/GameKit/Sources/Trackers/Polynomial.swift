@@ -4,7 +4,7 @@
 //
 
 /// Polynomial describes a collection of coefficients representing a polynomial.
-public final class Polynomial<Value> {
+public final class Polynomial: SmoothFunction {
     /// The coefficients, beginning with the lowest one (x^0, x^1, ... x^n).
     public let coefficients: [Value]
 
@@ -18,20 +18,7 @@ public final class Polynomial<Value> {
     public init(_ coefficients: [Value]) {
         self.coefficients = coefficients
     }
-    
-    // MARK: Convenience coefficients
-    // When you know the degree of the polynomial, use these coefficients.
-    
-    public var a: Value { return coefficients[degree - 0] }
-    public var b: Value { return coefficients[degree - 1] }
-    public var c: Value { return coefficients[degree - 2] }
-    public var d: Value { return coefficients[degree - 3] }
-    public var e: Value { return coefficients[degree - 4] }
-}
 
-// MARK: Calculation
-
-extension Polynomial where Value == Double {
     /// Calculate the value at a given point.
     public func at(_ x: Value) -> Value {
         var result = Value.zero
@@ -45,7 +32,7 @@ extension Polynomial where Value == Double {
     }
     
     /// The derivative of the polynomial.
-    public var derivative: Polynomial {
+    public var derivative: SmoothFunction {
         // Trivial case
         if degree < 1 {
             return Polynomial([])
@@ -59,11 +46,17 @@ extension Polynomial where Value == Double {
         
         return Polynomial(deriv)
     }
-}
 
-// MARK: CustomStringConvertible
+    // MARK: Convenience coefficients
+    // When you know the degree of the polynomial, use these coefficients.
+    // The polynomial is represented as follows: a*x^n + b*x^(n-1) + ...
+    public var a: Value { return coefficients[degree - 0] }
+    public var b: Value { return coefficients[degree - 1] }
+    public var c: Value { return coefficients[degree - 2] }
+    public var d: Value { return coefficients[degree - 3] }
+    public var e: Value { return coefficients[degree - 4] }
 
-extension Polynomial: CustomStringConvertible {
+    // MARK: CustomStringConvertible
     /// Describe the polynomial.
     public var description: String {
         // Trivial case
@@ -75,7 +68,7 @@ extension Polynomial: CustomStringConvertible {
         
         // Round coefficients
         let coeffs = coefficients.map { (a) -> String in
-            let a = String(format: "%.3f", a as! CVarArg)
+            let a = String(format: "%.3f", a)
             return a
         }
         

@@ -15,7 +15,7 @@ public final class ConstantTracker: PolyTracker {
     }
 
     /// Convenience method to check for validity, ignoring the time component.
-    public func `is`(_ value: Value, validWith tolerance: Tolerance, fallbackWhenNoRegression: FallbackMethod = .valid) -> Bool {
+    public func `is`(_ value: Value, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod = .valid) -> Bool {
         return self.is(value, at: .zero, validWith: tolerance, fallbackWhenNoRegression: fallbackWhenNoRegression)
     }
     
@@ -28,6 +28,6 @@ public final class ConstantTracker: PolyTracker {
     /// The average value, which is the result of the regression.
     /// Nil if not enough data points are available.
     public var average: Value? {
-        return regression?.a
+        return polynomial?.a
     }
 }
