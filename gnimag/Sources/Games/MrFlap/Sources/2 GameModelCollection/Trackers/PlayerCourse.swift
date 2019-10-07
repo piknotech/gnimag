@@ -9,7 +9,7 @@ import GameKit
 final class PlayerCourse {
     /// The angle and height trackers.
     /// For angle tracking, the normal game time is used. For height tracking, the player angle is used.
-    let angle = Circular(LinearTracker())
+    let angle = AngularWrapper(LinearTracker())
     let height: JumpTracker
 
     /// The size of the player.

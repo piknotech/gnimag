@@ -20,7 +20,7 @@ final class BarCourse {
     }
 
     // The angle and the center of the hole. yCenter is only used in state "normal".
-    let angle = Circular(LinearTracker())
+    let angle = AngularWrapper(LinearTracker())
     let yCenter = LinearTracker()
 
     // The constant width and hole size.
