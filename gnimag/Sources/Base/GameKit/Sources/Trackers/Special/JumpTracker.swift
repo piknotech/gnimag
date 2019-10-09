@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+/*
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.
 public final class JumpTracker {
@@ -220,3 +221,4 @@ public final class JumpTracker {
         jumpVelocityTracker.average
     }
 }
+*/

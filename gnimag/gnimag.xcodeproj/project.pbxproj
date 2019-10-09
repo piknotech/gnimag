@@ -97,8 +97,7 @@
 		631214392326686A00C126B4 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Logging.swift */; };
 		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
 		63351A53234BA2B700E42762 /* CompositeCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A52234BA2B700E42762 /* CompositeCore.swift */; };
-		63351A56234CCF5B00E42762 /* CompositeCoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A55234CCF5B00E42762 /* CompositeCoreDelegate.swift */; };
-		63351A58234CCF7300E42762 /* CompositeCoreDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A57234CCF7300E42762 /* CompositeCoreDataSource.swift */; };
+		63351A56234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A55234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift */; };
 		63351A5A234CCF8D00E42762 /* CompositeCoreSlidingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A59234CCF8D00E42762 /* CompositeCoreSlidingWindow.swift */; };
 		63351A5D234DD11E00E42762 /* Array+DropWhile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5B234DD11700E42762 /* Array+DropWhile.swift */; };
 		63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5E234DE23E00E42762 /* SimpleDataSet.swift */; };
@@ -249,8 +248,7 @@
 		631214382326686A00C126B4 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
 		63351A52234BA2B700E42762 /* CompositeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CompositeCore.swift; path = ../CompositeCore.swift; sourceTree = "<group>"; };
-		63351A55234CCF5B00E42762 /* CompositeCoreDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeCoreDelegate.swift; sourceTree = "<group>"; };
-		63351A57234CCF7300E42762 /* CompositeCoreDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeCoreDataSource.swift; sourceTree = "<group>"; };
+		63351A55234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompositeCore+Delegate+DataSource.swift"; sourceTree = "<group>"; };
 		63351A59234CCF8D00E42762 /* CompositeCoreSlidingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeCoreSlidingWindow.swift; sourceTree = "<group>"; };
 		63351A5B234DD11700E42762 /* Array+DropWhile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+DropWhile.swift"; sourceTree = "<group>"; };
 		63351A5E234DE23E00E42762 /* SimpleDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDataSet.swift; sourceTree = "<group>"; };
@@ -1009,8 +1007,7 @@
 			isa = PBXGroup;
 			children = (
 				63351A52234BA2B700E42762 /* CompositeCore.swift */,
-				63351A55234CCF5B00E42762 /* CompositeCoreDelegate.swift */,
-				63351A57234CCF7300E42762 /* CompositeCoreDataSource.swift */,
+				63351A55234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift */,
 				63351A59234CCF8D00E42762 /* CompositeCoreSlidingWindow.swift */,
 			);
 			path = Core;
@@ -1526,10 +1523,9 @@
 				6312138A2325793C00C126B4 /* MedianTracker.swift in Sources */,
 				63351A5A234CCF8D00E42762 /* CompositeCoreSlidingWindow.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
-				63351A58234CCF7300E42762 /* CompositeCoreDataSource.swift in Sources */,
 				6312138C2325793C00C126B4 /* SimpleDefaultTracker.swift in Sources */,
 				6312138B2325793C00C126B4 /* AngularWrapper.swift in Sources */,
-				63351A56234CCF5B00E42762 /* CompositeCoreDelegate.swift in Sources */,
+				63351A56234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift in Sources */,
 				631213882325793C00C126B4 /* Polynomial.swift in Sources */,
 				63F3CC1C234B36D000AA8228 /* SmoothFunction.swift in Sources */,
 				6312138F2325794600C126B4 /* LinearTracker.swift in Sources */,
