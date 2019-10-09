@@ -7,7 +7,7 @@ import MacTestingTools
 
 /// A simple tracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it can map this data to a specific (smooth) regression function.
 /// "Simple" means that these trackers track ONE simple, closed-form, smooth mathematical function like sin, exp, or a polynomial. Trackers which consist of multiple compound functions are not desired here – see CompositeTracker.
-public protocol SimpleTrackerProtocol: Has2DDataSet {
+public protocol SimpleTrackerProtocol: HasScatterDataSet {
     typealias Time = Double
     typealias Value = Double
 
@@ -44,12 +44,12 @@ public protocol SimpleTrackerProtocol: Has2DDataSet {
     func `is`(_ value: Value, at time: Time, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod) -> Bool
 }
 
-// MARK: Has2DDataSet
+// MARK: HasScatterDataSet
 
 public extension SimpleTrackerProtocol {
-    /// Conformance to Has2DDataSet.
-    func yieldDataSet() -> (xValues: [Double], yValues: [Double]) {
-        (values, times)
+    /// Return the raw data from the tracker.
+    var dataSet: [ScatterDataPoint] {
+        zip(times, values).map(ScatterDataPoint.init(x:y:))
     }
 }
 
