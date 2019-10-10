@@ -13,13 +13,13 @@ public protocol CompositeCoreDelegate {
 }
 
 public protocol CompositeCoreDataSource {
-    /// Called each time when testing whether a data point possibly matches the next partial function.
-    /// This partial function should begin at the given split position.
-    func guessForNextPartialFunction(whenSplittingSegmentsAt splitXPos: Double) -> SmoothFunction
+    /// Make a guess for the next partial function which begins at the given split position.
+    /// If you don't have enough information for making the guess, return nil.
+    func guessForNextPartialFunction(whenSplittingSegmentsAt splitXPos: Double) -> SmoothFunction?
 
     /// Called once per segment to create an appropriate empty tracker for the next partial function.
     /// This is called before `advancedToNextSegmentAndFinalizedRegressionFunctionOfLastSegment` is called on the delegate.
-    func trackerForNextPartialFunction() -> SmoothFunction
+    func trackerForNextSegment() -> SimpleTrackerProtocol
 }
 
 // TODO: what about segments with too little data points?! Is `advancedToNextSegmentAndFinalizedRegressionFunctionOfLastSegment` called?

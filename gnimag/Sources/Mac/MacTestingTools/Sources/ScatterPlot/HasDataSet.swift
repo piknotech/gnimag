@@ -14,15 +14,17 @@ public protocol HasScatterDataSet {
 
 /// A data point for a scatter plot.
 public struct ScatterDataPoint {
-    /// DataPoints can be distinguished by giving them an abstract color, either odd or even.
+    /// DataPoints can be distinguished by giving them an abstract color.
     public enum Color {
         case odd
         case even
+        case invalid
 
         internal var color: NSColor {
             switch self {
             case .odd: return .red
             case .even: return .black
+            case .invalid: return .yellow
             }
         }
     }

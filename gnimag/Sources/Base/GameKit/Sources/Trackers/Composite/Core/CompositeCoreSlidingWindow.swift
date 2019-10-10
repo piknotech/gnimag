@@ -62,7 +62,7 @@ internal class CompositeCoreSlidingWindow {
             // Remove all up to the first "current" point; then ensure that the window is, again, starting with a "next" point
             dataPoints.dropWhile { $0.matching == .next }
             let flushed = dataPoints.dropWhile { $0.matching == .current }
-            delegate?.flushedDataPointsAvailableForCurrentTracker(dataPoints: flushed.map { ($0.x, $0.y ) })
+            delegate?.flushedDataPointsAvailableForCurrentTracker(dataPoints: flushed.map { ($0.x, $0.y) })
         }
     }
 }
