@@ -58,7 +58,7 @@
 		631213B123257A2F00C126B4 /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A523257A2F00C126B4 /* Measurement.swift */; };
 		631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */; };
 		631213B323257A2F00C126B4 /* ScatterPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A823257A2F00C126B4 /* ScatterPlot.swift */; };
-		631213B423257A2F00C126B4 /* HasDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A923257A2F00C126B4 /* HasDataSet.swift */; };
+		631213B423257A2F00C126B4 /* HasScatterDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A923257A2F00C126B4 /* HasScatterDataSet.swift */; };
 		631213B523257A2F00C126B4 /* CGImage+WriteToFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */; };
 		631213B623257A2F00C126B4 /* ImageListCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AC23257A2F00C126B4 /* ImageListCreator.swift */; };
 		631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AD23257A2F00C126B4 /* ImageListProvider.swift */; };
@@ -210,7 +210,7 @@
 		631213A523257A2F00C126B4 /* Measurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
 		631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvertibleToCGImage.swift; sourceTree = "<group>"; };
 		631213A823257A2F00C126B4 /* ScatterPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScatterPlot.swift; sourceTree = "<group>"; };
-		631213A923257A2F00C126B4 /* HasDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HasDataSet.swift; sourceTree = "<group>"; };
+		631213A923257A2F00C126B4 /* HasScatterDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HasScatterDataSet.swift; sourceTree = "<group>"; };
 		631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImage+WriteToFile.swift"; sourceTree = "<group>"; };
 		631213AC23257A2F00C126B4 /* ImageListCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageListCreator.swift; sourceTree = "<group>"; };
 		631213AD23257A2F00C126B4 /* ImageListProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageListProvider.swift; sourceTree = "<group>"; };
@@ -801,7 +801,7 @@
 		631213A723257A2F00C126B4 /* ScatterPlot */ = {
 			isa = PBXGroup;
 			children = (
-				631213A923257A2F00C126B4 /* HasDataSet.swift */,
+				631213A923257A2F00C126B4 /* HasScatterDataSet.swift */,
 				63351A5E234DE23E00E42762 /* SimpleDataSet.swift */,
 				631213A823257A2F00C126B4 /* ScatterPlot.swift */,
 			);
@@ -1547,7 +1547,7 @@
 				634AD01B2327E78C00D87BAB /* Drawing Shapes+Lines.swift in Sources */,
 				631213AF23257A2F00C126B4 /* Color+Conversion.swift in Sources */,
 				631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */,
-				631213B423257A2F00C126B4 /* HasDataSet.swift in Sources */,
+				631213B423257A2F00C126B4 /* HasScatterDataSet.swift in Sources */,
 				631213B123257A2F00C126B4 /* Measurement.swift in Sources */,
 				634AD0192327D75200D87BAB /* Strokable+Fillable.swift in Sources */,
 				631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */,

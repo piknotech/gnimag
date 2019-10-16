@@ -12,7 +12,7 @@ public class SimpleDataSet: HasScatterDataSet {
     }
 
     /// Add a point to the data set.
-    public func add(time: Double, value: Double, color: ScatterDataPoint.Color) {
+    public func add(value: Double, time: Double, color: ScatterDataPoint.Color) {
         dataSet.append(ScatterDataPoint(x: time, y: value, color: color))
     }
 }
