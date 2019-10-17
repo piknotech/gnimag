@@ -68,10 +68,15 @@ public final class JumpTracker: HasScatterDataSet {
         core = CompositeCore(tolerance: absoluteJumpTolerance, decisionCharacteristics: characteristics, delegate: self, dataSource: self)
     }
 
+    /// Check if a point is valid to be added to the core.
+    /// Call this before actually calling `add(value:at:)`.
+    public func integrityCheck(with value: Value, at time: Time) -> Bool {
+        core.integrityCheck(with: value, at: time)
+    }
+
     /// Add a data point to the tracker if it is valid.
-    /// Return true iff the value is valid and it was added to the tracker.
     /// Data points MUST be added in time-monotonically order, meaning time is either increasing or decreasing permanently.
-    public func add(value: Value, at time: Time) -> Bool {
+    public func add(value: Value, at time: Time) {
         core.add(value: value, at: time)
     }
 }

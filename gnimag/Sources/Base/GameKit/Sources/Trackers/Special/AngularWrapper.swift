@@ -48,7 +48,7 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
 
     /// Check if a value will be valid (compared to the expected value) at a given time, using the existing regression.
     /// If there is no regression, use the specified fallback.
-    public func `is`(_ value: Value, at time: Time, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod) -> Bool {
+    public func `is`(_ value: Value, at time: Time, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod = .valid) -> Bool {
         let linearValue = linearify(value, at: time)
         return tracker.is(linearValue, at: time, validWith: tolerance, fallbackWhenNoRegression: fallbackWhenNoRegression)
     }

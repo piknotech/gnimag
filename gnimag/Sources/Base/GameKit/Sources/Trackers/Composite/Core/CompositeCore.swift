@@ -94,29 +94,31 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
 
     // MARK: Public Methods
 
+    /// Check if a point is valid to be added to the core.
+    /// Call this before actually calling `add(value:at:)`.
+    public func integrityCheck(with value: Value, at time: Time) -> Bool {
+        if !monotonicityChecker.verify(value: time) { return false }
+
+        if currentSegmentMatches(value: value, at: time) { return true }
+        if nextSegmentMatches(value: value, at: time) { return true }
+
+        // Value is invalid – still add to `allDataPoints` for plotting
+        allDataPoints.add(value: value, time: time, color: .invalid)
+        return false
+    }
+
     /// Add a data point to the tracker if it is valid.
-    /// Return true iff the value is valid and it was added to the tracker.
-    /// Data points MUST be added in time-monotonically order, meaning time is either increasing or decreasing permanently.
-    public func add(value: Value, at time: Time) -> Bool {
-        if !monotonicityChecker.verify(value: time) {
-            exit(withMessage: "Times added to CompositeCore must be monotone! (failure at time: \(time), value: \(value)")
-        }
-        
+    /// You MUST call `integrityCheck` before calling this method.
+    public func add(value: Value, at time: Time) {
         // Add to current segment, if matching
         if currentSegmentMatches(value: value, at: time) {
             window.addDataPoint(value: value, time: time, matching: .current)
-            return true
         }
 
         // Add to next segment, if matching
-        if nextSegmentMatches(value: value, at: time) {
+        else if nextSegmentMatches(value: value, at: time) {
             window.addDataPoint(value: value, time: time, matching: .next)
-            return true
         }
-
-        // Value was invalid – still add to `allDataPoints` for plotting
-        allDataPoints.add(value: value, time: time, color: .invalid)
-        return false
     }
 
     // MARK: Private Methods
@@ -172,7 +174,7 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
 
     /// Create enclosing (min & max) guesses from the given parameters:
     ///  - functions: The functions that enclose the target function. This can either be the target function itself, or guesses for it.
-    ///  - timeslots: The timeslots for each of which a guess should be made. The resulting function will be compared by their value at the greatest time.
+    ///  - timeslots: The timeslots for each of which a guess should be made. The resulting function will be compared by their value at the most recent time.
     ///  - mostRecentTime: The most recent time from `timeslots`. This can either be the smallest or largest time, depending on the direction time is running in.
     private func createGuesses(forFunctions functions: [Function], andTimeslots timeslots: [Time], mostRecentTime: Time) -> Guesses? {
         if functions.isEmpty || timeslots.isEmpty { return nil }
