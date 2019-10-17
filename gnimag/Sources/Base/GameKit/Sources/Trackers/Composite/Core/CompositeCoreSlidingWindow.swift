@@ -22,9 +22,6 @@ internal class CompositeCoreSlidingWindow {
     /// The stack of data points. The first entry is the oldest one, new entries will be pushed to the back.
     private var dataPoints = [DataPoint]()
 
-    /// States whether the window is empty.
-    var isEmpty: Bool { dataPoints.isEmpty }
-
     /// The data point that initiated the decision action, i.e. the first data point in the window.
     var decisionInitiator: CompositeCoreSlidingWindowDelegate.DataPoint? {
         dataPoints.first.map { ($0.value, $0.time) }
@@ -39,7 +36,7 @@ internal class CompositeCoreSlidingWindow {
     }
 
     /// Add a data point to the window.
-    /// The incoming data points must be sorted monotonically by x value.
+    /// The incoming data points MUST be sorted monotonically by x value.
     /// If the *first* data point is from the current segment, it is immediately flushed – a decision action will only be initiated when the first data point is from the *next* segment.
     func addDataPoint(value: Double, time: Double, matching segment: Segment) {
         if dataPoints.isEmpty && segment == .current {

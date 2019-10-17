@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import MacTestingTools
 
 /// CompositeCore provides the basic required functionalities for a composite tracker; that is, a tracker which tracks a piecewise defined funtion.
@@ -38,8 +39,10 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
     /// - Checking if a point is valid in the current segment, when the current segment has no regression yet
     /// - Checking if a point is valid in the next segment (as the next segment cannot have a regression before it is created)
     public struct Guesses {
-        let min: SmoothFunction
+        let min: SmoothFunction // Attention: min & max can also be flipped
         let max: SmoothFunction
+
+        var all: [SmoothFunction] { [min, max] }
     }
 
     // MARK: Properties
@@ -96,7 +99,6 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
         }
 
         // Add to next segment, if matching
-        updateNextSegmentGuesses()
         if nextSegmentMatches(value: value, at: time) {
             window.addDataPoint(value: value, time: time, matching: .next)
             return true
@@ -126,22 +128,64 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
     }
 
     /// Check if the data point matches the predicted next segment (using `mostRecentGuessesForNextSegment`).
-    /// Call `updateNextSegmentGuesses` before calling this method.
+    /// NOTE: This method calls `updateNextSegmentGuesses` to refresh the guesses before checking for a match.
     private func nextSegmentMatches(value: Value, at time: Time) -> Bool {
+        updateNextSegmentGuesses(forNextDataPoint: (time: time, value: value))
         guard let guesses = mostRecentGuessesForNextSegment else { return false }
         return self.value(value, at: time, matchesGuesses: guesses)
     }
 
     /// Update the guesses for the next segment.
     /// These will be used to check if a point matches the next segment, and as guesses for when the next segment is actually created.
-    private func updateNextSegmentGuesses() {
-        ...
+    private func updateNextSegmentGuesses(forNextDataPoint nextDataPoint: (time: Time, value: Value)) {
+        mostRecentGuessesForNextSegment = nil
+
+        // Determine the timeslot in which the next segment could have started.
+        // If there is currently a decision running, the timeslot is independent of the current data point; else, it is between the last and the current data point.
+        guard let timeA = currentSegment.tracker.times.last else { return }
+        let timeB = window.decisionInitiator?.time ?? nextDataPoint.time // timeB is more recent than timeA
+
+        // Use either the regression or the guesses of the current segment
+        var functions: [SmoothFunction]
+
+        if let regression = currentSegment.tracker.regression {
+            functions = [regression]
+        } else if let guesses = currentSegment.guesses {
+            functions = guesses.all
+        } else {
+            return // No regression and no guesses – can only happen for the very first tracker
+        }
+
+        mostRecentGuessesForNextSegment =
+            createGuesses(forFunctions: functions, andTimeslots: [timeA, timeB], mostRecentTime: timeB)
+    }
+
+    /// Create enclosing (min & max) guesses from the given parameters:
+    ///  - functions: The functions that enclose the target function. This can either be the target function itself, or guesses for it.
+    ///  - timeslots: The timeslots for each of which a guess should be made. The resulting function will be compared by their value at the greatest time.
+    ///  - mostRecentTime: The most recent time from `timeslots`. This can either be the smallest or largest time, depending on the direction time is running in.
+    private func createGuesses(forFunctions functions: [SmoothFunction], andTimeslots timeslots: [Time], mostRecentTime: Time) -> Guesses? {
+        if functions.isEmpty || timeslots.isEmpty { return nil }
+
+        // Create a guess for each function/time combination
+        let guesses = (functions × timeslots).compactMap { function, time in
+            dataSource.guessForNextPartialFunction(whenSplittingSegmentsAtTime: time, value: function.at(time))
+        }
+
+        if guesses.count < 2 { return nil }
+
+        // Sort by comparing the value at the most recent time
+        let comparator: (SmoothFunction, SmoothFunction) -> Bool = { guess1, guess2 in
+            guess1.at(mostRecentTime) < guess2.at(mostRecentTime)
+        }
+
+        return Guesses(min: guesses.min(by: comparator)!, max: guesses.max(by: comparator)!)
     }
 
     /// Check if the value is either inside the two functions, or is near enough to one of the two functions (using CompositeCore's tolerance).
     private func value(_ value: Value, at time: Time, matchesGuesses guesses: Guesses) -> Bool {
-        let value1 = guesses.min.at(time), value2 = guesses.max.at(time)
-        let min = Swift.min(value1, value2), max = Swift.max(value1, value2)
+        let values = guesses.all.map { $0.at(time) }
+        let min = values.min()!, max = values.max()!
 
         return (min <= value && value <= max) || abs(min - value) <= tolerance || abs(max - value) <= tolerance
     }
