@@ -18,10 +18,12 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
     /// Chracteristics which describe how and when to make a segment advancement decision.
     public struct NextSegmentDecisionCharacteristics {
         /// The number of points which must match the next segment.
+        /// Must be positive.
         /// When this is 1, `maxIntermediatePointsMatchingCurrentSegment` is irrelevant, as there are no intermediate points.
         let pointsMatchingNextSegment: Int
 
         /// During the interval in which `pointsMatchingNextSegment` points matching the next segment are collected, at most `maxIntermediatePointsMatchingCurrentSegment` are allowed to match the current, old segment.
+        /// Can be zero.
         /// If more points match the current segment, the decision action is (partially) cancelled.
         let maxIntermediatePointsMatchingCurrentSegment: Int
     }
@@ -214,6 +216,7 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
         }
         
         currentSegment.tracker.updateRegression()
+        delegate.currentSegmentWasUpdated(segment: currentSegment)
     }
 
     /// Actually advance to the next tracker.

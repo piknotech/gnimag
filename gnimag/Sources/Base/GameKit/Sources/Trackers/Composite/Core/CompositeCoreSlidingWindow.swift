@@ -32,6 +32,10 @@ internal class CompositeCoreSlidingWindow {
 
     /// Default initializer.
     init(characteristics: CompositeCore.NextSegmentDecisionCharacteristics) {
+        if characteristics.pointsMatchingNextSegment < 1 || characteristics.maxIntermediatePointsMatchingCurrentSegment < 0 {
+            exit(withMessage: "Characteristics invalid!")
+        }
+
         self.characteristics = characteristics
     }
 

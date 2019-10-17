@@ -4,7 +4,7 @@
 //
 
 /// A helper tool which checks whether an incoming value stream is (strictly) monotone.
-public class MonotonicityChecker<T: Comparable> {
+public final class MonotonicityChecker<T: Comparable> {
     public enum Direction {
         /// The sequence must be monotonically increasing.
         case increasing
@@ -53,6 +53,7 @@ public class MonotonicityChecker<T: Comparable> {
             if value == lastValue { return !strict }
             if value < lastValue { direction = .decreasing }
             if value > lastValue { direction = .increasing }
+            lastValue = value
             return true
         }
     }

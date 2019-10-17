@@ -4,7 +4,7 @@
 //
 
 /// A class which just allows easily storing data points, equipped with colors, to be drawn by ScatterPlot.
-public class SimpleDataSet: HasScatterDataSet {
+public final class SimpleDataSet: HasScatterDataSet {
     public private(set) var dataSet = [ScatterDataPoint]()
 
     /// Default initializer, creating an empty data set.

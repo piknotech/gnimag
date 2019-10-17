@@ -11,6 +11,7 @@ public protocol CompositeCoreDelegate: class {
     /// Called when the current segment is being finalized and focus moves to the next segment.
     /// The segment does not necessarily have a regression function, but it has at least a regression function or guesses.
     /// Called exactly once per segment.
+    /// Important: `lastSegment` does not contain any new information because the last call to `currentSegmentWasUpdated` did already have this segment with the exact same data points and regression as a parameter.
     func advancedToNextSegmentAndFinalizedLastSegment(lastSegment: CompositeCore.SegmentInfo)
 }
 

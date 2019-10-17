@@ -105,6 +105,7 @@
 		634AD0172327C8D000D87BAB /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0162327C8D000D87BAB /* Ray.swift */; };
 		634AD0192327D75200D87BAB /* Strokable+Fillable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0182327D75200D87BAB /* Strokable+Fillable.swift */; };
 		634AD01B2327E78C00D87BAB /* Drawing Shapes+Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */; };
+		634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC02358749F00AE9C91 /* PolynomialSolvers.swift */; };
 		634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */; };
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
@@ -259,6 +260,7 @@
 		634AD0162327C8D000D87BAB /* Ray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
 		634AD0182327D75200D87BAB /* Strokable+Fillable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strokable+Fillable.swift"; sourceTree = "<group>"; };
 		634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawing Shapes+Lines.swift"; sourceTree = "<group>"; };
+		634E4FC02358749F00AE9C91 /* PolynomialSolvers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolynomialSolvers.swift; sourceTree = "<group>"; };
 		634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polynomial+Arithmetic.swift"; sourceTree = "<group>"; };
 		634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
 		6364934423270ABA00FEF664 /* SimpleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRange.swift; sourceTree = "<group>"; };
@@ -744,7 +746,7 @@
 		631213812325793100C126B4 /* Polynomial */ = {
 			isa = PBXGroup;
 			children = (
-				631213792325793100C126B4 /* Polynomial.swift */,
+				634E4FBF2358749000AE9C91 /* Math */,
 				631213802325793100C126B4 /* Regression.swift */,
 				631213842325793100C126B4 /* PolyTracker.swift */,
 				631213822325793100C126B4 /* LinearTracker.swift */,
@@ -1025,6 +1027,7 @@
 			isa = PBXGroup;
 			children = (
 				631213792325793100C126B4 /* Polynomial.swift */,
+				634E4FC02358749F00AE9C91 /* PolynomialSolvers.swift */,
 				634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */,
 			);
 			path = Math;
@@ -1553,6 +1556,7 @@
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
 				6312138D2325793C00C126B4 /* Operators.swift in Sources */,
 				63351A53234BA2B700E42762 /* CompositeCore.swift in Sources */,
+				634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */,
 				6312138E2325793C00C126B4 /* Regression.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
