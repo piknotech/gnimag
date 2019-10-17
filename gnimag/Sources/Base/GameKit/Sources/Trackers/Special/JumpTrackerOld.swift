@@ -3,10 +3,9 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-/*
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.
-public final class JumpTracker {
+public final class JumpTrackerOld {
     public typealias Value = Double
     public typealias Time = Double
     
@@ -40,11 +39,11 @@ public final class JumpTracker {
     // MARK: - Jump tracking
     
     /// The parabola of the last jump.
-    private var lastParabola: Polynomial<Double>?
+    private var lastParabola: Polynomial?
     
     /// The parabola of the current jump.
-    private var currentParabola: Polynomial<Double>? {
-        return tracker.regression
+    private var currentParabola: Polynomial? {
+        return tracker.regression as? Polynomial
     }
     
     /// The last updated time value.
@@ -122,7 +121,7 @@ public final class JumpTracker {
                 // Reset and prepare for next jump
                 lastParabola = currentParabola
                 currentJumpStartBounds = (lastTime, time)
-                tracker.clear()
+                tracker.reset()
                 tracker.add(value: value, at: time)
             }
         }
@@ -221,4 +220,3 @@ public final class JumpTracker {
         jumpVelocityTracker.average
     }
 }
-*/
