@@ -112,6 +112,7 @@
 		6375953F233A53D900ACA969 /* ShapeErasedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953E233A53D900ACA969 /* ShapeErasedImage.swift */; };
 		63759541233A63CC00ACA969 /* ShapeErasureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63759540233A63CB00ACA969 /* ShapeErasureType.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
+		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
 		63F3CC1C234B36D000AA8228 /* SmoothFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* SmoothFunction.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
@@ -248,7 +249,7 @@
 		63121411232587E300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631214382326686A00C126B4 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
-		63351A52234BA2B700E42762 /* CompositeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CompositeCore.swift; path = ../CompositeCore.swift; sourceTree = "<group>"; };
+		63351A52234BA2B700E42762 /* CompositeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeCore.swift; sourceTree = "<group>"; };
 		63351A55234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompositeCore+Delegate+DataSource.swift"; sourceTree = "<group>"; };
 		63351A59234CCF8D00E42762 /* CompositeCoreSlidingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeCoreSlidingWindow.swift; sourceTree = "<group>"; };
 		63351A5B234DD11700E42762 /* Array+DropWhile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+DropWhile.swift"; sourceTree = "<group>"; };
@@ -264,6 +265,7 @@
 		6375953E233A53D900ACA969 /* ShapeErasedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeErasedImage.swift; sourceTree = "<group>"; };
 		63759540233A63CB00ACA969 /* ShapeErasureType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeErasureType.swift; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CartesianProduct.swift"; sourceTree = "<group>"; };
+		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* SmoothFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothFunction.swift; sourceTree = "<group>"; };
 		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
@@ -1012,6 +1014,7 @@
 				63351A52234BA2B700E42762 /* CompositeCore.swift */,
 				63351A55234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift */,
 				63351A59234CCF8D00E42762 /* CompositeCoreSlidingWindow.swift */,
+				63B64F3523586642005A5E82 /* MonotonicityChecker.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1531,6 +1534,7 @@
 				6312138B2325793C00C126B4 /* AngularWrapper.swift in Sources */,
 				63351A56234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift in Sources */,
 				631213882325793C00C126B4 /* Polynomial.swift in Sources */,
+				63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */,
 				63F3CC1C234B36D000AA8228 /* SmoothFunction.swift in Sources */,
 				6312138F2325794600C126B4 /* LinearTracker.swift in Sources */,
 				631213912325794600C126B4 /* PolyTracker.swift in Sources */,

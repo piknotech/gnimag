@@ -70,6 +70,8 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
     /// A dataset with all data points (including invalid ones which have been checked in `is(value:validAt:)`, for plotting with ScatterPlot.
     public private(set) var allDataPoints = SimpleDataSet()
 
+    private let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
+
     private var currentColorForPlotting: ScatterDataPoint.Color {
         currentSegmentIndex.isMultiple(of: 2) ? .even : .odd
     }
@@ -92,6 +94,10 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
     /// Return true iff the value is valid and it was added to the tracker.
     /// Data points MUST be added in time-monotonically order, meaning time is either increasing or decreasing permanently.
     public func add(value: Value, at time: Time) -> Bool {
+        if !monotonicityChecker.verify(value: time) {
+            exit(withMessage: "Times added to CompositeCore must be monotone! (failure at time: \(time), value: \(value)")
+        }
+        
         // Add to current segment, if matching
         if currentSegmentMatches(value: value, at: time) {
             window.addDataPoint(value: value, time: time, matching: .current)
