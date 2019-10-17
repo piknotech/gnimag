@@ -5,8 +5,8 @@
 
 import MacTestingTools
 
-/// A simple tracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it can map this data to a specific (smooth) regression function.
-/// "Simple" means that these trackers track ONE simple, closed-form, smooth mathematical function like sin, exp, or a polynomial. Trackers which consist of multiple compound functions are not desired here – see CompositeTracker.
+/// A simple tracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it can map this data to a specific regression function.
+/// "Simple" means that these trackers track ONE simple, closed-form, (probably continuous) mathematical function like sin, exp, or a polynomial. Trackers which consist of multiple compound functions are not desired here – see CompositeTracker.
 public protocol SimpleTrackerProtocol: HasScatterDataSet {
     typealias Time = Double
     typealias Value = Double
@@ -24,7 +24,7 @@ public protocol SimpleTrackerProtocol: HasScatterDataSet {
     var requiredPointsForCalculatingRegression: Int { get }
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
-    var regression: SmoothFunction? { get }
+    var regression: Function? { get }
 
     /// Add a data point to the tracker. Update the regression function with the new data point, if desired.
     func add(value: Value, at time: Time, updateRegression: Bool)

@@ -24,7 +24,7 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     }
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
-    public private(set) var regression: SmoothFunction?
+    public private(set) var regression: Function?
 
     // MARK: Method Implementations
     /// Add a data point to the tracker. Update the regression function with the new data point, if desired.
@@ -101,7 +101,7 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     // MARK: Abstract Methods
     /// Override this to calculate the regression for the current time/value-pairs.
     /// This method is only called if the number of data points is at least `requiredPointsForCalculatingRegression`.
-    open func calculateRegression() -> SmoothFunction? {
+    open func calculateRegression() -> Function? {
         fatalError("This is an abstract method.")
     }
 }

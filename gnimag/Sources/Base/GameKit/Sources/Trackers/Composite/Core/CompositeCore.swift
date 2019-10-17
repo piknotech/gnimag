@@ -41,10 +41,10 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
     /// - Checking if a point is valid in the current segment, when the current segment has no regression yet
     /// - Checking if a point is valid in the next segment (as the next segment cannot have a regression before it is created)
     public struct Guesses {
-        let min: SmoothFunction // Attention: min & max can also be flipped
-        let max: SmoothFunction
+        let min: Function // Attention: min & max can also be flipped
+        let max: Function
 
-        var all: [SmoothFunction] { [min, max] }
+        var all: [Function] { [min, max] }
     }
 
     // MARK: Properties
@@ -154,7 +154,7 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
         let timeB = window.decisionInitiator?.time ?? nextDataPoint.time // timeB is more recent than timeA
 
         // Use either the regression or the guesses of the current segment
-        var functions: [SmoothFunction]
+        var functions: [Function]
 
         if let regression = currentSegment.tracker.regression {
             functions = [regression]
@@ -172,7 +172,7 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
     ///  - functions: The functions that enclose the target function. This can either be the target function itself, or guesses for it.
     ///  - timeslots: The timeslots for each of which a guess should be made. The resulting function will be compared by their value at the greatest time.
     ///  - mostRecentTime: The most recent time from `timeslots`. This can either be the smallest or largest time, depending on the direction time is running in.
-    private func createGuesses(forFunctions functions: [SmoothFunction], andTimeslots timeslots: [Time], mostRecentTime: Time) -> Guesses? {
+    private func createGuesses(forFunctions functions: [Function], andTimeslots timeslots: [Time], mostRecentTime: Time) -> Guesses? {
         if functions.isEmpty || timeslots.isEmpty { return nil }
 
         // Create a guess for each function/time combination
@@ -183,7 +183,7 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
         if guesses.count < 2 { return nil }
 
         // Sort by comparing the value at the most recent time
-        let comparator: (SmoothFunction, SmoothFunction) -> Bool = { guess1, guess2 in
+        let comparator: (Function, Function) -> Bool = { guess1, guess2 in
             guess1.at(mostRecentTime) < guess2.at(mostRecentTime)
         }
 

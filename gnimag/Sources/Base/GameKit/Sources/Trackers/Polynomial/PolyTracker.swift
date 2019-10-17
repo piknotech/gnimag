@@ -20,7 +20,7 @@ public class PolyTracker: SimpleDefaultTracker {
     }
 
     /// Calculate the polynomial regression.
-    open override func calculateRegression() -> SmoothFunction? {
+    open override func calculateRegression() -> Function? {
         Regression.polyRegression(x: times, y: values, n: degree)
     }
 }

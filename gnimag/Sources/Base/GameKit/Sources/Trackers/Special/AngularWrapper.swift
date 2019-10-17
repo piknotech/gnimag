@@ -22,7 +22,7 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
     public var values: [Value] { tracker.values }
     public var maxDataPoints: Int { tracker.maxDataPoints }
     public var requiredPointsForCalculatingRegression: Int { tracker.requiredPointsForCalculatingRegression }
-    public var regression: SmoothFunction? { tracker.regression }
+    public var regression: Function? { tracker.regression }
 
     public func updateRegression() { tracker.updateRegression() }
     public func reset() { tracker.reset() }

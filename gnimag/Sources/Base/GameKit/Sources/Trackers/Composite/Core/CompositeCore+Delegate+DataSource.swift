@@ -18,7 +18,7 @@ public protocol CompositeCoreDelegate: class {
 public protocol CompositeCoreDataSource: class {
     /// Make a guess for the next partial function which begins at the given split position.
     /// If you don't have enough information for making the guess, return nil.
-    func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> SmoothFunction?
+    func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function?
 
     /// Called exactly once per segment to create an appropriate empty tracker for the next partial function.
     /// This will be called **after** `advancedToNextSegmentAndFinalizedLastSegment` is called on the delegate.

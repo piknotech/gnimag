@@ -144,7 +144,7 @@ extension JumpTracker: CompositeCoreDataSource {
     }
 
     /// Make a guess for a jump beginning at `splitXPos`.
-    public func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> SmoothFunction? {
+    public func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function? {
         guard let gravity = gravity, let jumpVelocity = jumpVelocity else { return nil }
 
         // Solve f(time) = value and f'(time) = jumpVelocity

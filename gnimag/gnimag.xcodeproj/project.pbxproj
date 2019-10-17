@@ -116,7 +116,7 @@
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
-		63F3CC1C234B36D000AA8228 /* SmoothFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* SmoothFunction.swift */; };
+		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
 /* End PBXBuildFile section */
@@ -272,7 +272,7 @@
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CartesianProduct.swift"; sourceTree = "<group>"; };
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
-		63F3CC1B234B36D000AA8228 /* SmoothFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothFunction.swift; sourceTree = "<group>"; };
+		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
 		9A8B5AE54AE4C6A103DA27FF /* Surge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Surge.framework; path = Dependencies/macOS/Surge.framework; sourceTree = "<group>"; };
@@ -1001,7 +1001,7 @@
 			children = (
 				6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */,
 				6312137E2325793100C126B4 /* SimpleDefaultTracker.swift */,
-				63F3CC1B234B36D000AA8228 /* SmoothFunction.swift */,
+				63F3CC1B234B36D000AA8228 /* Function.swift */,
 			);
 			path = Simple;
 			sourceTree = "<group>";
@@ -1554,7 +1554,7 @@
 				63351A56234CCF5B00E42762 /* CompositeCore+Delegate+DataSource.swift in Sources */,
 				631213882325793C00C126B4 /* Polynomial.swift in Sources */,
 				63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */,
-				63F3CC1C234B36D000AA8228 /* SmoothFunction.swift in Sources */,
+				63F3CC1C234B36D000AA8228 /* Function.swift in Sources */,
 				6312138F2325794600C126B4 /* LinearTracker.swift in Sources */,
 				631213912325794600C126B4 /* PolyTracker.swift in Sources */,
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
