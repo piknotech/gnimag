@@ -88,6 +88,8 @@ public final class CompositeCore: CompositeCoreSlidingWindowDelegate {
         // Create initial tracker
         let tracker = dataSource.trackerForNextSegment()
         currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil)
+
+        window.delegate = self
     }
 
     // MARK: Public Methods

@@ -30,7 +30,7 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     /// Add a data point to the tracker. Update the regression function with the new data point, if desired.
     public final func add(value: Value, at time: Time, updateRegression: Bool = true) {
         times.append(time)
-        distinctTimes.insert(value)
+        distinctTimes.insert(time)
         values.append(value)
 
         // Check maximum number of data points
