@@ -3,10 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import Common
-import MacTestingTools
-
-/// PolyTracker is a simple tracker providing a polynomial regression function
+/// PolyTracker is a simple tracker providing a polynomial regression function.
 public class PolyTracker: SimpleDefaultTracker {
     /// Default initializer.
     public init(maxDataPoints: Int = 500, degree: Int, tolerancePoints: Int = 1) {

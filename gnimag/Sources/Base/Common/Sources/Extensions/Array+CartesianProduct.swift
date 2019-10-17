@@ -13,8 +13,3 @@ public func ×<S, T>(lhs: [S], rhs: [T]) -> [(S, T)] {
         }
     }
 }
-
-public func a() {
-    let b = [1,2] × [3,4]
-    print(b)
-}
