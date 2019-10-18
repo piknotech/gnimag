@@ -87,28 +87,27 @@ extension JumpTracker: CompositeCoreDelegate {
     /// A new regression for the current jump may be available.
     /// Update preliminary values for gravity and jump velocity.
     public func currentSegmentWasUpdated(segment: CompositeCore.SegmentInfo) {
-        print("update: \(segment)")
-        if let jump = segment.tracker.regression as? Polynomial {
-            // Remove old preliminary values before adding new preliminary values
-            if usingPreliminaryValues {
-                gravityTracker.removeLast()
-                jumpVelocityTracker.removeLast()
-            }
+        guard let jump = segment.tracker.regression as? Polynomial else { return }
 
-            // Calculate gravity and jump velocity and jump start
-            let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump, currentTrackerStartTime: segment.tracker.times.first!)
-            let gravity = -2 * jump.a
-            let jumpVelocity = jump.derivative.at(jumpStart)
+        // Remove old preliminary values before adding new preliminary values
+        if usingPreliminaryValues {
+            gravityTracker.removeLast()
+            jumpVelocityTracker.removeLast()
+        }
 
-            // Add preliminary values to trackers if they are validß
-            if gravityTracker.is(gravity, validWith: .relative(tolerance: valueRangeTolerance)) &&
-                jumpVelocityTracker.is(jumpVelocity, validWith: .relative(tolerance: valueRangeTolerance)) {
-                gravityTracker.add(value: gravity)
-                jumpVelocityTracker.add(value: jumpVelocity)
-                usingPreliminaryValues = true
-            } else {
-                usingPreliminaryValues = false
-            }
+        // Calculate gravity and jump velocity and jump start
+        let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump, currentTrackerStartTime: segment.tracker.times.first!)
+        let gravity = -2 * jump.a
+        let jumpVelocity = jump.derivative.at(jumpStart)
+
+        // Add preliminary values to trackers if they are valid
+        if gravityTracker.is(gravity, validWith: .relative(tolerance: valueRangeTolerance)) &&
+            jumpVelocityTracker.is(jumpVelocity, validWith: .relative(tolerance: valueRangeTolerance)) {
+            gravityTracker.add(value: gravity)
+            jumpVelocityTracker.add(value: jumpVelocity)
+            usingPreliminaryValues = true
+        } else {
+            usingPreliminaryValues = false
         }
     }
 
@@ -139,7 +138,7 @@ extension JumpTracker: CompositeCoreDelegate {
             if abs(intersections.0 - guess) < abs(intersections.1 - guess) {
                 return intersections.0
             } else {
-                return intersections.1 // TODO: validation that intersection is nearly inside bounds?
+                return intersections.1
             }
         }
 
