@@ -18,8 +18,10 @@ public final class ScatterPlot {
     /// Create a scatter plot with the given data set.
     /// The scatter plot is black/red (using the given colors) and is drawn on a white background.
     public init(dataPoints: [ScatterDataPoint], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
-        // Map values to ChartDataEntries and sort by x-value
-        let entries = dataPoints.map { ChartDataEntry(x: $0.x, y: $0.y) }.sorted { $0.x < $1.x }
+        let dataPoints = dataPoints.sorted { $0.x < $1.x }
+
+        // Map sorted values to ChartDataEntries
+        let entries = dataPoints.map { ChartDataEntry(x: $0.x, y: $0.y) }
 
         // Create DataSet and view
         let dataSet = ScatterChartDataSet(entries: entries, label: "DataSet")
@@ -33,7 +35,7 @@ public final class ScatterPlot {
         view.data = data
         view.legend.enabled = false
 
-        // Save view to file
+        // Store image data
         let image = NSImage(size: view.bounds.size)
         image.lockFocusFlipped(true)
         NSColor.white.drawSwatch(in: view.bounds) // White background
