@@ -73,7 +73,7 @@ extension Polynomial: CustomStringConvertible {
         
         // Create description, using each coefficient
         if degree >= 2 {
-            for i in stride(from: degree, through: 2, by: -1) {
+            for i in stride(from: degree, through: 2, by: -1) where coefficients[i] != 0 {
                 result += "\(coeffs[i])x^\(i) + "
             }
         }

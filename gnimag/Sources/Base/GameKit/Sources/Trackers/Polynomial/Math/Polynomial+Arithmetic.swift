@@ -5,7 +5,13 @@
 
 import Common
 
-// As Polynomials over R form a ring, this file contains the necessary addition and multiplication methods.
+// As Polynomials over R form a ring, this file contains necessary addition and multiplication methods, and more convenience arithmetic functions.
+
+extension Polynomial: ParameterizableFunction {
+}
+
+extension Polynomial: ScalarFunctionArithmetic {
+}
 
 /// Perform polynomial addition.
 public func + (lhs: Polynomial, rhs: Polynomial) -> Polynomial {
@@ -36,9 +42,19 @@ public func * (lhs: Polynomial, rhs: Polynomial) -> Polynomial {
     return Polynomial(result)
 }
 
+/// Add a constant to a polynomial.
+public func + (lhs: Polynomial, rhs: Double) -> Polynomial {
+    lhs + Polynomial([rhs])
+}
+
 /// Multiply a polynomial by a constant.
 public func * (lhs: Double, rhs: Polynomial) -> Polynomial {
     Polynomial(rhs.coefficients.map { $0 * lhs })
+}
+
+/// Multiply a polynomial by a constant.
+public func * (lhs: Polynomial, rhs: Double) -> Polynomial {
+    rhs * lhs
 }
 
 /// Divide a polynomial by a constant.
@@ -49,4 +65,34 @@ public func / (lhs: Polynomial, rhs: Double) -> Polynomial {
 /// Negate a polynomial.
 public prefix func - (p: Polynomial) -> Polynomial {
     Polynomial(p.coefficients.map(-))
+}
+
+extension Polynomial {
+    /// Shift a polynomial to the left.
+    /// This runs in O(n^2).
+    public func shiftLeft(by amount: Double) -> Polynomial {
+        var result = [Double](repeating: 0, count: coefficients.count)
+
+        // Calculate (x-amount)^n
+        for (n, coefficient) in coefficients.enumerated() {
+            for k in 0 ... n { // x^k factor: x^k * amount^(n-k) * (n choose k)
+                let power = pow(amount, Double(n-k)) * choose(n, k)
+                result[k] += power * coefficient
+            }
+        }
+
+        return Polynomial(result)
+    }
+
+    /// Calculate the binomial coefficient.
+    private func choose(_ n: Int, _ k: Int) -> Double {
+        var result: Double = 1
+
+        for i in 0 ..< k {
+            let factor = Double(n - i) / Double(i + 1)
+            result *= factor
+        }
+
+        return result
+    }
 }
