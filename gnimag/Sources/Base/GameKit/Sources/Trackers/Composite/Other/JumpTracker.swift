@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import MacTestingTools
 
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
@@ -15,19 +16,23 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     // MARK: Private Properties
 
     /// The constant trackers for gravity and jump velocity.
-    fileprivate let gravityTracker: ConstantTracker
-    fileprivate let jumpVelocityTracker: ConstantTracker
+    private let gravityTracker: ConstantTracker
+    private let jumpVelocityTracker: ConstantTracker
 
     /// The relative tolerance for the gravity and jump velocity trackers.
     /// This is used to filter out garbage values.
-    fileprivate let valueRangeTolerance: Value
+    private let valueRangeTolerance: Value
 
     /// True when values (gravity & jump velocity) from the current jump are in the trackers.
     /// Because these values are updated each frame until the jump has ended (and the next jump begins), these values are only preliminary until the jump has ended.
-    fileprivate var usingPreliminaryValues = false
+    private var usingPreliminaryValues = false
 
     /// The last jump segment.
-    fileprivate var lastJump: SegmentInfo?
+    private var lastJump: SegmentInfo?
+
+    /// The guess range for when a new jump started.
+    /// If you know that jumps will, for example, always exactly begin at the second last data point, return [0, 0].
+    private let customGuessRange: SimpleRange<Time>
 
     // MARK: Public Properties
 
@@ -45,11 +50,13 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     public init(
         relativeValueRangeTolerance: Value,
         absoluteJumpTolerance: Value,
-        consecutiveNumberOfPointsRequiredToDetectJump: Int
+        consecutiveNumberOfPointsRequiredToDetectJump: Int,
+        customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1)
     ) {
         gravityTracker = ConstantTracker(tolerancePoints: 0)
         jumpVelocityTracker = ConstantTracker(tolerancePoints: 0)
         valueRangeTolerance = relativeValueRangeTolerance
+        self.customGuessRange = customGuessRange
 
         let characteristics = NextSegmentDecisionCharacteristics(
             pointsMatchingNextSegment: consecutiveNumberOfPointsRequiredToDetectJump,
@@ -137,5 +144,10 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         let c = value - (a * time * time + b * time) // ax^2 + bx + c = value
 
         return Polynomial([c, b, a])
+    }
+
+    /// Provide the custom guess range.
+    public override func guessRange() -> SimpleRange<Time> {
+        return customGuessRange
     }
 }

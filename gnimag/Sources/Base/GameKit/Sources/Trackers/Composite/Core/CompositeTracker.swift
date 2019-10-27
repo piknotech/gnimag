@@ -153,6 +153,11 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         guard let timeA = currentSegment.tracker.times.last else { return }
         let timeB = window.decisionInitiator?.time ?? nextDataPoint.time // timeB is more recent than timeA
 
+        // Transform timeslots to match the custom guess range
+        let range = guessRange()
+        let minTime = timeA + (timeB - timeA) * range.lower
+        let maxTime = timeA + (timeB - timeA) * range.upper // maxTime is more recent than minTime
+
         // Use either the regression or the guesses of the current segment
         var functions: [Function]
 
@@ -165,7 +170,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
 
         mostRecentGuessesForNextSegment =
-            createGuesses(forFunctions: functions, andTimeslots: [timeA, timeB], mostRecentTime: timeB)
+            createGuesses(forFunctions: functions, andTimeslots: [minTime, maxTime], mostRecentTime: maxTime)
     }
 
     /// Create enclosing (min & max) guesses from the given parameters:
@@ -241,6 +246,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     // MARK: - Delegate And DataSource
 
+    // MARK: Delegate
+
     /// Called each time the regression function or the guesses of the current segment are updated, i.e. each time a new point is added to the current segment.
     /// This is called at least once per segment.
     open func currentSegmentWasUpdated(segment: SegmentInfo) {
@@ -255,16 +262,26 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         fatalError("Override and implement this method.")
     }
 
-    /// Make a guess for the next partial function which begins at the given split position.
-    /// If you don't have enough information for making the guess, return nil.
-    open func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function? {
-        fatalError("Override and implement this method.")
-    }
+    // MARK: DataSource
 
     /// Called exactly once per segment to create an appropriate empty tracker for the next partial function.
     /// This will be called **after** `advancedToNextSegmentAndFinalizedLastSegment` is called on the delegate.
     open func trackerForNextSegment() -> SegmentTrackerType {
         fatalError("Override and implement this method.")
     }
-}
 
+    /// Make a guess for the next partial function which begins at the given split position.
+    /// If you don't have enough information for making the guess, return nil.
+    open func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function? {
+        fatalError("Override and implement this method.")
+    }
+
+    /// Return the range that defines where the two guesses (min and max guess) should be made.
+    /// The interval is transformed so that [0, 1] maps to [timeA, timeB] where timeA is the second last time and timeB the most recent time.
+    /// You can, for example, return [0, 0] if you are sure that the segment certainly started at the second last data point. You can also return negative values – times will then be extended further in the past.
+    /// Important: The range must be valid, i.e. the max value must be greater than the min value.
+    /// Also, values above 1 do not make sense because they would represent a timepoint in the future.
+    open func guessRange() -> SimpleRange<Time> {
+        SimpleRange<Time>(from: 0, to: 1)
+    }
+}
