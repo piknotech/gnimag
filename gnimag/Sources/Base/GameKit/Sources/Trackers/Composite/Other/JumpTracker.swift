@@ -8,13 +8,11 @@ import MacTestingTools
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.
 /// Important: This assumes that, on each jump, the object's y-velocity is set to a constant value which is NOT dependent on the previous object velocity (i.e. absolute jumping instead of relative jumping).
-public final class JumpTracker: HasScatterDataSet {
+public final class JumpTracker: CompositeTracker<PolyTracker> {
     public typealias Value = Double
     public typealias Time = Double
 
     // MARK: Private Properties
-
-    private var core: CompositeCore!
 
     /// The constant trackers for gravity and jump velocity.
     fileprivate let gravityTracker: ConstantTracker
@@ -29,7 +27,7 @@ public final class JumpTracker: HasScatterDataSet {
     fileprivate var usingPreliminaryValues = false
 
     /// The last jump segment.
-    fileprivate var lastJump: CompositeCore.SegmentInfo?
+    fileprivate var lastJump: SegmentInfo?
 
     // MARK: Public Properties
 
@@ -43,13 +41,6 @@ public final class JumpTracker: HasScatterDataSet {
         jumpVelocityTracker.average
     }
 
-    /// The data set for plotting.
-    public var dataSet: [ScatterDataPoint] {
-        core.allDataPoints.dataSet
-    }
-
-    // MARK: Methods
-
     /// Default initializer.
     public init(
         relativeValueRangeTolerance: Value,
@@ -60,34 +51,20 @@ public final class JumpTracker: HasScatterDataSet {
         jumpVelocityTracker = ConstantTracker(tolerancePoints: 0)
         valueRangeTolerance = relativeValueRangeTolerance
 
-        let characteristics = CompositeCore.NextSegmentDecisionCharacteristics(
+        let characteristics = NextSegmentDecisionCharacteristics(
             pointsMatchingNextSegment: consecutiveNumberOfPointsRequiredToDetectJump,
             maxIntermediatePointsMatchingCurrentSegment: 0
         )
-        
-        core = CompositeCore(tolerance: absoluteJumpTolerance, decisionCharacteristics: characteristics, delegate: self, dataSource: self)
+
+        super.init(tolerance: absoluteJumpTolerance, decisionCharacteristics: characteristics)
     }
 
-    /// Check if a point is valid to be added to the core.
-    /// Call this before actually calling `add(value:at:)`.
-    public func integrityCheck(with value: Value, at time: Time) -> Bool {
-        core.integrityCheck(with: value, at: time)
-    }
+    // MARK: Delegate And DataSource
 
-    /// Add a data point to the tracker if it is valid.
-    /// Data points MUST be added in time-monotonically order, meaning time is either increasing or decreasing permanently.
-    public func add(value: Value, at time: Time) {
-        core.add(value: value, at: time)
-    }
-}
-
-// MARK: Delegate
-
-extension JumpTracker: CompositeCoreDelegate {
     /// A new regression for the current jump may be available.
     /// Update preliminary values for gravity and jump velocity.
-    public func currentSegmentWasUpdated(segment: CompositeCore.SegmentInfo) {
-        guard let jump = segment.tracker.regression as? Polynomial else { return }
+    public override func currentSegmentWasUpdated(segment: SegmentInfo) {
+        guard let jump = segment.tracker.regression else { return }
 
         // Remove old preliminary values before adding new preliminary values
         if usingPreliminaryValues {
@@ -113,7 +90,7 @@ extension JumpTracker: CompositeCoreDelegate {
 
     /// The current jump has finished and the next jump has begun.
     /// Finalize the gravity and jump velocity values.
-    public func advancedToNextSegmentAndFinalizedLastSegment(lastSegment: CompositeCore.SegmentInfo) {
+    public override func advancedToNextSegmentAndFinalizedLastSegment(lastSegment: SegmentInfo) {
         // Mark the preliminary values (if existing) as final
         usingPreliminaryValues = false
 
@@ -130,7 +107,7 @@ extension JumpTracker: CompositeCoreDelegate {
         }
 
         // Actual polynomial intersection
-        if let lastJump = lastJump?.tracker.regression as? Polynomial {
+        if let lastJump = lastJump?.tracker.regression {
             let diff = currentJump - lastJump
             guard let intersections = QuadraticSolver.solve(a: diff.a, b: diff.b, c: diff.c) else { return guess }
 
@@ -144,18 +121,14 @@ extension JumpTracker: CompositeCoreDelegate {
 
         return guess
     }
-}
 
-// MARK: DataSource
-
-extension JumpTracker: CompositeCoreDataSource {
     /// Create a parabola tracker for the next jump segment.
-    public func trackerForNextSegment() -> SimpleTrackerProtocol {
+    public override func trackerForNextSegment() -> PolyTracker {
         PolyTracker(degree: 2)
     }
 
-    /// Make a guess for a jump beginning at `splitXPos`.
-    public func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function? {
+    /// Make a guess for a jump beginning at (`time`, `value`).
+    public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function? {
         guard let gravity = gravity, let jumpVelocity = jumpVelocity else { return nil }
 
         // Solve f(time) = value and f'(time) = jumpVelocity

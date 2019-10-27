@@ -9,6 +9,8 @@ import MacTestingTools
 /// AngularWrapper provides a wrapper around simple trackers which would describe a simple function, but their values are angular, meaning a modulo-2-pi is applied.
 /// This tracker undoes the modulo-2-pi step in order to produce the real base function (whose codomain is R instead of [0, 2*pi)).
 public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerProtocol {
+    public typealias F = Other.F
+    
     /// The internal tracker tracking the linearified values.
     private let tracker: Other
 
@@ -22,7 +24,7 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
     public var values: [Value] { tracker.values }
     public var maxDataPoints: Int { tracker.maxDataPoints }
     public var requiredPointsForCalculatingRegression: Int { tracker.requiredPointsForCalculatingRegression }
-    public var regression: Function? { tracker.regression }
+    public var regression: F? { tracker.regression }
 
     public func updateRegression() { tracker.updateRegression() }
     public func reset() { tracker.reset() }

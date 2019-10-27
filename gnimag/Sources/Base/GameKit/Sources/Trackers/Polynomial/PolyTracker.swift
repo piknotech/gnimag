@@ -4,7 +4,7 @@
 //
 
 /// PolyTracker is a simple tracker providing a polynomial regression function.
-public class PolyTracker: SimpleDefaultTracker {
+public class PolyTracker: SimpleDefaultTracker<Polynomial> {
     /// Default initializer.
     public init(maxDataPoints: Int = 500, degree: Int, tolerancePoints: Int = 1) {
         self.degree = degree
@@ -13,14 +13,9 @@ public class PolyTracker: SimpleDefaultTracker {
 
     /// The degree of the polynomial regression.
     private let degree: Int
-    
-    /// The current regression function as a Polynomial.
-    public var polynomial: Polynomial? {
-        regression as? Polynomial
-    }
 
     /// Calculate the polynomial regression.
-    open override func calculateRegression() -> Function? {
+    open override func calculateRegression() -> Polynomial? {
         Regression.polyRegression(x: times, y: values, n: degree)
     }
 }

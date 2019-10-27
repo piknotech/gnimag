@@ -5,10 +5,10 @@
 
 import Common
 
-/// CompositeCoreSlidingWindow plays a role during a decision action of CompositeCore.
-/// Once one data point matches the next segment, following data points are written into the CompositeCoreSlidingWindow.
+/// CompositeTrackerSlidingWindow plays a role during a decision action of CompositeTracker.
+/// Once one data point matches the next segment, following data points are written into the CompositeTrackerSlidingWindow.
 /// Once enough data points are in the window, the decision is made (i.e. the segment is either advanced or not) and the appropriate data points are flushed and given to the respective (either old or new) tracker.
-internal class CompositeCoreSlidingWindow {
+internal class CompositeTrackerSlidingWindow<SegmentTrackerType: SimpleTrackerProtocol> {
     private typealias DataPoint = (value: Double, time: Double, matching: Segment)
     
     enum Segment {
@@ -17,21 +17,21 @@ internal class CompositeCoreSlidingWindow {
     }
 
     /// The characteristics that describe how to make a decision.
-    private let characteristics: CompositeCore.NextSegmentDecisionCharacteristics
+    private let characteristics: CompositeTracker<SegmentTrackerType>.NextSegmentDecisionCharacteristics
 
     /// The stack of data points. The first entry is the oldest one, new entries will be pushed to the back.
     private var dataPoints = [DataPoint]()
 
     /// The data point that initiated the decision action, i.e. the first data point in the window.
-    var decisionInitiator: CompositeCoreSlidingWindowDelegate.DataPoint? {
+    var decisionInitiator: CompositeTrackerSlidingWindowDelegate.DataPoint? {
         dataPoints.first.map { ($0.value, $0.time) }
     }
 
     /// The delegate which is informed about decisions and flushed data points.
-    unowned var delegate: CompositeCoreSlidingWindowDelegate!
+    unowned var delegate: CompositeTrackerSlidingWindowDelegate!
 
     /// Default initializer.
-    init(characteristics: CompositeCore.NextSegmentDecisionCharacteristics) {
+    init(characteristics: CompositeTracker<SegmentTrackerType>.NextSegmentDecisionCharacteristics) {
         if characteristics.pointsMatchingNextSegment < 1 || characteristics.maxIntermediatePointsMatchingCurrentSegment < 0 {
             exit(withMessage: "Characteristics invalid!")
         }
@@ -79,8 +79,8 @@ internal class CompositeCoreSlidingWindow {
     }
 }
 
-/// The delegate that receives information about decisions and flushed points from CompositeCoreSlidingWindow.
-internal protocol CompositeCoreSlidingWindowDelegate: class {
+/// The delegate that receives information about decisions and flushed points from CompositeTrackerSlidingWindow.
+internal protocol CompositeTrackerSlidingWindowDelegate: class {
     typealias DataPoint = (value: Double, time: Double)
 
     /// Some (or all) of the oldest values in the window have been flushed because they cannot possibly contribute to the decision (too many data points belonging to the current segment).

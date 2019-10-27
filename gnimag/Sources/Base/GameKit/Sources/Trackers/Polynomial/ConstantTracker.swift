@@ -28,6 +28,6 @@ public final class ConstantTracker: PolyTracker {
     /// The average value, which is the result of the regression.
     /// Nil if not enough data points are available.
     public var average: Value? {
-        return polynomial?.a
+        regression?.a
     }
 }

@@ -11,6 +11,9 @@ public protocol SimpleTrackerProtocol: HasScatterDataSet {
     typealias Time = Double
     typealias Value = Double
 
+    /// The specific function type of the regression which is produced by this tracker.
+    associatedtype F: Function
+
     // MARK: Methods and Properties
 
     /// The time-value pairs.
@@ -24,7 +27,7 @@ public protocol SimpleTrackerProtocol: HasScatterDataSet {
     var requiredPointsForCalculatingRegression: Int { get }
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
-    var regression: Function? { get }
+    var regression: F? { get }
 
     /// Add a data point to the tracker. Update the regression function with the new data point, if desired.
     func add(value: Value, at time: Time, updateRegression: Bool)

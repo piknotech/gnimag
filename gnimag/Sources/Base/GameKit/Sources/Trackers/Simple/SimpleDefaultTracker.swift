@@ -5,7 +5,7 @@
 
 /// SimpleDefaultTracker is an abstract class providing useful default implementations for SimpleTrackerProtocol.
 /// In particular, when inheriting from SimpleTracker, you can (and must) only customize the regression calculation method; all other methods are implemented for you.
-open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
+open /*abstract*/ class SimpleDefaultTracker<F: Function>: SimpleTrackerProtocol {
     /// The time-value pairs.
     public private(set) var times = [Time]()
     public private(set) var values = [Value]()
@@ -24,7 +24,7 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     }
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
-    public private(set) var regression: Function?
+    public private(set) var regression: F?
 
     // MARK: Method Implementations
     /// Add a data point to the tracker. Update the regression function with the new data point, if desired.
@@ -101,7 +101,7 @@ open /*abstract*/ class SimpleDefaultTracker: SimpleTrackerProtocol {
     // MARK: Abstract Methods
     /// Override this to calculate the regression for the current time/value-pairs.
     /// This method is only called if the number of data points is at least `requiredPointsForCalculatingRegression`.
-    open func calculateRegression() -> Function? {
+    open func calculateRegression() -> F? {
         fatalError("This is an abstract method.")
     }
 }
