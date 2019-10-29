@@ -25,6 +25,12 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         /// Can be zero.
         /// If more points match the current segment, the decision action is (partially) cancelled.
         let maxIntermediatePointsMatchingCurrentSegment: Int
+
+        /// Default initializer.
+        public init(pointsMatchingNextSegment: Int, maxIntermediatePointsMatchingCurrentSegment: Int) {
+            self.pointsMatchingNextSegment = pointsMatchingNextSegment
+            self.maxIntermediatePointsMatchingCurrentSegment = maxIntermediatePointsMatchingCurrentSegment
+        }
     }
 
     /// Information about a segment, either the current segment or a previous one.

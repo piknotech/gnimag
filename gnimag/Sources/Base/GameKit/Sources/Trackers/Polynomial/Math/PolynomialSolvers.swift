@@ -24,3 +24,11 @@ public enum QuadraticSolver {
         return (-p/2 - d, -p/2 + d)
     }
 }
+
+public enum LinearSolver {
+    /// Solve the equation given by slope * x + intercept = 0 and return the solution.
+    public static func solve(slope: Double, intercept: Double) -> Double? {
+        if slope == 0 { return nil }
+        return -intercept / slope
+    }
+}

@@ -10,8 +10,6 @@ import MacTestingTools
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.
 /// Important: This assumes that, on each jump, the object's y-velocity is set to a constant value which is NOT dependent on the previous object velocity (i.e. absolute jumping instead of relative jumping).
 public final class JumpTracker: CompositeTracker<PolyTracker> {
-    public typealias Value = Double
-    public typealias Time = Double
 
     // MARK: Private Properties
 
@@ -21,7 +19,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
 
     /// The relative tolerance for the gravity and jump velocity trackers.
     /// This is used to filter out garbage values.
-    private let valueRangeTolerance: Value
+    private let valueRangeTolerance: TrackerTolerance
 
     /// True when values (gravity & jump velocity) from the current jump are in the trackers.
     /// Because these values are updated each frame until the jump has ended (and the next jump begins), these values are only preliminary until the jump has ended.
@@ -55,7 +53,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     ) {
         gravityTracker = ConstantTracker(tolerancePoints: 0)
         jumpVelocityTracker = ConstantTracker(tolerancePoints: 0)
-        valueRangeTolerance = relativeValueRangeTolerance
+        valueRangeTolerance = .relative(tolerance: relativeValueRangeTolerance)
         self.customGuessRange = customGuessRange
 
         let characteristics = NextSegmentDecisionCharacteristics(
@@ -85,8 +83,8 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         let jumpVelocity = jump.derivative.at(jumpStart)
 
         // Add preliminary values to trackers if they are valid
-        if gravityTracker.is(gravity, validWith: .relative(tolerance: valueRangeTolerance)) &&
-            jumpVelocityTracker.is(jumpVelocity, validWith: .relative(tolerance: valueRangeTolerance)) {
+        if gravityTracker.is(gravity, validWith: valueRangeTolerance) &&
+            jumpVelocityTracker.is(jumpVelocity, validWith: valueRangeTolerance) {
             gravityTracker.add(value: gravity)
             jumpVelocityTracker.add(value: jumpVelocity)
             usingPreliminaryValues = true
@@ -98,10 +96,10 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     /// The current jump has finished and the next jump has begun.
     /// Finalize the gravity and jump velocity values.
     public override func advancedToNextSegmentAndFinalizedLastSegment(lastSegment: SegmentInfo) {
+        lastJump = lastSegment
+
         // Mark the preliminary values (if existing) as final
         usingPreliminaryValues = false
-
-        lastJump = lastSegment
     }
 
     /// Calculate the intersection of the last jump and the current jump.

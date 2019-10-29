@@ -95,6 +95,8 @@
 		631214372326678700C126B4 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CD2325740000C126B4 /* Event.swift */; };
 		631214392326686A00C126B4 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Logging.swift */; };
 		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
+		6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */; };
+		6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */; };
 		63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A52234BA2B700E42762 /* CompositeTracker.swift */; };
 		63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */; };
 		63351A5D234DD11E00E42762 /* Array+DropWhile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5B234DD11700E42762 /* Array+DropWhile.swift */; };
@@ -252,6 +254,8 @@
 		63121411232587E300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631214382326686A00C126B4 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
+		6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuousPingPongTracker.swift; sourceTree = "<group>"; };
+		6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicLinearPingPongTracker.swift; sourceTree = "<group>"; };
 		63351A52234BA2B700E42762 /* CompositeTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTracker.swift; sourceTree = "<group>"; };
 		63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerSlidingWindow.swift; sourceTree = "<group>"; };
 		63351A5B234DD11700E42762 /* Array+DropWhile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+DropWhile.swift"; sourceTree = "<group>"; };
@@ -1030,8 +1034,10 @@
 		63456B31236465B600C71EE5 /* PingPong */ = {
 			isa = PBXGroup;
 			children = (
+				6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */,
 				63456B3B2364674A00C71EE5 /* ScalarFunctionArithmetic.swift */,
 				63456B37236466A900C71EE5 /* ParameterizableFunction.swift */,
+				6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */,
 				63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */,
 			);
 			path = PingPong;
@@ -1564,6 +1570,7 @@
 			files = (
 				634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */,
 				6312138A2325793C00C126B4 /* MedianTracker.swift in Sources */,
+				6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */,
 				63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */,
 				63456B3C2364674B00C71EE5 /* ScalarFunctionArithmetic.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
@@ -1580,6 +1587,7 @@
 				6312138D2325793C00C126B4 /* Operators.swift in Sources */,
 				63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */,
 				634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */,
+				6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */,
 				63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */,
 				6312138E2325793C00C126B4 /* Regression.swift in Sources */,
 			);
