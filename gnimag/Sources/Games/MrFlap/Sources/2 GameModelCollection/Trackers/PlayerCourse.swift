@@ -18,7 +18,12 @@ final class PlayerCourse {
 
     /// Default initializer.
     init(playfield: Playfield) {
-        height = JumpTracker(relativeValueRangeTolerance: 10%, absoluteJumpTolerance: 2% * playfield.freeSpace, consecutiveNumberOfPointsRequiredToDetectJump: 2, customGuessRange: SimpleRange<Double>(from: 0, to: 0))
+        height = JumpTracker(
+            relativeValueRangeTolerance: 10%,
+            absoluteJumpTolerance: 2% * playfield.freeSpace,
+            consecutiveNumberOfPointsRequiredToDetectJump: 2,
+            customGuessRange: SimpleRange<Double>(from: 0, to: 0)
+        )
     }
 
     // MARK: Updating

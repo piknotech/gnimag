@@ -21,7 +21,7 @@ final class BarCourse {
 
     // The angle and the center of the hole. yCenter is only used in state "normal".
     let angle = AngularWrapper(LinearTracker())
-    let yCenter = LinearTracker()
+    let yCenter: BasicLinearPingPongTracker
 
     // The constant width and hole size.
     let width = ConstantTracker()
@@ -37,6 +37,16 @@ final class BarCourse {
     // Default initializer.
     init(playfield: Playfield) {
         self.playfield = playfield
+
+        yCenter = BasicLinearPingPongTracker(
+            absoluteSegmentSwitchTolerance: 1% * playfield.freeSpace,
+            slopeTolerance: .relative(tolerance: 10%),
+            boundsTolerance: .absolute(tolerance: 5% * playfield.freeSpace),
+            decisionCharacteristics: .init(
+                pointsMatchingNextSegment: 2,
+                maxIntermediatePointsMatchingCurrentSegment: 0
+            )
+        )
     }
 
     // MARK: Updating
@@ -54,6 +64,7 @@ final class BarCourse {
         case .normal:
             holeSize.add(value: bar.holeSize, at: time)
             yCenter.add(value: bar.yCenter, at: time)
+            ScatterPlot(from: yCenter).writeToDesktop(name: "plot\(CFAbsoluteTimeGetCurrent()).png")
         }
     }
 
@@ -77,13 +88,9 @@ final class BarCourse {
             }
 
         case .normal:
-            guard holeSize.is(bar.holeSize, validWith: .relative(tolerance: 5%)) else {
-                return false
-            }
-
-            guard yCenter.is(bar.yCenter, at: time, validWith: .absolute(tolerance: 2% * playfield.freeSpace)) else {
-                return false
-            }
+            return
+                holeSize.is(bar.holeSize, validWith: .relative(tolerance: 5%)) &&
+                yCenter.integrityCheck(with: bar.yCenter, at: time)
         }
 
         return true
