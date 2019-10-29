@@ -10,7 +10,7 @@ import MacTestingTools
 import Tapping
 
 /// Each instance of MrFlap can play a single game of MrFlap.
-public class MrFlap {
+public final class MrFlap {
     private let imageProvider: ImageProvider
     private let tapper: Tapper
 
