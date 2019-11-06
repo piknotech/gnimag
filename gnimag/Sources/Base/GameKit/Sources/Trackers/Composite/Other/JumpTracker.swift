@@ -36,12 +36,12 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
 
     /// The estimated gravity, if available.
     public var gravity: Value? {
-        gravityTracker.average
+        gravityTracker.average ?? gravityTracker.values.last
     }
 
     /// The estimated jump velocity, if available.
     public var jumpVelocity: Value? {
-        jumpVelocityTracker.average
+        jumpVelocityTracker.average ?? jumpVelocityTracker.values.last
     }
 
     /// Default initializer.
@@ -51,8 +51,8 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         consecutiveNumberOfPointsRequiredToDetectJump: Int,
         customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1)
     ) {
-        gravityTracker = ConstantTracker(tolerancePoints: 0)
-        jumpVelocityTracker = ConstantTracker(tolerancePoints: 0)
+        gravityTracker = ConstantTracker(tolerancePoints: 1)
+        jumpVelocityTracker = ConstantTracker(tolerancePoints: 1)
         valueRangeTolerance = .relative(tolerance: relativeValueRangeTolerance)
         self.customGuessRange = customGuessRange
 

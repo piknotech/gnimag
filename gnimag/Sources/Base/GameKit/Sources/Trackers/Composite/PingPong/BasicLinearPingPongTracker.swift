@@ -10,7 +10,8 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     public let upperBoundTracker = ConstantTracker(tolerancePoints: 0)
 
     /// The tracker for the slope. The slope which is being added here is always positive (i.e. for the "up" direction)
-    public let slopeTracker = ConstantTracker(tolerancePoints: 0)
+    /// There is one tolerance point because the first value is often too imprecise.
+    public let slopeTracker = ConstantTracker(tolerancePoints: 1)
 
     /// States if a preliminary value for the slope / for the upper/lower bound is in the respective tracker.
     private var preliminarySlopeIsInTracker = false
@@ -97,7 +98,9 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// Make a guess for a segment beginning at (`time`, `value`).
     public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> Function? {
-        guard let direction = currentDirection, let positiveSlope = slopeTracker.average else { return nil }
+        guard
+            let direction = currentDirection,
+            let positiveSlope = slopeTracker.average ?? slopeTracker.values.last else { return nil }
 
         // Construct f = ax+b with f(time) = value
         let slope = (direction == .up) ? -positiveSlope : +positiveSlope

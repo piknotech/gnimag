@@ -40,7 +40,7 @@ final class BarCourse {
 
         yCenter = BasicLinearPingPongTracker(
             absoluteSegmentSwitchTolerance: 1% * playfield.freeSpace,
-            slopeTolerance: .relative(tolerance: 10%),
+            slopeTolerance: .relative(tolerance: 20%),
             boundsTolerance: .absolute(tolerance: 5% * playfield.freeSpace),
             decisionCharacteristics: .init(
                 pointsMatchingNextSegment: 2,
@@ -64,7 +64,6 @@ final class BarCourse {
         case .normal:
             holeSize.add(value: bar.holeSize, at: time)
             yCenter.add(value: bar.yCenter, at: time)
-            ScatterPlot(from: yCenter).writeToDesktop(name: "plot\(CFAbsoluteTimeGetCurrent()).png")
         }
     }
 
