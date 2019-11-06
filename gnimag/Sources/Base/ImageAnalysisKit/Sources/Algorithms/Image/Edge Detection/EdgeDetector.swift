@@ -10,7 +10,7 @@ import Image
 /// Where the image bounds are hit, the edge continues outside the bounds, unless inverse is true.
 public enum EdgeDetector {
     public enum DetectionLimit {
-        case maxPixelsOnEdge(Int)
+        case maxPixels(Int)
         case distance(to: Pixel, maximum: Double)
         case none
     }
@@ -20,10 +20,10 @@ public enum EdgeDetector {
         in image: Image,
         shapeColor: ColorMatch,
         from startingPixel: Pixel,
-        limit: DetectionLimit = .none,
         inverse: Bool = false,
         angle: CGFloat,
-        searchSpeed: Int = 1
+        searchSpeed: Int = 1,
+        limit: DetectionLimit = .none
     ) -> [Pixel]? {
         guard let (inside, outside) = findPointOnTheEdge(image: image, shapeColor: shapeColor, from: startingPixel, inverse: inverse, angle: angle) else {
             return nil
@@ -37,31 +37,25 @@ public enum EdgeDetector {
     /// Walk (using angle) until hitting a pixel that has NOT the required shape color (or hitting the image wall). Then we have found the beginning of the edge.
     /// Return (point inside the shape, point outside the shape), or nil if it was not found.
     private static func findPointOnTheEdge(image: Image, shapeColor: ColorMatch, from pixel: Pixel, inverse: Bool, angle: CGFloat) -> (inside: Pixel, outside: Pixel)? {
-        precondition(shapeColor.matches(image.color(at: pixel)), "The starting pixel (\(pixel)) must be inside the shape!")
+        // Walk at the given angle until:
+        // First, finding a pixel inside the shape (this can already be the starting pixel) and then:
+        // Finding a pixel outside the shape. This pixel is not on the edge, but the previous one is.
+        let path = StraightPath(start: pixel, angle: angle, bounds: image.bounds)
+        let result = image.follow(path: path, untilFulfillingSequence: ColorMatchSequence(shapeColor, !shapeColor))
 
-        let extendedBounds = image.bounds.inset(by: (-1, -1))
-        let path = StraightPath(start: pixel, angle: angle, bounds: extendedBounds) // This is done exactly (speed 1)
+        switch result {
+        case let .fulfilled(previousPixel: inside, fulfilledPixel: outside):
+            return (inside!, outside)
 
-        var lastPixel = pixel
-        
-        // Walk loop
-        while let pixel = path.next() {
-            // Outside bounds: either inside or outside shape, depending on `inverse`
-            if !image.contains(pixel) {
-                if inverse { return nil }
-                return (lastPixel, pixel)
-            }
+        case let .notFulfilled(lastPixelOfPath: inside, highestFulfilledSequenceIndex: index):
+            // Hit image bounds
+            if index < 0 { return nil } // Starting point was not even inside the shape
+            if inverse { return nil }
 
-            // Inside bounds: check if outside shape
-            if !shapeColor.matches(image.color(at: pixel)) {
-                return (lastPixel, pixel)
-            }
-            
-            lastPixel = pixel
+            let extended = image.bounds.inset(by: (-1, -1))
+            let outside = StraightPath(start: inside!, angle: angle, bounds: extended).first { $0 != inside }!
+            return (inside!, outside) // index >= 0 enforces inside != nil
         }
-
-        // Before the path ends, it returned a pixel outside bounds --> the method has definitely returned already
-        preconditionFailure()
     }
 
     /// Check if the found starting points are either adjacent horizontally or vertically; else (diagonally), change the starting points.

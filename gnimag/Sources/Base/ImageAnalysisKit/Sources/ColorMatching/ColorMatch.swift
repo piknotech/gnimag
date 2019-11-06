@@ -12,7 +12,8 @@ public indirect enum ColorMatch {
     case not(ColorMatch)
 
     /// Return true iff the given color matches the rule.
-    func matches(_ color: Color) -> Bool {
+    @inlinable @inline(__always)
+    public func matches(_ color: Color) -> Bool {
         switch self {
         case let .block(block):
             return block(color)

@@ -11,16 +11,18 @@ import MacTestingTools
 /// Currently, the wrapped CGImage must have a BGRA pixel layout.
 final class NativeImage: Image, ConvertibleToCGImage {
     /// The raw pixel data and CGImage.
-    private let data: Data
+    @usableFromInline
+    let data: CFData
     public let CGImage: CGImage
 
-    /// Number of bytes per row of the raw pixel data.
-    private let bytesPerRow: Int
+    /// Number of bytes per row of the raw pixel
+    @usableFromInline
+    let bytesPerRow: Int
 
     /// Default initializer.
     init(_ image: CGImage) {
         // Get raw pixel data
-        data = image.dataProvider!.data! as Data
+        data = image.dataProvider!.data!
         bytesPerRow = image.bytesPerRow
         CGImage = image
 
@@ -28,12 +30,13 @@ final class NativeImage: Image, ConvertibleToCGImage {
     }
 
     /// Get the color value at the given pixel.
+    @inlinable @inline(__always)
     override func color(at pixel: Pixel) -> Color {
         // Read pixel data (using BGRA layout)
         let offset = bytesPerRow * (height - 1 - pixel.y) + 4 * pixel.x
-        let red = data[offset]
-        let green = data[offset + 1]
-        let blue = data[offset + 2]
-        return Color(Double(red) / 255, Double(green) / 255, Double(blue) / 255)
+        
+        let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: 3)
+        CFDataGetBytes(data, CFRangeMake(offset, 3), buf)
+        return Color(Double(buf[0]) / 255, Double(buf[1]) / 255, Double(buf[2]) / 255)
     }
 }

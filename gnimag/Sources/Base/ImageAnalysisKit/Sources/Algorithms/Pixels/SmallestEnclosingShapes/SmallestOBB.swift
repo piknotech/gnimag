@@ -32,7 +32,7 @@ public enum SmallestOBB {
             // Angle is in [-pi/2, pi/2]
             var angle = acos(dir.x)
             if angle > .pi / 2 { angle = .pi - angle }
-            if dir.x * dir.y < 0 { angle = -angle }
+            if dir.x * dir.y > 0 { angle = -angle }
 
             // Rotate all points by the angle (counterclockwise); this will rotate the coordinate system so that (start, end) is parallel to the x-axis
             let rotated = points.map { $0.rotated(by: angle) }

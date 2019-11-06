@@ -7,7 +7,7 @@ import Foundation
 import Image
 
 /// A PixelPath that consists of a straight line. The path stops when the given bounds have been reached.
-public class StraightPath: PixelPath {
+public final class StraightPath: PixelPath {
     /// The start pixel. It must be inside the bounds, else the path is empty.
     public let start: Pixel
 
@@ -54,20 +54,15 @@ public class StraightPath: PixelPath {
 
     // MARK: PixelPath
 
-    /// The number of steps that have been taken already.
-    private var steps = 0
-
     /// Return the next pixel on the path.
     /// If the bounds are surpassed, return nil.
     public override func next() -> Pixel? {
-        current.x += speed * cosAngle
-        current.y += speed * sinAngle
         let pixel = current.nearestPixel
-
-        // Boundary check
         guard bounds.contains(pixel) else { return nil }
 
-        steps += 1
+        current.x += speed * cosAngle
+        current.y += speed * sinAngle
+
         return pixel
     }
 }

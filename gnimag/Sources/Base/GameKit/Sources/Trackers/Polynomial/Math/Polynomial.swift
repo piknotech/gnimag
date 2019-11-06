@@ -4,7 +4,7 @@
 //
 
 /// Polynomial describes a collection of coefficients representing a polynomial.
-public final class Polynomial<Value> {
+public final class Polynomial: Function {
     /// The coefficients, beginning with the lowest one (x^0, x^1, ... x^n).
     public let coefficients: [Value]
 
@@ -18,20 +18,7 @@ public final class Polynomial<Value> {
     public init(_ coefficients: [Value]) {
         self.coefficients = coefficients
     }
-    
-    // MARK: Convenience coefficients
-    // When you know the degree of the polynomial, use these coefficients.
-    
-    public var a: Value { return coefficients[degree - 0] }
-    public var b: Value { return coefficients[degree - 1] }
-    public var c: Value { return coefficients[degree - 2] }
-    public var d: Value { return coefficients[degree - 3] }
-    public var e: Value { return coefficients[degree - 4] }
-}
 
-// MARK: Calculation
-
-extension Polynomial where Value == Double {
     /// Calculate the value at a given point.
     public func at(_ x: Value) -> Value {
         var result = Value.zero
@@ -59,38 +46,40 @@ extension Polynomial where Value == Double {
         
         return Polynomial(deriv)
     }
+
+    // MARK: Convenience coefficients
+    // When you know the degree of the polynomial, use these coefficients.
+    // The polynomial is represented as follows: a*x^n + b*x^(n-1) + ...
+    public var a: Value { return coefficients[degree - 0] }
+    public var b: Value { return coefficients[degree - 1] }
+    public var c: Value { return coefficients[degree - 2] }
+    public var d: Value { return coefficients[degree - 3] }
+    public var e: Value { return coefficients[degree - 4] }
 }
 
 // MARK: CustomStringConvertible
-
 extension Polynomial: CustomStringConvertible {
     /// Describe the polynomial.
     public var description: String {
         // Trivial case
-        if degree < 0 {
-            return ""
-        }
+        if degree < 0 { return "" }
         
         var result = ""
         
         // Round coefficients
-        let coeffs = coefficients.map { (a) -> String in
-            let a = String(format: "%.3f", a as! CVarArg)
-            return a
+        let coeffs = coefficients.map {
+            String(format: "%.3f", $0)
         }
         
         // Create description, using each coefficient
         if degree >= 2 {
-            for i in stride(from: degree, through: 2, by: -1) {
+            for i in stride(from: degree, through: 2, by: -1) where coefficients[i] != 0 {
                 result += "\(coeffs[i])x^\(i) + "
             }
         }
         
-        // Extra cases
-        if degree >= 1 {
-            result += "\(coeffs[1])x + "
-        }
-        
+        // Extra cases: x^1 and x^0
+        if degree >= 1 { result += "\(coeffs[1])x + " }
         result += "\(coeffs[0])"
         
         return result

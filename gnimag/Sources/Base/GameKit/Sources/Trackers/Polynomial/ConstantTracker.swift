@@ -10,12 +10,12 @@ public final class ConstantTracker: PolyTracker {
     private var count: Double = 0
 
     /// Default initializer.
-    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 0) {
+    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 1) {
         super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints)
     }
 
     /// Convenience method to check for validity, ignoring the time component.
-    public func `is`(_ value: Value, validWith tolerance: Tolerance, fallbackWhenNoRegression: FallbackMethod = .valid) -> Bool {
+    public func `is`(_ value: Value, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod = .valid) -> Bool {
         return self.is(value, at: .zero, validWith: tolerance, fallbackWhenNoRegression: fallbackWhenNoRegression)
     }
     
@@ -28,6 +28,6 @@ public final class ConstantTracker: PolyTracker {
     /// The average value, which is the result of the regression.
     /// Nil if not enough data points are available.
     public var average: Value? {
-        return regression?.a
+        regression?.a
     }
 }

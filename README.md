@@ -10,7 +10,7 @@ Only a few games are implemented at the moment. You can help extending by [contr
 
 The project consists of the following parts:
 
-- Six base libraries ([Common](gnimag/Sources/Base/Common), [Geometry](gnimag/Sources/Base/Geometry), [ImageInput](gnimag/Sources/Base/ImageInput), [Tapping](gnimag/Sources/Base/Tapping), [ImageAnalysisKit](gnimag/Sources/Base/ImageAnalysisKit) and [GameKit](gnimag/Sources/Base/GameKit)). These provide required or useful tools for implementing your own game.
+- Six base libraries ([Common](gnimag/Sources/Base/Common), [Geometry](gnimag/Sources/Base/Geometry), [Image](gnimag/Sources/Base/Image), [Tapping](gnimag/Sources/Base/Tapping), [ImageAnalysisKit](gnimag/Sources/Base/ImageAnalysisKit) and [GameKit](gnimag/Sources/Base/GameKit)). These provide required or useful tools for implementing your own game.
 - The games. Each game is a library which provides a public entry point to start auto-playing the game.
 - [MacCLI](gnimag/Sources/Mac/MacCLI). This is where actual Mac-specific input and output methods are defined. Here, you can import a specific game library and start playing the game.
 - [MacTestingTools](gnimag/Sources/Mac/MacTestingTools). This library provides tools that are useful for testing while implementing a game or writing image analysis methods.

@@ -76,6 +76,13 @@ public final class BitmapCanvas {
         return canvas
     }
 
+    /// Return a new canvas which contains the contents of the cut rectangle.
+    public func cut(to bounds: Bounds) -> BitmapCanvas {
+        let new = BitmapCanvas(width: bounds.width, height: bounds.height)
+        new.context.draw(CGImage, in: CGRect(x: -bounds.minX, y: -bounds.minY, width: context.width, height: context.height))
+        return new
+    }
+
     // MARK: Simple Color Operations
     /// Fill the whole canvas with the given color.
     @discardableResult
@@ -108,9 +115,9 @@ public final class BitmapCanvas {
     }
 
     /// Fill a sequence of pixels with the given color.
-    /// For example, you can stroke a PixelPath.
+    /// For example, you can stroke a PixelPath. Attention: When using this on a PixelPath, the path is getting exhausted, so this operation is NOT side-effect-free!
     @discardableResult
-    public func stroke<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1, width: CGFloat = 1) -> BitmapCanvas where S.Element == Pixel {
+    public func fillPixels<S: Sequence>(_ pixels: S, with color: Color, alpha: Double = 1, width: CGFloat = 1) -> BitmapCanvas where S.Element == Pixel {
         pixels.reduce(self) { (_, pixel) in
             fill(pixel, with: color, alpha: alpha, width: width)
         }
@@ -127,5 +134,11 @@ public final class BitmapCanvas {
     public func writeToDesktop(name: String) {
         let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
         write(to: desktop + "/" + name)
+    }
+
+    // MARK: Get CGImage
+    /// Get the current CGImage representation of the canvas.
+    public var CGImage: CGImage {
+        context.makeImage()!
     }
 }

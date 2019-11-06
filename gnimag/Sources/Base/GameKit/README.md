@@ -1,6 +1,6 @@
 # GameKit
 
-GameKit contains useful tools for implementing a game. These tools are especially useful for the steps of game model construction and tapping prediction.
+GameKit contains useful tools for implementing a game. These tools are especially useful for the steps of game model collection and tapping prediction.
 
 Currently, these tools are:
 

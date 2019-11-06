@@ -4,15 +4,15 @@ This README contains information about how games are built and **gives a startin
 
 ## Structure of a Game
 
-The structure of most games is similar. A game consists of three parts: image analysis, game model construction and tapping prediction.
+The structure of most games is similar. A game consists of three parts: image analysis, game model collection and tapping prediction.
 
 - **Image Analysis**: Here, you provide a method that has an `Image` as input and outputs raw information about things that were found in the image, for example player positions, background color, and any relevant game data you need.
 
   `ImageAnalysisKit` helps with simple analysis tasks. You may be able to do most of the analysis with methods provided by ImageAnalysisKit. If not, you are welcome to contribute and extend ImageAnalysisKit itself(LINK).
 
-  You do not further process the analysed data in this step. Also, your image analysis class should not save any state. Any input parameters (like starting points for object search) should be provided by game model construction or tapping prediction.
+  You do not further process the analysed data in this step. Also, your image analysis class should not save any state. Any input parameters (like starting points for object search) should be provided by game model collection or tapping prediction.
 
-- **Game Model Construction**: here, you take the information provided by image analysis and use it to build and update an up-to-date game model. This game model contains any parameters and values that you need to fully comprehend the running game, for example player positions or physics values.
+- **Game Model Collection**: here, you take the information provided by image analysis and use it to build and update an up-to-date game model. This game model contains any parameters and values that you need to fully comprehend the running game, for example player positions or physics values.
 
   When receiving data from the image analysis step, first check for data integrity, i.e. if all measured values are approximately what they should be. When data is obviously invalid, the image analysis yielded wrong values – discard the data and hope that the next data frame is valid again.
 
@@ -24,9 +24,9 @@ The structure of most games is similar. A game consists of three parts: image an
 
 Having these three independent components, you can finally create your public `Game` class. It requires `ImageProvider` and `Tapper` instances which will be provided by the user of the game library (for example `MacCLI`).
 
-You can use an `ImageQueue` (`GameKit`) for simple asynchronous image processing; i.e., each time a new frame is available (e.g. at a rate of 60fps), the work of image analysis, game model construction and tapping prediction is done in the background, but still at a high priority.
+You can use an `ImageQueue` (`GameKit`) for simple asynchronous image processing; i.e., each time a new frame is available (e.g. at a rate of 60fps), the work of image analysis, game model collection and tapping prediction is done in the background, but still at a high priority.
 
-The Game directs the output from image analysis to game model construction, and feeds the data from game model construction into tapping prediction.
+The Game directs the output from image analysis to game model collection, and feeds the data from game model collection into tapping prediction.
 
 Also, the Game provides events which may be of interest to the user, like „level finished“, „point scored“, or „player died“.
 

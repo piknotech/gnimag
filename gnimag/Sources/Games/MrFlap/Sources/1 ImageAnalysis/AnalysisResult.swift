@@ -4,7 +4,7 @@
 //
 
 /// The result that ImageAnalyzer will yield for each analyzed image.
-/// It is a simple raw result; further processing is done by GameDataAssembly.
+/// It is a simple raw result; further processing is done by GameModelCollection.
 struct AnalysisResult {
     let player: Player
     let playfield: Playfield
@@ -13,7 +13,9 @@ struct AnalysisResult {
 }
 
 enum AnalysisError: Error {
-    case playfieldNotFound
-    case playerNotFound
-    case unspecified
+    // The player position did not change.
+    case samePlayerPosition
+
+    // Player was not found.
+    case error
 }

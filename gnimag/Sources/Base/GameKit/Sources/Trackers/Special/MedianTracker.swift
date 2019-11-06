@@ -47,13 +47,12 @@ public final class MedianTracker {
 }
 
 
-// MARK: Has2DDataSet (for MacTestingTools)
-extension MedianTracker: Has2DDataSet {
-    /// Return the current raw data from the tracker.
-    /// The data is, by design, monotonically increasing.
-    public func yieldDataSet() -> (xValues: [Double], yValues: [Double]) {
+// MARK: HasScatterDataSet
+extension MedianTracker: HasScatterDataSet {
+    /// Return the raw data from the tracker.
+    public var dataSet: [ScatterDataPoint] {
         let x = (0 ..< values.count).map(Double.init)
-        return (x, values)
+        return zip(x, values).map(ScatterDataPoint.init(x:y:))
     }
 }
 

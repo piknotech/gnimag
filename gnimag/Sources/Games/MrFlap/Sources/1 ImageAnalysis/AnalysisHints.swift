@@ -3,9 +3,8 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import Geometry
-
 /// Hints that are given to ImageAnalyzer.
 struct AnalysisHints {
-    let expectedPlayerPosition: PolarCoordinates
+    /// The expected player (i.e. expected position and size).
+    let expectedPlayer: Player
 }
