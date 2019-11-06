@@ -20,9 +20,9 @@ public enum Measurement {
 
         if let index = runningMeasurements.index(forKey: id) {
             let (_, startTime) = runningMeasurements.remove(at: index)
-            log(.nice, "Task \"\(id)\" took \(1000 * (time - startTime)) ms!")
+            Terminal.log(.nice, "Task \"\(id)\" took \(1000 * (time - startTime)) ms!")
         } else {
-            log(.warning, "There is no task named \"\(id)\"!")
+            Terminal.log(.warning, "There is no task named \"\(id)\"!")
         }
     }
 }
