@@ -18,7 +18,7 @@ public final class MrFlap {
     private var playfield: Playfield!
 
     /// The image analyzer.
-    private let imageAnalyzer = ImageAnalyzer()
+    private let imageAnalyzer: ImageAnalyzer
     private var nextHints: AnalysisHints!
 
     private var gameModelCollector: GameModelCollector!
@@ -33,9 +33,11 @@ public final class MrFlap {
     }
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: Tapper) {
+    public init(imageProvider: ImageProvider, tapper: Tapper, debugLogger: DebugLogger = DebugLogger()) {
         self.imageProvider = imageProvider
         self.tapper = tapper
+
+        imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
     }
 
     /// Begin receiving images and play the game.

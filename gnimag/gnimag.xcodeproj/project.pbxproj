@@ -119,6 +119,8 @@
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
+		63D002942373024600041069 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
+		63D002962373037900041069 /* DebugLoggerFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame.swift */; };
 		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
@@ -278,6 +280,8 @@
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CartesianProduct.swift"; sourceTree = "<group>"; };
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
+		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
+		63D002952373037900041069 /* DebugLoggerFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLoggerFrame.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
@@ -903,9 +907,9 @@
 			isa = PBXGroup;
 			children = (
 				631213E223257F4000C126B4 /* MrFlap.swift */,
-				63D002922372F31900041069 /* DebugLogger */,
 				631213E823257F4000C126B4 /* 1 ImageAnalysis */,
 				631213E323257F4000C126B4 /* 2 GameModelCollection */,
+				63D002922372F31900041069 /* DebugLogger */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1078,6 +1082,15 @@
 				3D2F1439F00EF2198E59A7B3 /* HandySwift.framework */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		63D002922372F31900041069 /* DebugLogger */ = {
+			isa = PBXGroup;
+			children = (
+				63D002932373024600041069 /* DebugLogger.swift */,
+				63D002952373037900041069 /* DebugLoggerFrame.swift */,
+			);
+			path = DebugLogger;
 			sourceTree = "<group>";
 		};
 		9F432FA5361DFCE0850BFC33 /* Dependencies */ = {
@@ -1620,6 +1633,7 @@
 				631213F623257F4000C126B4 /* AnalysisResult.swift in Sources */,
 				631213F823257F4000C126B4 /* Bar.swift in Sources */,
 				631213FC23257F4000C126B4 /* AnalysisHints.swift in Sources */,
+				63D002942373024600041069 /* DebugLogger.swift in Sources */,
 				631213F723257F4000C126B4 /* ImageAnalyzer.swift in Sources */,
 				631213FA23257F4000C126B4 /* Coloring.swift in Sources */,
 				634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */,
@@ -1627,6 +1641,7 @@
 				631213F923257F4000C126B4 /* Playfield.swift in Sources */,
 				631213F523257F4000C126B4 /* GameModel.swift in Sources */,
 				631213F323257F4000C126B4 /* BarCourse.swift in Sources */,
+				63D002962373037900041069 /* DebugLoggerFrame.swift in Sources */,
 				631213FB23257F4000C126B4 /* Player.swift in Sources */,
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,
 			);
@@ -1656,7 +1671,7 @@
 		631212A723253DA100C126B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=200";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1665,7 +1680,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = fast;
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=200";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

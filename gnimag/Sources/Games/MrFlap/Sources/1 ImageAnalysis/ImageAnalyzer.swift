@@ -18,22 +18,36 @@ class ImageAnalyzer {
     private var lastPlayer: Player?
     private var lastColoring: Coloring?
 
+    /// The debug logger, and a shorthand convenience form for the current debug frame
+    private let debugLogger: DebugLogger
+    private var debug: DebugLoggerFrame.ImageAnalysis { debugLogger.currentFrame.imageAnalysis }
+
+    /// Default initializer.
+    init(debugLogger: DebugLogger) {
+        self.debugLogger = debugLogger
+    }
+
     /// Analyze the image. Use the hints to accomplish more performant or better analysis.
     func analyze(image: Image, hints: AnalysisHints) -> Result<AnalysisResult, AnalysisError> {
+        debug.image = image
+        
         guard let coloring = findColoring(in: image) ?? lastColoring else {
             return .failure(.error)
         }
+        debug.coloring.result = coloring
 
         // Find playfield at first call
         playfield ??= findPlayfield(in: image, with: coloring)
         if playfield == nil {
             return .failure(.error)
         }
+        debug.playfield.result = playfield
 
         // Find player
         guard let (player, playerOBB) = findPlayer(in: image, with: coloring, expectedPlayer: hints.expectedPlayer) else {
             return .failure(.error)
         }
+        debug.player.result = player
 
         // Verify that player position has changed
         if let old = lastPlayer, player.angle.isAlmostEqual(to: old.angle, tolerance: 1/1_000), player.height.isAlmostEqual(to: old.height, tolerance: 1/1_000) {
@@ -44,6 +58,7 @@ class ImageAnalyzer {
 
         // Find bars
         let bars = findBars(in: image, with: coloring, playerOBB: playerOBB)
+        debug.bars.result = bars
 
         return .success(AnalysisResult(player: player, playfield: playfield, coloring: coloring, bars: bars))
     }
@@ -61,7 +76,11 @@ class ImageAnalyzer {
         let result = ConnectedChunks.from(colors, maxDistance: 0.05)
 
         // Find largest chunk; must contain at least half of the pixels
-        if result.maxChunkSize < 11 { return nil }
+        if result.maxChunkSize < 11 {
+            debug.coloring.failure = .init(pixels: pixels, chunks: result.chunks)
+            return nil
+        }
+
         let averageColor = result.largestChunk.objects.reduce(Color.zero) { sum, newColor in
             return sum + newColor / Double(result.maxChunkSize)
         }
@@ -95,16 +114,25 @@ class ImageAnalyzer {
     /// Find the player; also, return its OBB for further analysis.
     private func findPlayer(in image: Image, with coloring: Coloring, expectedPlayer: Player) -> (Player, OBB)? {
         let searchCenter = expectedPlayer.coords.position(respectiveTo: playfield.center).nearestPixel
+        debug.player.searchCenter = searchCenter
 
         // Find eye or wing pixel via its unique color
         let path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
-        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: path) else { return nil }
+        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: path) else {
+            debug.player.failure = .eyeNotFound
+            return nil
+        }
+        debug.player.eyePosition = eye
 
         // Find edge of player and calculate its OBB
         let blue = coloring.theme.withTolerance(0.1)
         let limit = EdgeDetector.DetectionLimit.maxPixels(Int(6 * expectedPlayer.size)) // Normal is 4 * size
-        guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: expectedPlayer.coords.angle, limit: limit) else { return nil } // 6 * width is enough
+        guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: expectedPlayer.coords.angle, limit: limit) else {
+            debug.player.failure = .edgeTooLarge
+            return nil
+        }
         let obb = SmallestOBB.containing(edge.map(CGPoint.init))
+        debug.player.obb = obb
 
         // Calculate player properties
         let coords = PolarCoordinates(position: obb.center, center: playfield.center)
