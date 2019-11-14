@@ -47,8 +47,8 @@ final class DebugLoggerFrame {
         struct _Player {
             var searchCenter: Pixel?
             var eyePosition: Pixel?
-            var failure: Failure?
             var obb: OBB?
+            var failure: Failure?
             var result: Player?
 
             enum Failure {
@@ -57,9 +57,33 @@ final class DebugLoggerFrame {
             }
         }
 
-        /// Properties of the bars search.
+        /// Bundles the properties of all bar searches.
         struct _Bars {
+            var locations = [_BarLocation]()
             var result: [Bar]?
+
+            var current: _BarLocation { locations.last! }
+
+            mutating func addNewLocation() {
+                locations.append(.init())
+            }
+        }
+
+        /// A call to "locateBar".
+        class _BarLocation {
+            var startPixel: Pixel?
+            var innerOBB: OBB?
+            var outerOBB: OBB?
+            var upPosition: Pixel?
+            var failure: Failure?
+            var result: Bar?
+
+            enum Failure {
+                case innerEdge
+                case outerEdge
+                case anglesDifferent
+                case widthsDifferent
+            }
         }
     }
 
