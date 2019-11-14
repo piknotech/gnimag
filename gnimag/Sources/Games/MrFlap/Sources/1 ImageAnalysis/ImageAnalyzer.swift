@@ -33,26 +33,26 @@ class ImageAnalyzer {
 
         // Find coloring
         guard let coloring = findColoring(in: image) ?? lastColoring else {
-            return .failure(.error)
+            debug.outcome = .error; return .failure(.error)
         }
         debug.coloring.result = coloring
 
         // Find playfield (only at first call)
         playfield ??= findPlayfield(in: image, with: coloring)
         if playfield == nil {
-            return .failure(.error)
+            debug.outcome = .error; return .failure(.error)
         }
         debug.playfield.result = playfield
 
         // Find player
         guard let (player, playerOBB) = findPlayer(in: image, with: coloring, expectedPlayer: hints.expectedPlayer) else {
-            return .failure(.error)
+            debug.outcome = .error; return .failure(.error)
         }
         debug.player.result = player
 
         // Verify that player position has changed
         if let old = lastPlayer, player.angle.isAlmostEqual(to: old.angle, tolerance: 1/1_000), player.height.isAlmostEqual(to: old.height, tolerance: 1/1_000) {
-            return .failure(.samePlayerPosition)
+            debug.outcome = .samePlayerPosition; return .failure(.samePlayerPosition)
         } else {
             lastPlayer = player
         }
@@ -61,6 +61,7 @@ class ImageAnalyzer {
         let bars = findBars(in: image, with: coloring, playerOBB: playerOBB)
         debug.bars.result = bars
 
+        debug.outcome = .success
         return .success(AnalysisResult(player: player, playfield: playfield, coloring: coloring, bars: bars))
     }
 

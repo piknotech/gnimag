@@ -17,11 +17,14 @@ public final class MrFlap {
     /// The shared playfield.
     private var playfield: Playfield!
 
-    /// The image analyzer.
+    /// Image analyzer and game model collector.
     private let imageAnalyzer: ImageAnalyzer
+    private var gameModelCollector: GameModelCollector!
+
     private var nextHints: AnalysisHints!
 
-    private var gameModelCollector: GameModelCollector!
+    // The debug logger.
+    private let debugLogger: DebugLogger
 
     /// The current analysis state.
     private var state = State.beforeGame
@@ -33,10 +36,11 @@ public final class MrFlap {
     }
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: Tapper, debugLogger: DebugLogger = DebugLogger()) {
+    public init(imageProvider: ImageProvider, tapper: Tapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
         self.tapper = tapper
-
+        self.debugLogger = DebugLogger(parameters: debugParameters)
+        
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
     }
 
@@ -46,6 +50,7 @@ public final class MrFlap {
     public func play() {
         imageProvider.newImage.subscribe { value in
             self.update(image: value.0, time: value.1)
+            self.debugLogger.advance()
         }
     }
 
@@ -74,7 +79,6 @@ public final class MrFlap {
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 
-        print(result.playfield)
         playfield = result.playfield
         gameModelCollector = GameModelCollector(playfield: playfield)
         state = .waitingForFirstMove(initialPlayerPos: result.player)
@@ -103,7 +107,6 @@ public final class MrFlap {
     /// Normal update method while in-game.
     private func gameplayUpdate(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image) else { return }
-
         gameModelCollector.accept(result: result, time: time)
     }
 
