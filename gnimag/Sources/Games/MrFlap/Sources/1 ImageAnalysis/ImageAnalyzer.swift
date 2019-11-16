@@ -195,13 +195,13 @@ class ImageAnalyzer {
         // Integrity checks, reorientate OBBs
         let angle2 = PolarCoordinates.angle(for: outerOBB.center, respectiveTo: playfield.center)
         guard angle1.isAlmostEqual(to: angle2, tolerance: 0.02) else {
-            return nil & {debug.bars.current.failure = .anglesDifferent}
+            return nil & {debug.bars.current.failure = .anglesDifferent(angle1: angle1, angle2: angle2)}
         }
 
         let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
         let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
         guard width1.isAlmostEqual(to: width2, tolerance: 2) else {
-            return nil & {debug.bars.current.failure = .widthsDifferent}
+            return nil & {debug.bars.current.failure = .widthsDifferent(width1: width1, width2: width2)}
         }
         let width = Double(width1 + width2) / 2
 
@@ -217,6 +217,7 @@ class ImageAnalyzer {
             holeSize: playfield.freeSpace - Double(innerHeight + outerHeight)
         )
 
+        debug.bars.current.result = bar
         return (bar, innerOBB)
     }
 

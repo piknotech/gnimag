@@ -18,10 +18,11 @@ final class DebugLogger {
         createDirectory()
     }
 
-    // Create the logging directory, if required.
+    // Delete, if required, and then create the logging directory.
     private func createDirectory() {
         switch parameters.severity {
         case .alwaysText, .onErrors:
+            try? FileManager.default.removeItem(atPath: parameters.location)
             try! FileManager.default.createDirectory(atPath: parameters.location, withIntermediateDirectories: true)
         case .none:
             break
@@ -30,7 +31,7 @@ final class DebugLogger {
 
     /// Log the current frame to disk, if required, and advance to the next frame.
     func advance() {
-        if currentFrame.isInteresting(forSeverity: parameters.severity) {
+        if currentFrame.isValidForLogging(forSeverity: parameters.severity) {
             let frame = currentFrame
             DispatchQueue.global(qos: .utility).async {
                 frame.log(to: self.parameters.location, severity: self.parameters.severity)
