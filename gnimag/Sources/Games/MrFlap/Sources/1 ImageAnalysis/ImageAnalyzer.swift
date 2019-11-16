@@ -194,7 +194,8 @@ class ImageAnalyzer {
         
         // Integrity checks, reorientate OBBs
         let angle2 = PolarCoordinates.angle(for: outerOBB.center, respectiveTo: playfield.center)
-        guard angle1.isAlmostEqual(to: angle2, tolerance: 0.02) else {
+        let distance = Angle(angle1).distance(to: Angle(angle2))
+        guard distance <= 0.02 else {
             return nil & {debug.bars.current.failure = .anglesDifferent(angle1: angle1, angle2: angle2)}
         }
 

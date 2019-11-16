@@ -29,9 +29,14 @@ extension Pixel: DistanceMeasurable {
 public struct Angle: DistanceMeasurable {
     public let value: Double
 
-    /// Default initializer. Value should be in [0, 2pi).
-    public init(value: Double) {
+    /// Default initializer, using a Double value. Value should be in [0, 2pi).
+    public init(_ value: Double) {
         self.value = value
+    }
+
+    /// Default initializer, using a CGFloat value. Value should be in [0, 2pi).
+    public init(_ value: CGFloat) {
+        self.value = Double(value)
     }
 
     /// Calculate the distance to another angle. This distance is always in [0, pi].
