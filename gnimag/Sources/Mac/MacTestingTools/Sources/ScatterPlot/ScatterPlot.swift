@@ -4,6 +4,7 @@
 //
 
 import Cocoa
+import Common
 import Charts
 
 public final class ScatterPlot {
@@ -11,12 +12,14 @@ public final class ScatterPlot {
 
     /// Create a scatter plot with the given HasScatterDataSet object.
     /// The scatter plot is black and is drawn on a white background.
+    /// Must be called on the UI thread.
     public convenience init(from object: HasScatterDataSet, scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
         self.init(dataPoints: object.dataSet, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize)
     }
 
     /// Create a scatter plot with the given data set.
     /// The scatter plot is black/red (using the given colors) and is drawn on a white background.
+    /// Must be called on the UI thread.
     public init(dataPoints: [ScatterDataPoint], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
         let dataPoints = dataPoints.sorted { $0.x < $1.x }
 
@@ -55,6 +58,6 @@ public final class ScatterPlot {
     /// Write the scatter plot to the users desktop.
     public func writeToDesktop(name: String) {
         let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
-        write(to: desktop + "/" + name)
+        write(to: desktop +/ name)
     }
 }

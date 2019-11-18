@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Dispatch
 
 final class DebugLogger {
@@ -20,10 +21,20 @@ final class DebugLogger {
 
     // Delete, if required, and then create the logging directory.
     private func createDirectory() {
+        if [.alwaysText, .onErrors].contains(parameters.severity) {
+
+        }
+
         switch parameters.severity {
         case .alwaysText, .onErrors:
-            try? FileManager.default.removeItem(atPath: parameters.location)
+            // Empty folder without deleting it (retaining attributes like desktop position and icon)
+            let items = (try? FileManager.default.contentsOfDirectory(atPath: parameters.location)) ?? []
+            for item in items where item != "Icon\r" { // Retain folder icon
+                try? FileManager.default.removeItem(atPath: parameters.location +/ item)
+            }
+
             try! FileManager.default.createDirectory(atPath: parameters.location, withIntermediateDirectories: true)
+
         case .none:
             break
         }

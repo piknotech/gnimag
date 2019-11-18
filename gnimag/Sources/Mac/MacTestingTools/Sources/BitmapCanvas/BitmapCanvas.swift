@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import Image
 
@@ -133,7 +134,7 @@ public final class BitmapCanvas {
     /// Write the current canvas content to the users desktop.
     public func writeToDesktop(name: String) {
         let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
-        write(to: desktop + "/" + name)
+        write(to: desktop +/ name)
     }
 
     // MARK: Get CGImage

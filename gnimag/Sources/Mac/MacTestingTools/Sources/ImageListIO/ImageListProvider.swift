@@ -43,7 +43,7 @@ public final class ImageListProvider: ImageProvider {
 
     /// Return the next image in the directory.
     private var nextImage: CGImage? {
-        let path = directoryPath + "/\(i).png"
+        let path = directoryPath +/ "\(i).png"
 
         if let image = NSImage(contentsOfFile: path)?.cgImage(forProposedRect: nil, context: nil, hints: nil) {
             Terminal.log(.info, "Image \(i)")

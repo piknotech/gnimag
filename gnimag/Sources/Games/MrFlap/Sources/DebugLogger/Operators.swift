@@ -14,12 +14,22 @@ precedencegroup NilDebugPrecedence {
 
 func &<T>(lhs: T?, rhs: () -> Void) -> T? {
     rhs()
-    return nil
+    return lhs
 }
 
 func &<T>(lhs: T?, rhs: @autoclosure () -> Void) -> T? {
     rhs()
-    return nil
+    return lhs
+}
+
+func &<T>(lhs: T, rhs: () -> Void) -> T {
+    rhs()
+    return lhs
+}
+
+func &<T>(lhs: T, rhs: @autoclosure () -> Void) -> T {
+    rhs()
+    return lhs
 }
 
 // An operator which allows printing anything (not necessarily CustomStringConvertible) and providing a default value, as follows:

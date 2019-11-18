@@ -96,7 +96,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     // MARK: Public Methods
 
-    /// Check if a point is valid to be added to the core.
+    /// Check if a point is valid to be added to the tracker.
     /// Call this before actually calling `add(value:at:)`.
     public func integrityCheck(with value: Value, at time: Time) -> Bool {
         if !monotonicityChecker.verify(value: time) { return false }
