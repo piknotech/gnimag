@@ -10,14 +10,19 @@ import GameKit
 class GameModelCollector {
     let model: GameModel
 
+    let debugLogger: DebugLogger
+
     /// Default initializer.
-    init(playfield: Playfield) {
-        model = GameModel(playfield: playfield)
+    init(playfield: Playfield, debugLogger: DebugLogger) {
+        model = GameModel(playfield: playfield, debugLogger: debugLogger)
+        self.debugLogger = debugLogger
     }
 
     /// Use the AnalysisResult to update the game model.
     /// Before actually updating the game model, the integrity of the result is checked.
     func accept(result: AnalysisResult, time: Double) {
+        debugLogger.currentFrame.gameModelCollection.wasPerformed = true
+        
         // Update player
         if model.player.integrityCheck(with: result.player, at: time) {
             model.player.update(with: result.player, at: time)
@@ -33,7 +38,7 @@ class GameModelCollector {
 
         // Match model-bars to tracker-bars; update existing bars and add new bars
         let (pairs, newBars) = match(bars: result.bars, to: model.bars, time: playerAngle)
-        
+
         for (tracker, bar) in pairs {
             if tracker.integrityCheck(with: bar, at: playerAngle) {
                 tracker.update(with: bar, at: playerAngle)
@@ -43,7 +48,8 @@ class GameModelCollector {
         }
 
         for bar in newBars {
-            let tracker = BarCourse(playfield: model.playfield)
+            let tracker = BarCourse(playfield: model.playfield, debugLogger: debugLogger)
+            _ = tracker.integrityCheck(with: bar, at: playerAngle) // Just for debug logging
             tracker.update(with: bar, at: playerAngle)
             model.bars.append(tracker)
         }

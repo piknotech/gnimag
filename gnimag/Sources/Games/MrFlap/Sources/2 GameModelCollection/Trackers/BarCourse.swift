@@ -9,9 +9,6 @@ import MacTestingTools
 
 /// BarCourse bundles trackers for a single bar.
 final class BarCourse {
-    /// Just for hashing
-    fileprivate let id = UUID()
-
     /// The state the bar is currently in.
     /// Only trackers with a "normal" state should be considered by prediction algorithms.
     private(set) var state = State.appearing
@@ -34,9 +31,14 @@ final class BarCourse {
     /// The shared playfield.
     private let playfield: Playfield
 
+    /// The debug logger and a shorthand form for the current debug frame.
+    private let debugLogger: DebugLogger
+    private var debug: DebugLoggerFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
+
     // Default initializer.
-    init(playfield: Playfield) {
+    init(playfield: Playfield, debugLogger: DebugLogger) {
         self.playfield = playfield
+        self.debugLogger = debugLogger
 
         yCenter = BasicLinearPingPongTracker(
             absoluteSegmentSwitchTolerance: 1% * playfield.freeSpace,
@@ -54,6 +56,8 @@ final class BarCourse {
     /// Update the trackers with the values from the given bar.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with bar: Bar, at time: Double) {
+        debug.integrityCheckSuccessful = true
+
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)
 
@@ -70,29 +74,43 @@ final class BarCourse {
     /// Check if all given values match the trackers.
     /// NOTE: This changes the state from `.appearing` to `.normal` when necessary.
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
-        guard angle.is(bar.angle, at: time, validWith: .absolute(tolerance: 3% * .pi)) else {
+        performDebugLogging()
+
+        guard angle.is(bar.angle, at: time, validWith: .absolute(tolerance: 3% * .pi), &debug.angle) else {
             return false
         }
 
-        guard width.is(bar.width, validWith: .relative(tolerance: 10%)) else {
+        guard width.is(bar.width, validWith: .relative(tolerance: 10%), &debug.width) else {
             return false
         }
 
         switch state {
         case .appearing:
             // If the appearing hole size does not match (but the angle and width did), the appearing state has ended; switch to normal state
-            if !appearingHoleSize.is(bar.holeSize, at: time, validWith: .absolute(tolerance: 5% * playfield.freeSpace)) {
+            if !appearingHoleSize.is(bar.holeSize, at: time, validWith: .absolute(tolerance: 5% * playfield.freeSpace), &debug.appearingHoleSize) {
                 print("state switch!")
+                debug.stateSwitch = true
                 state = .normal
             }
 
         case .normal:
             return
-                holeSize.is(bar.holeSize, validWith: .relative(tolerance: 5%)) &&
-                yCenter.integrityCheck(with: bar.yCenter, at: time)
+                holeSize.is(bar.holeSize, validWith: .relative(tolerance: 5%), &debug.holeSize) &&
+                yCenter.integrityCheck(with: bar.yCenter, at: time, &debug.yCenter)
         }
 
         return true
+    }
+
+    /// Write information about the trackers into the current debug logger frame.
+    private func performDebugLogging() {
+        debugLogger.currentFrame.gameModelCollection.bars.nextBar()
+        debug.state = state
+        debug.angle.from(tracker: angle)
+        debug.width.from(tracker: width)
+        debug.appearingHoleSize.from(tracker: appearingHoleSize)
+        debug.holeSize.from(tracker: holeSize)
+        debug.yCenter.from(tracker: yCenter)
     }
 }
 
@@ -102,6 +120,6 @@ extension BarCourse: Hashable {
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        ObjectIdentifier(self).hash(into: &hasher)
     }
 }

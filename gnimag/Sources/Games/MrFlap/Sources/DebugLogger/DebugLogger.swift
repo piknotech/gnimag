@@ -21,10 +21,6 @@ final class DebugLogger {
 
     // Delete, if required, and then create the logging directory.
     private func createDirectory() {
-        if [.alwaysText, .onErrors].contains(parameters.severity) {
-
-        }
-
         switch parameters.severity {
         case .alwaysText, .onErrors:
             // Empty folder without deleting it (retaining attributes like desktop position and icon)

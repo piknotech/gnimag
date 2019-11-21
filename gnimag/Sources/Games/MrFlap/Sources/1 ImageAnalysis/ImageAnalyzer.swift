@@ -18,7 +18,7 @@ class ImageAnalyzer {
     private var lastPlayer: Player?
     private var lastColoring: Coloring?
 
-    /// The debug logger, and a shorthand convenience form for the current debug frame
+    /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
     private var debug: DebugLoggerFrame.ImageAnalysis { debugLogger.currentFrame.imageAnalysis }
 
@@ -33,26 +33,26 @@ class ImageAnalyzer {
 
         // Find coloring
         guard let coloring = findColoring(in: image) ?? lastColoring else {
-            debug.outcome = .error; return .failure(.error)
+            return .failure(.error) & {debug.outcome = .error}
         }
         debug.coloring.result = coloring
 
         // Find playfield (only at first call)
         playfield ??= findPlayfield(in: image, with: coloring)
         if playfield == nil {
-            debug.outcome = .error; return .failure(.error)
+            return .failure(.error) & {debug.outcome = .error}
         }
         debug.playfield.result = playfield
 
         // Find player
         guard let (player, playerOBB) = findPlayer(in: image, with: coloring, expectedPlayer: hints.expectedPlayer) else {
-            debug.outcome = .error; return .failure(.error)
+            return .failure(.error) & {debug.outcome = .error}
         }
         debug.player.result = player
 
         // Verify that player position has changed
         if let old = lastPlayer, player.angle.isAlmostEqual(to: old.angle, tolerance: 1/1_000), player.height.isAlmostEqual(to: old.height, tolerance: 1/1_000) {
-            debug.outcome = .samePlayerPosition; return .failure(.samePlayerPosition)
+            return .failure(.samePlayerPosition) & {debug.outcome = .samePlayerPosition}
         } else {
             lastPlayer = player
         }
@@ -169,7 +169,7 @@ class ImageAnalyzer {
     /// Find the bar which is described by the given chunk.
     /// Also return the OBB of the inner part of the bar.
     private func locateBar(from pixel: Pixel, in image: Image, with coloring: Coloring) -> (Bar, innerOBB: OBB)? {
-        debug.bars.addNewLocation()
+        debug.bars.nextBarLocation()
         debug.bars.current.startPixel = pixel
 
         let insideBar = coloring.theme.withTolerance(0.1)
@@ -212,7 +212,7 @@ class ImageAnalyzer {
 
         let bar = Bar(
             width: Double(width),
-            angle: Double(angle1 + angle2) / 2,
+            angle: Angle(angle1).midpoint(between: Angle(angle2)).value,
             innerHeight: correctInnerHeight,
             outerHeight: Double(outerHeight), // Does not need to be corrected
             holeSize: playfield.freeSpace - Double(innerHeight + outerHeight)

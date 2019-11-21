@@ -59,7 +59,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     private let window: CompositeTrackerSlidingWindow<SegmentTrackerType>
 
     /// Up-to-date information about the current segment.
-    private var currentSegment: SegmentInfo!
+    public private(set) var currentSegment: SegmentInfo!
 
     /// The most recent guesses that have been made for the next segment. When the next segment is actually created, these guesses are used.
     private var mostRecentGuessesForNextSegment: Guesses?
@@ -99,7 +99,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Check if a point is valid to be added to the tracker.
     /// Call this before actually calling `add(value:at:)`.
     public func integrityCheck(with value: Value, at time: Time) -> Bool {
-        if !monotonicityChecker.verify(value: time) { return false }
+        if !monotonicityChecker.verify(value: time) { print("not monotone! – \(time)"); return false }
 
         if currentSegmentMatches(value: value, at: time) { return true }
         if nextSegmentMatches(value: value, at: time) { return true }
