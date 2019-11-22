@@ -40,6 +40,7 @@ final class DebugLogger {
     func advance() {
         if currentFrame.isValidForLogging(forSeverity: parameters.severity) {
             let frame = currentFrame
+            frame.prepareSynchronously()
             DispatchQueue.global(qos: .utility).async {
                 frame.log(to: self.parameters.location, severity: self.parameters.severity)
             }

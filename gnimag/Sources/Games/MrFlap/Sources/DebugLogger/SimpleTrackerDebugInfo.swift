@@ -9,14 +9,21 @@ import MacTestingTools
 /// SimpleTrackerDebugInfo describes information about a SimpleTracker at a given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.
 struct SimpleTrackerDebugInfo: CustomStringConvertible {
-    var dataSet: HasScatterDataSet?
-    var regression: Function?
-    var validityResult: ValidityResult?
+    private(set) var dataSetProvider: HasScatterDataSet?
+    private(set) var dataSet: [ScatterDataPoint]? // The data set is only evaluated when required.
 
-    /// Fill "regression" with the regression from the given tracker.
+    private(set) var regression: Function?
+    fileprivate(set) var validityResult: ValidityResult?
+
+    /// Initialize this instance with values from the given tracker.
     mutating func from<T: SimpleTrackerProtocol>(tracker: T) {
-        dataSet = tracker
+        dataSetProvider = tracker
         regression = tracker.regression
+    }
+
+    /// Get the data set from the data set provider and store it.
+    mutating func fetchDataSet() {
+        dataSet = dataSetProvider?.dataSet
     }
 
     enum ValidityResult {
@@ -40,8 +47,9 @@ struct SimpleTrackerDebugInfo: CustomStringConvertible {
     }
 
     /// Nice textual description of this instance.
+    /// Call "fetchDataSet" before describing this instance.
     var description: String {
-        "(dataPoints: \(dataSet?.dataSet.count ??? "nil"), regression: \(regression ??? "nil"), validityResult: \(validityResult?.description ??? "nil"))"
+        "(dataPoints: \(dataSet?.count ??? "nil"), regression: \(regression ??? "nil"), validityResult: \(validityResult?.description ??? "nil"))"
     }
 }
 

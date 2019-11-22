@@ -125,6 +125,12 @@ final class DebugLoggerFrame {
             var angle = SimpleTrackerDebugInfo()
             var size = SimpleTrackerDebugInfo()
             var height = CompositeTrackerDebugInfo()
+
+            /// Do necessary preparations before logging.
+            func prepareForLogging() {
+                angle.fetchDataSet(); size.fetchDataSet()
+                height.fetchDataSet()
+            }
         }
 
         /// Bundles the properties of the bar matching algorithm.
@@ -153,6 +159,14 @@ final class DebugLoggerFrame {
             var appearingHoleSize = SimpleTrackerDebugInfo()
             var holeSize = SimpleTrackerDebugInfo()
             var yCenter = CompositeTrackerDebugInfo()
+
+            /// Do necessary preparations before logging.
+            func prepareForLogging() {
+                yCenter.fetchDataSet() // TODO: superclass/protocol
+                for var info in [angle, width, appearingHoleSize, holeSize] {
+                    info.fetchDataSet()
+                }
+            }
         }
     }
 }

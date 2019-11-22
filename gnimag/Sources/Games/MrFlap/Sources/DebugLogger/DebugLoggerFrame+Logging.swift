@@ -48,6 +48,15 @@ extension DebugLoggerFrame {
         }
     }
 
+    /// Do preparations that are necessary before logging.
+    /// This method is only called when "isValidForLogging" has returned `true`.
+    /// These preparations are performed synchronously.
+    func prepareSynchronously() {
+        // Prepare tracker debug infos
+        gameModelCollection.player.prepareForLogging()
+        gameModelCollection.bars.all.forEach { $0.prepareForLogging() }
+    }
+
     // MARK: - Logging
     /// The filename, consisting of the frame index and of the error state.
     private var filenameForLogging: String {
@@ -62,24 +71,32 @@ extension DebugLoggerFrame {
     }
 
     /// Log the frame to the given directory.
+    /// This method is called asynchronously, i.e. an undefined time after the frame was actually live.
     func log(to directory: String, severity: DebugParameters.Severity) {
+        // Log text
         try? fullLoggingText.write(toFile: directory +/ filenameForLogging, atomically: false, encoding: .utf8)
 
+        // Log images
         if hasError {
-            // Create images subdirectory
             let prefix = String(format: "%06d", index)
             let directory = directory +/ prefix
-            do {
-                try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
-                logImageAnalysisImages(to: directory)
-                logRelevantScatterPlots(to: directory)
-            } catch {
-                Terminal.log(.warning, "DebugLogger – subdirectory \"\(directory)\" couldn't be created!")
-            }
+
+            createImagesSubdirectory(at: directory)
+            logImageAnalysisImages(to: directory)
+            logRelevantScatterPlots(to: directory)
         }
     }
 
     // MARK: Log Images
+    /// Create the subdirectory in which the images will be stored.
+    private func createImagesSubdirectory(at directory: String) {
+        do {
+            try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
+        } catch {
+            Terminal.log(.warning, "DebugLogger – subdirectory \"\(directory)\" couldn't be created!")
+        }
+    }
+
     /// Log all image analysis images.
     private func logImageAnalysisImages(to directory: String) {
         guard let image = imageAnalysis.image, let coloring = imageAnalysis.coloring.result else { return }
@@ -122,14 +139,14 @@ extension DebugLoggerFrame {
             // Plot the yCenter of each bar
             for (i, bar) in self.gameModelCollection.bars.all.enumerated() {
                 let path = directory +/ String(format: "bar_%02d_yCenter.png", i + 1)
-                bar.yCenter.dataSet.map { ScatterPlot(from: $0).write(to: path) }
+                bar.yCenter.dataSet.map { ScatterPlot(dataPoints: $0).write(to: path) }
             }
 
             // TODO: wider when more data points (e.g. als default beim ScatterPlot init)
 
             // Plot the player height
             let path = directory +/ "player_height.png"
-            self.gameModelCollection.player.height.dataSet.map { ScatterPlot(from: $0).write(to: path) }
+            self.gameModelCollection.player.height.dataSet.map { ScatterPlot(dataPoints: $0).write(to: path) }
         }
     }
 

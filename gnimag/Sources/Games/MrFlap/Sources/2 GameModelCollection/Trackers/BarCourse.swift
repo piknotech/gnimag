@@ -41,12 +41,12 @@ final class BarCourse {
         self.debugLogger = debugLogger
 
         yCenter = BasicLinearPingPongTracker(
-            absoluteSegmentSwitchTolerance: 1% * playfield.freeSpace,
+            absoluteSegmentSwitchTolerance: 0.5% * playfield.freeSpace,
             slopeTolerance: .relative(tolerance: 20%),
             boundsTolerance: .absolute(tolerance: 5% * playfield.freeSpace),
             decisionCharacteristics: .init(
-                pointsMatchingNextSegment: 2,
-                maxIntermediatePointsMatchingCurrentSegment: 0
+                pointsMatchingNextSegment: 5,
+                maxIntermediatePointsMatchingCurrentSegment: 1
             )
         )
     }

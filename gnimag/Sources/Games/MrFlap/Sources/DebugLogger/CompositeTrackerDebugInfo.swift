@@ -9,26 +9,35 @@ import MacTestingTools
 /// CompositeTrackerDebugInfo describes information about a CompositeTracker at a given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.
 struct CompositeTrackerDebugInfo: CustomStringConvertible {
-    var dataSet: HasScatterDataSet?
-    var segmentIndex: Int?
-    var segmentRegression: Function?
-    var validityResult: ValidityResult?
+    private(set) var dataSetProvider: HasScatterDataSet?
+    private(set) var dataSet: [ScatterDataPoint]? // The data set is only evaluated when required.
 
-    /// Fill "regression" with the regression from the given tracker.
+    private(set) var segmentIndex: Int?
+    private(set) var segmentRegression: Function?
+
+    fileprivate(set) var validityResult: ValidityResult?
+
+    /// Initialize this instance with values from the given tracker.
     mutating func from<T: SimpleTrackerProtocol>(tracker: CompositeTracker<T>) {
-        dataSet = tracker.allDataPoints
+        dataSetProvider = tracker
         segmentIndex = tracker.currentSegment.index
         segmentRegression = tracker.currentSegment.tracker.regression
     }
 
+    /// Get the data set from the data set provider and store it.
+    mutating func fetchDataSet() {
+        dataSet = dataSetProvider?.dataSet
+    }
+    
     enum ValidityResult {
         case valid
         case invalid
     }
 
     /// Nice textual description of this instance.
+    /// Call "fetchDataSet" before describing this instance.
     var description: String {
-        "(dataPoints: \(dataSet?.dataSet.count ??? "nil"), segmentIndex: \(segmentIndex ??? "nil"), segmentRegression: \(segmentRegression ??? "nil"), validityResult: \(validityResult ??? "nil"))"
+        "(dataPoints: \(dataSet?.count ??? "nil"), segmentIndex: \(segmentIndex ??? "nil"), segmentRegression: \(segmentRegression ??? "nil"), validityResult: \(validityResult ??? "nil"))"
     }
 }
 
