@@ -14,28 +14,13 @@ public protocol HasScatterDataSet {
 
 /// A data point for a scatter plot.
 public struct ScatterDataPoint {
-    /// DataPoints can be distinguished by giving them an abstract color.
-    public enum Color {
-        case odd
-        case even
-        case invalid
-
-        internal var color: NSColor {
-            switch self {
-            case .odd: return .red
-            case .even: return .black
-            case .invalid: return .yellow
-            }
-        }
-    }
-
     /// The properties of the data point.
     public let x: Double
     public let y: Double
-    public let color: Color
+    public let color: ScatterColor
 
     /// Initialize the data point with an explicit color.
-    public init(x: Double, y: Double, color: Color) {
+    public init(x: Double, y: Double, color: ScatterColor) {
         self.x = x
         self.y = y
         self.color = color
@@ -43,8 +28,21 @@ public struct ScatterDataPoint {
 
     /// Initialize the data point with the default color, which is black.
     public init(x: Double, y: Double) {
-        self.x = x
-        self.y = y
-        self.color = .even
+        self.init(x: x, y: y, color: .even)
+    }
+}
+
+/// DataPoints can be distinguished by giving them an abstract color.
+public enum ScatterColor {
+    case odd
+    case even
+    case invalid
+
+    internal var NSColor: NSColor {
+        switch self {
+        case .odd: return .red
+        case .even: return .black
+        case .invalid: return .yellow
+        }
     }
 }

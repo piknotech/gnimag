@@ -73,6 +73,7 @@ extension Geometry.Polygon: Strokable, Fillable {
 
 extension LineSegment: Strokable {
     public func stroke(onto context: CGContext) {
+        if isTrivial { return }
         context.move(to: startPoint)
         context.addLine(to: endPoint)
         context.strokePath()

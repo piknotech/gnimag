@@ -28,24 +28,44 @@ public final class BitmapCanvas {
         )!
     }
 
-    /// Create a canvas directly from the given image.
+    /// Create a canvas directly from the given Image.
     /// The image MUST be ConvertibleToCGImage.
-    public init(image: Image) {
-        let cgImage = (image as! ConvertibleToCGImage).CGImage
+    public convenience init(image: Image) {
+        let CGImage = (image as! ConvertibleToCGImage).CGImage
+        self.init(CGImage: CGImage)
+    }
 
+    /// Create a canvas directly from the given CGImage.
+    public init(CGImage: CGImage) {
         let rgba = 4
         context = CGContext(
             data: nil,
-            width: cgImage.width,
-            height: cgImage.height,
+            width: CGImage.width,
+            height: CGImage.height,
             bitsPerComponent: 8,
-            bytesPerRow: cgImage.width * rgba,
+            bytesPerRow: CGImage.width * rgba,
             space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: cgImage.bitmapInfo.rawValue
+            bitmapInfo: CGImage.bitmapInfo.rawValue
         )!
 
         // Draw image onto context
-        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: cgImage.width, height: cgImage.height))
+        context.draw(CGImage, in: CGRect(x: 0, y: 0, width: CGImage.width, height: CGImage.height))
+    }
+
+    /// Create a canvas by drawing an NSView onto its context.
+    /// The view should have integral side lengths.
+    public convenience init(view: NSView, background: NSColor? = nil) {
+        self.init(width: Int(view.bounds.width), height: Int(view.bounds.height))
+
+        NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: false)
+        background?.drawSwatch(in: view.bounds)
+
+        // Flip context before drawing the view
+        context.saveGState()
+        context.translateBy(x: 0, y: view.bounds.height)
+        context.scaleBy(x: 1, y: -1)
+        view.draw(view.bounds)
+        context.restoreGState()
     }
 
     /// Create a new bitmap canvas where all pixels that have a small enough distance to a given color are filled in a specific (other) color.

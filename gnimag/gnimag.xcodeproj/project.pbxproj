@@ -58,7 +58,7 @@
 		631213B123257A2F00C126B4 /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A523257A2F00C126B4 /* Measurement.swift */; };
 		631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */; };
 		631213B323257A2F00C126B4 /* ScatterPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A823257A2F00C126B4 /* ScatterPlot.swift */; };
-		631213B423257A2F00C126B4 /* HasScatterDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A923257A2F00C126B4 /* HasScatterDataSet.swift */; };
+		631213B423257A2F00C126B4 /* ScatterDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A923257A2F00C126B4 /* ScatterDataSet.swift */; };
 		631213B523257A2F00C126B4 /* CGImage+WriteToFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */; };
 		631213B623257A2F00C126B4 /* ImageListCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AC23257A2F00C126B4 /* ImageListCreator.swift */; };
 		631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AD23257A2F00C126B4 /* ImageListProvider.swift */; };
@@ -126,6 +126,7 @@
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
 		63D002942373024600041069 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
 		63D002962373037900041069 /* DebugLoggerFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame.swift */; };
+		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
 		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
@@ -225,7 +226,7 @@
 		631213A523257A2F00C126B4 /* Measurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
 		631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvertibleToCGImage.swift; sourceTree = "<group>"; };
 		631213A823257A2F00C126B4 /* ScatterPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScatterPlot.swift; sourceTree = "<group>"; };
-		631213A923257A2F00C126B4 /* HasScatterDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HasScatterDataSet.swift; sourceTree = "<group>"; };
+		631213A923257A2F00C126B4 /* ScatterDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScatterDataSet.swift; sourceTree = "<group>"; };
 		631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImage+WriteToFile.swift"; sourceTree = "<group>"; };
 		631213AC23257A2F00C126B4 /* ImageListCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageListCreator.swift; sourceTree = "<group>"; };
 		631213AD23257A2F00C126B4 /* ImageListProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageListProvider.swift; sourceTree = "<group>"; };
@@ -292,6 +293,7 @@
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		63D002952373037900041069 /* DebugLoggerFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLoggerFrame.swift; sourceTree = "<group>"; };
+		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
@@ -830,9 +832,10 @@
 		631213A723257A2F00C126B4 /* ScatterPlot */ = {
 			isa = PBXGroup;
 			children = (
-				631213A923257A2F00C126B4 /* HasScatterDataSet.swift */,
-				63351A5E234DE23E00E42762 /* SimpleDataSet.swift */,
 				631213A823257A2F00C126B4 /* ScatterPlot.swift */,
+				631213A923257A2F00C126B4 /* ScatterDataSet.swift */,
+				63351A5E234DE23E00E42762 /* SimpleDataSet.swift */,
+				63F0193023885BE100E380CB /* ScatterStrokable.swift */,
 			);
 			path = ScatterPlot;
 			sourceTree = "<group>";
@@ -1632,9 +1635,10 @@
 				634AD01B2327E78C00D87BAB /* Drawing Shapes+Lines.swift in Sources */,
 				631213AF23257A2F00C126B4 /* Color+Conversion.swift in Sources */,
 				631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */,
-				631213B423257A2F00C126B4 /* HasScatterDataSet.swift in Sources */,
+				631213B423257A2F00C126B4 /* ScatterDataSet.swift in Sources */,
 				631213B123257A2F00C126B4 /* Measurement.swift in Sources */,
 				634AD0192327D75200D87BAB /* Strokable+Fillable.swift in Sources */,
+				63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */,
 				631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */,
 				631213B323257A2F00C126B4 /* ScatterPlot.swift in Sources */,
 				631213B523257A2F00C126B4 /* CGImage+WriteToFile.swift in Sources */,

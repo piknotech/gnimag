@@ -6,9 +6,11 @@
 import Cocoa
 import Common
 import Charts
+import Image
 
 public final class ScatterPlot {
-    private let data: NSData
+    public let canvas: BitmapCanvas
+    private let view: ScatterChartView
 
     /// Create a scatter plot with the given HasScatterDataSet object.
     /// The scatter plot is black and is drawn on a white background.
@@ -27,37 +29,62 @@ public final class ScatterPlot {
         let entries = dataPoints.map { ChartDataEntry(x: $0.x, y: $0.y) }
 
         // Create DataSet and view
-        let dataSet = ScatterChartDataSet(entries: entries, label: "DataSet")
+        let dataSet = ScatterChartDataSet(entries: entries)
         dataSet.setScatterShape(.circle)
         dataSet.scatterShapeSize = scatterCircleSize
         dataSet.drawValuesEnabled = false
-        dataSet.colors = dataPoints.map { $0.color.color }
+        dataSet.colors = dataPoints.map { $0.color.NSColor }
         let data = ScatterChartData(dataSet: dataSet)
 
-        let view = ScatterChartView(frame: CGRect(origin: .zero, size: outputImageSize))
+        view = ScatterChartView(frame: CGRect(origin: .zero, size: outputImageSize))
         view.data = data
         view.legend.enabled = false
 
-        // Store image data
-        let image = NSImage(size: view.bounds.size)
-        image.lockFocusFlipped(true)
-        NSColor.white.drawSwatch(in: view.bounds) // White background
-        view.draw(view.bounds)
-        image.unlockFocus()
-
-        let rep = NSBitmapImageRep(data: image.tiffRepresentation!)!
-        let viewData = rep.representation(using: .png, properties: [:])!
-        self.data = NSData(data: viewData)
+        // Create BitmapCanvas from the scatter view
+        canvas = BitmapCanvas(view: view)
     }
 
     /// Write the scatter plot to a given destination.
     public func write(to file: String) {
-        data.write(toFile: file, atomically: true)
+        canvas.write(to: file)
     }
 
     /// Write the scatter plot to the users desktop.
     public func writeToDesktop(name: String) {
-        let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
-        write(to: desktop +/ name)
+        canvas.writeToDesktop(name: name)
+    }
+
+    // MARK: ScatterStrokable
+
+    /// Draw the outline of the ScatterStrokable.
+    public func stroke(_ scatterStrokable: ScatterStrokable, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) {
+        let strokable = scatterStrokable.concreteStrokable(for: self)
+        let color = scatterStrokable.color.NSColor.imageColor
+        canvas.stroke(strokable, with: color, alpha: alpha, strokeWidth: strokeWidth)
+    }
+
+    /// Convert a point in the dataset-space into its actual pixel location on the image.
+    public func pixelPosition(of dataPoint: (x: Double, y: Double)) -> CGPoint {
+        var rect = view.viewPortHandler.contentRect
+        rect.origin.y = view.viewPortHandler.offsetBottom // Rect is ULO, we want LLO
+
+        /// Convert a value from one range to another range, keeping its relative position.
+        func convert(_ value: Double, from: SimpleRange<Double>, to: SimpleRange<Double>) -> Double {
+            if from.lower == from.upper { return value }
+            let pos = (value - from.lower) / (from.upper - from.lower)
+            return to.lower + pos * (to.upper - to.lower)
+        }
+
+        // Convert x and y values
+        let xFrom = SimpleRange(from: view.xAxis.axisMinimum, to: view.xAxis.axisMaximum)
+        let xTo = SimpleRange(from: Double(rect.minX), to: Double(rect.maxX))
+        let x = convert(dataPoint.x, from: xFrom, to: xTo)
+
+        // Convert x and y values
+        let yFrom = SimpleRange(from: view.leftAxis.axisMinimum, to: view.leftAxis.axisMaximum)
+        let yTo = SimpleRange(from: Double(rect.minY), to: Double(rect.maxY))
+        let y = convert(dataPoint.y, from: yFrom, to: yTo)
+
+        return CGPoint(x: x, y: y)
     }
 }

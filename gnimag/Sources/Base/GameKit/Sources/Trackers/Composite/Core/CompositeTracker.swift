@@ -75,7 +75,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     public var dataSet: [ScatterDataPoint] { allDataPoints.dataSet }
 
-    private var currentColorForPlotting: ScatterDataPoint.Color {
+    private var currentColorForPlotting: ScatterColor {
         currentSegmentIndex.isMultiple(of: 2) ? .even : .odd
     }
 
