@@ -14,7 +14,9 @@ public final class MonotonicityChecker<T: Comparable> {
         case both
     }
 
-    private var direction: Direction
+    /// The determined monotonicity direction.
+    /// When `.both`, the direction is not yet determined.
+    public private(set) var direction: Direction
 
     /// When `strict`, the values must be strictly monotone, which means that equality is already a failure of monotonicity.
     private let strict: Bool

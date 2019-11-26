@@ -27,9 +27,6 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     }
     private var currentDirection: Direction!
 
-    /// The last segment.
-    private var lastSegment: SegmentInfo?
-
     /// Default initializer.
     public init(
         absoluteSegmentSwitchTolerance: Value,
@@ -47,8 +44,9 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// A new regression for the current segment may be available.
     /// Update the preliminary value for the slope.
-    public override func currentSegmentWasUpdated(segment: SegmentInfo) {
-        guard let slope = segment.tracker.slope, let intercept = segment.tracker.intercept else { return }
+    /// Return the supposed time where the segment started at.
+    public override func currentSegmentWasUpdated(segment: SegmentInfo) -> Time? {
+        guard let slope = segment.tracker.slope, let intercept = segment.tracker.intercept else { return nil }
 
         // 1.: Determine the direction if it is unknown
         if currentDirection == nil {
@@ -66,9 +64,10 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
         // 3.: Update lower or upper bound tracker
         guard
-            let lastSlope = lastSegment?.tracker.slope,
-            let lastIntercept = lastSegment?.tracker.intercept,
-            let intersectionX = LinearSolver.solve(slope: slope - lastSlope, intercept: intercept - lastIntercept) else { return }
+            let lastSegment = finalizedSegments.last,
+            let lastSlope = lastSegment.tracker.slope,
+            let lastIntercept = lastSegment.tracker.intercept,
+            let intersectionX = LinearSolver.solve(slope: slope - lastSlope, intercept: intercept - lastIntercept) else { return nil }
 
         let intersectionY = slope * intersectionX + intercept
 
@@ -78,12 +77,13 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         if preliminaryBoundIsInTracker { relevantTracker.removeLast() }
         preliminaryBoundIsInTracker = relevantTracker.is(intersectionY, validWith: boundsTolerance)
         if preliminaryBoundIsInTracker { relevantTracker.add(value: intersectionY) }
+
+        return intersectionX
     }
 
     /// The current segment has finished and the next segment has begun.
     /// Finalize the value for the slope.
-    public override func advancedToNextSegmentAndFinalizedLastSegment(lastSegment: SegmentInfo) {
-        self.lastSegment = lastSegment
+    public override func willFinalizeCurrentSegmentAndAdvanceToNextSegment() {
         currentDirection = (currentDirection == .up) ? .down : .up
 
         // Mark the preliminary values (if existing) as final

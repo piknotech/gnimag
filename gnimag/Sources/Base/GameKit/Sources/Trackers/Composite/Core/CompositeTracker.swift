@@ -38,6 +38,9 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         public let index: Int
         public let tracker: SegmentTrackerType
 
+        /// The time where the segment has supposedly started. For debugging.
+        fileprivate var supposedStartTime: Time
+
         /// When the tracker has no regression yet, use the guesses (which come from the last segment) for approximated functions and values.
         public let guesses: Guesses?
     }
@@ -49,6 +52,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         let min: Function // Attention: min & max can also be flipped
         let max: Function
 
+        // The start times of the respective guesses. For debugging.
+        fileprivate var minXStart: Time
+        fileprivate var maxXStart: Time
+
         var all: [Function] { [min, max] }
     }
 
@@ -58,14 +65,14 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// The points are then received via delegate callbacks.
     private let window: CompositeTrackerSlidingWindow<SegmentTrackerType>
 
+    /// All segments prior to the current segments.
+    public private(set) var finalizedSegments = [SegmentInfo]()
+
     /// Up-to-date information about the current segment.
     public private(set) var currentSegment: SegmentInfo!
 
     /// The most recent guesses that have been made for the next segment. When the next segment is actually created, these guesses are used.
     private var mostRecentGuessesForNextSegment: Guesses?
-
-    /// The index of the current segment, starting at 0. Each time a new segment is detected, this increases by 1.
-    public var currentSegmentIndex: Int { currentSegment.index }
 
     /// The absolute tolerance for all segments/trackers.
     private let tolerance: Double
@@ -76,12 +83,18 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     public var dataSet: [ScatterDataPoint] { allDataPoints.dataSet }
 
     private var currentColorForPlotting: ScatterColor {
-        currentSegmentIndex.isMultiple(of: 2) ? .even : .odd
+        currentSegment.index.isMultiple(of: 2) ? .even : .odd
     }
 
     /// A monotonicity checker which enforces that values are only added in a time-monontone order.
     private let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
 
+    /// The most distant value for time.
+    /// Because time direction can either be increasing or decreasing, this is either + or -infinity.
+    private var timeInfinity: Time {
+        monotonicityChecker.direction == .decreasing ? -.infinity : +.infinity
+    }
+    
     /// Default initializer.
     public init(tolerance: Double, decisionCharacteristics: NextSegmentDecisionCharacteristics) {
         self.tolerance = tolerance
@@ -89,7 +102,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
         // Create initial tracker
         let tracker = trackerForNextSegment()
-        currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil)
+        currentSegment = SegmentInfo(index: 0, tracker: tracker, supposedStartTime: -timeInfinity, guesses: nil)
 
         window.delegate = self
     }
@@ -186,19 +199,24 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     private func createGuesses(forFunctions functions: [Function], andTimeslots timeslots: [Time], mostRecentTime: Time) -> Guesses? {
         if functions.isEmpty || timeslots.isEmpty { return nil }
 
+        typealias GuessAndTime = (guess: Function, time: Time)
+
         // Create a guess for each function/time combination
-        let guesses = (functions × timeslots).compactMap { function, time in
-            guessForNextPartialFunction(whenSplittingSegmentsAtTime: time, value: function.at(time))
+        let guesses: [GuessAndTime] = (functions × timeslots).compactMap { function, time in
+            guessForNextPartialFunction(whenSplittingSegmentsAtTime: time, value: function.at(time)).map {
+                ($0, time) // (guess, time) tuple, or nil if guess = nil
+            }
         }
 
         if guesses.count < 2 { return nil }
 
         // Sort by comparing the value at the most recent time
-        let comparator: (Function, Function) -> Bool = { guess1, guess2 in
-            guess1.at(mostRecentTime) < guess2.at(mostRecentTime)
+        let comparator: (GuessAndTime, GuessAndTime) -> Bool = { guess1, guess2 in
+            guess1.guess.at(mostRecentTime) < guess2.guess.at(mostRecentTime)
         }
 
-        return Guesses(min: guesses.min(by: comparator)!, max: guesses.max(by: comparator)!)
+        let min = guesses.min(by: comparator)!, max = guesses.max(by: comparator)!
+        return Guesses(min: min.guess, max: max.guess, minXStart: min.time, maxXStart: max.time)
     }
 
     /// Check if the value is either inside the two functions, or is near enough to one of the two functions (using CompositeTracker's tolerance).
@@ -216,6 +234,12 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
     }
 
+    /// Update `supposedXRange` of the current segment.
+    /// `currentSegmentStartTime` is the time value that was returned by the `currentSegmentWasUpdated` delegate call.
+    private func updateCurrentStartTime(with startTime: Time?) {
+        currentSegment.supposedStartTime = startTime ?? -timeInfinity
+    }
+
     // MARK: CompositeTrackerSlidingWindowDelegate
 
     /// New data points are available for the current segment.
@@ -227,24 +251,32 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
         
         currentSegment.tracker.updateRegression()
-        currentSegmentWasUpdated(segment: currentSegment)
+        let time = currentSegmentWasUpdated(segment: currentSegment)
+        updateCurrentStartTime(with: time)
     }
 
     /// Actually advance to the next tracker.
     func madeDecisionToAdvanceToNextTracker(withDataPoints dataPoints: [DataPoint], discardedDataPoints: [DataPoint]) {
         // Finalize old segment
         updateAllDataPoints(withSet: discardedDataPoints)
-        advancedToNextSegmentAndFinalizedLastSegment(lastSegment: currentSegment)
+        willFinalizeCurrentSegmentAndAdvanceToNextSegment()
+        finalizedSegments.append(currentSegment)
 
         // Create next segment
         let nextTracker = trackerForNextSegment()
         dataPoints.forEach { nextTracker.add(value: $0.value, at: $0.time, updateRegression: false) }
         nextTracker.updateRegression()
 
-        currentSegment = SegmentInfo(index: currentSegmentIndex + 1, tracker: nextTracker, guesses: mostRecentGuessesForNextSegment)
-        updateAllDataPoints(withSet: dataPoints)
+        currentSegment = SegmentInfo(
+            index: currentSegment.index + 1,
+            tracker: nextTracker,
+            supposedStartTime: dataPoints.first!.time, // Time of the least recent data point in the new tracker
+            guesses: mostRecentGuessesForNextSegment
+        )
 
-        currentSegmentWasUpdated(segment: currentSegment)
+        updateAllDataPoints(withSet: dataPoints)
+        let time = currentSegmentWasUpdated(segment: currentSegment)
+        updateCurrentStartTime(with: time)
 
         // Reset guesses
         mostRecentGuessesForNextSegment = nil
@@ -252,26 +284,22 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     // MARK: - Delegate And DataSource
 
-    // MARK: Delegate
-
     /// Called each time the regression function or the guesses of the current segment are updated, i.e. each time a new point is added to the current segment.
     /// This is called at least once per segment.
-    open func currentSegmentWasUpdated(segment: SegmentInfo) {
+    /// Return the supposed time where the segment started at.
+    open func currentSegmentWasUpdated(segment: SegmentInfo) -> Time? {
         fatalError("Override and implement this method.")
     }
 
     /// Called when the current segment is being finalized and focus moves to the next segment.
     /// The segment does not necessarily have a regression function, but it has at least a regression function or guesses.
     /// Called exactly once per segment.
-    /// Important: `lastSegment` does not contain any new information because the last call to `currentSegmentWasUpdated` did already have this segment with the exact same data points and regression as a parameter.
-    open func advancedToNextSegmentAndFinalizedLastSegment(lastSegment: SegmentInfo) {
+    open func willFinalizeCurrentSegmentAndAdvanceToNextSegment() {
         fatalError("Override and implement this method.")
     }
 
-    // MARK: DataSource
-
     /// Called exactly once per segment to create an appropriate empty tracker for the next partial function.
-    /// This will be called **after** `advancedToNextSegmentAndFinalizedLastSegment` is called on the delegate.
+    /// This will be called **after** `willFinalizeCurrentSegmentAndAdvanceToNextSegment` is called on the delegate.
     open func trackerForNextSegment() -> SegmentTrackerType {
         fatalError("Override and implement this method.")
     }
