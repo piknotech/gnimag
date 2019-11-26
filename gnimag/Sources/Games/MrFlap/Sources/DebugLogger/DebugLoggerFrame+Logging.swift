@@ -138,15 +138,17 @@ extension DebugLoggerFrame {
         DispatchQueue.main.async {
             // Plot the yCenter of each bar
             for (i, bar) in self.gameModelCollection.bars.all.enumerated() {
-                let path = directory +/ String(format: "bar_%02d_yCenter.png", i + 1)
-                bar.yCenter.dataSet.map { ScatterPlot(dataPoints: $0).write(to: path) }
+                if let plot = bar.yCenter.createScatterPlot() {
+                    plot.write(to: directory +/ String(format: "bar_%02d_yCenter.png", i + 1))
+                }
             }
 
             // TODO: wider when more data points (e.g. als default beim ScatterPlot init)
 
             // Plot the player height
-            let path = directory +/ "player_height.png"
-            self.gameModelCollection.player.height.dataSet.map { ScatterPlot(dataPoints: $0).write(to: path) }
+            if let plot = self.gameModelCollection.player.height.createScatterPlot() {
+                plot.write(to: directory +/ "player_height.png")
+            }
         }
     }
 

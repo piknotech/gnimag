@@ -34,9 +34,12 @@ public struct Color {
     public static let white = Color(1, 1, 1)
     public static let black = Color(0, 0, 0)
     public static let blue = Color(0, 0, 1)
+    public static let lightBlue = Color(0.5, 0.5, 1)
     public static let green = Color(0, 1, 0)
     public static let yellow = Color(1, 1, 0)
+    public static let orange = Color(1, 0.5, 0)
     public static let red = Color(1, 0, 0)
+    public static let cyan = Color(0.2, 1, 1)
 }
 
 extension Color: Equatable {

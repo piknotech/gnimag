@@ -33,12 +33,24 @@ public final class ScatterPlot {
         dataSet.setScatterShape(.circle)
         dataSet.scatterShapeSize = scatterCircleSize
         dataSet.drawValuesEnabled = false
-        dataSet.colors = dataPoints.map { $0.color.NSColor }
+        dataSet.colors = dataPoints.map { $0.color.concreteColor.NSColor }
         let data = ScatterChartData(dataSet: dataSet)
 
         view = ScatterChartView(frame: CGRect(origin: .zero, size: outputImageSize))
         view.data = data
         view.legend.enabled = false
+
+        // Specify exact window (the default margin is too large)
+        if let xMin = dataPoints.first?.x, let xMax = dataPoints.last?.x, let yMin = (dataPoints.min { $0.y < $1.y })?.y, let yMax = (dataPoints.max { $0.y < $1.y })?.y {
+            let xRange = xMax - xMin
+            let yRange = yMax - yMin
+            view.xAxis.axisMinimum = xMin - 5% * xRange
+            view.xAxis.axisMaximum = xMax + 5% * xRange
+            view.leftAxis.axisMinimum = yMin - 5% * yRange
+            view.leftAxis.axisMaximum = yMax + 5% * yRange
+            view.rightAxis.axisMinimum = yMin - 5% * yRange
+            view.rightAxis.axisMaximum = yMax + 5% * yRange
+        }
 
         // Create BitmapCanvas from the scatter view
         canvas = BitmapCanvas(view: view)
@@ -57,14 +69,14 @@ public final class ScatterPlot {
     // MARK: ScatterStrokable
 
     /// Draw the outline of the ScatterStrokable.
-    public func stroke(_ scatterStrokable: ScatterStrokable, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) {
+    public func stroke(_ scatterStrokable: ScatterStrokable, alpha: Double = 1, strokeWidth: Double = 1) {
         let strokable = scatterStrokable.concreteStrokable(for: self)
-        let color = scatterStrokable.color.NSColor.imageColor
+        let color = scatterStrokable.color.concreteColor
         canvas.stroke(strokable, with: color, alpha: alpha, strokeWidth: strokeWidth)
     }
 
     /// The drawing area of the plot, in data point space.
-    public var contentRect: CGRect {
+    public var contentRect: CGRect {
         CGRect(x: view.xAxis.axisMinimum, y: view.leftAxis.axisMinimum, width: view.xAxis.axisRange, height: view.leftAxis.axisRange)
     }
 

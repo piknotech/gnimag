@@ -9,13 +9,10 @@ import Image
 internal extension Color {
     /// Convert the Color to a CGColor with the given alpha component.
     func CGColor(withAlpha alpha: Double) -> CGColor {
-        return NSColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: CGFloat(alpha)).cgColor
+        NSColor.withAlphaComponent(CGFloat(alpha)).cgColor
     }
-}
 
-internal extension NSColor {
-    /// Convert the NSColor to an Image.Color.
-    var imageColor: Color {
-        Color(Double(redComponent), Double(greenComponent), Double(blueComponent))
+    var NSColor: NSColor {
+        Cocoa.NSColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: 1)
     }
 }

@@ -32,17 +32,17 @@ public struct ScatterDataPoint {
     }
 }
 
-/// DataPoints can be distinguished by giving them an abstract color.
+/// DataPoints and functions can be distinguished by giving them an abstract color.
 public enum ScatterColor {
     case odd
     case even
     case invalid
 
-    internal var NSColor: NSColor {
+    internal var concreteColor: Color {
         switch self {
         case .odd: return .red
         case .even: return .black
-        case .invalid: return .yellow
+        case .invalid: return .lightBlue
         }
     }
 }

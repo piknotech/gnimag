@@ -3,6 +3,9 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
+import MacTestingTools
+
 /// BasicLinearPingPongTracker is a PingPongTracker whose lower and upper bounds are constant, and whose segment function is linear.
 public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The trackers for the upper and lower bound.
@@ -107,5 +110,10 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         let intercept = value - slope * time
 
         return Polynomial([intercept, slope])
+    }
+
+    /// Return a ScatterStrokable which matches the function. For debugging.
+    public override func scatterStrokable(for function: Function, color: ScatterColor, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+        LinearScatterStrokable(color: color, line: function as! Polynomial, drawingRange: drawingRange)
     }
 }

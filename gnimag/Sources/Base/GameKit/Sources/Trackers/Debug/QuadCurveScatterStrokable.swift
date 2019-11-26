@@ -26,14 +26,14 @@ public struct QuadCurveScatterStrokable: ScatterStrokable {
 
         // Attention: left is always the lowest value, even if the ranges are inverted
         let x1 = max(drawingRange.lower, Double(scatterPlot.contentRect.minX))
-        let x3 = max(drawingRange.upper, Double(scatterPlot.contentRect.maxX))
+        let x3 = min(drawingRange.upper, Double(scatterPlot.contentRect.maxX))
         let y1 = parabola.at(x1), y3 = parabola.at(x3)
 
         // Find intersection point of the tangents at (x1, y1) and (x3, y3)
         let deriv1 = parabola.derivative.at(x1)
         let deriv3 = parabola.derivative.at(x3)
-        let ray1 = Ray(startPoint: CGPoint(x: x1, y: y1), direction: CGPoint(x: 1, y: deriv1))
-        let ray3 = Ray(startPoint: CGPoint(x: x3, y: y3), direction: CGPoint(x: 1, y: deriv3))
+        let ray1 = Line(through: CGPoint(x: x1, y: y1), direction: CGPoint(x: 1, y: deriv1))
+        let ray3 = Line(through: CGPoint(x: x3, y: y3), direction: CGPoint(x: 1, y: deriv3))
         let intersection = ray1.intersection(with: ray3)!
         let x2 = Double(intersection.x), y2 = Double(intersection.y)
 

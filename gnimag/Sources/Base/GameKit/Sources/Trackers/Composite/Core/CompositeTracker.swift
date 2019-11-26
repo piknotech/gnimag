@@ -53,14 +53,15 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// - Checking if a point is valid in the current segment, when the current segment has no regression yet
     /// - Checking if a point is valid in the next segment (as the next segment cannot have a regression before it is created)
     public struct Guesses {
-        let min: Function // Attention: min & max can also be flipped
-        let max: Function
+        let a: Function
+        let b: Function? // If the two guesses are the same, one of them is omitted.
+
+        var all: [Function] { [a, b].compactMap(id) }
 
         // The start times of the respective guesses. For debugging.
-        fileprivate var minXStart: Time
-        fileprivate var maxXStart: Time
-
-        var all: [Function] { [min, max] }
+        fileprivate var aXStart: Time
+        fileprivate var bXStart: Time?
+        fileprivate var allStartTimes: [Time] { [aXStart, bXStart].compactMap(id) }
     }
 
     // MARK: Properties
@@ -85,42 +86,43 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     public private(set) var allDataPoints = SimpleDataSet()
     public var dataSet: [ScatterDataPoint] { allDataPoints.dataSet }
 
-    /// Information about regression functions from each segment.
-    private var allFunctionInfos: [FunctionDebugInfo] {
+    /// Create information about regression functions from each segment.
+    /// Attention: this is a possibly expensive operation.
+    public var allFunctionInfos: [FunctionDebugInfo] {
         var result = [FunctionDebugInfo]()
         let all = finalizedSegments + [currentSegment!]
 
-        /// Helper function to add ScatterStrokables for a pair of guesses to the result.
-        func add(_ guesses: Guesses, with color: ScatterColor, endTime: Time) {
-            let minStart = guesses.minXStart, maxStart = guesses.maxXStart
-            let minRange = SimpleRange(from: minStart, to: endTime, enforceRegularity: true)
-            let maxRange = SimpleRange(from: maxStart, to: endTime, enforceRegularity: true)
-
-            result.append(QuadCurveScatterStrokable(color: color, parabola: guesses.min, drawingRange: minRange))
-            result.append(QuadCurveScatterStrokable(color: color, parabola: guesses.max, drawingRange: maxRange))
+        /// Convenience function to add a ScatterStrokable for a given function to the result.
+        func add(_ function: Function, with color: ScatterColor, from startTime: Time, to endTime: Time) {
+            let range = SimpleRange(from: startTime, to: endTime, enforceRegularity: true)
+            let strokable = scatterStrokable(for: function, color: color, drawingRange: range)
+            result.append(FunctionDebugInfo(function: function, strokable: strokable))
         }
 
         // Add ScatterStrokables for each segment
         for (i, segment) in all.enumerated() {
-            let endTime = (i == all.count - 1) ? all[i+1].supposedStartTime : timeInfinity
+            let endTime = (i < all.count - 1) ? all[i+1].supposedStartTime : timeInfinity
             let color = segment.colorForPlotting
 
             // Regression function
             if let function = segment.tracker.regression {
-                let startTime = segment.supposedStartTime
-                let range = SimpleRange(from: startTime, to: endTime, enforceRegularity: true)
-                result.append(QuadCurveScatterStrokable(color: color, parabola: function, drawingRange: range))
+                add(function, with: color, from: segment.supposedStartTime, to: endTime)
             }
 
             // Guesses
             else if let guesses = segment.guesses {
-                add(guesses, with: color, endTime: endTime)
+                for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
+                    add(function, with: color, from: startTime, to: endTime)
+                }
             }
         }
 
         // Guesses for next segment
         if let guesses = mostRecentGuessesForNextSegment {
-            add(guesses, with: color, endTime: endTime)
+            let color = currentSegment.colorForPlotting == .even ? ScatterColor.odd : .even
+            for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
+                add(function, with: color, from: startTime, to: timeInfinity)
+            }
         }
 
         return result
@@ -142,7 +144,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
         // Create initial tracker
         let tracker = trackerForNextSegment()
-        currentSegment = SegmentInfo(index: 0, tracker: tracker, supposedStartTime: -timeInfinity, guesses: nil)
+        currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil, supposedStartTime: -timeInfinity)
 
         window.delegate = self
     }
@@ -216,6 +218,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         let range = guessRange()
         let minTime = timeA + (timeB - timeA) * range.lower
         let maxTime = timeA + (timeB - timeA) * range.upper // maxTime is more recent than minTime
+        let timeslots = minTime == maxTime ? [minTime] : [minTime, maxTime]
 
         // Use either the regression or the guesses of the current segment
         var functions: [Function]
@@ -229,7 +232,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
 
         mostRecentGuessesForNextSegment =
-            createGuesses(forFunctions: functions, andTimeslots: [minTime, maxTime], mostRecentTime: maxTime)
+            createGuesses(forFunctions: functions, andTimeslots: timeslots, mostRecentTime: maxTime)
     }
 
     /// Create enclosing (min & max) guesses from the given parameters:
@@ -248,7 +251,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
             }
         }
 
-        if guesses.count < 2 { return nil }
+        if guesses.count == 0 { return nil }
 
         // Sort by comparing the value at the most recent time
         let comparator: (GuessAndTime, GuessAndTime) -> Bool = { guess1, guess2 in
@@ -256,7 +259,14 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
 
         let min = guesses.min(by: comparator)!, max = guesses.max(by: comparator)!
-        return Guesses(min: min.guess, max: max.guess, minXStart: min.time, maxXStart: max.time)
+
+        // Explicitly leave "b" empty if both guesses are identical (because the guess range is empty).
+        // This is good for debugging to avoid drawing the exact same function twice.
+        if guesses.count == 1 {
+            return Guesses(a: min.guess, b: nil, aXStart: min.time, bXStart: nil)
+        } else {
+            return Guesses(a: min.guess, b: max.guess, aXStart: min.time, bXStart: max.time)
+        }
     }
 
     /// Check if the value is either inside the two functions, or is near enough to one of the two functions (using CompositeTracker's tolerance).
@@ -270,7 +280,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Add one or multiple points to `allDataPoints` (just for plotting purposes).
     private func updateAllDataPoints(withSet newPoints: [DataPoint]) {
         for point in newPoints {
-            allDataPoints.add(value: point.value, time: point.time, color: currentColorForPlotting)
+            allDataPoints.add(value: point.value, time: point.time, color: currentSegment.colorForPlotting)
         }
     }
 
@@ -287,7 +297,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     func flushedDataPointsAvailableForCurrentTracker(dataPoints: [DataPoint]) {
         for point in dataPoints {
             currentSegment.tracker.add(value: point.value, at: point.time, updateRegression: false)
-            allDataPoints.add(value: point.value, time: point.time, color: currentColorForPlotting)
+            allDataPoints.add(value: point.value, time: point.time, color: currentSegment.colorForPlotting)
         }
         
         currentSegment.tracker.updateRegression()
@@ -310,8 +320,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         currentSegment = SegmentInfo(
             index: currentSegment.index + 1,
             tracker: nextTracker,
-            supposedStartTime: dataPoints.first!.time, // Time of the least recent data point in the new tracker
-            guesses: mostRecentGuessesForNextSegment
+            guesses: mostRecentGuessesForNextSegment,
+            supposedStartTime: dataPoints.first!.time // Time of the least recent data point in the new tracker
         )
 
         updateAllDataPoints(withSet: dataPoints)
@@ -357,5 +367,12 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Also, values above 1 do not make sense because they would represent a timepoint in the future.
     open func guessRange() -> SimpleRange<Time> {
         SimpleRange<Time>(from: 0, to: 1)
+    }
+
+    /// Return a ScatterStrokable which matches the function. For debugging.
+    /// The function is either a regression function from one of the trackers, or a guess.
+    /// This means, the function was provided by you, and you can be certain about its specific type.
+    open func scatterStrokable(for function: Function, color: ScatterColor, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+        fatalError("Override and implement this method.")
     }
 }

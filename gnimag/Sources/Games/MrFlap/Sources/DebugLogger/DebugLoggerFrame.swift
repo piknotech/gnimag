@@ -124,7 +124,7 @@ final class DebugLoggerFrame {
 
             var angle = SimpleTrackerDebugInfo()
             var size = SimpleTrackerDebugInfo()
-            var height = CompositeTrackerDebugInfo()
+            var height = CompositeTrackerDebugInfo<PolyTracker>()
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
@@ -158,7 +158,7 @@ final class DebugLoggerFrame {
             var width = SimpleTrackerDebugInfo()
             var appearingHoleSize = SimpleTrackerDebugInfo()
             var holeSize = SimpleTrackerDebugInfo()
-            var yCenter = CompositeTrackerDebugInfo()
+            var yCenter = CompositeTrackerDebugInfo<LinearTracker>()
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
