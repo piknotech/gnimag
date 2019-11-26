@@ -113,6 +113,7 @@
 		634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */; };
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
+		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
 		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
 		6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */; };
 		6375953F233A53D900ACA969 /* ShapeErasedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953E233A53D900ACA969 /* ShapeErasedImage.swift */; };
@@ -127,6 +128,7 @@
 		63D002942373024600041069 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
 		63D002962373037900041069 /* DebugLoggerFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
+		63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */; };
 		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
@@ -280,6 +282,7 @@
 		634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polynomial+Arithmetic.swift"; sourceTree = "<group>"; };
 		634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
 		6364934423270ABA00FEF664 /* SimpleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRange.swift; sourceTree = "<group>"; };
+		6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadCurveScatterStrokable.swift; sourceTree = "<group>"; };
 		637595392331012C00ACA969 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+IsAlmostEqual.swift"; sourceTree = "<group>"; };
 		6375953E233A53D900ACA969 /* ShapeErasedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeErasedImage.swift; sourceTree = "<group>"; };
@@ -294,6 +297,7 @@
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		63D002952373037900041069 /* DebugLoggerFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLoggerFrame.swift; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
+		63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionDebugInfo.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
@@ -752,6 +756,7 @@
 				63351A51234B9E7600E42762 /* Composite */,
 				631213812325793100C126B4 /* Polynomial */,
 				6312137A2325793100C126B4 /* Special */,
+				63F0192F23885B7600E380CB /* Debug */,
 				6312137F2325793100C126B4 /* Operators.swift */,
 			);
 			path = Trackers;
@@ -1109,6 +1114,15 @@
 				63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */,
 			);
 			path = DebugLogger;
+			sourceTree = "<group>";
+		};
+		63F0192F23885B7600E380CB /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */,
+				6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		9F432FA5361DFCE0850BFC33 /* Dependencies */ = {
@@ -1607,6 +1621,7 @@
 				63456B3C2364674B00C71EE5 /* ScalarFunctionArithmetic.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
 				63876E662356093500132A21 /* JumpTracker.swift in Sources */,
+				6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */,
 				6312138C2325793C00C126B4 /* SimpleDefaultTracker.swift in Sources */,
 				6312138B2325793C00C126B4 /* AngularWrapper.swift in Sources */,
 				631213882325793C00C126B4 /* Polynomial.swift in Sources */,
@@ -1614,6 +1629,7 @@
 				63F3CC1C234B36D000AA8228 /* Function.swift in Sources */,
 				6312138F2325794600C126B4 /* LinearTracker.swift in Sources */,
 				63456B38236466A900C71EE5 /* ParameterizableFunction.swift in Sources */,
+				63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */,
 				631213912325794600C126B4 /* PolyTracker.swift in Sources */,
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
 				6312138D2325793C00C126B4 /* Operators.swift in Sources */,

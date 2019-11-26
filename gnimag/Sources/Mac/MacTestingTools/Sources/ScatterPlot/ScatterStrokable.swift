@@ -5,7 +5,7 @@
 
 /// ScatterStrokable defines its requirements on an abstract space and generates a concrete Strokable once it is given concrete information about the drawing space (which is defined by a ScatterPlot).
 public protocol ScatterStrokable {
-        /// Return the concrete strokable for drawing onto a specific ScatterPlot.
+    /// Return the concrete strokable for drawing onto a specific ScatterPlot.
     func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable
 
     /// The color of the path.

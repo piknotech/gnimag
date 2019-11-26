@@ -10,9 +10,11 @@ public struct SimpleRange<Bound: SignedNumeric & Comparable> {
     public let upper: Bound
 
     /// Default initializer.
-    public init(from lower: Bound, to upper: Bound) {
-        self.lower = lower
-        self.upper = upper
+    /// If `enforceRegularity`, `from` and `to` are swapped, if required, to guarantee lower <= upper.
+    /// Else, `from` and `to` are left as-is. Defaults to false.
+    public init(from lower: Bound, to upper: Bound, enforceRegularity: Bool = false) {
+        self.lower = enforceRegularity ? min(lower, upper) : lower
+        self.upper = enforceRegularity ? max(lower, upper) : upper
     }
 
     /// States if the range is empty.

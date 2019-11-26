@@ -63,27 +63,32 @@ public final class ScatterPlot {
         canvas.stroke(strokable, with: color, alpha: alpha, strokeWidth: strokeWidth)
     }
 
+    /// The drawing area of the plot, in data point space.
+    public var contentRect: CGRect {
+        CGRect(x: view.xAxis.axisMinimum, y: view.leftAxis.axisMinimum, width: view.xAxis.axisRange, height: view.leftAxis.axisRange)
+    }
+
     /// Convert a point in the dataset-space into its actual pixel location on the image.
     public func pixelPosition(of dataPoint: (x: Double, y: Double)) -> CGPoint {
         var rect = view.viewPortHandler.contentRect
         rect.origin.y = view.viewPortHandler.offsetBottom // Rect is ULO, we want LLO
 
         /// Convert a value from one range to another range, keeping its relative position.
-        func convert(_ value: Double, from: SimpleRange<Double>, to: SimpleRange<Double>) -> Double {
+        func convert<T: FloatingPoint>(_ value: T, from: SimpleRange<T>, to: SimpleRange<T>) -> T {
             if from.lower == from.upper { return value }
             let pos = (value - from.lower) / (from.upper - from.lower)
             return to.lower + pos * (to.upper - to.lower)
         }
 
         // Convert x and y values
-        let xFrom = SimpleRange(from: view.xAxis.axisMinimum, to: view.xAxis.axisMaximum)
-        let xTo = SimpleRange(from: Double(rect.minX), to: Double(rect.maxX))
-        let x = convert(dataPoint.x, from: xFrom, to: xTo)
+        let xFrom = SimpleRange(from: contentRect.minX, to: contentRect.maxX)
+        let xTo = SimpleRange(from: rect.minX, to: rect.maxX)
+        let x = convert(CGFloat(dataPoint.x), from: xFrom, to: xTo)
 
         // Convert x and y values
-        let yFrom = SimpleRange(from: view.leftAxis.axisMinimum, to: view.leftAxis.axisMaximum)
-        let yTo = SimpleRange(from: Double(rect.minY), to: Double(rect.maxY))
-        let y = convert(dataPoint.y, from: yFrom, to: yTo)
+        let yFrom = SimpleRange(from: contentRect.minY, to: contentRect.maxY)
+        let yTo = SimpleRange(from: rect.minY, to: rect.maxY)
+        let y = convert(CGFloat(dataPoint.y), from: yFrom, to: yTo)
 
         return CGPoint(x: x, y: y)
     }

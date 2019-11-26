@@ -38,11 +38,15 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         public let index: Int
         public let tracker: SegmentTrackerType
 
+        /// When the tracker has no regression yet, use the guesses (which come from the last segment) for approximated functions and values.
+        public let guesses: Guesses?
+
         /// The time where the segment has supposedly started. For debugging.
         fileprivate var supposedStartTime: Time
 
-        /// When the tracker has no regression yet, use the guesses (which come from the last segment) for approximated functions and values.
-        public let guesses: Guesses?
+        fileprivate var colorForPlotting: ScatterColor {
+            index.isMultiple(of: 2) ? .even : .odd
+        }
     }
 
     /// Guesses are used for two things:
@@ -79,11 +83,47 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// A dataset with all data points (including invalid ones which have been checked in `is(value:validAt:)`, for plotting with ScatterPlot.
     public private(set) var allDataPoints = SimpleDataSet()
-
     public var dataSet: [ScatterDataPoint] { allDataPoints.dataSet }
 
-    private var currentColorForPlotting: ScatterColor {
-        currentSegment.index.isMultiple(of: 2) ? .even : .odd
+    /// Information about regression functions from each segment.
+    private var allFunctionInfos: [FunctionDebugInfo] {
+        var result = [FunctionDebugInfo]()
+        let all = finalizedSegments + [currentSegment!]
+
+        /// Helper function to add ScatterStrokables for a pair of guesses to the result.
+        func add(_ guesses: Guesses, with color: ScatterColor, endTime: Time) {
+            let minStart = guesses.minXStart, maxStart = guesses.maxXStart
+            let minRange = SimpleRange(from: minStart, to: endTime, enforceRegularity: true)
+            let maxRange = SimpleRange(from: maxStart, to: endTime, enforceRegularity: true)
+
+            result.append(QuadCurveScatterStrokable(color: color, parabola: guesses.min, drawingRange: minRange))
+            result.append(QuadCurveScatterStrokable(color: color, parabola: guesses.max, drawingRange: maxRange))
+        }
+
+        // Add ScatterStrokables for each segment
+        for (i, segment) in all.enumerated() {
+            let endTime = (i == all.count - 1) ? all[i+1].supposedStartTime : timeInfinity
+            let color = segment.colorForPlotting
+
+            // Regression function
+            if let function = segment.tracker.regression {
+                let startTime = segment.supposedStartTime
+                let range = SimpleRange(from: startTime, to: endTime, enforceRegularity: true)
+                result.append(QuadCurveScatterStrokable(color: color, parabola: function, drawingRange: range))
+            }
+
+            // Guesses
+            else if let guesses = segment.guesses {
+                add(guesses, with: color, endTime: endTime)
+            }
+        }
+
+        // Guesses for next segment
+        if let guesses = mostRecentGuessesForNextSegment {
+            add(guesses, with: color, endTime: endTime)
+        }
+
+        return result
     }
 
     /// A monotonicity checker which enforces that values are only added in a time-monontone order.
