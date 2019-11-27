@@ -3,9 +3,9 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-/// SimpleRange defines a ClosedRange and provides some utilities.
-/// When using floating-point types, it is also possible to create unbounded ranges using .infinity.
-public struct SimpleRange<Bound: SignedNumeric & Comparable> {
+/// SimpleRange defines a floating-point range and provides some utilities.
+/// It is also possible to create unbounded ranges using .infinity.
+public struct SimpleRange<Bound: FloatingPoint> {
     public let lower: Bound
     public let upper: Bound
 
@@ -16,6 +16,11 @@ public struct SimpleRange<Bound: SignedNumeric & Comparable> {
         self.lower = enforceRegularity ? min(lower, upper) : lower
         self.upper = enforceRegularity ? max(lower, upper) : upper
     }
+
+    /// The open range, from -inf to +inf.
+    public static var open: SimpleRange { .init(from: -.infinity, to: .infinity) }
+    public static var positiveHalfOpen: SimpleRange { .init(from: 0, to: .infinity) }
+    public static var negativeHalfOpen: SimpleRange { .init(from: -.infinity, to: 0) }
 
     /// States if the range is empty.
     public var isEmpty: Bool {

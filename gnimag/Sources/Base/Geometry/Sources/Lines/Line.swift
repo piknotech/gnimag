@@ -24,6 +24,6 @@ extension Line: LineType {
     }
 
     public var normalizedBounds: SimpleRange<CGFloat> {
-        return SimpleRange(from: -.infinity, to: .infinity)
+        return .open
     }
 }

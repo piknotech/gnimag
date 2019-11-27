@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import MacTestingTools
 
 /// A simple tracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it can map this data to a specific regression function.
@@ -12,7 +13,7 @@ public protocol SimpleTrackerProtocol: HasScatterDataSet {
     typealias Value = Double
 
     /// The specific function type of the regression which is produced by this tracker.
-    associatedtype F: Function
+    associatedtype F: Function & ScalarFunctionArithmetic
 
     // MARK: Methods and Properties
 
@@ -52,6 +53,9 @@ public protocol SimpleTrackerProtocol: HasScatterDataSet {
     /// Perform a validity check, but with a different tolerance value.
     /// This should not affect `self.tolerance`.
     func isDataPoint(value: Value, time: Time, validWithTolerance tolerance: TrackerTolerance, fallback: TrackerFallbackMethod) -> Bool
+
+    /// Return a ScatterStrokable which matches the function. For debugging.
+    func scatterStrokable(for function: F) -> ScatterStrokable
 }
 
 public extension SimpleTrackerProtocol {

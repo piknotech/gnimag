@@ -3,9 +3,12 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
+import MacTestingTools
+
 /// SimpleDefaultTracker is an abstract class providing useful default implementations for SimpleTrackerProtocol.
 /// In particular, when inheriting from SimpleTracker, you can (and must) only customize the regression calculation method; all other methods are implemented for you.
-open /*abstract*/ class SimpleDefaultTracker<F: Function>: SimpleTrackerProtocol {
+open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithmetic>: SimpleTrackerProtocol {
     /// The time-value pairs.
     public private(set) var times = [Time]()
     public private(set) var values = [Value]()
@@ -117,5 +120,10 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function>: SimpleTrackerProtocol
     /// This method is only called if the number of data points is at least `requiredPointsForCalculatingRegression`.
     open func calculateRegression() -> F? {
         fatalError("This is an abstract method.")
+    }
+
+    /// Return a ScatterStrokable which matches the function. For debugging.
+    open func scatterStrokable(for function: F) -> ScatterStrokable {
+        fatalError("This is an abstract method")
     }
 }

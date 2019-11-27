@@ -42,9 +42,9 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         public let guesses: Guesses?
 
         /// The time where the segment has supposedly started. For debugging.
-        fileprivate var supposedStartTime: Time
+        internal var supposedStartTime: Time
 
-        fileprivate var colorForPlotting: ScatterColor {
+        internal var colorForPlotting: ScatterColor {
             index.isMultiple(of: 2) ? .even : .odd
         }
     }
@@ -53,15 +53,17 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// - Checking if a point is valid in the current segment, when the current segment has no regression yet
     /// - Checking if a point is valid in the next segment (as the next segment cannot have a regression before it is created)
     public struct Guesses {
-        let a: Function
-        let b: Function? // If the two guesses are the same, one of them is omitted.
+        /// The guesses. At least one guess is guaranteed.
+        public let all: [Function]
 
-        var all: [Function] { [a, b].compactMap(id) }
+        /// The start times of the respective guesses. For debugging.
+        internal let allStartTimes: [Time]
 
-        // The start times of the respective guesses. For debugging.
-        fileprivate var aXStart: Time
-        fileprivate var bXStart: Time?
-        fileprivate var allStartTimes: [Time] { [aXStart, bXStart].compactMap(id) }
+        /// Default initializer.
+        fileprivate init(a: Function, b: Function? = nil, aXStart: Time, bXStart: Time? = nil) {
+            all = [a, b].compactMap(id)
+            allStartTimes = [aXStart, bXStart].compactMap(id)
+        }
     }
 
     // MARK: Properties
@@ -77,7 +79,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     public private(set) var currentSegment: SegmentInfo!
 
     /// The most recent guesses that have been made for the next segment. When the next segment is actually created, these guesses are used.
-    private var mostRecentGuessesForNextSegment: Guesses?
+    internal var mostRecentGuessesForNextSegment: Guesses?
 
     /// The absolute tolerance for all segments/trackers.
     public let tolerance: Double
@@ -86,54 +88,12 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     public private(set) var allDataPoints = SimpleDataSet()
     public var dataSet: [ScatterDataPoint] { allDataPoints.dataSet }
 
-    /// Create information about regression functions from each segment.
-    /// Attention: this is a possibly expensive operation.
-    public var allFunctionInfos: [FunctionDebugInfo] {
-        var result = [FunctionDebugInfo]()
-        let all = finalizedSegments + [currentSegment!]
-
-        /// Convenience function to add a ScatterStrokable for a given function to the result.
-        func add(_ function: Function, with color: ScatterColor, from startTime: Time, to endTime: Time) {
-            let range = SimpleRange(from: startTime, to: endTime, enforceRegularity: true)
-            let strokable = scatterStrokable(for: function, drawingRange: range)
-            result.append(FunctionDebugInfo(function: function, strokable: strokable, color: color))
-        }
-
-        // Add ScatterStrokables for each segment
-        for (i, segment) in all.enumerated() {
-            let endTime = (i < all.count - 1) ? all[i+1].supposedStartTime : timeInfinity
-            let color = segment.colorForPlotting
-
-            // Regression function
-            if let function = segment.tracker.regression {
-                add(function, with: color, from: segment.supposedStartTime, to: endTime)
-            }
-
-            // Guesses
-            else if let guesses = segment.guesses {
-                for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
-                    add(function, with: color, from: startTime, to: endTime)
-                }
-            }
-        }
-
-        // Guesses for next segment
-        if let guesses = mostRecentGuessesForNextSegment {
-            let color = currentSegment.colorForPlotting == .even ? ScatterColor.odd : .even
-            for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
-                add(function, with: color, from: startTime, to: timeInfinity)
-            }
-        }
-
-        return result
-    }
-
     /// A monotonicity checker which enforces that values are only added in a time-monontone order.
     private let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
 
     /// The most distant value for time.
     /// Because time direction can either be increasing or decreasing, this is either + or -infinity.
-    private var timeInfinity: Time {
+    internal var timeInfinity: Time {
         monotonicityChecker.direction == .decreasing ? -.infinity : +.infinity
     }
     
@@ -263,7 +223,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         // Explicitly leave "b" empty if both guesses are identical (because the guess range is empty).
         // This is good for debugging to avoid drawing the exact same function twice.
         if guesses.count == 1 {
-            return Guesses(a: min.guess, b: nil, aXStart: min.time, bXStart: nil)
+            return Guesses(a: min.guess, aXStart: min.time)
         } else {
             return Guesses(a: min.guess, b: max.guess, aXStart: min.time, bXStart: max.time)
         }

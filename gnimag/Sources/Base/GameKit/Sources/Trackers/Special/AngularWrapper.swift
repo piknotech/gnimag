@@ -3,12 +3,13 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import MacTestingTools
 
 /// AngularWrapper provides a wrapper around simple trackers which would describe a simple function, but their values are angular, meaning a modulo-2-pi is applied.
 /// This tracker undoes the modulo-2-pi step in order to produce the real base function (whose codomain is R instead of [0, 2*pi)).
-public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerProtocol {
+public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerProtocol {    
     public typealias F = Other.F
     
     /// The internal tracker tracking the linearified values.
@@ -33,6 +34,10 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
     public func updateRegression() { tracker.updateRegression() }
     public func reset() { tracker.reset() }
     public func removeLast() { tracker.removeLast() }
+
+    public func scatterStrokable(for function: F) -> ScatterStrokable {
+        tracker.scatterStrokable(for: function)
+    }
 
     // MARK: Linearification
     /// Convert a given angular value in [0, 2pi) to a linear value that is directly near the estimated tracker value.
