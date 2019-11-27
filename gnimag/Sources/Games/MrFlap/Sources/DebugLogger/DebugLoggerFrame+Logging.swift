@@ -134,21 +134,18 @@ extension DebugLoggerFrame {
 
     /// Log scatter plots of relevant trackers.
     private func logRelevantScatterPlots(to directory: String) {
-        // ScatterPlots must be created in the UI thread
-        DispatchQueue.main.async {
-            // Plot the yCenter of each bar
-            for (i, bar) in self.gameModelCollection.bars.all.enumerated() {
-                if let plot = bar.yCenter.createScatterPlot() {
-                    plot.write(to: directory +/ String(format: "bar_%02d_yCenter.png", i + 1))
-                }
+        // Plot the yCenter of each bar
+        for (i, bar) in self.gameModelCollection.bars.all.enumerated() {
+            if let plot = bar.yCenter.createScatterPlot() {
+                plot.write(to: directory +/ String(format: "bar_%02d_yCenter.png", i + 1))
             }
+        }
 
-            // TODO: wider when more data points (e.g. als default beim ScatterPlot init)
+        // TODO: wider when more data points (e.g. als default beim ScatterPlot init)
 
-            // Plot the player height
-            if let plot = self.gameModelCollection.player.height.createScatterPlot() {
-                plot.write(to: directory +/ "player_height.png")
-            }
+        // Plot the player height
+        if let plot = self.gameModelCollection.player.height.createScatterPlot() {
+            plot.write(to: directory +/ "player_height.png")
         }
     }
 

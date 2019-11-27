@@ -14,14 +14,12 @@ public final class ScatterPlot {
 
     /// Create a scatter plot with the given HasScatterDataSet object.
     /// The scatter plot is black and is drawn on a white background.
-    /// Must be called on the UI thread.
     public convenience init(from object: HasScatterDataSet, scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
         self.init(dataPoints: object.dataSet, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize)
     }
 
     /// Create a scatter plot with the given data set.
     /// The scatter plot is black/red (using the given colors) and is drawn on a white background.
-    /// Must be called on the UI thread.
     public init(dataPoints: [ScatterDataPoint], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
         let dataPoints = dataPoints.sorted { $0.x < $1.x }
 
@@ -37,6 +35,7 @@ public final class ScatterPlot {
         let data = ScatterChartData(dataSet: dataSet)
 
         view = ScatterChartView(frame: CGRect(origin: .zero, size: outputImageSize))
+        view.canDrawConcurrently = true
         view.data = data
         view.legend.enabled = false
 

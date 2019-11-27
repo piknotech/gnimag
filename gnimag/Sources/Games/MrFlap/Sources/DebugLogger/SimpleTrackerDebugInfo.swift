@@ -42,13 +42,13 @@ class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: TrackerDebugInfo, 
         var description: String {
             switch self {
             case .valid:
-                return ".valid"
+                return "valid"
 
             case let .invalid(value: value, expected: expected, tolerance: tolerance, wasFallback: wasFallback):
-                return ".INVALID(value: \(value), expected: \(expected), tolerance: \(tolerance), wasFallback: \(wasFallback)"
+                return "INVALID(value: \(value), expected: \(expected), tolerance: \(tolerance), wasFallback: \(wasFallback)"
 
             case .fallbackInvalid:
-                return ".FALLBACK_INVALID"
+                return "FALLBACK_INVALID"
             }
         }
     }
