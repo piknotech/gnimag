@@ -9,8 +9,6 @@ import MacTestingTools
 
 /// QuadCurveScatterStrokable is a ScatterStrokable that can draw a parabola curve using a bezier path.
 public struct QuadCurveScatterStrokable: ScatterStrokable {
-    public let color: ScatterColor
-
     /// The parabola in the data point space.
     let parabola: Polynomial
 
@@ -25,8 +23,8 @@ public struct QuadCurveScatterStrokable: ScatterStrokable {
         }
 
         // Attention: left is always the lowest value, even if the ranges are inverted
-        let x1 = max(drawingRange.lower, Double(scatterPlot.contentRect.minX))
-        let x3 = min(drawingRange.upper, Double(scatterPlot.contentRect.maxX))
+        let x1 = max(drawingRange.lower, Double(scatterPlot.dataContentRect.minX))
+        let x3 = min(drawingRange.upper, Double(scatterPlot.dataContentRect.maxX))
         let y1 = parabola.at(x1), y3 = parabola.at(x3)
 
         // Find intersection point of the tangents at (x1, y1) and (x3, y3)

@@ -122,14 +122,16 @@ final class DebugLoggerFrame {
             var linearAngle: Double?
             var integrityCheckSuccessful = false
 
-            var angle = SimpleTrackerDebugInfo()
-            var size = SimpleTrackerDebugInfo()
+            var angle = SimpleTrackerDebugInfo<AngularWrapper<LinearTracker>>()
+            var size = SimpleTrackerDebugInfo<ConstantTracker>()
             var height = CompositeTrackerDebugInfo<PolyTracker>()
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
-                angle.fetchDataSet(); size.fetchDataSet()
-                height.fetchDataSet()
+                height.fetchFunctionInfos()
+                for tracker in [angle, size, height] as [TrackerDebugInfo] {
+                    tracker.fetchDataSet()
+                }
             }
         }
 
@@ -154,17 +156,17 @@ final class DebugLoggerFrame {
             var stateSwitch = false // True when a state switch was detected in this exact frame
             var integrityCheckSuccessful = false
 
-            var angle = SimpleTrackerDebugInfo()
-            var width = SimpleTrackerDebugInfo()
-            var appearingHoleSize = SimpleTrackerDebugInfo()
-            var holeSize = SimpleTrackerDebugInfo()
+            var angle = SimpleTrackerDebugInfo<AngularWrapper<LinearTracker>>()
+            var width = SimpleTrackerDebugInfo<ConstantTracker>()
+            var appearingHoleSize = SimpleTrackerDebugInfo<LinearTracker>()
+            var holeSize = SimpleTrackerDebugInfo<ConstantTracker>()
             var yCenter = CompositeTrackerDebugInfo<LinearTracker>()
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
-                yCenter.fetchDataSet() // TODO: superclass/protocol
-                for var info in [angle, width, appearingHoleSize, holeSize] {
-                    info.fetchDataSet()
+                yCenter.fetchFunctionInfos()
+                for tracker in [yCenter, angle, width, appearingHoleSize, holeSize] as [TrackerDebugInfo] {
+                    tracker.fetchDataSet()
                 }
             }
         }

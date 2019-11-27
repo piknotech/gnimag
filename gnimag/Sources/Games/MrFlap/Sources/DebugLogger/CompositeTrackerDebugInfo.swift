@@ -8,7 +8,7 @@ import MacTestingTools
 
 /// CompositeTrackerDebugInfo describes information about a CompositeTracker at a given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.
-struct CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: CustomStringConvertible {
+class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerDebugInfo, CustomStringConvertible {
     private(set) var tracker: CompositeTracker<T>?
     private(set) var allDataPoints: [ScatterDataPoint]? // The data set is only evaluated when required.
     private(set) var allFunctions: [FunctionDebugInfo]? // The functions are only evaluated when required.
@@ -19,16 +19,20 @@ struct CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: CustomStringConverti
     fileprivate(set) var validityResult: ValidityResult?
 
     /// Initialize this instance with values from the given tracker.
-    mutating func from(tracker: CompositeTracker<T>) {
+    func from(tracker: CompositeTracker<T>) {
         self.tracker = tracker
         segmentIndex = tracker.currentSegment.index
         segmentRegression = tracker.currentSegment.tracker.regression
     }
 
     /// Get the data set from the data set provider and store it.
-    mutating func fetchDataSet() {
+    func fetchDataSet() {
         allDataPoints = tracker?.dataSet
-        allFunctions = tracker?.allFunctionInfos
+    }
+
+    /// Get function infos from the data set provider and store it.
+    func fetchFunctionInfos() {
+        allFunctions = tracker?.allDebugFunctionInfos
     }
     
     enum ValidityResult {
@@ -45,11 +49,11 @@ struct CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: CustomStringConverti
     /// Create a scatter plot with `allDataPoints` and `allFunctions`, if existing.
     /// Call `fetchDataSet` beforehand.
     func createScatterPlot() -> ScatterPlot? {
-        guard let dataPoints = allDataPoints, let functions = allFunctions else { return nil }
+        guard let dataPoints = allDataPoints else { return nil }
 
         let plot = ScatterPlot(dataPoints: dataPoints)
-        for function in functions {
-            plot.stroke(function.strokable, alpha: 0.75, strokeWidth: 0.5)
+        allFunctions?.forEach { function in
+            plot.stroke(function.strokable, with: function.color, alpha: 0.75, strokeWidth: 0.5)
         }
         
         return plot

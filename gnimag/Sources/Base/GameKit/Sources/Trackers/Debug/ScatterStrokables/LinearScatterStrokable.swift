@@ -9,13 +9,11 @@ import MacTestingTools
 
 /// LinaerScatterStrokable is a ScatterStrokable that can draw a line (segment).
 public struct LinearScatterStrokable: ScatterStrokable {
-    public let color: ScatterColor
-
     /// The line in the data point space.
     /// Can be of degree either 0 or 1.
     let line: Polynomial
 
-    /// The x value range where the parabola should be drawn (in data point space).
+    /// The x value range where the line should be drawn (in data point space).
     /// Attention: the range must be regular, i.e. upper > lower.
     let drawingRange: SimpleRange<Double>
 
@@ -26,8 +24,8 @@ public struct LinearScatterStrokable: ScatterStrokable {
         }
 
         // Attention: left is always the lowest value, even if the ranges are inverted
-        let x1 = max(drawingRange.lower, Double(scatterPlot.contentRect.minX))
-        let x2 = min(drawingRange.upper, Double(scatterPlot.contentRect.maxX))
+        let x1 = max(drawingRange.lower, Double(scatterPlot.dataContentRect.minX))
+        let x2 = min(drawingRange.upper, Double(scatterPlot.dataContentRect.maxX))
         let y1 = line.at(x1), y2 = line.at(x2)
 
         // Convert into scatter plot space
