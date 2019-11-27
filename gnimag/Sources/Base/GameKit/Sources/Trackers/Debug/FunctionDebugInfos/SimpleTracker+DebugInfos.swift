@@ -7,7 +7,7 @@ public extension SimpleTrackerProtocol {
     /// A FunctionDebugInfo containing the regression function, if existing.
     var regressionDebugInfo: FunctionDebugInfo? {
         regression.map {
-            FunctionDebugInfo(function: $0, strokable: scatterStrokable(for: $0), color: .normal)
+            FunctionDebugInfo(function: $0, strokable: scatterStrokable(for: $0), color: .normal, dash: .solid)
         }
     }
 
@@ -29,8 +29,8 @@ public extension SimpleTrackerProtocol {
         }
 
         return [
-            FunctionDebugInfo(function: lower, strokable: scatterStrokable(for: lower), color: .emphasize),
-            FunctionDebugInfo(function: upper, strokable: scatterStrokable(for: upper), color: .emphasize),
+            FunctionDebugInfo(function: lower, strokable: scatterStrokable(for: lower), color: .emphasize, dash: .dashed),
+            FunctionDebugInfo(function: upper, strokable: scatterStrokable(for: upper), color: .emphasize, dash: .dashed),
         ]
     }
 }

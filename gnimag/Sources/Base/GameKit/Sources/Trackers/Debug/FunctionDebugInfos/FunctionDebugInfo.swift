@@ -14,4 +14,23 @@ public struct FunctionDebugInfo {
 
     /// The color of the path.
     public let color: ScatterColor
+
+    /// The dash that is used to draw the graph.
+    public let dash: DashType
+
+    /// DashType defines a dash semantically, allowing trackers to provide values like "dashed" or "solid", separating them from the exact dash layout.
+    public enum DashType {
+        case dashed
+        case solid
+
+        /// The concrete dash that can be used for drawing onto ScatterPlot.
+        public var concreteDash: Dash? {
+            switch self {
+            case .dashed:
+                return Dash(on: 3, off: 3)
+            case .solid:
+                return nil
+            }
+        }
+    }
 }

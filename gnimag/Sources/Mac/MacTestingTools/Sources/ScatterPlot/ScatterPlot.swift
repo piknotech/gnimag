@@ -69,10 +69,10 @@ public final class ScatterPlot {
     // MARK: ScatterStrokable
 
     /// Draw the outline of the ScatterStrokable.
-    public func stroke(_ scatterStrokable: ScatterStrokable, with color: ScatterColor, alpha: Double = 1, strokeWidth: Double = 1) {
+    public func stroke(_ scatterStrokable: ScatterStrokable, with color: ScatterColor, alpha: Double = 1, strokeWidth: Double = 1, dash: Dash? = nil) {
         let color = color.concreteColor
         let strokable = scatterStrokable.concreteStrokable(for: self)
-        canvas.stroke(strokable, with: color, alpha: alpha, strokeWidth: strokeWidth)
+        canvas.stroke(strokable, with: color, alpha: alpha, strokeWidth: strokeWidth, dash: dash)
     }
 
     /// The drawing area of the plot, in data point space.

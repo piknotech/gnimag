@@ -65,8 +65,8 @@ class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: TrackerDebugInfo, 
         guard let dataPoints = allDataPoints else { return nil }
 
         let plot = ScatterPlot(dataPoints: dataPoints)
-        allFunctions?.forEach { function in
-            plot.stroke(function.strokable, with: function.color, alpha: 0.75, strokeWidth: 0.5)
+        allFunctions?.forEach {
+            plot.stroke($0.strokable, with: $0.color, alpha: 0.75, strokeWidth: 0.5, dash: $0.dash.concreteDash)
         }
 
         return plot

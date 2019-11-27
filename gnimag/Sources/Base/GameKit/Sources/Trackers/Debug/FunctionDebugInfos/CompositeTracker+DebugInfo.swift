@@ -14,10 +14,10 @@ public extension CompositeTracker {
         let all = finalizedSegments + [currentSegment!]
 
         /// Convenience function to add a ScatterStrokable for a given function to the result.
-        func add(_ function: Function, with color: ScatterColor, from startTime: Time, to endTime: Time) {
+        func add(_ function: Function, with color: ScatterColor, dash: FunctionDebugInfo.DashType, from startTime: Time, to endTime: Time) {
             let range = SimpleRange(from: startTime, to: endTime, enforceRegularity: true)
             let strokable = scatterStrokable(for: function, drawingRange: range)
-            result.append(FunctionDebugInfo(function: function, strokable: strokable, color: color))
+            result.append(FunctionDebugInfo(function: function, strokable: strokable, color: color, dash: dash))
         }
 
         // Add ScatterStrokables for each segment
@@ -27,13 +27,13 @@ public extension CompositeTracker {
 
             // Regression function
             if let function = segment.tracker.regression {
-                add(function, with: color, from: segment.supposedStartTime, to: endTime)
+                add(function, with: color, dash: .solid, from: segment.supposedStartTime, to: endTime)
             }
 
             // Guesses
             else if let guesses = segment.guesses {
                 for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
-                    add(function, with: color, from: startTime, to: endTime)
+                    add(function, with: color, dash: .dashed, from: startTime, to: endTime)
                 }
             }
         }
@@ -42,7 +42,7 @@ public extension CompositeTracker {
         if let guesses = mostRecentGuessesForNextSegment {
             let color = currentSegment.colorForPlotting == .even ? ScatterColor.odd : .even
             for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
-                add(function, with: color, from: startTime, to: timeInfinity)
+                add(function, with: color, dash: .dashed, from: startTime, to: timeInfinity)
             }
         }
 
