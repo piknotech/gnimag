@@ -10,11 +10,11 @@ import GameKit
 final class PlayerCourse {
     /// The angle and height trackers.
     /// For angle tracking, the normal game time is used. For height tracking, the player angle is used.
-    let angle = AngularWrapper(LinearTracker())
+    let angle: AngularWrapper<LinearTracker>
     let height: JumpTracker
 
     /// The size of the player.
-    let size = ConstantTracker()
+    let size: ConstantTracker
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
@@ -22,12 +22,14 @@ final class PlayerCourse {
 
     /// Default initializer.
     init(playfield: Playfield, debugLogger: DebugLogger) {
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(2% * .pi)))
         height = JumpTracker(
             relativeValueRangeTolerance: 20%,
             absoluteJumpTolerance: 2% * playfield.freeSpace,
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
             customGuessRange: SimpleRange<Double>(from: 0, to: 0)
         )
+        size = ConstantTracker(tolerance: .relative(10%))
 
         self.debugLogger = debugLogger
     }
@@ -51,9 +53,8 @@ final class PlayerCourse {
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
         performDebugLogging(linearAngle: linearAngle)
 
-        return
-            angle.is(player.angle, at: time, validWith: .absolute(tolerance: 2% * .pi), &debug.angle) &&
-            size.is(player.size, validWith: .relative(tolerance: 10%), &debug.size) &&
+        return angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
+            size.isValueValid(player.size, &debug.size) &&
             height.integrityCheck(with: player.height, at: linearAngle, &debug.height)
     }
 

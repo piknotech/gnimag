@@ -10,15 +10,15 @@ public final class ConstantTracker: PolyTracker {
     private var count: Double = 0
 
     /// Default initializer.
-    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 1) {
-        super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints)
+    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 1, tolerance: TrackerTolerance) {
+        super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints, tolerance: tolerance)
     }
 
     /// Convenience method to check for validity, ignoring the time component.
-    public func `is`(_ value: Value, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod = .valid) -> Bool {
-        return self.is(value, at: .zero, validWith: tolerance, fallbackWhenNoRegression: fallbackWhenNoRegression)
+    public func isValueValid(_ value: Value, fallback: TrackerFallbackMethod = .valid) -> Bool {
+        return isDataPointValid(value: value, time: .zero, fallback: fallback)
     }
-    
+
     /// Convenience method, ignoring the time component.
     public func add(value: Value) {
         add(value: value, at: count)

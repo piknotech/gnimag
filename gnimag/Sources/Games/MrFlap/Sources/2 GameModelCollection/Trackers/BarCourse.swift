@@ -18,16 +18,16 @@ final class BarCourse {
     }
 
     // The angle and the center of the hole. yCenter is only used in state "normal".
-    let angle = AngularWrapper(LinearTracker())
+    let angle: AngularWrapper<LinearTracker>
     let yCenter: BasicLinearPingPongTracker
 
     // The constant width and hole size.
-    let width = ConstantTracker()
-    let holeSize = ConstantTracker()
+    let width: ConstantTracker
+    let holeSize: ConstantTracker
 
     /// The hole size while the bar is appearing.
     /// Only used during the appearing state (which is really short). Once the hole size stays constant, the bar has stopped appearing and the "holeSize" tracker is used.
-    let appearingHoleSize = LinearTracker(tolerancePoints: 0)
+    let appearingHoleSize: LinearTracker
 
     /// The shared playfield.
     private let playfield: Playfield
@@ -41,10 +41,14 @@ final class BarCourse {
         self.playfield = playfield
         self.debugLogger = debugLogger
 
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
+        width = ConstantTracker(tolerance: .relative(10%))
+        holeSize = ConstantTracker(tolerance: .relative(5%))
+        appearingHoleSize = LinearTracker(tolerancePoints: 0, tolerance: .absolute(5% * playfield.freeSpace))
         yCenter = BasicLinearPingPongTracker(
             absoluteSegmentSwitchTolerance: 0.5% * playfield.freeSpace,
-            slopeTolerance: .relative(tolerance: 20%),
-            boundsTolerance: .absolute(tolerance: 5% * playfield.freeSpace),
+            slopeTolerance: .relative(20%),
+            boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
                 pointsMatchingNextSegment: 5,
                 maxIntermediatePointsMatchingCurrentSegment: 1
@@ -77,26 +81,20 @@ final class BarCourse {
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         performDebugLogging()
 
-        guard angle.is(bar.angle, at: time, validWith: .absolute(tolerance: 3% * .pi), &debug.angle) else {
-            return false
-        }
-
-        guard width.is(bar.width, validWith: .relative(tolerance: 10%), &debug.width) else {
-            return false
-        }
+        guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
+        guard width.isValueValid(bar.width, &debug.width) else { return false }
 
         switch state {
         case .appearing:
             // If the appearing hole size does not match (but the angle and width did), the appearing state has ended; switch to normal state
-            if !appearingHoleSize.is(bar.holeSize, at: time, validWith: .absolute(tolerance: 5% * playfield.freeSpace), &debug.appearingHoleSize) {
+            if !appearingHoleSize.isDataPointValid(value: bar.holeSize, time: time, &debug.appearingHoleSize) {
                 print("state switch!")
                 debug.stateSwitch = true
                 state = .normal
             }
 
         case .normal:
-            return
-                holeSize.is(bar.holeSize, validWith: .relative(tolerance: 5%), &debug.holeSize) &&
+            return holeSize.isValueValid(bar.holeSize, &debug.holeSize) &&
                 yCenter.integrityCheck(with: bar.yCenter, at: time, &debug.yCenter)
         }
 

@@ -17,10 +17,6 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     private let gravityTracker: ConstantTracker
     private let jumpVelocityTracker: ConstantTracker
 
-    /// The relative tolerance for the gravity and jump velocity trackers.
-    /// This is used to filter out garbage values.
-    private let valueRangeTolerance: TrackerTolerance
-
     /// True when values (gravity & jump velocity) from the current jump are in the trackers.
     /// Because these values are updated each frame until the jump has ended (and the next jump begins), these values are only preliminary until the jump has ended.
     private var usingPreliminaryValues = false
@@ -48,9 +44,10 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         consecutiveNumberOfPointsRequiredToDetectJump: Int,
         customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1)
     ) {
-        gravityTracker = ConstantTracker(tolerancePoints: 1)
-        jumpVelocityTracker = ConstantTracker(tolerancePoints: 1)
-        valueRangeTolerance = .relative(tolerance: relativeValueRangeTolerance)
+        let tolerance = TrackerTolerance.relative(relativeValueRangeTolerance)
+        gravityTracker = ConstantTracker(tolerancePoints: 1, tolerance: tolerance)
+        jumpVelocityTracker = ConstantTracker(tolerancePoints: 1, tolerance: tolerance)
+
         self.customGuessRange = customGuessRange
 
         let characteristics = NextSegmentDecisionCharacteristics(
@@ -81,8 +78,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         let jumpVelocity = jump.derivative.at(jumpStart)
 
         // Add preliminary values to trackers if they are valid
-        if gravityTracker.is(gravity, validWith: valueRangeTolerance) &&
-            jumpVelocityTracker.is(jumpVelocity, validWith: valueRangeTolerance) {
+        if gravityTracker.isValueValid(gravity) && jumpVelocityTracker.isValueValid(jumpVelocity) {
             gravityTracker.add(value: gravity)
             jumpVelocityTracker.add(value: jumpVelocity)
             usingPreliminaryValues = true
@@ -128,7 +124,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
 
     /// Create a parabola tracker for the next jump segment.
     public override func trackerForNextSegment() -> PolyTracker {
-        PolyTracker(degree: 2)
+        PolyTracker(degree: 2, tolerance: .absolute(tolerance))
     }
 
     /// Make a guess for a jump beginning at (`time`, `value`).

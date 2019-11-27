@@ -64,7 +64,7 @@ class GameModelCollector {
         // Check if the given tracker matches the given bar, angle-wise.
         func tracker(_ tracker: BarCourse, matches bar: Bar) -> Bool {
             pairs[tracker] == nil && // Tracker cannot be already taken by another bar
-            tracker.angle.is(bar.angle, at: time, validWith: .absolute(tolerance: .pi / 8), fallbackWhenNoRegression: .useLastValue) // Works for up to 8 bars
+            tracker.angle.isDataPoint(value: bar.angle, time: time, validWithTolerance: .absolute(.pi / 8), fallback: .useLastValue) // Works for up to 8 bars
         }
 
         // Find matching tracker for each bar

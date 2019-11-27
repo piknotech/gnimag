@@ -9,20 +9,16 @@ import MacTestingTools
 /// BasicLinearPingPongTracker is a PingPongTracker whose lower and upper bounds are constant, and whose segment function is linear.
 public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The trackers for the upper and lower bound.
-    public let lowerBoundTracker = ConstantTracker(tolerancePoints: 0)
-    public let upperBoundTracker = ConstantTracker(tolerancePoints: 0)
+    public let lowerBoundTracker: ConstantTracker
+    public let upperBoundTracker: ConstantTracker
 
     /// The tracker for the slope. The slope which is being added here is always positive (i.e. for the "up" direction)
     /// There is one tolerance point because the first value is often too imprecise.
-    public let slopeTracker = ConstantTracker(tolerancePoints: 1)
+    public let slopeTracker: ConstantTracker
 
     /// States if a preliminary value for the slope / for the upper/lower bound is in the respective tracker.
     private var preliminarySlopeIsInTracker = false
     private var preliminaryBoundIsInTracker = false
-
-    /// Tolerances for the slope and the bounds trackers.
-    private let slopeTolerance: TrackerTolerance
-    private let boundsTolerance: TrackerTolerance
 
     private enum Direction {
         case up
@@ -37,8 +33,9 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         boundsTolerance: TrackerTolerance,
         decisionCharacteristics: NextSegmentDecisionCharacteristics
     ) {
-        self.slopeTolerance = slopeTolerance
-        self.boundsTolerance = boundsTolerance
+        lowerBoundTracker = ConstantTracker(tolerancePoints: 0, tolerance: boundsTolerance)
+        upperBoundTracker = ConstantTracker(tolerancePoints: 0, tolerance: boundsTolerance)
+        slopeTracker = ConstantTracker(tolerancePoints: 1, tolerance: slopeTolerance)
 
         super.init(tolerance: absoluteSegmentSwitchTolerance, decisionCharacteristics: decisionCharacteristics)
     }
@@ -62,7 +59,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
         // Update preliminary slope if valid
         if preliminarySlopeIsInTracker { slopeTracker.removeLast() }
-        preliminarySlopeIsInTracker = slopeTracker.is(positiveSlope, validWith: slopeTolerance)
+        preliminarySlopeIsInTracker = slopeTracker.isValueValid(positiveSlope)
         if preliminarySlopeIsInTracker { slopeTracker.add(value: positiveSlope) }
 
         // 3.: Update lower or upper bound tracker
@@ -78,7 +75,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
         // Update preliminary bound if valid
         if preliminaryBoundIsInTracker { relevantTracker.removeLast() }
-        preliminaryBoundIsInTracker = relevantTracker.is(intersectionY, validWith: boundsTolerance)
+        preliminaryBoundIsInTracker = relevantTracker.isValueValid(intersectionY)
         if preliminaryBoundIsInTracker { relevantTracker.add(value: intersectionY) }
 
         return intersectionX
@@ -96,7 +93,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// Create a linear tracker for the next segment.
     public override func trackerForNextSegment() -> LinearTracker {
-        LinearTracker()
+        LinearTracker(tolerance: .absolute(tolerance))
     }
 
     /// Make a guess for a segment beginning at (`time`, `value`).

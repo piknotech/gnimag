@@ -57,8 +57,8 @@ struct SimpleTrackerDebugInfo: CustomStringConvertible {
 
 extension SimpleTrackerProtocol {
     /// Perform a validity check on the tracker and write the result into "validityResult" of the provided SimpleTrackerDebugInfo.
-    func `is`(_ value: Value, at time: Time, validWith tolerance: TrackerTolerance, fallback: TrackerFallbackMethod = .valid, _ debug: inout SimpleTrackerDebugInfo) -> Bool {
-        let result = self.is(value, at: time, validWith: tolerance, fallbackWhenNoRegression: .valid)
+    func isDataPointValid(value: Value, time: Time, fallback: TrackerFallbackMethod = .valid, _ debug: inout SimpleTrackerDebugInfo) -> Bool {
+        let result = isDataPointValid(value: value, time: time, fallback: fallback)
 
         // Fill validityResult according to result
         if result {
@@ -78,7 +78,7 @@ extension SimpleTrackerProtocol {
 
 extension ConstantTracker {
     /// Perform a validity check on the tracker and write the result into "validityResult" of the provided SimpleTrackerDebugInfo.
-    func `is`(_ value: Value, validWith tolerance: TrackerTolerance, fallback: TrackerFallbackMethod = .valid, _ debug: inout SimpleTrackerDebugInfo) -> Bool {
-        self.is(value, at: .zero, validWith: tolerance, fallback: fallback, &debug)
+    func isValueValid(_ value: Value, fallback: TrackerFallbackMethod = .valid, _ debug: inout SimpleTrackerDebugInfo) -> Bool {
+        isDataPointValid(value: value, time: .zero, fallback: fallback, &debug)
     }
 }

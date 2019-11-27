@@ -6,9 +6,9 @@
 /// PolyTracker is a simple tracker providing a polynomial regression function.
 public class PolyTracker: SimpleDefaultTracker<Polynomial> {
     /// Default initializer.
-    public init(maxDataPoints: Int = 500, degree: Int, tolerancePoints: Int = 1) {
+    public init(maxDataPoints: Int = 500, degree: Int, tolerancePoints: Int = 1, tolerance: TrackerTolerance) {
         self.degree = degree
-        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: degree + tolerancePoints + 1)
+        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: degree + tolerancePoints + 1, tolerance: tolerance)
     }
 
     /// The degree of the polynomial regression.

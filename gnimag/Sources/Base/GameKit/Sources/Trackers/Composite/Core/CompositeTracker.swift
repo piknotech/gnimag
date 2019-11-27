@@ -80,7 +80,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     private var mostRecentGuessesForNextSegment: Guesses?
 
     /// The absolute tolerance for all segments/trackers.
-    private let tolerance: Double
+    public let tolerance: Double
 
     /// A dataset with all data points (including invalid ones which have been checked in `is(value:validAt:)`, for plotting with ScatterPlot.
     public private(set) var allDataPoints = SimpleDataSet()
@@ -183,8 +183,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Check if the data point matches the current segment regression.
     private func currentSegmentMatches(value: Value, at time: Time) -> Bool {
         // Regression function available
-        if let regression = currentSegment.tracker.regression {
-            return abs(regression.at(time) - value) <= tolerance
+        if currentSegment.tracker.hasRegression {
+            return currentSegment.tracker.isDataPointValid(value: value, time: time, fallback: .valid)
         }
 
         // Min and max guess available
@@ -349,6 +349,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     }
 
     /// Called exactly once per segment to create an appropriate empty tracker for the next partial function.
+    /// For the tolerance value, use `.absolute(tolerance)`.
     /// This will be called **after** `willFinalizeCurrentSegmentAndAdvanceToNextSegment` is called on the delegate.
     open func trackerForNextSegment() -> SegmentTrackerType {
         fatalError("Override and implement this method.")
