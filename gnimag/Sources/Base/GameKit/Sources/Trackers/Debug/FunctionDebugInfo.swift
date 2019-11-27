@@ -11,4 +11,7 @@ public struct FunctionDebugInfo {
 
     /// The strokable which can be drawn onto a ScatterPlot.
     public let strokable: ScatterStrokable
+
+    /// The color of the path.
+    public let color: ScatterColor
 }

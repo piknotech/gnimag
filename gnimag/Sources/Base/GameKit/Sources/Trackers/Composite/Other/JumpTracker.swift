@@ -145,7 +145,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
-    public override func scatterStrokable(for function: Function, color: ScatterColor, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
-        QuadCurveScatterStrokable(color: color, parabola: function as! Polynomial, drawingRange: drawingRange)
+    public override func scatterStrokable(for function: Function, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+        QuadCurveScatterStrokable(parabola: function as! Polynomial, drawingRange: drawingRange)
     }
 }

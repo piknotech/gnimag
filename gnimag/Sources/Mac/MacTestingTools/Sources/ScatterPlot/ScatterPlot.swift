@@ -69,9 +69,8 @@ public final class ScatterPlot {
     // MARK: ScatterStrokable
 
     /// Draw the outline of the ScatterStrokable.
-    public func stroke(_ scatterStrokable: ScatterStrokable, alpha: Double = 1, strokeWidth: Double = 1) {
+    public func stroke(_ scatterStrokable: ScatterStrokable, with color: Color, alpha: Double = 1, strokeWidth: Double = 1) {
         let strokable = scatterStrokable.concreteStrokable(for: self)
-        let color = scatterStrokable.color.concreteColor
         canvas.stroke(strokable, with: color, alpha: alpha, strokeWidth: strokeWidth)
     }
 

@@ -110,7 +110,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
-    public override func scatterStrokable(for function: Function, color: ScatterColor, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
-        LinearScatterStrokable(color: color, line: function as! Polynomial, drawingRange: drawingRange)
+    public override func scatterStrokable(for function: Function, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+        LinearScatterStrokable(line: function as! Polynomial, drawingRange: drawingRange)
     }
 }

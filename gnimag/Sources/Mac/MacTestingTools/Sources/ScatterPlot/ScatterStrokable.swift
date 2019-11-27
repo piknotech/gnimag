@@ -7,7 +7,4 @@
 public protocol ScatterStrokable {
     /// Return the concrete strokable for drawing onto a specific ScatterPlot.
     func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable
-
-    /// The color of the path.
-    var color: ScatterColor { get }
 }

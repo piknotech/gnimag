@@ -95,8 +95,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         /// Convenience function to add a ScatterStrokable for a given function to the result.
         func add(_ function: Function, with color: ScatterColor, from startTime: Time, to endTime: Time) {
             let range = SimpleRange(from: startTime, to: endTime, enforceRegularity: true)
-            let strokable = scatterStrokable(for: function, color: color, drawingRange: range)
-            result.append(FunctionDebugInfo(function: function, strokable: strokable))
+            let strokable = scatterStrokable(for: function, drawingRange: range)
+            result.append(FunctionDebugInfo(function: function, strokable: strokable, color: color))
         }
 
         // Add ScatterStrokables for each segment
@@ -373,7 +373,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Return a ScatterStrokable which matches the function. For debugging.
     /// The function is either a regression function from one of the trackers, or a guess.
     /// This means, the function was provided by you, and you can be certain about its specific type.
-    open func scatterStrokable(for function: Function, color: ScatterColor, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+    open func scatterStrokable(for function: Function, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
         fatalError("Override and implement this method.")
     }
 }

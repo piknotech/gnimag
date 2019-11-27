@@ -26,23 +26,31 @@ public struct ScatterDataPoint {
         self.color = color
     }
 
-    /// Initialize the data point with the default color, which is black.
+    /// Initialize the data point with the default color.
     public init(x: Double, y: Double) {
-        self.init(x: x, y: y, color: .even)
+        self.init(x: x, y: y, color: .normal)
     }
 }
 
 /// DataPoints and functions can be distinguished by giving them an abstract color.
 public enum ScatterColor {
-    case odd
+    case normal
+    case emphasize
+
     case even
+    case odd
     case invalid
 
     internal var concreteColor: Color {
         switch self {
-        case .odd: return .red
-        case .even: return .black
-        case .invalid: return .lightBlue
+        case .normal, .even:
+            return .black
+
+        case .odd:
+            return .red
+
+        case .invalid, .emphasize:
+            return .lightBlue
         }
     }
 }
