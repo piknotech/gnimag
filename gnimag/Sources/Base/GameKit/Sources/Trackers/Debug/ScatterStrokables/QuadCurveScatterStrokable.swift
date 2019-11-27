@@ -16,13 +16,18 @@ public struct QuadCurveScatterStrokable: ScatterStrokable {
     /// Attention: the range must be regular, i.e. upper > lower.
     let drawingRange: SimpleRange<Double>
 
-     /// Return the concrete strokable for drawing onto a specific ScatterPlot.
-    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
+    /// Default initializer.
+    public init(parabola: Polynomial, drawingRange: SimpleRange<Double>) {
         guard parabola.degree == 2 else {
             exit(withMessage: "QuadCurveScatterStrokable can only draw polynomials of degree 2!")
         }
 
-        // Attention: left is always the lowest value, even if the ranges are inverted
+        self.parabola = parabola
+        self.drawingRange = drawingRange
+    }
+
+     /// Return the concrete strokable for drawing onto a specific ScatterPlot.
+    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
         let x1 = max(drawingRange.lower, Double(scatterPlot.dataContentRect.minX))
         let x3 = min(drawingRange.upper, Double(scatterPlot.dataContentRect.maxX))
         let y1 = parabola.at(x1), y3 = parabola.at(x3)

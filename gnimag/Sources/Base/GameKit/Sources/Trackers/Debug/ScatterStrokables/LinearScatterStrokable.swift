@@ -17,13 +17,18 @@ public struct LinearScatterStrokable: ScatterStrokable {
     /// Attention: the range must be regular, i.e. upper > lower.
     let drawingRange: SimpleRange<Double>
 
-     /// Return the concrete strokable for drawing onto a specific ScatterPlot.
-    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
+    /// Default initializer.
+    public init(line: Polynomial, drawingRange: SimpleRange<Double>) {
         guard line.degree < 2 else {
             exit(withMessage: "LinearScatterStrokable can only draw polynomials of degree 0 or 1!")
         }
 
-        // Attention: left is always the lowest value, even if the ranges are inverted
+        self.line = line
+        self.drawingRange = drawingRange
+    }
+
+     /// Return the concrete strokable for drawing onto a specific ScatterPlot.
+    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
         let x1 = max(drawingRange.lower, Double(scatterPlot.dataContentRect.minX))
         let x2 = min(drawingRange.upper, Double(scatterPlot.dataContentRect.maxX))
         let y1 = line.at(x1), y2 = line.at(x2)
