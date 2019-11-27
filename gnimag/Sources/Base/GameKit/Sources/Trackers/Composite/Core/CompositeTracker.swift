@@ -84,9 +84,17 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// The absolute tolerance for all segments/trackers.
     public let tolerance: Double
 
-    /// A dataset with all data points (including invalid ones which have been checked in `is(value:validAt:)`, for plotting with ScatterPlot.
-    public private(set) var allDataPoints = SimpleDataSet()
-    public var dataSet: [ScatterDataPoint] { allDataPoints.dataSet }
+    /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)
+    private var allDataPoints = SimpleDataSet()
+
+    /// The full dataset, containing all points:
+    ///  - Valid points that have been added to the tracker,
+    ///  - Invalid points that failed the `integrityCheck`,
+    ///  - Points that are currently in the decision window and therefore propably belong to the next segment.
+    public var dataSet: [ScatterDataPoint] {
+        allDataPoints.dataSet +
+        window.dataPoints.map { ScatterDataPoint(x: $0.time, y: $0.value, color: .inDecisionWindow) }
+    }
 
     /// A monotonicity checker which enforces that values are only added in a time-monontone order.
     private let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
@@ -292,7 +300,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         mostRecentGuessesForNextSegment = nil
     }
 
-    // MARK: - Delegate And DataSource
+    // MARK: Abstract Methods (Delegate And DataSource)
 
     /// Called each time the regression function or the guesses of the current segment are updated, i.e. each time a new point is added to the current segment.
     /// This is called at least once per segment.

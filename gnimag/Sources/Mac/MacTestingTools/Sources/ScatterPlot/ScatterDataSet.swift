@@ -37,8 +37,10 @@ public enum ScatterColor {
     case normal
     case emphasize
 
+    // Special values for CompositeTracker.
     case even
     case odd
+    case inDecisionWindow
     case invalid
 
     internal var concreteColor: Color {
@@ -48,6 +50,9 @@ public enum ScatterColor {
 
         case .odd:
             return .red
+
+        case .inDecisionWindow:
+            return .white
 
         case .invalid, .emphasize:
             return .lightBlue
