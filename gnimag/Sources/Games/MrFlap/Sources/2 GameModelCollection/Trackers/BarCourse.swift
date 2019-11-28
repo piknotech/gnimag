@@ -102,7 +102,7 @@ final class BarCourse {
     }
 
     /// Write information about the trackers into the current debug logger frame.
-    private func performDebugLogging() {
+    func performDebugLogging() {
         debugLogger.currentFrame.gameModelCollection.bars.nextBar()
         debug.state = state
         debug.angle.from(tracker: angle)

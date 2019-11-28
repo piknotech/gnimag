@@ -10,7 +10,9 @@ import GameKit
 class GameModelCollector {
     let model: GameModel
 
-    let debugLogger: DebugLogger
+    /// The debug logger and a shorthand form for the current debug frame.
+    private let debugLogger: DebugLogger
+    private var debug: DebugLoggerFrame.GameModelCollection { debugLogger.currentFrame.gameModelCollection }
 
     /// Default initializer.
     init(playfield: Playfield, debugLogger: DebugLogger) {
@@ -36,9 +38,14 @@ class GameModelCollector {
         // Bars: instead of using the game time, use the player angle for bar-related trackers. This is useful to prevent small lags (which stop both the player and the bars) from destroying all of the tracking.
         let playerAngle = model.player.angle.linearify(result.player.angle, at: time) // Map angle from [0, 2pi) to R
 
-        // Match model-bars to tracker-bars; update existing bars and add new bars
+        // Match model-bars to tracker-bars
         let (pairs, newBars) = match(bars: result.bars, to: model.bars, time: playerAngle)
+        updateBars(with: pairs, newBars: newBars, playerAngle: playerAngle)
+    }
 
+    /// Update the bar trackers with the result from the matching algorithm.
+    private func updateBars(with pairs: [BarCourse: Bar], newBars: [Bar], playerAngle: Double) {
+        // Update existing bars
         for (tracker, bar) in pairs {
             if tracker.integrityCheck(with: bar, at: playerAngle) {
                 tracker.update(with: bar, at: playerAngle)
@@ -47,9 +54,10 @@ class GameModelCollector {
             }
         }
 
+        // Add new bars
         for bar in newBars {
             let tracker = BarCourse(playfield: model.playfield, debugLogger: debugLogger)
-            _ = tracker.integrityCheck(with: bar, at: playerAngle) // Just for debug logging
+            tracker.performDebugLogging() // Required because there is no call to `integrityCheck`
             tracker.update(with: bar, at: playerAngle)
             model.bars.append(tracker)
         }

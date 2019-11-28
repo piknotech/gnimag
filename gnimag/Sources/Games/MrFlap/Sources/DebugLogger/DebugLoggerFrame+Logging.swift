@@ -44,17 +44,19 @@ extension DebugLoggerFrame {
         switch severity {
         case .none: return false
         case .alwaysText: return true
-        case .onErrors: return hasError
+        case .onErrors, .textOnly: return hasError
         }
     }
 
     /// Do preparations that are necessary before logging.
     /// This method is only called when "isValidForLogging" has returned `true`.
     /// These preparations are performed synchronously.
-    func prepareSynchronously() {
+    func prepareSynchronously(forSeverity severity: DebugParameters.Severity) {
         // Prepare tracker debug infos
-        gameModelCollection.player.prepareForLogging()
-        gameModelCollection.bars.all.forEach { $0.prepareForLogging() }
+        if !severity.noImages {
+            gameModelCollection.player.prepareForLogging()
+            gameModelCollection.bars.all.forEach { $0.prepareForLogging() }
+        }
     }
 
     // MARK: - Logging
@@ -77,7 +79,7 @@ extension DebugLoggerFrame {
         try? fullLoggingText.write(toFile: directory +/ filenameForLogging, atomically: false, encoding: .utf8)
 
         // Log images
-        if hasError {
+        if hasError && !severity.noImages {
             let prefix = String(format: "%06d", index)
             let directory = directory +/ prefix
 

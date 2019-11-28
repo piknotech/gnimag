@@ -22,7 +22,7 @@ final class DebugLogger {
     // Delete, if required, and then create the logging directory.
     private func createDirectory() {
         switch parameters.severity {
-        case .alwaysText, .onErrors:
+        case .alwaysText, .onErrors, .textOnly:
             // Empty folder without deleting it (retaining attributes like desktop position and icon)
             let items = (try? FileManager.default.contentsOfDirectory(atPath: parameters.location)) ?? []
             for item in items where item != "Icon\r" { // Retain folder icon
@@ -40,7 +40,7 @@ final class DebugLogger {
     func advance() {
         if currentFrame.isValidForLogging(forSeverity: parameters.severity) {
             let frame = currentFrame
-            frame.prepareSynchronously()
+            frame.prepareSynchronously(forSeverity: parameters.severity)
             DispatchQueue.global(qos: .utility).async {
                 frame.log(to: self.parameters.location, severity: self.parameters.severity)
             }

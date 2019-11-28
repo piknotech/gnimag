@@ -7,7 +7,7 @@ import Common
 import MacTestingTools
 
 public extension CompositeTracker {
-    /// Create information about regression functions from the last 10 segments.
+    /// Create information about all regression functions.
     /// This includes guesses and creates a very clear picture.
     /// Attention: this is a possibly expensive operation.
     var allDebugFunctionInfos: [FunctionDebugInfo] {
@@ -51,7 +51,7 @@ public extension CompositeTracker {
         return result
     }
 
-    /// Information about all regressions and all tolerance bound functions of the last 10 segments.
+    /// Information about the regressions and tolerance bound functions of all segments.
     /// Does not include any guesses.
     var segmentwiseFullDebugFunctionInfos: [FunctionDebugInfo] {
         let all = finalizedSegments + [currentSegment!]

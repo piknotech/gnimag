@@ -18,8 +18,17 @@ public struct DebugParameters {
         /// Error means either an image analysis error or a data integrity error.
         case onErrors
 
+        /// Log text on errors.
+        /// Error means either an image analysis error or a data integrity error.
+        case textOnly
+
         /// Always log text. Log text and images on errors.
         case alwaysText
+
+        /// True if logging of images is disabled.
+        var noImages: Bool {
+            return [.none, .textOnly].contains(self)
+        }
     }
 
     /// Default initializer.

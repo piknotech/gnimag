@@ -114,7 +114,6 @@ final class DebugLoggerFrame {
         var wasPerformed = false
 
         var player = _Player()
-        var barMatchings = _BarMatchings()
         var bars = _Bars()
 
         /// Properties of the player tracking.
@@ -133,11 +132,6 @@ final class DebugLoggerFrame {
                     tracker.fetchDataSet()
                 }
             }
-        }
-
-        /// Bundles the properties of the bar matching algorithm.
-        class _BarMatchings {
-
         }
 
         /// Bundles the properties of all bar trackings.
