@@ -93,7 +93,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// Create a linear tracker for the next segment.
     public override func trackerForNextSegment() -> LinearTracker {
-        LinearTracker(tolerance: .absolute(tolerance))
+        LinearTracker(tolerancePoints: 3, tolerance: .absolute(tolerance))
     }
 
     /// Make a guess for a segment beginning at (`time`, `value`).
@@ -107,6 +107,19 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         let intercept = value - slope * time
 
         return Polynomial([intercept, slope])
+    }
+
+    /// Move the guess range to the back to
+    public override func guessRange(for timeRange: Time) -> SimpleRange<Time> {
+        guard let slope = slopeTracker.average ?? slopeTracker.values.last else {
+            return SimpleRange(from: 0, to: 0.5)
+        }
+
+        // d: horizontal distance from tolerance line to actual line (tolerance is the vertical distance)
+        let d = tolerance / abs(slope)
+        let from = 0.5 - d / (2 * timeRange) // Go d/2 back in time, starting at 0.5 (midpoint between a and b)
+        let to = 0.5 // Range cannot start after the midpoint of a and b
+        return SimpleRange(from: from, to: to)
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.

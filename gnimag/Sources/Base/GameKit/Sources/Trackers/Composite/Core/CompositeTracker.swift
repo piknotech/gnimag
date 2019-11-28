@@ -183,7 +183,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         let timeB = window.decisionInitiator?.time ?? nextDataPoint.time // timeB is more recent than timeA
 
         // Transform timeslots to match the custom guess range
-        let range = guessRange()
+        let range = guessRange(for: abs(timeB - timeA))
         let minTime = timeA + (timeB - timeA) * range.lower
         let maxTime = timeA + (timeB - timeA) * range.upper // maxTime is more recent than minTime
         let timeslots = minTime == maxTime ? [minTime] : [minTime, maxTime]
@@ -334,7 +334,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// You can, for example, return [0, 0] if you are sure that the segment certainly started at the second last data point. You can also return negative values – times will then be extended further in the past.
     /// Important: The range must be valid, i.e. the max value must be greater than the min value.
     /// Also, values above 1 do not make sense because they would represent a timepoint in the future.
-    open func guessRange() -> SimpleRange<Time> {
+    /// `timeRange: timeB - timeA`; `timeRange > 0`.
+    open func guessRange(for timeRange: Time) -> SimpleRange<Time> {
         SimpleRange<Time>(from: 0, to: 1)
     }
 

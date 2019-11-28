@@ -35,8 +35,8 @@ extension DebugLoggerFrame {
     /// States if the frame contains an integrity error (from game model collection).
     var hasIntegrityError: Bool {
         gameModelCollection.wasPerformed &&
-            !gameModelCollection.player.integrityCheckSuccessful ||
-            gameModelCollection.bars.all.any { !$0.integrityCheckSuccessful }
+            (!gameModelCollection.player.integrityCheckSuccessful ||
+            gameModelCollection.bars.all.any { !$0.integrityCheckSuccessful })
     }
 
     /// Check if the frame should be logged given the severity.

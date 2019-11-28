@@ -50,7 +50,7 @@ final class BarCourse {
             slopeTolerance: .relative(20%),
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
-                pointsMatchingNextSegment: 5,
+                pointsMatchingNextSegment: 4,
                 maxIntermediatePointsMatchingCurrentSegment: 1
             )
         )

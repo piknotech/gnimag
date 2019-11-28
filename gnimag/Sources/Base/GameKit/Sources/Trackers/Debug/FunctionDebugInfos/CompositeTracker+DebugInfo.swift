@@ -7,11 +7,12 @@ import Common
 import MacTestingTools
 
 public extension CompositeTracker {
-    /// Create information about regression functions from each segment.
+    /// Create information about regression functions from the last 10 segments.
+    /// This includes guesses and creates a very clear picture.
     /// Attention: this is a possibly expensive operation.
     var allDebugFunctionInfos: [FunctionDebugInfo] {
         var result = [FunctionDebugInfo]()
-        let all = finalizedSegments + [currentSegment!]
+        var all = finalizedSegments + [currentSegment!]
 
         /// Convenience function to add a ScatterStrokable for a given function to the result.
         func add(_ function: Function, with color: ScatterColor, dash: FunctionDebugInfo.DashType, from startTime: Time, to endTime: Time) {
@@ -22,7 +23,8 @@ public extension CompositeTracker {
 
         // Add ScatterStrokables for each segment
         for (i, segment) in all.enumerated() {
-            let endTime = (i < all.count - 1) ? all[i+1].supposedStartTime : timeInfinity
+            var endTime = (i < all.count - 1) ? all[i+1].supposedStartTime : timeInfinity
+            if endTime == -timeInfinity { endTime.negate() } // If start time of next segment is unknown
             let color = segment.colorForPlotting
 
             // Regression function
@@ -47,5 +49,12 @@ public extension CompositeTracker {
         }
 
         return result
+    }
+
+    /// Information about all regressions and all tolerance bound functions of the last 10 segments.
+    /// Does not include any guesses.
+    var segmentwiseFullDebugFunctionInfos: [FunctionDebugInfo] {
+        let all = finalizedSegments + [currentSegment!]
+        return all.flatMap { $0.tracker.allDebugFunctionInfos }
     }
 }

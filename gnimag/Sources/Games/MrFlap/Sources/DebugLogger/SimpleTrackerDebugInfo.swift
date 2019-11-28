@@ -30,7 +30,7 @@ class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: TrackerDebugInfo, 
 
     /// Get function infos from the data set provider and store it.
     func fetchFunctionInfos() {
-        allFunctions = [tracker?.regressionDebugInfo].compactMap(id) + (tracker?.toleranceBoundsDebugInfos ?? [])
+        allFunctions = tracker?.allDebugFunctionInfos
     }
 
     enum ValidityResult {

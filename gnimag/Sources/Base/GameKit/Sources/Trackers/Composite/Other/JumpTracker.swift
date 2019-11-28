@@ -140,8 +140,8 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     }
 
     /// Provide the custom guess range.
-    public override func guessRange() -> SimpleRange<Time> {
-        return customGuessRange
+    public override func guessRange(for timeRange: Time) -> SimpleRange<Time> {
+        customGuessRange
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.

@@ -3,7 +3,14 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
+
 public extension SimpleTrackerProtocol {
+    /// All functions – regression and tolerance bounds.
+    var allDebugFunctionInfos: [FunctionDebugInfo] {
+        [regressionDebugInfo].compactMap(id) + (toleranceBoundsDebugInfos ?? [])
+    }
+
     /// A FunctionDebugInfo containing the regression function, if existing.
     var regressionDebugInfo: FunctionDebugInfo? {
         regression.map {
