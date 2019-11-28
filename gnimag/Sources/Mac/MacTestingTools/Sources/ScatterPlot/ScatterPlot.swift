@@ -14,13 +14,13 @@ public final class ScatterPlot {
 
     /// Create a scatter plot with the given HasScatterDataSet object.
     /// The scatter plot is black and is drawn on a white background.
-    public convenience init(from object: HasScatterDataSet, scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
+    public convenience init(from object: HasScatterDataSet, scatterCircleSize: CGFloat = 3, outputImageSize: CGSize? = nil) {
         self.init(dataPoints: object.dataSet, scatterCircleSize: scatterCircleSize, outputImageSize: outputImageSize)
     }
 
     /// Create a scatter plot with the given data set.
     /// The scatter plot is black/red (using the given colors) and is drawn on a white background.
-    public init(dataPoints: [ScatterDataPoint], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize = CGSize(width: 600, height: 400)) {
+    public init(dataPoints: [ScatterDataPoint], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize? = nil) {
         let dataPoints = dataPoints.sorted { $0.x < $1.x }
 
         // Map sorted values to ChartDataEntries
@@ -34,7 +34,16 @@ public final class ScatterPlot {
         dataSet.colors = dataPoints.map { $0.color.concreteColor.NSColor }
         let data = ScatterChartData(dataSet: dataSet)
 
-        view = ScatterChartView(frame: CGRect(origin: .zero, size: outputImageSize))
+        // Calculate view size depending on dataset size
+        let size = outputImageSize ?? {
+            let pixelPerPoint: CGFloat = 2
+            return CGSize(
+                width: 300 + CGFloat(dataPoints.count) * pixelPerPoint,
+                height: 200 + CGFloat(dataPoints.count) * pixelPerPoint / 2
+            )
+        }()
+
+        view = ScatterChartView(frame: CGRect(origin: .zero, size: size))
         view.canDrawConcurrently = true
         view.data = data
         view.legend.enabled = false
@@ -43,7 +52,7 @@ public final class ScatterPlot {
         if let xMin = dataPoints.first?.x, let xMax = dataPoints.last?.x, let yMin = (dataPoints.min { $0.y < $1.y })?.y, let yMax = (dataPoints.max { $0.y < $1.y })?.y {
             let xRange = xMax - xMin
             let yRange = yMax - yMin
-            if xRange > 0 && yRange > 0 { // if exactly 0, use the default window, which fits better
+            if xRange > 0 && yRange > 0 { // if exactly 0, use the default window, which fits better
                 view.xAxis.axisMinimum = xMin - 5% * xRange
                 view.xAxis.axisMaximum = xMax + 5% * xRange
                 view.leftAxis.axisMinimum = yMin - 5% * yRange
