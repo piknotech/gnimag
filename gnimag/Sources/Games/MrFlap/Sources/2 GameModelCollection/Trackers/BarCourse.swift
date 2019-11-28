@@ -6,7 +6,7 @@
 import Common
 import Foundation
 import GameKit
-import MacTestingTools
+import TestingTools
 
 /// BarCourse bundles trackers for a single bar.
 final class BarCourse {

@@ -1,7 +1,7 @@
 import Foundation
 import Image
 import ImageAnalysisKit
-import MacTestingTools
+import TestingTools
 import MrFlap
 import Geometry
 

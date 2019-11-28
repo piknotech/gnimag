@@ -22,11 +22,11 @@ let package = Package(
         ),
 
         .target(
-            name: "MacTestingTools",
+            name: "TestingTools",
             dependencies: [
                 "Charts"
             ],
-            path: "Sources/Mac/MacTestingTools"
+            path: "Sources/Mac/TestingTools"
         )
     ]
 )

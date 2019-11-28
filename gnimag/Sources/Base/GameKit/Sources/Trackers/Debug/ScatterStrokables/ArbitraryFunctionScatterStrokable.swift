@@ -5,7 +5,7 @@
 
 import Common
 import Geometry
-import MacTestingTools
+import TestingTools
 
 /// A ScatterStrokable that can draw any function by calculating and connecting points on the function at certain intervals.
 public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {

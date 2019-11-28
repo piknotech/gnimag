@@ -4,7 +4,7 @@
 //
 
 import Common
-import MacTestingTools
+import TestingTools
 
 /// CompositeTracker defines an abstract class providing basic required functionalities for a composite tracker; that is, a tracker which tracks a piecewise defined funtion.
 /// When you inherit from CompositTracker, you must implement a handful of Delegate and DataSource methods.

@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import MacTestingTools
+import TestingTools
 
 /// Contains information about a function that is useful for debugging.
 public struct FunctionDebugInfo {

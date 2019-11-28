@@ -5,7 +5,7 @@
 
 import Common
 import GameKit
-import MacTestingTools
+import TestingTools
 
 /// SimpleTrackerDebugInfo describes information about a SimpleTracker at a given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.

@@ -4,7 +4,7 @@
 //
 
 import GameKit
-import MacTestingTools
+import TestingTools
 
 /// CompositeTrackerDebugInfo describes information about a CompositeTracker at a given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.

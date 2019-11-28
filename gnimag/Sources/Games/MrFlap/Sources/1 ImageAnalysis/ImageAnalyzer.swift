@@ -8,7 +8,7 @@ import Foundation
 import Geometry
 import Image
 import ImageAnalysisKit
-import MacTestingTools
+import TestingTools
 
 /// ImageAnalyzer provides a method for analyzing an image.
 class ImageAnalyzer {

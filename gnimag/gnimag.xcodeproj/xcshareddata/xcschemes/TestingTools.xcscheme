@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "631213962325798E00C126B4"
-               BuildableName = "MacTestingTools.framework"
-               BlueprintName = "MacTestingTools"
+               BuildableName = "TestingTools.framework"
+               BlueprintName = "TestingTools"
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -52,8 +52,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631213962325798E00C126B4"
-            BuildableName = "MacTestingTools.framework"
-            BlueprintName = "MacTestingTools"
+            BuildableName = "TestingTools.framework"
+            BlueprintName = "TestingTools"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

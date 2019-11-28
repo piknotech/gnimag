@@ -4,7 +4,7 @@
 //
 
 import Common
-import MacTestingTools
+import TestingTools
 
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.

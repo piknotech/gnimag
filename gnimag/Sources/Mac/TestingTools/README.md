@@ -1,8 +1,8 @@
-# MacTestingTools
+# TestingTools
 
-Just as the name would suggest, this library provides powerful tools that are extremely useful for creating, testing and debugging while implementing a game or while implementing image analysis methods. Because these methods are Mac-specific and tailored to the `Image` class from MacCLI, it is called MacTestingTools.
+Just as the name would suggest, this library provides powerful tools that are extremely useful for creating, testing and debugging while implementing a game or while implementing image analysis methods. Because these methods are Mac-specific and tailored to the `Image` class from MacCLI, it is called TestingTools.
 
-Just `import MacTestingTools` from either your game or from inside ImageAnalysisKit. Remember to remove these import statements and any testing code after you have finished debugging.
+Just `import TestingTools` from either your game or from inside ImageAnalysisKit. Remember to remove these import statements and any testing code after you have finished debugging.
 
 The features are:
 

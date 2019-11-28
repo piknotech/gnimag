@@ -51,7 +51,7 @@
 		6312138F2325794600C126B4 /* LinearTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213822325793100C126B4 /* LinearTracker.swift */; };
 		631213902325794600C126B4 /* ConstantTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213832325793100C126B4 /* ConstantTracker.swift */; };
 		631213912325794600C126B4 /* PolyTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213842325793100C126B4 /* PolyTracker.swift */; };
-		6312139B2325798E00C126B4 /* MacTestingTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 631213992325798E00C126B4 /* MacTestingTools.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6312139B2325798E00C126B4 /* TestingTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 631213992325798E00C126B4 /* TestingTools.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631213AF23257A2F00C126B4 /* Color+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A223257A2F00C126B4 /* Color+Conversion.swift */; };
 		631213B023257A2F00C126B4 /* BitmapCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A323257A2F00C126B4 /* BitmapCanvas.swift */; };
 		631213B123257A2F00C126B4 /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A523257A2F00C126B4 /* Measurement.swift */; };
@@ -153,6 +153,7 @@
 
 /* Begin PBXFileReference section */
 		3D2F1439F00EF2198E59A7B3 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
+		61ED5ED8A0CFA3E40265F162 /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; lastKnownFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
 		6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerProtocol.swift; sourceTree = "<group>"; };
 		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		631212AD23253DC700C126B4 /* MacCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MacCLI; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,8 +225,8 @@
 		631213842325793100C126B4 /* PolyTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolyTracker.swift; sourceTree = "<group>"; };
 		631213862325793100C126B4 /* PolarCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolarCoordinates.swift; sourceTree = "<group>"; };
 		631213872325793100C126B4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		631213972325798E00C126B4 /* MacTestingTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MacTestingTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		631213992325798E00C126B4 /* MacTestingTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacTestingTools.h; sourceTree = "<group>"; };
+		631213972325798E00C126B4 /* TestingTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TestingTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		631213992325798E00C126B4 /* TestingTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestingTools.h; sourceTree = "<group>"; };
 		6312139A2325798E00C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631213A223257A2F00C126B4 /* Color+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Conversion.swift"; sourceTree = "<group>"; };
 		631213A323257A2F00C126B4 /* BitmapCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitmapCanvas.swift; sourceTree = "<group>"; };
@@ -391,14 +392,6 @@
 			name = GameKit;
 			sourceTree = "<group>";
 		};
-		5324653E3AFAD5B895036ABD /* MacTestingTools */ = {
-			isa = PBXGroup;
-			children = (
-				7FDFD129E8E7B8C5DADE74FE /* Charts.framework */,
-			);
-			name = MacTestingTools;
-			sourceTree = "<group>";
-		};
 		631212A223253DA100C126B4 = {
 			isa = PBXGroup;
 			children = (
@@ -420,7 +413,7 @@
 				631212F22325768000C126B4 /* Common.framework */,
 				63121311232577E900C126B4 /* ImageAnalysisKit.framework */,
 				6312136E2325791600C126B4 /* GameKit.framework */,
-				631213972325798E00C126B4 /* MacTestingTools.framework */,
+				631213972325798E00C126B4 /* TestingTools.framework */,
 				631213D623257EF600C126B4 /* MrFlap.framework */,
 				6312140E232587E300C126B4 /* Geometry.framework */,
 			);
@@ -483,7 +476,7 @@
 		631212C72325429C00C126B4 /* Mac */ = {
 			isa = PBXGroup;
 			children = (
-				631213982325798E00C126B4 /* MacTestingTools */,
+				631213982325798E00C126B4 /* TestingTools */,
 				631212AF23253DC700C126B4 /* MacCLI */,
 			);
 			path = Mac;
@@ -792,20 +785,20 @@
 			path = Polynomial;
 			sourceTree = "<group>";
 		};
-		631213982325798E00C126B4 /* MacTestingTools */ = {
+		631213982325798E00C126B4 /* TestingTools */ = {
 			isa = PBXGroup;
 			children = (
 				631213AE23257A2F00C126B4 /* README.md */,
 				631213A023257A2F00C126B4 /* Sources */,
 				6312139F23257A1D00C126B4 /* SupportingFiles */,
 			);
-			path = MacTestingTools;
+			path = TestingTools;
 			sourceTree = "<group>";
 		};
 		6312139F23257A1D00C126B4 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				631213992325798E00C126B4 /* MacTestingTools.h */,
+				631213992325798E00C126B4 /* TestingTools.h */,
 				6312139A2325798E00C126B4 /* Info.plist */,
 			);
 			path = SupportingFiles;
@@ -1160,9 +1153,17 @@
 			isa = PBXGroup;
 			children = (
 				11578D4D3B87173763296AD3 /* GameKit */,
-				5324653E3AFAD5B895036ABD /* MacTestingTools */,
+				AB4CB9B3FFFA119AE1170175 /* TestingTools */,
 			);
 			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		AB4CB9B3FFFA119AE1170175 /* TestingTools */ = {
+			isa = PBXGroup;
+			children = (
+				61ED5ED8A0CFA3E40265F162 /* Charts.framework */,
+			);
+			name = TestingTools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1212,7 +1213,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6312139B2325798E00C126B4 /* MacTestingTools.h in Headers */,
+				6312139B2325798E00C126B4 /* TestingTools.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1343,9 +1344,9 @@
 			productReference = 6312136E2325791600C126B4 /* GameKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		631213962325798E00C126B4 /* MacTestingTools */ = {
+		631213962325798E00C126B4 /* TestingTools */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6312139C2325798E00C126B4 /* Build configuration list for PBXNativeTarget "MacTestingTools" */;
+			buildConfigurationList = 6312139C2325798E00C126B4 /* Build configuration list for PBXNativeTarget "TestingTools" */;
 			buildPhases = (
 				631213922325798E00C126B4 /* Headers */,
 				631213932325798E00C126B4 /* Sources */,
@@ -1357,9 +1358,9 @@
 			);
 			dependencies = (
 			);
-			name = MacTestingTools;
+			name = TestingTools;
 			productName = MacTestingTools;
-			productReference = 631213972325798E00C126B4 /* MacTestingTools.framework */;
+			productReference = 631213972325798E00C126B4 /* TestingTools.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		631213D523257EF600C126B4 /* MrFlap */ = {
@@ -1456,7 +1457,7 @@
 				631212F12325768000C126B4 /* Common */,
 				63121310232577E900C126B4 /* ImageAnalysisKit */,
 				6312136D2325791600C126B4 /* GameKit */,
-				631213962325798E00C126B4 /* MacTestingTools */,
+				631213962325798E00C126B4 /* TestingTools */,
 				631213D523257EF600C126B4 /* MrFlap */,
 				6312140D232587E300C126B4 /* Geometry */,
 			);
@@ -2820,7 +2821,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/Mac/MacTestingTools/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Mac/TestingTools/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2831,7 +2832,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacTestingTools;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.TestingTools;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -2900,7 +2901,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/Mac/MacTestingTools/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Mac/TestingTools/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2910,7 +2911,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacTestingTools;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.TestingTools;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -3310,7 +3311,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6312139C2325798E00C126B4 /* Build configuration list for PBXNativeTarget "MacTestingTools" */ = {
+		6312139C2325798E00C126B4 /* Build configuration list for PBXNativeTarget "TestingTools" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6312139D2325798E00C126B4 /* Debug */,

@@ -5,7 +5,7 @@
 
 import Foundation
 import Image
-import MacTestingTools
+import TestingTools
 
 /// NativeImage is an Image effectively wrapping a CGImage using bitmap data.
 /// Currently, the wrapped CGImage must have a BGRA pixel layout.

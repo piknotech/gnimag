@@ -5,7 +5,7 @@
 
 import Common
 import Image
-import MacTestingTools
+import TestingTools
 
 extension DebugLoggerFrame {
     // MARK: - HasError And IsValidForLogging

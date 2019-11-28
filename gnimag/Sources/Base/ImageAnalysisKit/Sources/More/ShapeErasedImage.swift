@@ -5,7 +5,7 @@
 
 import Geometry
 import Image
-import MacTestingTools
+import TestingTools
 
 /// An image that consists of another image, but has one or multiple shapes erased with a given color.
 public final class ShapeErasedImage: Image {
