@@ -18,18 +18,23 @@ struct Coloring {
     /// The eye or wing color that identifies the player. It is unique and does not appear anywhere else on the playfield.
     let eye: Color
 
+    /// A color that is safe on draw with both on foreground and background.
+    let safeLoggingColor: Color
+
     /// Default initializer.
     init(theme: Color, secondary: Color) {
         self.theme = theme
         self.secondary = secondary
 
-        /// Determine eyeColor
+        /// Determine eyeColor and safeLoggingColor
         if secondary.distance(to: .black) < secondary.distance(to: .white) {
             // Mode: hardcore
             eye = .white
+            safeLoggingColor = Color(0.5, 0.5, 1) // light blue
         } else {
             // Mode: normal
             eye = .black
+            safeLoggingColor = .red
         }
     }
 }

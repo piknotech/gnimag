@@ -10,14 +10,21 @@ import GameKit
 class GameModelCollector {
     let model: GameModel
 
+    /// The debug logger and a shorthand form for the current debug frame.
+    private let debugLogger: DebugLogger
+    private var debug: DebugLoggerFrame.GameModelCollection { debugLogger.currentFrame.gameModelCollection }
+
     /// Default initializer.
-    init(playfield: Playfield) {
-        model = GameModel(playfield: playfield)
+    init(playfield: Playfield, debugLogger: DebugLogger) {
+        model = GameModel(playfield: playfield, debugLogger: debugLogger)
+        self.debugLogger = debugLogger
     }
 
     /// Use the AnalysisResult to update the game model.
     /// Before actually updating the game model, the integrity of the result is checked.
     func accept(result: AnalysisResult, time: Double) {
+        debugLogger.currentFrame.gameModelCollection.wasPerformed = true
+        
         // Update player
         if model.player.integrityCheck(with: result.player, at: time) {
             model.player.update(with: result.player, at: time)
@@ -31,9 +38,14 @@ class GameModelCollector {
         // Bars: instead of using the game time, use the player angle for bar-related trackers. This is useful to prevent small lags (which stop both the player and the bars) from destroying all of the tracking.
         let playerAngle = model.player.angle.linearify(result.player.angle, at: time) // Map angle from [0, 2pi) to R
 
-        // Match model-bars to tracker-bars; update existing bars and add new bars
+        // Match model-bars to tracker-bars
         let (pairs, newBars) = match(bars: result.bars, to: model.bars, time: playerAngle)
-        
+        updateBars(with: pairs, newBars: newBars, playerAngle: playerAngle)
+    }
+
+    /// Update the bar trackers with the result from the matching algorithm.
+    private func updateBars(with pairs: [BarCourse: Bar], newBars: [Bar], playerAngle: Double) {
+        // Update existing bars
         for (tracker, bar) in pairs {
             if tracker.integrityCheck(with: bar, at: playerAngle) {
                 tracker.update(with: bar, at: playerAngle)
@@ -42,8 +54,10 @@ class GameModelCollector {
             }
         }
 
+        // Add new bars
         for bar in newBars {
-            let tracker = BarCourse(playfield: model.playfield)
+            let tracker = BarCourse(playfield: model.playfield, debugLogger: debugLogger)
+            tracker.performDebugLogging() // Required because there is no call to `integrityCheck`
             tracker.update(with: bar, at: playerAngle)
             model.bars.append(tracker)
         }
@@ -58,7 +72,7 @@ class GameModelCollector {
         // Check if the given tracker matches the given bar, angle-wise.
         func tracker(_ tracker: BarCourse, matches bar: Bar) -> Bool {
             pairs[tracker] == nil && // Tracker cannot be already taken by another bar
-            tracker.angle.is(bar.angle, at: time, validWith: .absolute(tolerance: .pi / 8), fallbackWhenNoRegression: .useLastValue) // Works for up to 8 bars
+            tracker.angle.isDataPoint(value: bar.angle, time: time, validWithTolerance: .absolute(.pi / 8), fallback: .useLastValue) // Works for up to 8 bars
         }
 
         // Find matching tracker for each bar

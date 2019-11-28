@@ -18,33 +18,50 @@ class ImageAnalyzer {
     private var lastPlayer: Player?
     private var lastColoring: Coloring?
 
+    /// The debug logger and a shorthand form for the current debug frame.
+    private let debugLogger: DebugLogger
+    private var debug: DebugLoggerFrame.ImageAnalysis { debugLogger.currentFrame.imageAnalysis }
+
+    /// Default initializer.
+    init(debugLogger: DebugLogger) {
+        self.debugLogger = debugLogger
+    }
+
     /// Analyze the image. Use the hints to accomplish more performant or better analysis.
     func analyze(image: Image, hints: AnalysisHints) -> Result<AnalysisResult, AnalysisError> {
-        guard let coloring = findColoring(in: image) ?? lastColoring else {
-            return .failure(.error)
-        }
+        debug.image = image
 
-        // Find playfield at first call
+        // Find coloring
+        guard let coloring = findColoring(in: image) ?? lastColoring else {
+            return .failure(.error) & {debug.outcome = .error}
+        }
+        debug.coloring.result = coloring
+
+        // Find playfield (only at first call)
         playfield ??= findPlayfield(in: image, with: coloring)
         if playfield == nil {
-            return .failure(.error)
+            return .failure(.error) & {debug.outcome = .error}
         }
+        debug.playfield.result = playfield
 
         // Find player
         guard let (player, playerOBB) = findPlayer(in: image, with: coloring, expectedPlayer: hints.expectedPlayer) else {
-            return .failure(.error)
+            return .failure(.error) & {debug.outcome = .error}
         }
+        debug.player.result = player
 
         // Verify that player position has changed
         if let old = lastPlayer, player.angle.isAlmostEqual(to: old.angle, tolerance: 1/1_000), player.height.isAlmostEqual(to: old.height, tolerance: 1/1_000) {
-            return .failure(.samePlayerPosition)
+            return .failure(.samePlayerPosition) & {debug.outcome = .samePlayerPosition}
         } else {
             lastPlayer = player
         }
 
         // Find bars
         let bars = findBars(in: image, with: coloring, playerOBB: playerOBB)
+        debug.bars.result = bars
 
+        debug.outcome = .success
         return .success(AnalysisResult(player: player, playfield: playfield, coloring: coloring, bars: bars))
     }
 
@@ -61,7 +78,10 @@ class ImageAnalyzer {
         let result = ConnectedChunks.from(colors, maxDistance: 0.05)
 
         // Find largest chunk; must contain at least half of the pixels
-        if result.maxChunkSize < 11 { return nil }
+        if result.maxChunkSize < 11 {
+            return nil & {debug.coloring.failure = .init(pixels: pixels, chunks: result.chunks)}
+        }
+
         let averageColor = result.largestChunk.objects.reduce(Color.zero) { sum, newColor in
             return sum + newColor / Double(result.maxChunkSize)
         }
@@ -95,16 +115,23 @@ class ImageAnalyzer {
     /// Find the player; also, return its OBB for further analysis.
     private func findPlayer(in image: Image, with coloring: Coloring, expectedPlayer: Player) -> (Player, OBB)? {
         let searchCenter = expectedPlayer.coords.position(respectiveTo: playfield.center).nearestPixel
+        debug.player.searchCenter = searchCenter
 
         // Find eye or wing pixel via its unique color
         let path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
-        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: path) else { return nil }
+        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: path) else {
+            return nil & {debug.player.failure = .eyeNotFound}
+        }
+        debug.player.eyePosition = eye
 
         // Find edge of player and calculate its OBB
         let blue = coloring.theme.withTolerance(0.1)
         let limit = EdgeDetector.DetectionLimit.maxPixels(Int(6 * expectedPlayer.size)) // Normal is 4 * size
-        guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: expectedPlayer.coords.angle, limit: limit) else { return nil } // 6 * width is enough
+        guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: expectedPlayer.coords.angle, limit: limit) else {
+            return nil & {debug.player.failure = .edgeTooLarge}
+        }
         let obb = SmallestOBB.containing(edge.map(CGPoint.init))
+        debug.player.obb = obb
 
         // Calculate player properties
         let coords = PolarCoordinates(position: obb.center, center: playfield.center)
@@ -142,27 +169,41 @@ class ImageAnalyzer {
     /// Find the bar which is described by the given chunk.
     /// Also return the OBB of the inner part of the bar.
     private func locateBar(from pixel: Pixel, in image: Image, with coloring: Coloring) -> (Bar, innerOBB: OBB)? {
+        debug.bars.nextBarLocation()
+        debug.bars.current.startPixel = pixel
+
         let insideBar = coloring.theme.withTolerance(0.1)
         let limit = EdgeDetector.DetectionLimit.distance(to: pixel, maximum: playfield.freeSpace)
 
         // Find inner edge
-        guard let innerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: pixel, angle: 0, limit: limit) else { return nil }
+        guard let innerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: pixel, angle: 0, limit: limit) else {
+            return nil & {debug.bars.current.failure = .innerEdge}
+        }
         let innerOBB = SmallestOBB.containing(innerEdge.map(CGPoint.init))
-
         let angle1 = PolarCoordinates.angle(for: innerOBB.center, respectiveTo: playfield.center)
+        debug.bars.current.innerOBB = innerOBB
 
         // Find outer edge
         let upPosition = PolarCoordinates.position(atAngle: angle1, height: CGFloat(playfield.fullRadius - 5), respectiveTo: playfield.center).nearestPixel
-        guard let outerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: upPosition, angle: 0, limit: limit) else { return nil }
+        debug.bars.current.upPosition = upPosition
+        guard let outerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: upPosition, angle: 0, limit: limit) else {
+            return nil & {debug.bars.current.failure = .outerEdge}
+        }
         let outerOBB = SmallestOBB.containing(outerEdge.map(CGPoint.init))
-
+        debug.bars.current.outerOBB = outerOBB
+        
         // Integrity checks, reorientate OBBs
         let angle2 = PolarCoordinates.angle(for: outerOBB.center, respectiveTo: playfield.center)
-        guard angle1.isAlmostEqual(to: angle2, tolerance: 0.02) else { return nil }
+        let distance = Angle(angle1).distance(to: Angle(angle2))
+        guard distance <= 0.02 else {
+            return nil & {debug.bars.current.failure = .anglesDifferent(angle1: angle1, angle2: angle2)}
+        }
 
         let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
         let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
-        guard width1.isAlmostEqual(to: width2, tolerance: 2) else { return nil }
+        guard width1.isAlmostEqual(to: width2, tolerance: 2) else {
+            return nil & {debug.bars.current.failure = .widthsDifferent(width1: width1, width2: width2)}
+        }
         let width = Double(width1 + width2) / 2
 
         // The inner obb is a tiny bit too large because of the non-zero width of the box
@@ -171,12 +212,13 @@ class ImageAnalyzer {
 
         let bar = Bar(
             width: Double(width),
-            angle: Double(angle1 + angle2) / 2,
+            angle: Angle(angle1).midpoint(between: Angle(angle2)).value,
             innerHeight: correctInnerHeight,
             outerHeight: Double(outerHeight), // Does not need to be corrected
             holeSize: playfield.freeSpace - Double(innerHeight + outerHeight)
         )
 
+        debug.bars.current.result = bar
         return (bar, innerOBB)
     }
 

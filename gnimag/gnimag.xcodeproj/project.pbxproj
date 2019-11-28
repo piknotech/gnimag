@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */; };
+		63048E0A23842FB10076442C /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
 		631212BE23253DE300C126B4 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 631212BC23253DE300C126B4 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631212D42325740000C126B4 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CE2325740000C126B4 /* Image.swift */; };
 		631212D52325740000C126B4 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CF2325740000C126B4 /* ImageProvider.swift */; };
@@ -46,7 +47,6 @@
 		6312138A2325793C00C126B4 /* MedianTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312137C2325793100C126B4 /* MedianTracker.swift */; };
 		6312138B2325793C00C126B4 /* AngularWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312137D2325793100C126B4 /* AngularWrapper.swift */; };
 		6312138C2325793C00C126B4 /* SimpleDefaultTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312137E2325793100C126B4 /* SimpleDefaultTracker.swift */; };
-		6312138D2325793C00C126B4 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312137F2325793100C126B4 /* Operators.swift */; };
 		6312138E2325793C00C126B4 /* Regression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213802325793100C126B4 /* Regression.swift */; };
 		6312138F2325794600C126B4 /* LinearTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213822325793100C126B4 /* LinearTracker.swift */; };
 		631213902325794600C126B4 /* ConstantTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213832325793100C126B4 /* ConstantTracker.swift */; };
@@ -57,7 +57,7 @@
 		631213B123257A2F00C126B4 /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A523257A2F00C126B4 /* Measurement.swift */; };
 		631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */; };
 		631213B323257A2F00C126B4 /* ScatterPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A823257A2F00C126B4 /* ScatterPlot.swift */; };
-		631213B423257A2F00C126B4 /* HasScatterDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A923257A2F00C126B4 /* HasScatterDataSet.swift */; };
+		631213B423257A2F00C126B4 /* ScatterDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A923257A2F00C126B4 /* ScatterDataSet.swift */; };
 		631213B523257A2F00C126B4 /* CGImage+WriteToFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */; };
 		631213B623257A2F00C126B4 /* ImageListCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AC23257A2F00C126B4 /* ImageListCreator.swift */; };
 		631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AD23257A2F00C126B4 /* ImageListProvider.swift */; };
@@ -93,7 +93,7 @@
 		631214322325885F00C126B4 /* CGPoint+SimpleGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312133B2325785000C126B4 /* CGPoint+SimpleGeometry.swift */; };
 		6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312133A2325785000C126B4 /* Sequence+Extensions.swift */; };
 		631214372326678700C126B4 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CD2325740000C126B4 /* Event.swift */; };
-		631214392326686A00C126B4 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Logging.swift */; };
+		631214392326686A00C126B4 /* Terminal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Terminal.swift */; };
 		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
 		6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */; };
 		6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */; };
@@ -103,7 +103,6 @@
 		63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5E234DE23E00E42762 /* SimpleDataSet.swift */; };
 		63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */; };
 		63456B38236466A900C71EE5 /* ParameterizableFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B37236466A900C71EE5 /* ParameterizableFunction.swift */; };
-		63456B3C2364674B00C71EE5 /* ScalarFunctionArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B3B2364674A00C71EE5 /* ScalarFunctionArithmetic.swift */; };
 		634AD0152327C8C400D87BAB /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0122327C8C000D87BAB /* Line.swift */; };
 		634AD0172327C8D000D87BAB /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0162327C8D000D87BAB /* Ray.swift */; };
 		634AD0192327D75200D87BAB /* Strokable+Fillable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0182327D75200D87BAB /* Strokable+Fillable.swift */; };
@@ -112,13 +111,29 @@
 		634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */; };
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
-		6375953A2331012C00ACA969 /* ??=.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* ??=.swift */; };
+		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
+		6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D901238D666400477AD9 /* LinearScatterStrokable.swift */; };
+		6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */; };
+		6367D906238EAE7200477AD9 /* Array+RemoveAtIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */; };
+		6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */; };
+		6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift */; };
+		6367D90E238EC0CF00477AD9 /* TrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */; };
+		6367D910238ED8DC00477AD9 /* Dash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90F238ED8DC00477AD9 /* Dash.swift */; };
+		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
 		6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */; };
 		6375953F233A53D900ACA969 /* ShapeErasedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953E233A53D900ACA969 /* ShapeErasedImage.swift */; };
 		63759541233A63CC00ACA969 /* ShapeErasureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63759540233A63CB00ACA969 /* ShapeErasureType.swift */; };
+		6375AFB6237DA9060019981E /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFB4237DA8B40019981E /* Operators.swift */; };
+		6375AFB9237DA96D0019981E /* DebugParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFB7237DA9650019981E /* DebugParameters.swift */; };
+		6375AFBB237DE6090019981E /* DebugLoggerFrame+Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
+		638F407D2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
+		63D002942373024600041069 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
+		63D002962373037900041069 /* DebugLoggerFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame.swift */; };
+		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
+		63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */; };
 		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
 		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
@@ -139,6 +154,7 @@
 /* Begin PBXFileReference section */
 		3D2F1439F00EF2198E59A7B3 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerProtocol.swift; sourceTree = "<group>"; };
+		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		631212AD23253DC700C126B4 /* MacCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MacCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		631212BA23253DE300C126B4 /* Image.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Image.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		631212BC23253DE300C126B4 /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
@@ -202,7 +218,6 @@
 		6312137C2325793100C126B4 /* MedianTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedianTracker.swift; sourceTree = "<group>"; };
 		6312137D2325793100C126B4 /* AngularWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngularWrapper.swift; sourceTree = "<group>"; };
 		6312137E2325793100C126B4 /* SimpleDefaultTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDefaultTracker.swift; sourceTree = "<group>"; };
-		6312137F2325793100C126B4 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		631213802325793100C126B4 /* Regression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Regression.swift; sourceTree = "<group>"; };
 		631213822325793100C126B4 /* LinearTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearTracker.swift; sourceTree = "<group>"; };
 		631213832325793100C126B4 /* ConstantTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantTracker.swift; sourceTree = "<group>"; };
@@ -217,7 +232,7 @@
 		631213A523257A2F00C126B4 /* Measurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
 		631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvertibleToCGImage.swift; sourceTree = "<group>"; };
 		631213A823257A2F00C126B4 /* ScatterPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScatterPlot.swift; sourceTree = "<group>"; };
-		631213A923257A2F00C126B4 /* HasScatterDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HasScatterDataSet.swift; sourceTree = "<group>"; };
+		631213A923257A2F00C126B4 /* ScatterDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScatterDataSet.swift; sourceTree = "<group>"; };
 		631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImage+WriteToFile.swift"; sourceTree = "<group>"; };
 		631213AC23257A2F00C126B4 /* ImageListCreator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageListCreator.swift; sourceTree = "<group>"; };
 		631213AD23257A2F00C126B4 /* ImageListProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageListProvider.swift; sourceTree = "<group>"; };
@@ -252,7 +267,7 @@
 		6312140E232587E300C126B4 /* Geometry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Geometry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63121410232587E300C126B4 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
 		63121411232587E300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		631214382326686A00C126B4 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		631214382326686A00C126B4 /* Terminal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terminal.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
 		6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuousPingPongTracker.swift; sourceTree = "<group>"; };
 		6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicLinearPingPongTracker.swift; sourceTree = "<group>"; };
@@ -262,7 +277,6 @@
 		63351A5E234DE23E00E42762 /* SimpleDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDataSet.swift; sourceTree = "<group>"; };
 		63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatingPingPongTracker.swift; sourceTree = "<group>"; };
 		63456B37236466A900C71EE5 /* ParameterizableFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterizableFunction.swift; sourceTree = "<group>"; };
-		63456B3B2364674A00C71EE5 /* ScalarFunctionArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScalarFunctionArithmetic.swift; sourceTree = "<group>"; };
 		634AD0122327C8C000D87BAB /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		634AD0162327C8D000D87BAB /* Ray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
 		634AD0182327D75200D87BAB /* Strokable+Fillable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strokable+Fillable.swift"; sourceTree = "<group>"; };
@@ -271,13 +285,29 @@
 		634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polynomial+Arithmetic.swift"; sourceTree = "<group>"; };
 		634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
 		6364934423270ABA00FEF664 /* SimpleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRange.swift; sourceTree = "<group>"; };
-		637595392331012C00ACA969 /* ??=.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "??=.swift"; sourceTree = "<group>"; };
+		6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadCurveScatterStrokable.swift; sourceTree = "<group>"; };
+		6367D901238D666400477AD9 /* LinearScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearScatterStrokable.swift; sourceTree = "<group>"; };
+		6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryFunctionScatterStrokable.swift; sourceTree = "<group>"; };
+		6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+RemoveAtIndices.swift"; sourceTree = "<group>"; };
+		6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SimpleTracker+DebugInfos.swift"; sourceTree = "<group>"; };
+		6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompositeTracker+DebugInfo.swift"; sourceTree = "<group>"; };
+		6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDebugInfo.swift; sourceTree = "<group>"; };
+		6367D90F238ED8DC00477AD9 /* Dash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dash.swift; sourceTree = "<group>"; };
+		637595392331012C00ACA969 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+IsAlmostEqual.swift"; sourceTree = "<group>"; };
 		6375953E233A53D900ACA969 /* ShapeErasedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeErasedImage.swift; sourceTree = "<group>"; };
 		63759540233A63CB00ACA969 /* ShapeErasureType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeErasureType.swift; sourceTree = "<group>"; };
+		6375AFB4237DA8B40019981E /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		6375AFB7237DA9650019981E /* DebugParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugParameters.swift; sourceTree = "<group>"; };
+		6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugLoggerFrame+Logging.swift"; sourceTree = "<group>"; };
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
+		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CartesianProduct.swift"; sourceTree = "<group>"; };
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
+		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
+		63D002952373037900041069 /* DebugLoggerFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLoggerFrame.swift; sourceTree = "<group>"; };
+		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
+		63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionDebugInfo.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
 		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
@@ -519,9 +549,9 @@
 			children = (
 				6312143A232669B800C126B4 /* AsyncTools.swift */,
 				631212CD2325740000C126B4 /* Event.swift */,
-				631214382326686A00C126B4 /* Logging.swift */,
+				631214382326686A00C126B4 /* Terminal.swift */,
 				6364934423270ABA00FEF664 /* SimpleRange.swift */,
-				637595392331012C00ACA969 /* ??=.swift */,
+				637595392331012C00ACA969 /* Operators.swift */,
 				6312143423258A2600C126B4 /* Extensions */,
 			);
 			path = Sources;
@@ -736,7 +766,7 @@
 				63351A51234B9E7600E42762 /* Composite */,
 				631213812325793100C126B4 /* Polynomial */,
 				6312137A2325793100C126B4 /* Special */,
-				6312137F2325793100C126B4 /* Operators.swift */,
+				63F0192F23885B7600E380CB /* Debug */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -798,6 +828,7 @@
 			isa = PBXGroup;
 			children = (
 				631213A323257A2F00C126B4 /* BitmapCanvas.swift */,
+				6367D90F238ED8DC00477AD9 /* Dash.swift */,
 				634AD0182327D75200D87BAB /* Strokable+Fillable.swift */,
 				634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */,
 				631213A223257A2F00C126B4 /* Color+Conversion.swift */,
@@ -816,9 +847,10 @@
 		631213A723257A2F00C126B4 /* ScatterPlot */ = {
 			isa = PBXGroup;
 			children = (
-				631213A923257A2F00C126B4 /* HasScatterDataSet.swift */,
-				63351A5E234DE23E00E42762 /* SimpleDataSet.swift */,
 				631213A823257A2F00C126B4 /* ScatterPlot.swift */,
+				631213A923257A2F00C126B4 /* ScatterDataSet.swift */,
+				63F0193023885BE100E380CB /* ScatterStrokable.swift */,
+				63351A5E234DE23E00E42762 /* SimpleDataSet.swift */,
 			);
 			path = ScatterPlot;
 			sourceTree = "<group>";
@@ -905,6 +937,7 @@
 				631213E223257F4000C126B4 /* MrFlap.swift */,
 				631213E823257F4000C126B4 /* 1 ImageAnalysis */,
 				631213E323257F4000C126B4 /* 2 GameModelCollection */,
+				63D002922372F31900041069 /* DebugLogger */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -995,6 +1028,7 @@
 			children = (
 				63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */,
 				63351A5B234DD11700E42762 /* Array+DropWhile.swift */,
+				6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */,
 				6312133A2325785000C126B4 /* Sequence+Extensions.swift */,
 				6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */,
 			);
@@ -1035,7 +1069,6 @@
 			isa = PBXGroup;
 			children = (
 				6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */,
-				63456B3B2364674A00C71EE5 /* ScalarFunctionArithmetic.swift */,
 				63456B37236466A900C71EE5 /* ParameterizableFunction.swift */,
 				6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */,
 				63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */,
@@ -1061,6 +1094,26 @@
 			path = Math;
 			sourceTree = "<group>";
 		};
+		6367D90B238EBC4300477AD9 /* FunctionDebugInfos */ = {
+			isa = PBXGroup;
+			children = (
+				63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */,
+				6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */,
+				6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift */,
+			);
+			path = FunctionDebugInfos;
+			sourceTree = "<group>";
+		};
+		6367D90C238EBC5000477AD9 /* ScatterStrokables */ = {
+			isa = PBXGroup;
+			children = (
+				6367D901238D666400477AD9 /* LinearScatterStrokable.swift */,
+				6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */,
+				6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */,
+			);
+			path = ScatterStrokables;
+			sourceTree = "<group>";
+		};
 		6375953D233A539800ACA969 /* More */ = {
 			isa = PBXGroup;
 			children = (
@@ -1077,6 +1130,30 @@
 				3D2F1439F00EF2198E59A7B3 /* HandySwift.framework */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		63D002922372F31900041069 /* DebugLogger */ = {
+			isa = PBXGroup;
+			children = (
+				6375AFB7237DA9650019981E /* DebugParameters.swift */,
+				63D002932373024600041069 /* DebugLogger.swift */,
+				63D002952373037900041069 /* DebugLoggerFrame.swift */,
+				6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */,
+				6375AFB4237DA8B40019981E /* Operators.swift */,
+				6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */,
+				638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */,
+				63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */,
+			);
+			path = DebugLogger;
+			sourceTree = "<group>";
+		};
+		63F0192F23885B7600E380CB /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				6367D90B238EBC4300477AD9 /* FunctionDebugInfos */,
+				6367D90C238EBC5000477AD9 /* ScatterStrokables */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		9F432FA5361DFCE0850BFC33 /* Dependencies */ = {
@@ -1328,7 +1405,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					631212AC23253DC700C126B4 = {
 						CreatedOnToolsVersion = 11.0;
@@ -1522,13 +1599,14 @@
 			files = (
 				631214372326678700C126B4 /* Event.swift in Sources */,
 				6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */,
-				631214392326686A00C126B4 /* Logging.swift in Sources */,
+				631214392326686A00C126B4 /* Terminal.swift in Sources */,
 				6312143B232669B900C126B4 /* AsyncTools.swift in Sources */,
 				63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */,
 				6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */,
+				6367D906238EAE7200477AD9 /* Array+RemoveAtIndices.swift in Sources */,
 				63351A5D234DD11E00E42762 /* Array+DropWhile.swift in Sources */,
 				6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */,
-				6375953A2331012C00ACA969 /* ??=.swift in Sources */,
+				6375953A2331012C00ACA969 /* Operators.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1569,12 +1647,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */,
+				6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */,
 				6312138A2325793C00C126B4 /* MedianTracker.swift in Sources */,
 				6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */,
 				63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */,
-				63456B3C2364674B00C71EE5 /* ScalarFunctionArithmetic.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
+				6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift in Sources */,
 				63876E662356093500132A21 /* JumpTracker.swift in Sources */,
+				6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */,
 				6312138C2325793C00C126B4 /* SimpleDefaultTracker.swift in Sources */,
 				6312138B2325793C00C126B4 /* AngularWrapper.swift in Sources */,
 				631213882325793C00C126B4 /* Polynomial.swift in Sources */,
@@ -1582,14 +1662,16 @@
 				63F3CC1C234B36D000AA8228 /* Function.swift in Sources */,
 				6312138F2325794600C126B4 /* LinearTracker.swift in Sources */,
 				63456B38236466A900C71EE5 /* ParameterizableFunction.swift in Sources */,
+				63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */,
 				631213912325794600C126B4 /* PolyTracker.swift in Sources */,
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
-				6312138D2325793C00C126B4 /* Operators.swift in Sources */,
 				63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */,
 				634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */,
 				6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */,
 				63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */,
+				6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */,
 				6312138E2325793C00C126B4 /* Regression.swift in Sources */,
+				6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1598,14 +1680,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				631213B623257A2F00C126B4 /* ImageListCreator.swift in Sources */,
+				6367D910238ED8DC00477AD9 /* Dash.swift in Sources */,
 				631213B023257A2F00C126B4 /* BitmapCanvas.swift in Sources */,
 				63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */,
 				634AD01B2327E78C00D87BAB /* Drawing Shapes+Lines.swift in Sources */,
 				631213AF23257A2F00C126B4 /* Color+Conversion.swift in Sources */,
 				631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */,
-				631213B423257A2F00C126B4 /* HasScatterDataSet.swift in Sources */,
+				631213B423257A2F00C126B4 /* ScatterDataSet.swift in Sources */,
 				631213B123257A2F00C126B4 /* Measurement.swift in Sources */,
 				634AD0192327D75200D87BAB /* Strokable+Fillable.swift in Sources */,
+				63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */,
 				631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */,
 				631213B323257A2F00C126B4 /* ScatterPlot.swift in Sources */,
 				631213B523257A2F00C126B4 /* CGImage+WriteToFile.swift in Sources */,
@@ -1619,15 +1703,23 @@
 				631213F623257F4000C126B4 /* AnalysisResult.swift in Sources */,
 				631213F823257F4000C126B4 /* Bar.swift in Sources */,
 				631213FC23257F4000C126B4 /* AnalysisHints.swift in Sources */,
+				63D002942373024600041069 /* DebugLogger.swift in Sources */,
 				631213F723257F4000C126B4 /* ImageAnalyzer.swift in Sources */,
 				631213FA23257F4000C126B4 /* Coloring.swift in Sources */,
 				634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */,
 				631213F423257F4000C126B4 /* PlayerCourse.swift in Sources */,
 				631213F923257F4000C126B4 /* Playfield.swift in Sources */,
 				631213F523257F4000C126B4 /* GameModel.swift in Sources */,
+				63048E0A23842FB10076442C /* CompositeTrackerDebugInfo.swift in Sources */,
+				638F407D2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift in Sources */,
+				6367D90E238EC0CF00477AD9 /* TrackerDebugInfo.swift in Sources */,
 				631213F323257F4000C126B4 /* BarCourse.swift in Sources */,
+				6375AFB9237DA96D0019981E /* DebugParameters.swift in Sources */,
+				63D002962373037900041069 /* DebugLoggerFrame.swift in Sources */,
 				631213FB23257F4000C126B4 /* Player.swift in Sources */,
+				6375AFB6237DA9060019981E /* Operators.swift in Sources */,
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,
+				6375AFBB237DE6090019981E /* DebugLoggerFrame+Logging.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1655,7 +1747,34 @@
 		631212A723253DA100C126B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=200";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1663,8 +1782,33 @@
 		631212A823253DA100C126B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=200";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -1701,6 +1845,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1730,6 +1875,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacCLI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1770,6 +1916,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1792,6 +1939,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacCLI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;

@@ -3,9 +3,12 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
+import MacTestingTools
+
 /// SimpleDefaultTracker is an abstract class providing useful default implementations for SimpleTrackerProtocol.
 /// In particular, when inheriting from SimpleTracker, you can (and must) only customize the regression calculation method; all other methods are implemented for you.
-open /*abstract*/ class SimpleDefaultTracker<F: Function>: SimpleTrackerProtocol {
+open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithmetic>: SimpleTrackerProtocol {
     /// The time-value pairs.
     public private(set) var times = [Time]()
     public private(set) var values = [Value]()
@@ -17,10 +20,14 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function>: SimpleTrackerProtocol
     public let maxDataPoints: Int
     public let requiredPointsForCalculatingRegression: Int
 
+    /// The tolerance value which is used for validity checks.
+    public var tolerance: TrackerTolerance
+
     /// Defaut initializer.
-    public init(maxDataPoints: Int, requiredPointsForCalculatingRegression: Int) {
+    public init(maxDataPoints: Int, requiredPointsForCalculatingRegression: Int, tolerance: TrackerTolerance) {
         self.maxDataPoints = maxDataPoints
         self.requiredPointsForCalculatingRegression = requiredPointsForCalculatingRegression
+        self.tolerance = tolerance
     }
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
@@ -72,15 +79,15 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function>: SimpleTrackerProtocol
     }
 
     /// Check if a value will be valid (compared to the expected value) at a given time, using the existing regression.
-    /// If there is no regression, use the specified fallback.
-    public final func `is`(_ value: Value, at time: Time, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod = .valid) -> Bool {
+    /// If there is no regression, use the specified fallback. The default value for `fallback` is `.valid`.
+    public func isDataPointValid(value: Value, time: Time, fallback: TrackerFallbackMethod = .valid) -> Bool {
         var expectedValue: Value!
 
         // Calculate expected value either from regression or from specified fallback
         if let regression = regression {
             expectedValue = regression.at(time)
         } else {
-            switch fallbackWhenNoRegression {
+            switch fallback {
                 case .valid: return true
                 case .invalid: return false
                 case .useLastValue: expectedValue = values.last! // Crash when no last value available
@@ -98,10 +105,25 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function>: SimpleTrackerProtocol
         return difference <= allowedDifference
     }
 
+    /// Perform a validity check, but with a different tolerance value.
+    /// This does not affect `self.tolerance`.
+    public func isDataPoint(value: Value, time: Time, validWithTolerance tolerance: TrackerTolerance, fallback: TrackerFallbackMethod = .valid) -> Bool {
+        let previous = self.tolerance
+        self.tolerance = tolerance
+        defer { self.tolerance = previous }
+
+        return isDataPointValid(value: value, time: time, fallback: fallback)
+    }
+
     // MARK: Abstract Methods
     /// Override this to calculate the regression for the current time/value-pairs.
     /// This method is only called if the number of data points is at least `requiredPointsForCalculatingRegression`.
     open func calculateRegression() -> F? {
         fatalError("This is an abstract method.")
+    }
+
+    /// Return a ScatterStrokable which matches the function. For debugging.
+    open func scatterStrokable(for function: F) -> ScatterStrokable {
+        fatalError("This is an abstract method")
     }
 }

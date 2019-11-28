@@ -20,7 +20,7 @@ internal class CompositeTrackerSlidingWindow<SegmentTrackerType: SimpleTrackerPr
     private let characteristics: CompositeTracker<SegmentTrackerType>.NextSegmentDecisionCharacteristics
 
     /// The stack of data points. The first entry is the oldest one, new entries will be pushed to the back.
-    private var dataPoints = [DataPoint]()
+    private(set) var dataPoints = [DataPoint]()
 
     /// The data point that initiated the decision action, i.e. the first data point in the window.
     var decisionInitiator: CompositeTrackerSlidingWindowDelegate.DataPoint? {

@@ -4,7 +4,7 @@
 //
 
 /// Polynomial describes a collection of coefficients representing a polynomial.
-public final class Polynomial: Function {
+public final class Polynomial: DifferentiableFunction {
     /// The coefficients, beginning with the lowest one (x^0, x^1, ... x^n).
     public let coefficients: [Value]
 
@@ -32,7 +32,7 @@ public final class Polynomial: Function {
     }
     
     /// The derivative of the polynomial.
-    public var derivative: Polynomial {
+    public var derivative: Function {
         // Trivial case
         if degree < 1 {
             return Polynomial([])

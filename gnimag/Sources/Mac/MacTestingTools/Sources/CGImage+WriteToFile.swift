@@ -4,6 +4,7 @@
 //
 
 import Cocoa
+import Common
 
 extension CGImage {
     /// Write the image to a given destination.
@@ -16,6 +17,6 @@ extension CGImage {
     /// Write the image to the users desktop.
     public func writeToDesktop(name: String) {
         let desktop = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true).first!
-        write(to: desktop + "/" + name)
+        write(to: desktop +/ name)
     }
 }

@@ -17,11 +17,15 @@ public final class MrFlap {
     /// The shared playfield.
     private var playfield: Playfield!
 
-    /// The image analyzer.
-    private let imageAnalyzer = ImageAnalyzer()
-    private var nextHints: AnalysisHints!
-
+    /// Image analyzer and game model collector.
+    private let imageAnalyzer: ImageAnalyzer
     private var gameModelCollector: GameModelCollector!
+
+    // TODO: remove once using prediction for hints
+    private var lastPlayerCoords: PolarCoordinates?
+
+    // The debug logger.
+    private let debugLogger: DebugLogger
 
     /// The current analysis state.
     private var state = State.beforeGame
@@ -33,9 +37,12 @@ public final class MrFlap {
     }
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: Tapper) {
+    public init(imageProvider: ImageProvider, tapper: Tapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
         self.tapper = tapper
+        self.debugLogger = DebugLogger(parameters: debugParameters)
+        
+        imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
     }
 
     /// Begin receiving images and play the game.
@@ -43,7 +50,9 @@ public final class MrFlap {
     /// If you want to play a new game, create a new instance of MrFlap.
     public func play() {
         imageProvider.newImage.subscribe { value in
+            self.debugLogger.currentFrame.time = value.1
             self.update(image: value.0, time: value.1)
+            self.debugLogger.advance()
         }
     }
 
@@ -68,13 +77,12 @@ public final class MrFlap {
 
     /// Analyze the first image to find the playfield. Then tap the screen to start the game.
     private func startGame(image: Image, time: Double) {
-        guard case let .success(result) = analyze(image: image) else {
+        guard case let .success(result) = analyze(image: image, time: time) else {
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 
-        print(result.playfield)
         playfield = result.playfield
-        gameModelCollector = GameModelCollector(playfield: playfield)
+        gameModelCollector = GameModelCollector(playfield: playfield, debugLogger: debugLogger)
         state = .waitingForFirstMove(initialPlayerPos: result.player)
 
         tapper.tap()
@@ -83,12 +91,18 @@ public final class MrFlap {
     /// Check if the first player move, initiated by `startGame`, is visible.
     /// If yes, advance the state to begin collecting game model data.
     private func checkForFirstMove(image: Image, time: Double, initialPlayerPos: Player) {
-        guard case let .success(result) = analyze(image: image) else { return }
+        guard case let .success(result) = analyze(image: image, time: time) else { return }
 
         if distance(between: result.player, and: initialPlayerPos) > 1 {
             state = .inGame
             gameModelCollector.accept(result: result, time: time) // TODO: remove?
         }
+    }
+
+    /// Normal update method while in-game.
+    private func gameplayUpdate(image: Image, time: Double) {
+        guard case let .success(result) = analyze(image: image, time: time) else { return }
+        gameModelCollector.accept(result: result, time: time)
     }
 
     /// Calculate the pixel distance between two players.
@@ -98,41 +112,41 @@ public final class MrFlap {
         return pos1.distance(to: pos2)
     }
 
-    /// Normal update method while in-game.
-    private func gameplayUpdate(image: Image, time: Double) {
-        guard case let .success(result) = analyze(image: image) else { return }
-
-        gameModelCollector.accept(result: result, time: time)
-    }
-
     // MARK: Analysis & Hints
 
     /// Analyze an image using the ImageAnalyzer and the hints.
-    private func analyze(image: Image) -> Result<AnalysisResult, AnalysisError> {
-        nextHints ??= initialHints(for: image)
-        let result = imageAnalyzer.analyze(image: image, hints: nextHints)
+    private func analyze(image: Image, time: Double) -> Result<AnalysisResult, AnalysisError> {
+        let hints = hintsForCurrentFrame(image: image, time: time)
+        let result = imageAnalyzer.analyze(image: image, hints: hints)
+        debugLogger.currentFrame.hints.hints = hints
 
         if case let .success(result) = result {
-            updateNextHint(for: result)
+            lastPlayerCoords = result.player.coords
         }
 
         return result
     }
 
-    /// Create the next AnalysisHint for the next call to the ImageAnalyzer.
-    private func updateNextHint(for result: AnalysisResult) {
+    /// Calculate the hints for the current image.
+    private func hintsForCurrentFrame(image: Image, time: Double) -> AnalysisHints {
+        guard let playerSize = gameModelCollector?.model.player.size.average, let playerCoords = lastPlayerCoords else {
+            debugLogger.currentFrame.hints.usingInitialHints = true
+            return initialHints(for: image)
+        }
+
         let expectedPlayer = Player(
-            coords: result.player.coords,
-            size: gameModelCollector?.model.player.size.average ?? result.player.size
+            coords: playerCoords,
+            size: playerSize
         )
-        nextHints = AnalysisHints(expectedPlayer: expectedPlayer)
+
+        return AnalysisHints(expectedPlayer: expectedPlayer)
     }
 
     /// Use approximated default values to create hints for the first image.
     private func initialHints(for image: Image) -> AnalysisHints {
         let expectedPlayer = Player(
             coords: PolarCoordinates(angle: .pi / 2, height: 0.2 * CGFloat(image.height)),
-            size: 0.25 * Double(image.width) // Larger than or equal to the actual player size
+            size: 0.25 * Double(image.width) // Upper bound
         )
         return AnalysisHints(expectedPlayer: expectedPlayer)
     }

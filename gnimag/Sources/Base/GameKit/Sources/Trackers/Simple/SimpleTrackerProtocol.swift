@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import MacTestingTools
 
 /// A simple tracker tracks the course of a one-dimensional data variable over time. Once it has enough data points, it can map this data to a specific regression function.
@@ -12,9 +13,12 @@ public protocol SimpleTrackerProtocol: HasScatterDataSet {
     typealias Value = Double
 
     /// The specific function type of the regression which is produced by this tracker.
-    associatedtype F: Function
+    associatedtype F: Function & ScalarFunctionArithmetic
 
     // MARK: Methods and Properties
+
+    /// The tolerance value which is used for validity checks.
+    var tolerance: TrackerTolerance { get set }
 
     /// The time-value pairs.
     var times: [Time] { get }
@@ -43,8 +47,22 @@ public protocol SimpleTrackerProtocol: HasScatterDataSet {
     func removeLast()
 
     /// Check if a value will be valid (compared to the expected value) at a given time, using the existing regression.
-    /// If there is no regression, use the specified fallback.
-    func `is`(_ value: Value, at time: Time, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod) -> Bool
+    /// If there is no regression, use the specified fallback. The default value for `fallback` should be `.valid`.
+    func isDataPointValid(value: Value, time: Time, fallback: TrackerFallbackMethod) -> Bool
+
+    /// Perform a validity check, but with a different tolerance value.
+    /// This should not affect `self.tolerance`.
+    func isDataPoint(value: Value, time: Time, validWithTolerance tolerance: TrackerTolerance, fallback: TrackerFallbackMethod) -> Bool
+
+    /// Return a ScatterStrokable which matches the function. For debugging.
+    func scatterStrokable(for function: F) -> ScatterStrokable
+}
+
+public extension SimpleTrackerProtocol {
+    /// Equivalent to `regression != nil`.
+    var hasRegression: Bool {
+        regression != nil
+    }
 }
 
 // MARK: HasScatterDataSet
@@ -62,15 +80,16 @@ public extension SimpleTrackerProtocol {
 public enum TrackerTolerance {
     /// Look at the difference between the expected value and the average value.
     /// Iff it is smaller than or equal to tolerance, return true.
-    case absolute(tolerance: SimpleTrackerProtocol.Value)
+    case absolute(SimpleTrackerProtocol.Value)
 
     /// Look at the difference between the expected value and the average value.
     /// Iff it is smaller than or equal to (tolerance * expectedValue), return true.
-    case relative(tolerance: SimpleTrackerProtocol.Value)
+    case relative(SimpleTrackerProtocol.Value)
 }
 
 public enum TrackerFallbackMethod {
     /// Return true when no regression is available.
+    /// The default value.
     case valid
 
     /// Return false when no regression is available.

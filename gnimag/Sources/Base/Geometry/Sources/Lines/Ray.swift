@@ -24,6 +24,6 @@ extension Ray: LineType {
     }
 
     public var normalizedBounds: SimpleRange<CGFloat> {
-        return SimpleRange(from: 0, to: .infinity)
+        return .positiveHalfOpen
     }
 }

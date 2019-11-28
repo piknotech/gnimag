@@ -3,17 +3,22 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import MacTestingTools
 
 /// AngularWrapper provides a wrapper around simple trackers which would describe a simple function, but their values are angular, meaning a modulo-2-pi is applied.
 /// This tracker undoes the modulo-2-pi step in order to produce the real base function (whose codomain is R instead of [0, 2*pi)).
-public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerProtocol {
+public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerProtocol {    
     public typealias F = Other.F
     
     /// The internal tracker tracking the linearified values.
-    private let tracker: Other
+    private var tracker: Other
 
+    public var tolerance: TrackerTolerance {
+        get { tracker.tolerance }
+        set { tracker.tolerance = newValue }
+    }
     /// Default initializer.
     public init(_ tracker: Other) {
         self.tracker = tracker
@@ -29,6 +34,10 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
     public func updateRegression() { tracker.updateRegression() }
     public func reset() { tracker.reset() }
     public func removeLast() { tracker.removeLast() }
+
+    public func scatterStrokable(for function: F) -> ScatterStrokable {
+        tracker.scatterStrokable(for: function)
+    }
 
     // MARK: Linearification
     /// Convert a given angular value in [0, 2pi) to a linear value that is directly near the estimated tracker value.
@@ -50,8 +59,15 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
 
     /// Check if a value will be valid (compared to the expected value) at a given time, using the existing regression.
     /// If there is no regression, use the specified fallback.
-    public func `is`(_ value: Value, at time: Time, validWith tolerance: TrackerTolerance, fallbackWhenNoRegression: TrackerFallbackMethod = .valid) -> Bool {
+    public func isDataPointValid(value: Value, time: Time, fallback: TrackerFallbackMethod = .valid) -> Bool {
         let linearValue = linearify(value, at: time)
-        return tracker.is(linearValue, at: time, validWith: tolerance, fallbackWhenNoRegression: fallbackWhenNoRegression)
+        return tracker.isDataPointValid(value: linearValue, time: time, fallback: fallback)
+    }
+
+    /// Perform a validity check, but with a different tolerance value.
+    /// This does not affect `self.tolerance`.
+    public func isDataPoint(value: Value, time: Time, validWithTolerance tolerance: TrackerTolerance, fallback: TrackerFallbackMethod = .valid) -> Bool {
+        let linearValue = linearify(value, at: time)
+        return tracker.isDataPoint(value: linearValue, time: time, validWithTolerance: tolerance, fallback: fallback)
     }
 }

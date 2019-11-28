@@ -10,20 +10,28 @@ import GameKit
 final class PlayerCourse {
     /// The angle and height trackers.
     /// For angle tracking, the normal game time is used. For height tracking, the player angle is used.
-    let angle = AngularWrapper(LinearTracker())
+    let angle: AngularWrapper<LinearTracker>
     let height: JumpTracker
 
     /// The size of the player.
-    let size = ConstantTracker()
+    let size: ConstantTracker
+
+    /// The debug logger and a shorthand form for the current debug frame.
+    private let debugLogger: DebugLogger
+    private var debug: DebugLoggerFrame.GameModelCollection._Player { debugLogger.currentFrame.gameModelCollection.player }
 
     /// Default initializer.
-    init(playfield: Playfield) {
+    init(playfield: Playfield, debugLogger: DebugLogger) {
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(2% * .pi)))
         height = JumpTracker(
             relativeValueRangeTolerance: 20%,
-            absoluteJumpTolerance: 2% * playfield.freeSpace,
+            absoluteJumpTolerance: 1% * playfield.freeSpace,
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
             customGuessRange: SimpleRange<Double>(from: 0, to: 0)
         )
+        size = ConstantTracker(tolerance: .relative(10%))
+
+        self.debugLogger = debugLogger
     }
 
     // MARK: Updating
@@ -31,6 +39,8 @@ final class PlayerCourse {
     /// Update the trackers with the values from the given player.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with player: Player, at time: Double) {
+        debug.integrityCheckSuccessful = true
+
         angle.add(value: player.angle, at: time)
         size.add(value: player.size)
 
@@ -41,9 +51,18 @@ final class PlayerCourse {
     /// Check if all given values match the trackers.
     func integrityCheck(with player: Player, at time: Double) -> Bool {
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
-        return
-            angle.is(player.angle, at: time, validWith: .absolute(tolerance: 2% * .pi)) &&
-            size.is(player.size, validWith: .relative(tolerance: 10%)) &&
-            height.integrityCheck(with: player.height, at: linearAngle)
+        performDebugLogging(linearAngle: linearAngle)
+
+        return angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
+            size.isValueValid(player.size, &debug.size) &&
+            height.integrityCheck(with: player.height, at: linearAngle, &debug.height)
+    }
+
+    /// Write information about the trackers into the current debug logger frame.
+    private func performDebugLogging(linearAngle: Double) {
+        debug.linearAngle = linearAngle
+        debug.angle.from(tracker: angle)
+        debug.size.from(tracker: size)
+        debug.height.from(tracker: height)
     }
 }
