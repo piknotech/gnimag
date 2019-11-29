@@ -160,7 +160,7 @@
 		61ED5ED8A0CFA3E40265F162 /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
 		6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerProtocol.swift; sourceTree = "<group>"; };
 		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
-		631212AD23253DC700C126B4 /* MacCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MacCLI; sourceTree = BUILT_PRODUCTS_DIR; };
+		631212AD23253DC700C126B4 /* gnimag */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gnimag; sourceTree = BUILT_PRODUCTS_DIR; };
 		631212BA23253DE300C126B4 /* Image.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Image.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		631212BC23253DE300C126B4 /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
 		631212BD23253DE300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -425,7 +425,7 @@
 		631212AE23253DC700C126B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				631212AD23253DC700C126B4 /* MacCLI */,
+				631212AD23253DC700C126B4 /* gnimag */,
 				631212BA23253DE300C126B4 /* Image.framework */,
 				631212DF2325746B00C126B4 /* Tapping.framework */,
 				631212F22325768000C126B4 /* Common.framework */,
@@ -439,13 +439,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		631212AF23253DC700C126B4 /* MacCLI */ = {
+		631212AF23253DC700C126B4 /* gnimag */ = {
 			isa = PBXGroup;
 			children = (
 				631213BA23257EB600C126B4 /* README.md */,
 				631213BB23257EB600C126B4 /* Sources */,
 			);
-			path = MacCLI;
+			path = gnimag;
 			sourceTree = "<group>";
 		};
 		631212BB23253DE300C126B4 /* Image */ = {
@@ -492,12 +492,12 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		631212C72325429C00C126B4 /* Mac */ = {
+		631212C72325429C00C126B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				631212AF23253DC700C126B4 /* MacCLI */,
+				631212AF23253DC700C126B4 /* gnimag */,
 			);
-			path = Mac;
+			path = Products;
 			sourceTree = "<group>";
 		};
 		631212C8232542A300C126B4 /* Games */ = {
@@ -515,7 +515,7 @@
 				631212C62325429200C126B4 /* Base */,
 				63FABDB923917D7B0088FD77 /* Debug */,
 				631212C8232542A300C126B4 /* Games */,
-				631212C72325429C00C126B4 /* Mac */,
+				631212C72325429C00C126B4 /* Products */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1316,9 +1316,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		631212AC23253DC700C126B4 /* MacCLI */ = {
+		631212AC23253DC700C126B4 /* gnimag */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "MacCLI" */;
+			buildConfigurationList = 631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "gnimag" */;
 			buildPhases = (
 				631212A923253DC700C126B4 /* Sources */,
 				631212AA23253DC700C126B4 /* Frameworks */,
@@ -1328,9 +1328,9 @@
 			);
 			dependencies = (
 			);
-			name = MacCLI;
+			name = gnimag;
 			productName = MacCLI;
-			productReference = 631212AD23253DC700C126B4 /* MacCLI */;
+			productReference = 631212AD23253DC700C126B4 /* gnimag */;
 			productType = "com.apple.product-type.tool";
 		};
 		631212B923253DE300C126B4 /* Image */ = {
@@ -1552,7 +1552,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				631212AC23253DC700C126B4 /* MacCLI */,
+				631212AC23253DC700C126B4 /* gnimag */,
 				631212B923253DE300C126B4 /* Image */,
 				631212DE2325746B00C126B4 /* Tapping */,
 				631212F12325768000C126B4 /* Common */,
@@ -1894,6 +1894,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
 				SWIFT_VERSION = 5.0;
@@ -1930,6 +1931,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1997,7 +1999,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacCLI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -2061,7 +2063,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacCLI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -3479,7 +3481,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "MacCLI" */ = {
+		631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "gnimag" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				631212B323253DC700C126B4 /* Debug */,

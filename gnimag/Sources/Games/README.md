@@ -22,7 +22,7 @@ The structure of most games is similar. A game consists of three parts: image an
 
 - **Tapping Prediction**: here, you take the game model and schedule future taps. You think about what sequence of taps you need to survive the current game situation, and schedule or reschedule the taps accordingly. Also, do you keep track of Time Delay? Oder woanders?
 
-Having these three independent components, you can finally create your public `Game` class. It requires `ImageProvider` and `Tapper` instances which will be provided by the user of the game library (for example `MacCLI`).
+Having these three independent components, you can finally create your public `Game` class. It requires `ImageProvider` and `Tapper` instances which will be provided by the user of the game library (for example `gnimag`).
 
 You can use an `ImageQueue` (`GameKit`) for simple asynchronous image processing; i.e., each time a new frame is available (e.g. at a rate of 60fps), the work of image analysis, game model collection and tapping prediction is done in the background, but still at a high priority.
 
@@ -59,7 +59,7 @@ To summarize: use Trackers to calculate physics values and game parameters. Try 
 
 A very important thing to think about is input/output delay.
 
-Any tool you use for transferring the screen content from your mobile device to your computer, like [scrcpy](../Mac/MacCLI/Sources/IO/Scrcpy), has a small, but noticeable input delay. Depending on what you use for tapping, there may arise an additional output delay.
+Any tool you use for transferring the screen content from your mobile device to your computer, like [scrcpy](../Products/gnimag/Sources/IO/Scrcpy), has a small, but noticeable input delay. Depending on what you use for tapping, there may arise an additional output delay.
 
 Your game must of course make up for this delay. Anything your program sees is slightly in the past. You want to calculate the **current**, live game model and use this to make tap predictions.
 

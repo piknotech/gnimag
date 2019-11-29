@@ -6,9 +6,9 @@ All libraries are defined as targets. Dependencies are managed via [Accio](https
 
 To create a new library, create a new target and choose macOS -> Framework.
 
-Currently, building all targets simultaneously does not work due to an Xcode bug. Therefore, you must build all targets manually. Therefore, select the according scheme and build it. Do this iteratively until reaching MacCLI, the highest-level module.
+To build the project, you can either build all targets at once with the `All` scheme, or build each target separately.
 
-This is the module import graph:
+This is the module/target import graph:
 
 ![](Images/ModuleImportGraph.png)
 

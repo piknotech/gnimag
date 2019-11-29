@@ -3,8 +3,10 @@ import PackageDescription
 
 let package = Package(
     name: "gnimag",
-    products: [
+    platforms: [
+        .macOS(.v10_14),
     ],
+    products: [],
     dependencies: [
         /// A Swift library that uses the Accelerate framework to provide high-performance functions for matrix math, digital signal processing, and image manipulation.
         .package(url: "https://github.com/mattt/Surge", .upToNextMajor(from: "2.0.0")),
