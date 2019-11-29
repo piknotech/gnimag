@@ -5,6 +5,7 @@
 
 import Common
 import Image
+import LoggingKit
 import TestingTools
 
 extension DebugLoggerFrame {
@@ -40,8 +41,8 @@ extension DebugLoggerFrame {
     }
 
     /// Check if the frame should be logged given the severity.
-    func isValidForLogging(forSeverity severity: DebugParameters.Severity) -> Bool {
-        switch severity {
+    func isValidForLogging(with parameters: DebugParameters) -> Bool {
+        switch parameters.severity {
         case .none: return false
         case .alwaysText: return true
         case .onErrors, .textOnly: return hasError
@@ -51,9 +52,9 @@ extension DebugLoggerFrame {
     /// Do preparations that are necessary before logging.
     /// This method is only called when "isValidForLogging" has returned `true`.
     /// These preparations are performed synchronously.
-    func prepareSynchronously(forSeverity severity: DebugParameters.Severity) {
+    func prepareSynchronously(with parameters: DebugParameters) {
         // Prepare tracker debug infos
-        if !severity.noImages {
+        if !parameters.severity.noImages {
             gameModelCollection.player.prepareForLogging()
             gameModelCollection.bars.all.forEach { $0.prepareForLogging() }
         }
@@ -74,14 +75,14 @@ extension DebugLoggerFrame {
 
     /// Log the frame to the given directory.
     /// This method is called asynchronously, i.e. an undefined time after the frame was actually live.
-    func log(to directory: String, severity: DebugParameters.Severity) {
+    func log(with parameters: DebugParameters) {
         // Log text
-        try? fullLoggingText.write(toFile: directory +/ filenameForLogging, atomically: false, encoding: .utf8)
+        try? fullLoggingText.write(toFile: parameters.location +/ filenameForLogging, atomically: false, encoding: .utf8)
 
         // Log images
-        if hasError && !severity.noImages {
+        if hasError && !parameters.severity.noImages {
             let prefix = String(format: "%06d", index)
-            let directory = directory +/ prefix
+            let directory = parameters.location +/ prefix
 
             createImagesSubdirectory(at: directory)
             logImageAnalysisImages(to: directory)

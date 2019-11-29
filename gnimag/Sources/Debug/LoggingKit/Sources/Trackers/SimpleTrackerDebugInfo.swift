@@ -9,31 +9,35 @@ import TestingTools
 
 /// SimpleTrackerDebugInfo describes information about a SimpleTracker at a given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.
-class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: TrackerDebugInfo, CustomStringConvertible {
-    private(set) var tracker: Tracker?
-    private(set) var allDataPoints: [ScatterDataPoint]? // The data set is only evaluated when required.
-    private(set) var allFunctions: [FunctionDebugInfo]? // The functions are only evaluated when required.
+public final class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: TrackerDebugInfo, CustomStringConvertible {
+    public private(set) var tracker: Tracker?
+    public private(set) var allDataPoints: [ScatterDataPoint]? // The data set is only evaluated when required.
+    public private(set) var allFunctions: [FunctionDebugInfo]? // The functions are only evaluated when required.
 
-    private(set) var regression: Function?
-    fileprivate(set) var validityResult: ValidityResult?
+    public private(set) var regression: Function?
+    public fileprivate(set) var validityResult: ValidityResult?
 
+    /// Default initializer, creating an emtpy instance.
+    public init() {
+    }
+    
     /// Initialize this instance with values from the given tracker.
-    func from(tracker: Tracker) {
+    public func from(tracker: Tracker) {
         self.tracker = tracker
         regression = tracker.regression
     }
 
     /// Get the data set from the data set provider and store it.
-    func fetchDataSet() {
+    public func fetchDataSet() {
         allDataPoints = tracker?.dataSet
     }
 
     /// Get function infos from the data set provider and store it.
-    func fetchFunctionInfos() {
+    public func fetchFunctionInfos() {
         allFunctions = tracker?.allDebugFunctionInfos
     }
 
-    enum ValidityResult {
+    public enum ValidityResult {
         case valid
         case invalid(value: Double, expected: Double, tolerance: TrackerTolerance, wasFallback: Bool)
         case fallbackInvalid
@@ -55,13 +59,13 @@ class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: TrackerDebugInfo, 
 
     /// Nice textual description of this instance.
     /// Call "fetchDataSet" before describing this instance.
-    var description: String {
+    public var description: String {
         "(dataPoints: \(allDataPoints?.count ??? "nil"), regression: \(regression ??? "nil"), validityResult: \(validityResult?.description ??? "nil"))"
     }
 
     /// Create a scatter plot with `allDataPoints` and `allFunctions`, if existing.
     /// Call `fetchDataSet` beforehand.
-    func createScatterPlot() -> ScatterPlot? {
+    public func createScatterPlot() -> ScatterPlot? {
         guard let dataPoints = allDataPoints else { return nil }
 
         let plot = ScatterPlot(dataPoints: dataPoints)
@@ -75,7 +79,7 @@ class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: TrackerDebugInfo, 
 
 // Extensions for SimpleTrackers to simply allow filling "validityResult" of a SimpleTrackerDebugInfo without additional code
 
-extension SimpleTrackerProtocol {
+public extension SimpleTrackerProtocol {
     /// Perform a validity check on the tracker and write the result into "validityResult" of the provided SimpleTrackerDebugInfo.
     func isDataPointValid(value: Value, time: Time, fallback: TrackerFallbackMethod = .valid, _ debug: inout SimpleTrackerDebugInfo<Self>) -> Bool {
         let result = isDataPointValid(value: value, time: time, fallback: fallback)
@@ -96,7 +100,7 @@ extension SimpleTrackerProtocol {
     }
 }
 
-extension ConstantTracker {
+public extension ConstantTracker {
     /// Perform a validity check on the tracker and write the result into "validityResult" of the provided SimpleTrackerDebugInfo.
     func isValueValid(_ value: Value, fallback: TrackerFallbackMethod = .valid, _ debug: inout SimpleTrackerDebugInfo<ConstantTracker>) -> Bool {
         isDataPointValid(value: value, time: .zero, fallback: fallback, &debug)

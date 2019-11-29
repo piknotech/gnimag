@@ -27,12 +27,17 @@
 		<key>Image.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>9</integer>
+			<integer>8</integer>
 		</dict>
 		<key>ImageAnalysisKit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>4</integer>
+		</dict>
+		<key>LoggingKit.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>9</integer>
 		</dict>
 		<key>MacCLI.xcscheme_^#shared#^_</key>
 		<dict>
@@ -103,6 +108,11 @@
 			<true/>
 		</dict>
 		<key>63121415232587E300C126B4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>63FABDB023917D6F0088FD77</key>
 		<dict>
 			<key>primary</key>
 			<true/>

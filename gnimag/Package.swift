@@ -26,7 +26,7 @@ let package = Package(
             dependencies: [
                 "Charts"
             ],
-            path: "Sources/Mac/TestingTools"
+            path: "Sources/Debug/TestingTools"
         )
     ]
 )

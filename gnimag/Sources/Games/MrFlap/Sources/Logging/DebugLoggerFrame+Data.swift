@@ -7,10 +7,12 @@ import GameKit
 import Geometry
 import Image
 import ImageAnalysisKit
+import LoggingKit
 
-/// DebugLoggerFrame stores all relevant data of a single frame, consisting of image analysis, game model collection, and tap prediction.
-final class DebugLoggerFrame {
-    let index: Int // Starts at 1.
+final class DebugLoggerFrame: DebugLoggerFrameProtocol {
+    typealias ParameterType = DebugParameters
+
+    var index: Int
     var time: Double?
     
     /// Default initializer.

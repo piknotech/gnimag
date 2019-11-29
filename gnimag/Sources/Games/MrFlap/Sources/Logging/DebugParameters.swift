@@ -3,8 +3,10 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import LoggingKit
+
 /// DebugParameters allow the user of MrFlap to configure the location and the severity of the debug logging.
-public struct DebugParameters {
+public struct DebugParameters: DebugParameterType {
     /// The path to the directory in which the logging is performed.
     public let location: String
 

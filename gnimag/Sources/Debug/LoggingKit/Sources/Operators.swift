@@ -12,22 +12,22 @@ precedencegroup NilDebugPrecedence {
     lowerThan: AssignmentPrecedence
 }
 
-func &<T>(lhs: T?, rhs: () -> Void) -> T? {
+public func &<T>(lhs: T?, rhs: () -> Void) -> T? {
     rhs()
     return lhs
 }
 
-func &<T>(lhs: T?, rhs: @autoclosure () -> Void) -> T? {
+public func &<T>(lhs: T?, rhs: @autoclosure () -> Void) -> T? {
     rhs()
     return lhs
 }
 
-func &<T>(lhs: T, rhs: () -> Void) -> T {
+public func &<T>(lhs: T, rhs: () -> Void) -> T {
     rhs()
     return lhs
 }
 
-func &<T>(lhs: T, rhs: @autoclosure () -> Void) -> T {
+public func &<T>(lhs: T, rhs: @autoclosure () -> Void) -> T {
     rhs()
     return lhs
 }
@@ -36,13 +36,13 @@ func &<T>(lhs: T, rhs: @autoclosure () -> Void) -> T {
 // a = "Result: \(result ??? "NOT FOUND")"
 
 infix operator ???
-func ???<T>(lhs: T?, rhs: String) -> String {
+public func ???<T>(lhs: T?, rhs: String) -> String {
     lhs.map(anyDescription(of:)) ?? rhs
 }
 
 /// Return the description that will be printed wenn calling "print(any)". For example, for structs, this prints out all properties of the struct.
 /// This allows printing things that are not necessarily CustomStringConvertible.
-func anyDescription(of any: Any) -> String {
+public func anyDescription(of any: Any) -> String {
     var result = ""
     print(any, terminator: "", to: &result)
     return result

@@ -8,7 +8,11 @@ import Foundation
 import Geometry
 import Image
 import ImageAnalysisKit
+import LoggingKit
 import TestingTools
+
+// Required to redeclare the & operator which was publicly defined in LoggingKit
+infix operator &
 
 /// ImageAnalyzer provides a method for analyzing an image.
 class ImageAnalyzer {
