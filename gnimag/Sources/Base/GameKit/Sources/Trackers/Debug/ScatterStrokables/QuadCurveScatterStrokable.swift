@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 import Geometry
 import TestingTools
 

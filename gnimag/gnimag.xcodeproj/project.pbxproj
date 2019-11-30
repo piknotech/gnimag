@@ -650,8 +650,8 @@
 			isa = PBXGroup;
 			children = (
 				631213242325785000C126B4 /* RayShooter.swift */,
-				631213252325785000C126B4 /* EdgeTraverser.swift */,
 				631213262325785000C126B4 /* EdgeDetector.swift */,
+				631213252325785000C126B4 /* EdgeTraverser.swift */,
 			);
 			path = "Edge Detection";
 			sourceTree = "<group>";

@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 import Image
 import LoggingKit
 import TestingTools

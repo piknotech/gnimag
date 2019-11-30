@@ -15,13 +15,10 @@ SOURCES = $(wildcard $(srcdir)/**/*.swift)
 all: gnimag
 
 gnimag: $(SOURCES)
-	@accio install
-	@cp -a Dependencies/macOS/ .build
-	@xcodebuild \
-		-configuration release \
-		-scheme All \
-		CONFIGURATION_BUILD_DIR="$(BUILDDIR)" \
-		BUILT_PRODUCTS_DIR="$(BUILDDIR)"
+	@swift build \
+		-c release \
+		--disable-sandbox \
+		--build-path "$(BUILDDIR)"
 
 .PHONY: install
 install: gnimag

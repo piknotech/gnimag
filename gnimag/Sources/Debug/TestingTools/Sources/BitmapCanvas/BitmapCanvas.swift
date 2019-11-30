@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Cocoa
 import Common
 import Foundation
 import Image

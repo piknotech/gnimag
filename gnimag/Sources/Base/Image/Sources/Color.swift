@@ -3,6 +3,8 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Foundation
+
 /// Color represents a simple RGB color.
 /// The channel values are in the range [0, 1].
 public struct Color {
