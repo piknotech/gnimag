@@ -61,7 +61,7 @@ final class DebugLoggerFrame: DebugLoggerFrameProtocol {
 
             struct Failure {
                 let pixels: [Pixel]
-                let chunks: [ConnectedChunks.Chunk<Color>]
+                let clusters: [SimpleClustering.Cluster<Color>]
             }
         }
 
