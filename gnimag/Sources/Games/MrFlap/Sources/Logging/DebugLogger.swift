@@ -8,11 +8,12 @@ import Foundation
 import LoggingKit
 
 final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugLoggerFrame> {
+    /// One-time setup: create the logging directory.
     override func setup() {
         createDirectory()
     }
 
-    // Delete, if required, and then recreate the logging directory.
+    /// Delete, if required, and then recreate the logging directory.
     private func createDirectory() {
         switch parameters.severity {
         case .alwaysText, .onErrors, .textOnly:

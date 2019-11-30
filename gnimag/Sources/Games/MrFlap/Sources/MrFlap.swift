@@ -5,6 +5,7 @@
 
 import Common
 import Foundation
+import GameKit
 import Geometry
 import Image
 import TestingTools
@@ -12,8 +13,9 @@ import Tapping
 
 /// Each instance of MrFlap can play a single game of MrFlap.
 public final class MrFlap {
-    private let imageProvider: ImageProvider
     private let tapper: Tapper
+
+    private var queue: GameQueue!
 
     /// The shared playfield.
     private var playfield: Playfield!
@@ -39,26 +41,25 @@ public final class MrFlap {
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: Tapper, debugParameters: DebugParameters = .none) {
-        self.imageProvider = imageProvider
         self.tapper = tapper
-        self.debugLogger = DebugLogger(parameters: debugParameters)
-        
+
+        debugLogger = DebugLogger(parameters: debugParameters)
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
+        queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
     }
 
     /// Begin receiving images and play the game.
     /// Only call this once.
     /// If you want to play a new game, create a new instance of MrFlap.
     public func play() {
-        imageProvider.newImage.subscribe { value in
-            self.debugLogger.currentFrame.time = value.1
-            self.update(image: value.0, time: value.1)
-            self.debugLogger.advance()
-        }
+        queue.begin()
     }
 
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
+        self.debugLogger.currentFrame.time = time
+
+        // State-specific update
         switch state {
         case .beforeGame:
             startGame(image: image, time: time)
@@ -72,6 +73,8 @@ public final class MrFlap {
         case .finished:
             ()
         }
+
+        self.debugLogger.advance()
     }
 
     // MARK: State-Specific Update Methods
