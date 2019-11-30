@@ -73,7 +73,8 @@ let package = Package(
             dependencies: [
                 "Charts",
                 "Common",
-                "Geometry"
+                "Geometry",
+                "Image"
             ],
             path: "Sources/Debug/TestingTools"
         ),

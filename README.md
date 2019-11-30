@@ -10,10 +10,10 @@ Only a few games are implemented at the moment. You can help extending by [contr
 
 The project consists of the following parts:
 
-- Six base libraries ([Common](gnimag/Sources/Base/Common), [Geometry](gnimag/Sources/Base/Geometry), [Image](gnimag/Sources/Base/Image), [Tapping](gnimag/Sources/Base/Tapping), [ImageAnalysisKit](gnimag/Sources/Base/ImageAnalysisKit) and [GameKit](gnimag/Sources/Base/GameKit)). These provide required or useful tools for implementing your own game.
-- The games. Each game is a library which provides a public entry point to start auto-playing the game.
-- [MacCLI](gnimag/Sources/Mac/MacCLI). This is where actual Mac-specific input and output methods are defined. Here, you can import a specific game library and start playing the game.
-- [MacTestingTools](gnimag/Sources/Mac/MacTestingTools). This library provides tools that are useful for testing while implementing a game or writing image analysis methods.
+- Six base libraries ([Common](gnimag/Sources/Base/Common), [Geometry](gnimag/Sources/Base/Geometry), [Image](gnimag/Sources/Base/Image), [Tapping](gnimag/Sources/Base/Tapping), [ImageAnalysisKit](gnimag/Sources/Base/ImageAnalysisKit) and [GameKit](gnimag/Sources/Base/GameKit)). These provide required and useful tools for implementing your own game.
+- Two debugging and logging libraries ([TestingTools](gnimag/Sources/Debug/TestingTools) and [LoggingKit](gnimag/Sources/Debug/LoggingKit).) They provide tools for manual and automated testing and logging while implementing a game.
+- [The games](gnimag/Sources/Games). Each game is a library which provides a public entry point to start auto-playing the game.
+- [gnimag](gnimag/Sources/Products/gnimag). The executable which allow running gnimag. Also, the actual Mac-specific input and output methods are defined here.
 
 ---
 
@@ -25,7 +25,9 @@ See [here](gnimag/Sources/Games) for how a game is built and how you can easily 
 
 ### How do I install and run gnimag on my Mac?
 
-TODO.
+Call `make install` to build and install gnimag. You need [Accio](https://github.com/JamitLabs/Accio) for dependency resolution.
+
+After `make install`, use `gnimag` to start gnimag.
 
 ### What about iPhones?
 
