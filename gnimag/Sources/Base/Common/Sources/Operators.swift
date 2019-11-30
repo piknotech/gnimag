@@ -3,6 +3,8 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Foundation
+
 infix operator ??=
 
 /// Shorthand for lhs = lhs ?? rhs.

@@ -8,7 +8,11 @@ import Foundation
 import Geometry
 import Image
 import ImageAnalysisKit
-import MacTestingTools
+import LoggingKit
+import TestingTools
+
+// Required to redeclare the & operator which was publicly defined in LoggingKit
+infix operator &
 
 /// ImageAnalyzer provides a method for analyzing an image.
 class ImageAnalyzer {
@@ -75,15 +79,15 @@ class ImageAnalyzer {
         let circle = Circle(center: image.bounds.center.CGPoint, radius: CGFloat(image.width) / 4)
         let pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 21)
         let colors = pixels.map(image.color(at:))
-        let result = ConnectedChunks.from(colors, maxDistance: 0.05)
+        let result = SimpleClustering.from(colors, maxDistance: 0.05)
 
-        // Find largest chunk; must contain at least half of the pixels
-        if result.maxChunkSize < 11 {
-            return nil & {debug.coloring.failure = .init(pixels: pixels, chunks: result.chunks)}
+        // Find largest cluster; must contain at least half of the pixels
+        if result.largestCluster.size < 11 {
+            return nil & {debug.coloring.failure = .init(pixels: pixels, clusters: result.clusters)}
         }
 
-        let averageColor = result.largestChunk.objects.reduce(Color.zero) { sum, newColor in
-            return sum + newColor / Double(result.maxChunkSize)
+        let averageColor = result.largestCluster.objects.reduce(Color.zero) { sum, newColor in
+            sum + newColor / Double(result.largestCluster.size)
         }
 
         return Coloring(theme: theme, secondary: averageColor)
@@ -166,7 +170,7 @@ class ImageAnalyzer {
         }
     }
 
-    /// Find the bar which is described by the given chunk.
+    /// Find the bar which is described by the given cluster.
     /// Also return the OBB of the inner part of the bar.
     private func locateBar(from pixel: Pixel, in image: Image, with coloring: Coloring) -> (Bar, innerOBB: OBB)? {
         debug.bars.nextBarLocation()

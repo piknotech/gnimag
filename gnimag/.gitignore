@@ -2,6 +2,9 @@
 Dependencies/
 .accio/
 
+# Building via make
+.build/
+
 # User settings
 xcuserdata/
 *.xcuserstate

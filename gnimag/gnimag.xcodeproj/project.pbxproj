@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */; };
-		63048E0A23842FB10076442C /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
 		631212BE23253DE300C126B4 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 631212BC23253DE300C126B4 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631212D42325740000C126B4 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CE2325740000C126B4 /* Image.swift */; };
 		631212D52325740000C126B4 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CF2325740000C126B4 /* ImageProvider.swift */; };
@@ -19,7 +18,7 @@
 		631212EC232574E600C126B4 /* Tapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212EA232574E500C126B4 /* Tapper.swift */; };
 		631213022325768000C126B4 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 631212F42325768000C126B4 /* Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63121315232577EA00C126B4 /* ImageAnalysisKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63121313232577EA00C126B4 /* ImageAnalysisKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		631213492325785000C126B4 /* ConnectedChunks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312131F2325785000C126B4 /* ConnectedChunks.swift */; };
+		631213492325785000C126B4 /* SimpleClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312131F2325785000C126B4 /* SimpleClustering.swift */; };
 		6312134A2325785000C126B4 /* DistanceMeasurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213202325785000C126B4 /* DistanceMeasurable.swift */; };
 		6312134B2325785000C126B4 /* FindSinglePixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213222325785000C126B4 /* FindSinglePixel.swift */; };
 		6312134C2325785000C126B4 /* RayShooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213242325785000C126B4 /* RayShooter.swift */; };
@@ -51,7 +50,7 @@
 		6312138F2325794600C126B4 /* LinearTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213822325793100C126B4 /* LinearTracker.swift */; };
 		631213902325794600C126B4 /* ConstantTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213832325793100C126B4 /* ConstantTracker.swift */; };
 		631213912325794600C126B4 /* PolyTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213842325793100C126B4 /* PolyTracker.swift */; };
-		6312139B2325798E00C126B4 /* MacTestingTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 631213992325798E00C126B4 /* MacTestingTools.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6312139B2325798E00C126B4 /* TestingTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 631213992325798E00C126B4 /* TestingTools.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631213AF23257A2F00C126B4 /* Color+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A223257A2F00C126B4 /* Color+Conversion.swift */; };
 		631213B023257A2F00C126B4 /* BitmapCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A323257A2F00C126B4 /* BitmapCanvas.swift */; };
 		631213B123257A2F00C126B4 /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A523257A2F00C126B4 /* Measurement.swift */; };
@@ -117,25 +116,29 @@
 		6367D906238EAE7200477AD9 /* Array+RemoveAtIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */; };
 		6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */; };
 		6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift */; };
-		6367D90E238EC0CF00477AD9 /* TrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */; };
 		6367D910238ED8DC00477AD9 /* Dash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90F238ED8DC00477AD9 /* Dash.swift */; };
 		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
 		6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */; };
 		6375953F233A53D900ACA969 /* ShapeErasedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953E233A53D900ACA969 /* ShapeErasedImage.swift */; };
 		63759541233A63CC00ACA969 /* ShapeErasureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63759540233A63CB00ACA969 /* ShapeErasureType.swift */; };
-		6375AFB6237DA9060019981E /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFB4237DA8B40019981E /* Operators.swift */; };
 		6375AFB9237DA96D0019981E /* DebugParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFB7237DA9650019981E /* DebugParameters.swift */; };
 		6375AFBB237DE6090019981E /* DebugLoggerFrame+Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */; };
+		637FCB4B2391AA0C0067BBCC /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB492391A9FA0067BBCC /* DebugLogger.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
-		638F407D2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
-		63D002942373024600041069 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
-		63D002962373037900041069 /* DebugLoggerFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame.swift */; };
+		63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
+		63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame+Data.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
 		63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */; };
 		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
-		654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDFD129E8E7B8C5DADE74FE /* Charts.framework */; };
+		63FABDB523917D6F0088FD77 /* LoggingKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63FABDB323917D6F0088FD77 /* LoggingKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63FABDBE23917F6C0088FD77 /* DebugParameterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FABDBD23917F6C0088FD77 /* DebugParameterType.swift */; };
+		63FABDBF239180F30088FD77 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFB4237DA8B40019981E /* Operators.swift */; };
+		63FABDC12391811F0088FD77 /* DebugLoggerFrameProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FABDC02391811F0088FD77 /* DebugLoggerFrameProtocol.swift */; };
+		63FABDC3239181640088FD77 /* TrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */; };
+		63FABDC4239181640088FD77 /* SimpleTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */; };
+		63FABDC6239186DB0088FD77 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
 		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
 /* End PBXBuildFile section */
 
@@ -152,10 +155,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3D2F1439F00EF2198E59A7B3 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
+		61ED5ED8A0CFA3E40265F162 /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
 		6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerProtocol.swift; sourceTree = "<group>"; };
 		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
-		631212AD23253DC700C126B4 /* MacCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MacCLI; sourceTree = BUILT_PRODUCTS_DIR; };
+		631212AD23253DC700C126B4 /* gnimag */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gnimag; sourceTree = BUILT_PRODUCTS_DIR; };
 		631212BA23253DE300C126B4 /* Image.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Image.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		631212BC23253DE300C126B4 /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
 		631212BD23253DE300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -180,7 +183,7 @@
 		63121313232577EA00C126B4 /* ImageAnalysisKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageAnalysisKit.h; sourceTree = "<group>"; };
 		63121314232577EA00C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6312131A2325785000C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		6312131F2325785000C126B4 /* ConnectedChunks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectedChunks.swift; sourceTree = "<group>"; };
+		6312131F2325785000C126B4 /* SimpleClustering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleClustering.swift; sourceTree = "<group>"; };
 		631213202325785000C126B4 /* DistanceMeasurable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceMeasurable.swift; sourceTree = "<group>"; };
 		631213222325785000C126B4 /* FindSinglePixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindSinglePixel.swift; sourceTree = "<group>"; };
 		631213242325785000C126B4 /* RayShooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RayShooter.swift; sourceTree = "<group>"; };
@@ -224,8 +227,8 @@
 		631213842325793100C126B4 /* PolyTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolyTracker.swift; sourceTree = "<group>"; };
 		631213862325793100C126B4 /* PolarCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolarCoordinates.swift; sourceTree = "<group>"; };
 		631213872325793100C126B4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		631213972325798E00C126B4 /* MacTestingTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MacTestingTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		631213992325798E00C126B4 /* MacTestingTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacTestingTools.h; sourceTree = "<group>"; };
+		631213972325798E00C126B4 /* TestingTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TestingTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		631213992325798E00C126B4 /* TestingTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestingTools.h; sourceTree = "<group>"; };
 		6312139A2325798E00C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631213A223257A2F00C126B4 /* Color+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Conversion.swift"; sourceTree = "<group>"; };
 		631213A323257A2F00C126B4 /* BitmapCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitmapCanvas.swift; sourceTree = "<group>"; };
@@ -300,17 +303,21 @@
 		6375AFB4237DA8B40019981E /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		6375AFB7237DA9650019981E /* DebugParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugParameters.swift; sourceTree = "<group>"; };
 		6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugLoggerFrame+Logging.swift"; sourceTree = "<group>"; };
+		637FCB492391A9FA0067BBCC /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CartesianProduct.swift"; sourceTree = "<group>"; };
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
-		63D002952373037900041069 /* DebugLoggerFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLoggerFrame.swift; sourceTree = "<group>"; };
+		63D002952373037900041069 /* DebugLoggerFrame+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugLoggerFrame+Data.swift"; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
 		63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionDebugInfo.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
-		671ADA6D5EF52448399201D6 /* HandySwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = HandySwift.framework; path = Dependencies/macOS/HandySwift.framework; sourceTree = "<group>"; };
-		7FDFD129E8E7B8C5DADE74FE /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
+		63FABDB123917D6F0088FD77 /* LoggingKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoggingKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63FABDB323917D6F0088FD77 /* LoggingKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoggingKit.h; sourceTree = "<group>"; };
+		63FABDB423917D6F0088FD77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63FABDBD23917F6C0088FD77 /* DebugParameterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugParameterType.swift; sourceTree = "<group>"; };
+		63FABDC02391811F0088FD77 /* DebugLoggerFrameProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLoggerFrameProtocol.swift; sourceTree = "<group>"; };
 		9A8B5AE54AE4C6A103DA27FF /* Surge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Surge.framework; path = Dependencies/macOS/Surge.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -362,7 +369,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				654C63BBDA086F8383D5F9C6 /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,6 +386,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		63FABDAE23917D6F0088FD77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -391,14 +404,6 @@
 			name = GameKit;
 			sourceTree = "<group>";
 		};
-		5324653E3AFAD5B895036ABD /* MacTestingTools */ = {
-			isa = PBXGroup;
-			children = (
-				7FDFD129E8E7B8C5DADE74FE /* Charts.framework */,
-			);
-			name = MacTestingTools;
-			sourceTree = "<group>";
-		};
 		631212A223253DA100C126B4 = {
 			isa = PBXGroup;
 			children = (
@@ -407,33 +412,33 @@
 				631212CA23256D5000C126B4 /* Sources */,
 				631212AE23253DC700C126B4 /* Products */,
 				9F432FA5361DFCE0850BFC33 /* Dependencies */,
-				63B49D5C23270B1200AFDF13 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
 		631212AE23253DC700C126B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				631212AD23253DC700C126B4 /* MacCLI */,
+				631212AD23253DC700C126B4 /* gnimag */,
 				631212BA23253DE300C126B4 /* Image.framework */,
 				631212DF2325746B00C126B4 /* Tapping.framework */,
 				631212F22325768000C126B4 /* Common.framework */,
 				63121311232577E900C126B4 /* ImageAnalysisKit.framework */,
 				6312136E2325791600C126B4 /* GameKit.framework */,
-				631213972325798E00C126B4 /* MacTestingTools.framework */,
+				631213972325798E00C126B4 /* TestingTools.framework */,
 				631213D623257EF600C126B4 /* MrFlap.framework */,
 				6312140E232587E300C126B4 /* Geometry.framework */,
+				63FABDB123917D6F0088FD77 /* LoggingKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		631212AF23253DC700C126B4 /* MacCLI */ = {
+		631212AF23253DC700C126B4 /* gnimag */ = {
 			isa = PBXGroup;
 			children = (
 				631213BA23257EB600C126B4 /* README.md */,
 				631213BB23257EB600C126B4 /* Sources */,
 			);
-			path = MacCLI;
+			path = gnimag;
 			sourceTree = "<group>";
 		};
 		631212BB23253DE300C126B4 /* Image */ = {
@@ -480,13 +485,12 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		631212C72325429C00C126B4 /* Mac */ = {
+		631212C72325429C00C126B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				631213982325798E00C126B4 /* MacTestingTools */,
-				631212AF23253DC700C126B4 /* MacCLI */,
+				631212AF23253DC700C126B4 /* gnimag */,
 			);
-			path = Mac;
+			path = Products;
 			sourceTree = "<group>";
 		};
 		631212C8232542A300C126B4 /* Games */ = {
@@ -502,8 +506,9 @@
 			isa = PBXGroup;
 			children = (
 				631212C62325429200C126B4 /* Base */,
+				63FABDB923917D7B0088FD77 /* Debug */,
 				631212C8232542A300C126B4 /* Games */,
-				631212C72325429C00C126B4 /* Mac */,
+				631212C72325429C00C126B4 /* Products */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -611,18 +616,18 @@
 		6312131D2325785000C126B4 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				6312131E2325785000C126B4 /* ConnectedChunks */,
+				6312131E2325785000C126B4 /* SimpleClustering */,
 			);
 			path = Other;
 			sourceTree = "<group>";
 		};
-		6312131E2325785000C126B4 /* ConnectedChunks */ = {
+		6312131E2325785000C126B4 /* SimpleClustering */ = {
 			isa = PBXGroup;
 			children = (
-				6312131F2325785000C126B4 /* ConnectedChunks.swift */,
+				6312131F2325785000C126B4 /* SimpleClustering.swift */,
 				631213202325785000C126B4 /* DistanceMeasurable.swift */,
 			);
-			path = ConnectedChunks;
+			path = SimpleClustering;
 			sourceTree = "<group>";
 		};
 		631213212325785000C126B4 /* Image */ = {
@@ -638,8 +643,8 @@
 			isa = PBXGroup;
 			children = (
 				631213242325785000C126B4 /* RayShooter.swift */,
-				631213252325785000C126B4 /* EdgeTraverser.swift */,
 				631213262325785000C126B4 /* EdgeDetector.swift */,
+				631213252325785000C126B4 /* EdgeTraverser.swift */,
 			);
 			path = "Edge Detection";
 			sourceTree = "<group>";
@@ -792,20 +797,20 @@
 			path = Polynomial;
 			sourceTree = "<group>";
 		};
-		631213982325798E00C126B4 /* MacTestingTools */ = {
+		631213982325798E00C126B4 /* TestingTools */ = {
 			isa = PBXGroup;
 			children = (
 				631213AE23257A2F00C126B4 /* README.md */,
 				631213A023257A2F00C126B4 /* Sources */,
 				6312139F23257A1D00C126B4 /* SupportingFiles */,
 			);
-			path = MacTestingTools;
+			path = TestingTools;
 			sourceTree = "<group>";
 		};
 		6312139F23257A1D00C126B4 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				631213992325798E00C126B4 /* MacTestingTools.h */,
+				631213992325798E00C126B4 /* TestingTools.h */,
 				6312139A2325798E00C126B4 /* Info.plist */,
 			);
 			path = SupportingFiles;
@@ -937,7 +942,7 @@
 				631213E223257F4000C126B4 /* MrFlap.swift */,
 				631213E823257F4000C126B4 /* 1 ImageAnalysis */,
 				631213E323257F4000C126B4 /* 2 GameModelCollection */,
-				63D002922372F31900041069 /* DebugLogger */,
+				63D002922372F31900041069 /* Logging */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1123,28 +1128,15 @@
 			path = More;
 			sourceTree = "<group>";
 		};
-		63B49D5C23270B1200AFDF13 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				671ADA6D5EF52448399201D6 /* HandySwift.framework */,
-				3D2F1439F00EF2198E59A7B3 /* HandySwift.framework */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		63D002922372F31900041069 /* DebugLogger */ = {
+		63D002922372F31900041069 /* Logging */ = {
 			isa = PBXGroup;
 			children = (
 				6375AFB7237DA9650019981E /* DebugParameters.swift */,
-				63D002932373024600041069 /* DebugLogger.swift */,
-				63D002952373037900041069 /* DebugLoggerFrame.swift */,
+				637FCB492391A9FA0067BBCC /* DebugLogger.swift */,
+				63D002952373037900041069 /* DebugLoggerFrame+Data.swift */,
 				6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */,
-				6375AFB4237DA8B40019981E /* Operators.swift */,
-				6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */,
-				638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */,
-				63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */,
 			);
-			path = DebugLogger;
+			path = Logging;
 			sourceTree = "<group>";
 		};
 		63F0192F23885B7600E380CB /* Debug */ = {
@@ -1156,13 +1148,70 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		63FABDB223917D6F0088FD77 /* LoggingKit */ = {
+			isa = PBXGroup;
+			children = (
+				63FABDBA23917DB20088FD77 /* Sources */,
+				63FABDBB23917DBB0088FD77 /* SupportingFiles */,
+			);
+			path = LoggingKit;
+			sourceTree = "<group>";
+		};
+		63FABDB923917D7B0088FD77 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				631213982325798E00C126B4 /* TestingTools */,
+				63FABDB223917D6F0088FD77 /* LoggingKit */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		63FABDBA23917DB20088FD77 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				63D002932373024600041069 /* DebugLogger.swift */,
+				63FABDBD23917F6C0088FD77 /* DebugParameterType.swift */,
+				63FABDC02391811F0088FD77 /* DebugLoggerFrameProtocol.swift */,
+				6375AFB4237DA8B40019981E /* Operators.swift */,
+				63FABDC2239181460088FD77 /* Trackers */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		63FABDBB23917DBB0088FD77 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				63FABDB323917D6F0088FD77 /* LoggingKit.h */,
+				63FABDB423917D6F0088FD77 /* Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		63FABDC2239181460088FD77 /* Trackers */ = {
+			isa = PBXGroup;
+			children = (
+				6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */,
+				638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */,
+				63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */,
+			);
+			path = Trackers;
+			sourceTree = "<group>";
+		};
 		9F432FA5361DFCE0850BFC33 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
 				11578D4D3B87173763296AD3 /* GameKit */,
-				5324653E3AFAD5B895036ABD /* MacTestingTools */,
+				AB4CB9B3FFFA119AE1170175 /* TestingTools */,
 			);
 			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		AB4CB9B3FFFA119AE1170175 /* TestingTools */ = {
+			isa = PBXGroup;
+			children = (
+				61ED5ED8A0CFA3E40265F162 /* Charts.framework */,
+			);
+			name = TestingTools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1212,7 +1261,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6312139B2325798E00C126B4 /* MacTestingTools.h in Headers */,
+				6312139B2325798E00C126B4 /* TestingTools.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1232,12 +1281,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		63FABDAC23917D6F0088FD77 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63FABDB523917D6F0088FD77 /* LoggingKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		631212AC23253DC700C126B4 /* MacCLI */ = {
+		631212AC23253DC700C126B4 /* gnimag */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "MacCLI" */;
+			buildConfigurationList = 631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "gnimag" */;
 			buildPhases = (
 				631212A923253DC700C126B4 /* Sources */,
 				631212AA23253DC700C126B4 /* Frameworks */,
@@ -1247,9 +1304,9 @@
 			);
 			dependencies = (
 			);
-			name = MacCLI;
+			name = gnimag;
 			productName = MacCLI;
-			productReference = 631212AD23253DC700C126B4 /* MacCLI */;
+			productReference = 631212AD23253DC700C126B4 /* gnimag */;
 			productType = "com.apple.product-type.tool";
 		};
 		631212B923253DE300C126B4 /* Image */ = {
@@ -1343,9 +1400,9 @@
 			productReference = 6312136E2325791600C126B4 /* GameKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		631213962325798E00C126B4 /* MacTestingTools */ = {
+		631213962325798E00C126B4 /* TestingTools */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6312139C2325798E00C126B4 /* Build configuration list for PBXNativeTarget "MacTestingTools" */;
+			buildConfigurationList = 6312139C2325798E00C126B4 /* Build configuration list for PBXNativeTarget "TestingTools" */;
 			buildPhases = (
 				631213922325798E00C126B4 /* Headers */,
 				631213932325798E00C126B4 /* Sources */,
@@ -1357,9 +1414,9 @@
 			);
 			dependencies = (
 			);
-			name = MacTestingTools;
+			name = TestingTools;
 			productName = MacTestingTools;
-			productReference = 631213972325798E00C126B4 /* MacTestingTools.framework */;
+			productReference = 631213972325798E00C126B4 /* TestingTools.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		631213D523257EF600C126B4 /* MrFlap */ = {
@@ -1396,6 +1453,24 @@
 			name = Geometry;
 			productName = Geometry;
 			productReference = 6312140E232587E300C126B4 /* Geometry.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		63FABDB023917D6F0088FD77 /* LoggingKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63FABDB823917D6F0088FD77 /* Build configuration list for PBXNativeTarget "LoggingKit" */;
+			buildPhases = (
+				63FABDAC23917D6F0088FD77 /* Headers */,
+				63FABDAD23917D6F0088FD77 /* Sources */,
+				63FABDAE23917D6F0088FD77 /* Frameworks */,
+				63FABDAF23917D6F0088FD77 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LoggingKit;
+			productName = LoggingKit;
+			productReference = 63FABDB123917D6F0088FD77 /* LoggingKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -1435,6 +1510,9 @@
 					6312140D232587E300C126B4 = {
 						CreatedOnToolsVersion = 11.0;
 					};
+					63FABDB023917D6F0088FD77 = {
+						CreatedOnToolsVersion = 11.3;
+					};
 				};
 			};
 			buildConfigurationList = 631212A623253DA100C126B4 /* Build configuration list for PBXProject "gnimag" */;
@@ -1450,15 +1528,16 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				631212AC23253DC700C126B4 /* MacCLI */,
+				631212AC23253DC700C126B4 /* gnimag */,
 				631212B923253DE300C126B4 /* Image */,
 				631212DE2325746B00C126B4 /* Tapping */,
 				631212F12325768000C126B4 /* Common */,
 				63121310232577E900C126B4 /* ImageAnalysisKit */,
 				6312136D2325791600C126B4 /* GameKit */,
-				631213962325798E00C126B4 /* MacTestingTools */,
+				631213962325798E00C126B4 /* TestingTools */,
 				631213D523257EF600C126B4 /* MrFlap */,
 				6312140D232587E300C126B4 /* Geometry */,
+				63FABDB023917D6F0088FD77 /* LoggingKit */,
 			);
 		};
 /* End PBXProject section */
@@ -1514,6 +1593,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6312140C232587E300C126B4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63FABDAF23917D6F0088FD77 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1622,7 +1708,7 @@
 				631213662325785000C126B4 /* ColorMatch.swift in Sources */,
 				631213642325785000C126B4 /* ExpandingCirclePath.swift in Sources */,
 				631213622325785000C126B4 /* LimitedPath.swift in Sources */,
-				631213492325785000C126B4 /* ConnectedChunks.swift in Sources */,
+				631213492325785000C126B4 /* SimpleClustering.swift in Sources */,
 				631213632325785000C126B4 /* PixelPath.swift in Sources */,
 				6312134E2325785000C126B4 /* EdgeDetector.swift in Sources */,
 				631213612325785000C126B4 /* CirclePath.swift in Sources */,
@@ -1703,21 +1789,17 @@
 				631213F623257F4000C126B4 /* AnalysisResult.swift in Sources */,
 				631213F823257F4000C126B4 /* Bar.swift in Sources */,
 				631213FC23257F4000C126B4 /* AnalysisHints.swift in Sources */,
-				63D002942373024600041069 /* DebugLogger.swift in Sources */,
+				637FCB4B2391AA0C0067BBCC /* DebugLogger.swift in Sources */,
 				631213F723257F4000C126B4 /* ImageAnalyzer.swift in Sources */,
 				631213FA23257F4000C126B4 /* Coloring.swift in Sources */,
 				634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */,
 				631213F423257F4000C126B4 /* PlayerCourse.swift in Sources */,
 				631213F923257F4000C126B4 /* Playfield.swift in Sources */,
 				631213F523257F4000C126B4 /* GameModel.swift in Sources */,
-				63048E0A23842FB10076442C /* CompositeTrackerDebugInfo.swift in Sources */,
-				638F407D2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift in Sources */,
-				6367D90E238EC0CF00477AD9 /* TrackerDebugInfo.swift in Sources */,
 				631213F323257F4000C126B4 /* BarCourse.swift in Sources */,
 				6375AFB9237DA96D0019981E /* DebugParameters.swift in Sources */,
-				63D002962373037900041069 /* DebugLoggerFrame.swift in Sources */,
+				63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */,
 				631213FB23257F4000C126B4 /* Player.swift in Sources */,
-				6375AFB6237DA9060019981E /* Operators.swift in Sources */,
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,
 				6375AFBB237DE6090019981E /* DebugLoggerFrame+Logging.swift in Sources */,
 			);
@@ -1738,6 +1820,20 @@
 				6312142B2325883A00C126B4 /* AABB.swift in Sources */,
 				634AD0172327C8D000D87BAB /* Ray.swift in Sources */,
 				634AD0152327C8C400D87BAB /* Line.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63FABDAD23917D6F0088FD77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63FABDC6239186DB0088FD77 /* DebugLogger.swift in Sources */,
+				63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */,
+				63FABDC12391811F0088FD77 /* DebugLoggerFrameProtocol.swift in Sources */,
+				63FABDC3239181640088FD77 /* TrackerDebugInfo.swift in Sources */,
+				63FABDBE23917F6C0088FD77 /* DebugParameterType.swift in Sources */,
+				63FABDC4239181640088FD77 /* SimpleTrackerDebugInfo.swift in Sources */,
+				63FABDBF239180F30088FD77 /* Operators.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1766,6 +1862,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1773,6 +1870,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
 				SWIFT_VERSION = 5.0;
@@ -1800,6 +1898,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1808,6 +1907,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1875,7 +1975,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacCLI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1939,7 +2039,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacCLI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -2820,7 +2920,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/Mac/MacTestingTools/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Debug/TestingTools/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2831,7 +2931,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacTestingTools;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.TestingTools;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -2900,7 +3000,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Sources/Mac/MacTestingTools/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Debug/TestingTools/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2910,7 +3010,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.MacTestingTools;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.TestingTools;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -3123,10 +3223,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Dependencies/macOS",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3209,10 +3305,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Dependencies/macOS",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -3244,6 +3336,115 @@
 			};
 			name = Release;
 		};
+		63FABDB623917D6F0088FD77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = TD9G758WXJ;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Sources/Debug/LoggingKit/SupportingFiles/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.LoggingKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		63FABDB723917D6F0088FD77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = TD9G758WXJ;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Sources/Debug/LoggingKit/SupportingFiles/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.LoggingKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3256,7 +3457,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "MacCLI" */ = {
+		631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "gnimag" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				631212B323253DC700C126B4 /* Debug */,
@@ -3310,7 +3511,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6312139C2325798E00C126B4 /* Build configuration list for PBXNativeTarget "MacTestingTools" */ = {
+		6312139C2325798E00C126B4 /* Build configuration list for PBXNativeTarget "TestingTools" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6312139D2325798E00C126B4 /* Debug */,
@@ -3333,6 +3534,15 @@
 			buildConfigurations = (
 				63121420232587E300C126B4 /* Debug */,
 				63121421232587E300C126B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63FABDB823917D6F0088FD77 /* Build configuration list for PBXNativeTarget "LoggingKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63FABDB623917D6F0088FD77 /* Debug */,
+				63FABDB723917D6F0088FD77 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

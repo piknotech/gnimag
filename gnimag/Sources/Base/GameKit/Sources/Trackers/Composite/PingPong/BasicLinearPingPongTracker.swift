@@ -4,7 +4,7 @@
 //
 
 import Common
-import MacTestingTools
+import TestingTools
 
 /// BasicLinearPingPongTracker is a PingPongTracker whose lower and upper bounds are constant, and whose segment function is linear.
 public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {

@@ -4,7 +4,7 @@
 //
 
 import Common
-import MacTestingTools
+import TestingTools
 
 public extension CompositeTracker {
     /// Create information about all regression functions.

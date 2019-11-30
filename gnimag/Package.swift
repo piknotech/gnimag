@@ -3,7 +3,11 @@ import PackageDescription
 
 let package = Package(
     name: "gnimag",
+    platforms: [
+        .macOS(.v10_14),
+    ],
     products: [
+        .executable(name: "gnimag", targets: ["gnimag"]),
     ],
     dependencies: [
         /// A Swift library that uses the Accelerate framework to provide high-performance functions for matrix math, digital signal processing, and image manipulation.
@@ -13,20 +17,107 @@ let package = Package(
         .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.3.0")),
     ],
     targets: [
+        // BASE
+        .target(
+            name: "Common",
+            path: "Sources/Base/Common"
+        ),
+
+        .target(
+            name: "Image",
+            dependencies: [
+                "Common"
+            ],
+            path: "Sources/Base/Image"
+        ),
+
+        .target(
+            name: "Tapping",
+            dependencies: [
+                "Common"
+            ],
+            path: "Sources/Base/Tapping"
+        ),
+
+        .target(
+            name: "Geometry",
+            dependencies: [
+                "Common"
+            ],
+            path: "Sources/Base/Geometry"
+        ),
+
+        .target(
+            name: "ImageAnalysisKit",
+            dependencies: [
+                "Common",
+                "Image",
+                "TestingTools"
+            ],
+            path: "Sources/Base/ImageAnalysisKit"
+        ),
+
         .target(
             name: "GameKit",
             dependencies: [
+                "Common",
+                "TestingTools",
                 "Surge"
             ],
             path: "Sources/Base/GameKit"
         ),
 
+        // DEBUG
         .target(
-            name: "MacTestingTools",
+            name: "TestingTools",
             dependencies: [
-                "Charts"
+                "Charts",
+                "Common",
+                "Geometry",
+                "Image"
             ],
-            path: "Sources/Mac/MacTestingTools"
-        )
+            path: "Sources/Debug/TestingTools"
+        ),
+
+        .target(
+            name: "LoggingKit",
+            dependencies: [
+                "Common",
+                "GameKit",
+                "TestingTools",
+            ],
+            path: "Sources/Debug/LoggingKit"
+        ),
+
+        // GAMES
+        .target(
+            name: "MrFlap",
+            dependencies: [
+                "Common",
+                "Geometry",
+                "Image",
+                "ImageAnalysisKit",
+                "LoggingKit",
+                "Tapping",
+                "TestingTools",
+            ],
+            path: "Sources/Games/MrFlap"
+        ),
+
+        // PRODUCTS
+        .target(
+            name: "gnimag",
+            dependencies: [
+                "Common",
+                "Geometry",
+                "Image",
+                "ImageAnalysisKit",
+                "LoggingKit",
+                "MrFlap",
+                "Tapping",
+                "TestingTools",
+            ],
+            path: "Sources/Products/gnimag"
+        ),
     ]
 )

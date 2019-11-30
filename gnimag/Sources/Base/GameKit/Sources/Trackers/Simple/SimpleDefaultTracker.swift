@@ -4,7 +4,7 @@
 //
 
 import Common
-import MacTestingTools
+import TestingTools
 
 /// SimpleDefaultTracker is an abstract class providing useful default implementations for SimpleTrackerProtocol.
 /// In particular, when inheriting from SimpleTracker, you can (and must) only customize the regression calculation method; all other methods are implemented for you.

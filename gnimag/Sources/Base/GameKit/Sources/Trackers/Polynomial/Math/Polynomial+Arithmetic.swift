@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 
 // As Polynomials over R form a ring, this file contains necessary addition and multiplication methods, and more convenience arithmetic functions.
 

@@ -3,7 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import MacTestingTools
+import TestingTools
 
 /// MedianTracker continuously calculates the median value of the given stream of data points.
 public final class MedianTracker {

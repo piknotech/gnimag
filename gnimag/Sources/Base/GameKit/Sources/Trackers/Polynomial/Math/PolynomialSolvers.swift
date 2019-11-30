@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 
 public enum QuadraticSolver {
     /// Solve the equation given by ax^2 + bx + c = 0 and return both solutions.

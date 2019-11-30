@@ -4,9 +4,10 @@
 //
 
 import Common
+import Foundation
 import Geometry
 import Image
-import MacTestingTools
+import TestingTools
 import Tapping
 
 /// Each instance of MrFlap can play a single game of MrFlap.

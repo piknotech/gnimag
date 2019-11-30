@@ -4,8 +4,9 @@
 //
 
 import Common
+import Foundation
 import Geometry
-import MacTestingTools
+import TestingTools
 
 /// QuadCurveScatterStrokable is a ScatterStrokable that can draw a parabola curve using a bezier path.
 public struct QuadCurveScatterStrokable: ScatterStrokable {

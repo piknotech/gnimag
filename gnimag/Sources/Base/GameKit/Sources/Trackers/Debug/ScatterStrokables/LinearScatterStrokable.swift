@@ -4,8 +4,9 @@
 //
 
 import Common
+import Foundation
 import Geometry
-import MacTestingTools
+import TestingTools
 
 /// LinaerScatterStrokable is a ScatterStrokable that can draw a line (segment).
 public struct LinearScatterStrokable: ScatterStrokable {
