@@ -26,8 +26,8 @@ public final class GameQueue {
     /// States if `performCurrentTasksInQueue` is currently executed.
     private var isSpawningTasks = false
 
-    /// When a new frame comes in while the queue is busy, the last frame is stored to be analyzed once self is not busy anymore.
-    private var mostRecentWaitingFrame: Frame?
+    /// The next frame that will be analyzed, assumed that no new frame comes in while waiting for the current frame to finish analysis.
+    private var nextFrameToAnalyze: Frame?
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, synchronousFrameCallback: @escaping (Frame) -> Void) {
@@ -51,7 +51,16 @@ public final class GameQueue {
     /// This method is called from the `imageProvider` event thread / queue.
     private func newFrame(frame: Frame) {
         synchronized(self) {
-            mostRecentWaitingFrame = frame
+            timingStats.newFrame(frame: frame)
+
+            // Note if the previous frame was dropped
+            if nextFrameToAnalyze != nil { timingStats.frameDropped() }
+
+            // Note if the current frame has to wait
+            if isSpawningTasks { timingStats.frameCannotImmediatelyBeAnalyzed() }
+
+            // Schedule frame, either for immediate or later processing
+            nextFrameToAnalyze = frame
             queue.async(execute: performCurrentTasksInQueue)
         }
     }
@@ -74,11 +83,14 @@ public final class GameQueue {
         while true {
             // Fetch and clear `mostRecentWaitingFrame` synchronized
             if let frame = (synchronized(self) { () -> Frame? in
-                defer { mostRecentWaitingFrame = nil }
-                return mostRecentWaitingFrame
+                defer { nextFrameToAnalyze = nil }
+                return nextFrameToAnalyze
             }) {
-                // Analyze frame synchronously on queue
+                // Analyze frame synchronously on the queue.
+                // Of course, there exists NO lock during this execution
+                timingStats.currentFrameAnalysisStarted()
                 synchronousFrameCallback(frame)
+                timingStats.currentFrameAnalysisEnded()
             } else {
                 // No image is waiting; leave this method. Nothing happens until the next comes in
                 synchronized(self) { isSpawningTasks = false }
