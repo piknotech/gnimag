@@ -13,7 +13,7 @@ public final class ImageListCreator {
     /// The directory path.
     private let directoryPath: String
 
-    /// The next image to create.
+    /// The next image to create (1-based).
     private var i = 1
 
     /// The maximum number of images to write.

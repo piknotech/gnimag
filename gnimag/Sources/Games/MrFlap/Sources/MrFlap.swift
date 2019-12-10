@@ -57,7 +57,7 @@ public final class MrFlap {
 
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
-        self.debugLogger.currentFrame.time = time
+        debugLogger.currentFrame.time = time
 
         // State-specific update
         switch state {
@@ -74,7 +74,7 @@ public final class MrFlap {
             ()
         }
 
-        self.debugLogger.advance()
+        debugLogger.advance()
     }
 
     // MARK: State-Specific Update Methods

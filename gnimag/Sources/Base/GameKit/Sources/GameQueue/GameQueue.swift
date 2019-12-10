@@ -12,7 +12,7 @@ public final class GameQueue {
     public typealias Frame = (Image, Double)
 
     /// The timing stats which give you information about frame durations, frame dismissal rates and more.
-    public let timingStats = GameQueueTimingStats()
+    public let timingStats: GameQueueTimingStats
 
     private let imageProvider: ImageProvider
 
@@ -34,6 +34,7 @@ public final class GameQueue {
         self.imageProvider = imageProvider
         self.synchronousFrameCallback = synchronousFrameCallback
         self.queue = DispatchQueue(label: "GameQueue", qos: .userInteractive) // High-priority queue
+        self.timingStats = GameQueueTimingStats(imageProvider: imageProvider)
     }
 
     /// Begin receiving images.

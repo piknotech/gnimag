@@ -47,10 +47,15 @@ class AppWindowScreenProvider: ImageProvider {
         }
     }
 
+    /// The current time.
+    var time: Time {
+        CACurrentMediaTime()
+    }
+
     /// Called each time the display link fires.
     private func displayLinkFire(_: CVDisplayLink, _: UnsafePointer<CVTimeStamp>, _: UnsafePointer<CVTimeStamp>, _: CVOptionFlags, _: UnsafeMutablePointer<CVOptionFlags>) -> CVReturn {
         // Get image and call block (on same thread)
-        let time = CACurrentMediaTime()
+        let time = self.time // Get current time before copying the image
         let image = NativeImage(currentImage)
         newImage.trigger(with: (image, time))
 

@@ -13,7 +13,7 @@ public final class ImageListProvider: ImageProvider {
     /// The directory path.
     private let directoryPath: String
 
-    /// The next image to consume.
+    /// The latest consumed image (1-based).
     private var i: Int
     private let speed: Int
 
@@ -36,18 +36,17 @@ public final class ImageListProvider: ImageProvider {
         self.framerate = framerate
         self.imageFromCGImage = imageFromCGImage
         self.speed = speed
-        i = startingAt
+        i = startingAt - speed
 
         `continue`()
     }
 
-    /// Return the next image in the directory.
-    private var nextImage: CGImage? {
+    /// Return the current image (image number `i`) in the directory.
+    private var currentImage: CGImage? {
         let path = directoryPath +/ "\(i).png"
 
         if let image = NSImage(contentsOfFile: path)?.cgImage(forProposedRect: nil, context: nil, hints: nil) {
             Terminal.log(.info, "Image \(i)")
-            i += speed
             return image
         } else {
             // All images consumed
@@ -57,14 +56,21 @@ public final class ImageListProvider: ImageProvider {
         }
     }
 
+    /// The current time, which is defined by the current image index.
+    /// Attention: This is a synthetic, not an actual time value!
+    public var time: Time {
+        Double(self.i) / Double(self.framerate * self.speed)
+    }
+
     /// Start or continue providing images.
     public func `continue`() {
-        pause()
+        guard timer == nil else { return }
 
         // Start timer
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(framerate), repeats: true) { _ in
-            let time = Double(self.i) / Double(self.framerate * self.speed)
-            if let image = self.nextImage {
+            self.i += self.speed // Next image
+            let time = self.time // Get current time before copying the image
+            if let image = self.currentImage {
                 self.newImage.trigger(with: (self.imageFromCGImage(image), time))
             }
         }
