@@ -11,6 +11,9 @@ import Image
 public final class GameQueue {
     public typealias Frame = (Image, Double)
 
+    /// The timing stats which give you information about frame durations, frame dismissal rates and more.
+    public let timingStats = GameQueueTimingStats()
+
     private let imageProvider: ImageProvider
 
     /// High-priority queue where frame analysis is performed.
@@ -20,8 +23,8 @@ public final class GameQueue {
     /// Only return from this callback after you finished analyzing the frame.
     private let synchronousFrameCallback: (Frame) -> Void
 
-    /// States if an image is currently being analyzed.
-    private var isBusy = false
+    /// States if `performCurrentTasksInQueue` is currently executed.
+    private var isSpawningTasks = false
 
     /// When a new frame comes in while the queue is busy, the last frame is stored to be analyzed once self is not busy anymore.
     private var mostRecentWaitingFrame: Frame?
@@ -44,33 +47,43 @@ public final class GameQueue {
         imageProvider.newImage.unsubscribeAll()
     }
 
-    /// This method schedules frame analysis in the background or marks the current frame as waiting.
+    /// This method schedules frame analysis in the background.
+    /// This method is called from the `imageProvider` event thread / queue.
     private func newFrame(frame: Frame) {
         synchronized(self) {
-            if isBusy {
-                mostRecentWaitingFrame = frame
-            } else {
-                // Perform analysis on background game queue
-                isBusy = true
-                queue.async {
-                    self.synchronousFrameCallback(frame)
-                    self.analyzeWaitingFrame()
-                }
-            }
+            mostRecentWaitingFrame = frame
+            queue.async(execute: performCurrentTasksInQueue)
         }
     }
 
-    /// Analyze (synchronously) the most recent waiting frame, if existing.
-    /// This method is called on the background game queue.
-    private func analyzeWaitingFrame() {
-        // Fetch and clear `mostRecentWaitingFrame` synchronously
-        if let frame = (synchronized(self) { () -> Frame? in
-            defer { mostRecentWaitingFrame = nil }
-            return mostRecentWaitingFrame
-        }) {
-            synchronousFrameCallback(frame) // Synchronous
+    /// Analyze (synchronously, on the background queue) the most recent waiting frame, if existing.
+    /// After analyzing the current frame, analyze the next one, if existing, and so on.
+    /// This method is always called on the background game queue, and without an active lock.
+    private func performCurrentTasksInQueue() {
+        // Only allow one access to this method at once. If there is already a frame being analyzed, leave
+        let shouldContinue = synchronized(self) { () -> Bool in
+            if isSpawningTasks { return false }
+            isSpawningTasks = true
+            return true
         }
 
-        isBusy = false
+        // If there is already a frame being analyzed, leave
+        guard shouldContinue else { return }
+
+        // Next-frame-analysis loop
+        while true {
+            // Fetch and clear `mostRecentWaitingFrame` synchronized
+            if let frame = (synchronized(self) { () -> Frame? in
+                defer { mostRecentWaitingFrame = nil }
+                return mostRecentWaitingFrame
+            }) {
+                // Analyze frame synchronously on queue
+                synchronousFrameCallback(frame)
+            } else {
+                // No image is waiting; leave this method. Nothing happens until the next comes in
+                synchronized(self) { isSpawningTasks = false }
+                break
+            }
+        }
     }
 }
