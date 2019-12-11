@@ -16,7 +16,7 @@ final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugLoggerFram
     /// Delete, if required, and then recreate the logging directory.
     private func createDirectory() {
         switch parameters.severity {
-        case .alwaysText, .onErrors, .textOnly:
+        case .alwaysText, .onErrors, .onErrorsTextOnly:
             // Empty folder without deleting it (retaining attributes like desktop position and icon)
             let items = (try? FileManager.default.contentsOfDirectory(atPath: parameters.location)) ?? []
             for item in items where item != "Icon\r" { // Retain folder icon

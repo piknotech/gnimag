@@ -105,4 +105,3 @@ fileprivate struct PolygonalChainsStrokable: Strokable {
         }
     }
 }
-
