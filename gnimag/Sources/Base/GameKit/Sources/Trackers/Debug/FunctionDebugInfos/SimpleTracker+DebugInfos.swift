@@ -30,6 +30,11 @@ public extension SimpleTrackerProtocol {
             lower = regression + (-tolerance)
             upper = regression + tolerance
 
+        case let .absolute2D(dy: dy, dx: _):
+            lower = regression + (-dy)
+            upper = regression + dy
+            // TODO: kreis machen!
+
         case let .relative(tolerance):
             lower = regression * (1 - tolerance)
             upper = regression * (1 - tolerance)

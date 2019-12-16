@@ -82,6 +82,12 @@ public enum TrackerTolerance {
     /// Iff it is smaller than or equal to tolerance, return true.
     case absolute(SimpleTrackerProtocol.Value)
 
+    /// Instead of just allowing a deviation in y direction, we also allow a deviation in x (time) direction.
+    /// We draw an ellipse with radii (dx, dy) around the data point and see if it intersects the regression graph.
+    /// This means, allowed deviations are: (dx, 0), (0, dy), (0.7*dx, 0.7*dy), ...
+    /// Attention: dx should be comparatively small enough.
+    case absolute2D(dy: SimpleTrackerProtocol.Value, dx: SimpleTrackerProtocol.Time)
+
     /// Look at the difference between the expected value and the average value.
     /// Iff it is smaller than or equal to (tolerance * expectedValue), return true.
     case relative(SimpleTrackerProtocol.Value)

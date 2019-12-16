@@ -4,6 +4,7 @@
 //
 
 import Common
+import simd
 import TestingTools
 
 /// SimpleDefaultTracker is an abstract class providing useful default implementations for SimpleTrackerProtocol.
@@ -81,28 +82,72 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
     /// Check if a value will be valid (compared to the expected value) at a given time, using the existing regression.
     /// If there is no regression, use the specified fallback. The default value for `fallback` is `.valid`.
     public func isDataPointValid(value: Value, time: Time, fallback: TrackerFallbackMethod = .valid) -> Bool {
-        var expectedValue: Value!
-
-        // Calculate expected value either from regression or from specified fallback
-        if let regression = regression {
-            expectedValue = regression.at(time)
-        } else {
+        // Fallback when no regression is available
+        guard let f = regression else {
             switch fallback {
-                case .valid: return true
-                case .invalid: return false
-                case .useLastValue: expectedValue = values.last! // Crash when no last value available
+            case .valid: return true
+            case .invalid: return false
+            case .useLastValue: return validityCheckUsingLastValue(value: value, time: time)
             }
         }
 
-        // Calculate allowed difference
-        var allowedDifference: Value
+        // Normal check using regression function
         switch tolerance {
-            case let .absolute(maxDiff): allowedDifference = maxDiff
-            case let .relative(tolerance): allowedDifference = abs(expectedValue) * tolerance
+        case let .absolute(tolerance):
+            return abs(f.at(time) - value) <= tolerance
+
+        case let .relative(tolerance):
+            return abs(f.at(time) - value) <= f.at(time) * tolerance
+
+        case let .absolute2D(dy: dy, dx: dx):
+            return validityCheckWithCircularTolerance(value: value, time: time, dx: dx, dy: dy, f: f)
+        }
+    }
+
+    /// The validity check just using the last value.
+    private func validityCheckUsingLastValue(value: Value, time: Time) -> Bool {
+        let y = values.last!
+
+        switch tolerance {
+        case let .absolute(tolerance):
+            return abs(y - value) <= tolerance
+
+        case let .absolute2D(dy: dy, dx: _):
+            return abs(y - value) <= dy
+
+        case let .relative(tolerance):
+            return abs(y - value) <= y * tolerance
+        }
+    }
+
+    /// The validity check for a tolerance of `.absolute2D(dy: dy, dx: dx)`.
+    private func validityCheckWithCircularTolerance(value: Value, time: Time, dx: Value, dy: Time, f: F) -> Bool {
+        // 1.: Direct check
+        if abs(f.at(time) - value) <= dy { return true }
+
+        // 2.: Check sign of values at (x-dx, x+dx) and compare with value at x
+        // ATTENTION: This assumes that f is continuous and defined everywhere (i.e. on R).
+        let m = f.at(time) - value
+        let l = f.at(time - dx) - value
+        let r = f.at(time + dx) - value
+        if sign(m) != sign(l) || sign(m) != sign(r) || sign(l) != sign(r) {
+            return true
         }
 
-        let difference = abs(value - expectedValue)
-        return difference <= allowedDifference
+        // 3.: Perform check at some values in (x-dx, x+dx). Start with the direction where the slope at x is pointing to.
+        // A slope > 0 means: start looking to the left
+        let deriv = (f as? DifferentiableFunction)?.derivative.at(time) ?? abs(r) - abs(l)
+        let by = dx / 5
+        let left = Array(stride(from: time - dx + by, to: time, by: by))
+        let right = Array(stride(from: time + by, to: time + dx, by: by))
+
+        for x in deriv > 0 ? (left + right) : (right + left) {
+            let ydiff = abs(f.at(x) - value)
+            let xdiff = abs(x - time)
+            if pow(xdiff / dx, 2) + pow(ydiff / dy, 2) <= 1 { return true }
+        }
+
+        return false
     }
 
     /// Perform a validity check, but with a different tolerance value.
