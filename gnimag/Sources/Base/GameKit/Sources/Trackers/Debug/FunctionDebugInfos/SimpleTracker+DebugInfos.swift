@@ -30,10 +30,8 @@ public extension SimpleTrackerProtocol {
             lower = regression + (-tolerance)
             upper = regression + tolerance
 
-        case let .absolute2D(dy: dy, dx: _):
-            lower = regression + (-dy)
-            upper = regression + dy
-            // TODO: kreis machen!
+        case let .absolute2D(dy: dy, dx: dx):
+            return functionInfosFor2DTolerance(dx: dx, dy: dy)
 
         case let .relative(tolerance):
             lower = regression * (1 - tolerance)
@@ -44,5 +42,19 @@ public extension SimpleTrackerProtocol {
             FunctionDebugInfo(function: lower, strokable: scatterStrokable(for: lower), color: .emphasize, dash: .dashed),
             FunctionDebugInfo(function: upper, strokable: scatterStrokable(for: upper), color: .emphasize, dash: .dashed),
         ]
+    }
+
+    /// Create 8 functions by shifting the regression in all 45° and 90° directions.
+    /// This closely resembles the actual 2D tolerance (where the function would be shifted in all possible directions (360°)).
+    private func functionInfosFor2DTolerance(dx: Double, dy: Double) -> [FunctionDebugInfo]? {
+        guard let regression = regression else { return nil }
+
+        // Shift function in all 45° and 90° directions (total 8 directions)
+        let offsets: [Double] = [-1, 0, 1]
+        return (offsets × offsets).compactMap { (x, y) in
+            if (x, y) == (0, 0) { return nil }
+            let f = regression.shiftLeft(by: x * dx) + y * dy
+            return FunctionDebugInfo(function: f, strokable: scatterStrokable(for: f), color: .emphasize, dash: .dashed)
+        }
     }
 }
