@@ -119,6 +119,6 @@ public extension SimpleTrackerProtocol {
 public extension ConstantTracker {
     /// Perform a validity check on the tracker and write the result into "validityResult" of the provided SimpleTrackerDebugInfo.
     func isValueValid(_ value: Value, fallback: TrackerFallbackMethod = .valid, _ debug: inout SimpleTrackerDebugInfo<ConstantTracker>) -> Bool {
-        isDataPointValid(value: value, time: .zero, fallback: fallback, &debug)
+        isDataPointValid(value: value, time: count, fallback: fallback, &debug)
     }
 }
