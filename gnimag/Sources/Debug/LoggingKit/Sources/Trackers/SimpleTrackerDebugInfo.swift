@@ -17,6 +17,9 @@ public final class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: Track
     public private(set) var regression: Function?
     public fileprivate(set) var validityResult: ValidityResult?
 
+    /// A FunctionDebugInfo containing a ScatterStrokable (for example, ellipse or line) which shows the exact tolerance testing range around the latest tested data point. Non-nil iff `validityResult` is `.some(.valid) or .some(.invalid)`.
+    public fileprivate(set) var toleranceRegionInfo: FunctionDebugInfo?
+
     /// Default initializer, creating an emtpy instance.
     public init() {
     }
@@ -65,12 +68,20 @@ public final class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: Track
 
     /// Create a scatter plot with `allDataPoints` and `allFunctions`, if existing.
     /// Call `fetchDataSet` beforehand.
-    public func createScatterPlot() -> ScatterPlot? {
+    public func createScatterPlot(includeToleranceRegionForLastDataPoint: Bool = true) -> ScatterPlot? {
         guard let dataPoints = allDataPoints else { return nil }
 
+        // Plot data points
         let plot = ScatterPlot(dataPoints: dataPoints)
+
+        // Plot regression and tolerance functions
         allFunctions?.forEach {
             plot.stroke($0.strokable, with: $0.color, alpha: 0.75, strokeWidth: 0.5, dash: $0.dash.concreteDash)
+        }
+
+        // Plot tolerance region for last data point
+        if includeToleranceRegionForLastDataPoint, let region = toleranceRegionInfo {
+            plot.stroke(region.strokable, with: region.color, alpha: 0.7, strokeWidth: 0.5, dash: region.dash.concreteDash)
         }
 
         return plot
@@ -87,14 +98,19 @@ public extension SimpleTrackerProtocol {
         // Fill validityResult according to result
         if result {
             debug.validityResult = .valid
-        } else {
-            if fallback == .invalid {
+        }
+        else {
+            if !hasRegression && fallback == .invalid {
                 debug.validityResult = .fallbackInvalid
             } else {
-                let wasFallback = regression == nil // fallback: .useLastValue was used
-                debug.validityResult = .invalid(value: value, expected: regression?.at(time) ?? values.last!, tolerance: tolerance, wasFallback: wasFallback)
+                debug.validityResult = .invalid(value: value, expected: regression?.at(time) ?? values.last!, tolerance: tolerance, wasFallback: !hasRegression)
             }
         }
+
+        // Fill toleranceFunctionInfo
+        guard let f = regression else { return result }
+        let toleranceStrokable = scatterStrokable(forToleranceRangeAroundTime: time, value: value, f: f)
+        debug.toleranceRegionInfo = FunctionDebugInfo(function: nil, strokable: toleranceStrokable, color: .emphasize, dash: .solid)
 
         return result
     }

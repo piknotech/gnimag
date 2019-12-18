@@ -171,4 +171,19 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
     open func scatterStrokable(for function: F) -> ScatterStrokable {
         fatalError("This is an abstract method")
     }
+
+    /// Return a ScatterStrokable which describes the valid tolerance range around the given point, respective to the current tolerance and the given regression function. For debugging.
+    public final func scatterStrokable(forToleranceRangeAroundTime time: Time, value: Value, f: F) -> ScatterStrokable {
+        switch tolerance {
+        case let .absolute(tolerance):
+            return VerticalLineSegmentScatterStrokable(x: time, yCenter: value, yRadius: tolerance)
+
+        case let .absolute2D(dy: dy, dx: dx):
+            return EllipseScatterStrokable(center: (time, value), radii: (dx, dy))
+
+        case let .relative(tolerance):
+            let tolerance = tolerance * f.at(time) // Relative tolerance
+            return VerticalLineSegmentScatterStrokable(x: time, yCenter: value, yRadius: tolerance)
+        }
+    }
 }

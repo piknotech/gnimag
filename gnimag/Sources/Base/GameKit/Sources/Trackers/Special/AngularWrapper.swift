@@ -70,4 +70,10 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
         let linearValue = linearify(value, at: time)
         return tracker.isDataPoint(value: linearValue, time: time, validWithTolerance: tolerance, fallback: fallback)
     }
+
+    /// Return a ScatterStrokable which describes the valid tolerance range around the given point, respective to the current tolerance and the given regression function. For debugging.
+    public final func scatterStrokable(forToleranceRangeAroundTime time: Time, value: Value, f: F) -> ScatterStrokable {
+        let linearValue = linearify(value, at: time)
+        return tracker.scatterStrokable(forToleranceRangeAroundTime: time, value: linearValue, f: f)
+    }
 }
