@@ -51,7 +51,7 @@ final class PlayerCourse {
     /// Check if all given values match the trackers.
     func integrityCheck(with player: Player, at time: Double) -> Bool {
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
-        performDebugLogging(linearAngle: linearAngle)
+        debug.linearAngle = linearAngle
 
         return angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
             size.isValueValid(player.size, &debug.size) &&
@@ -59,8 +59,8 @@ final class PlayerCourse {
     }
 
     /// Write information about the trackers into the current debug logger frame.
-    private func performDebugLogging(linearAngle: Double) {
-        debug.linearAngle = linearAngle
+    /// Call after the updating has finished, i.e. after `update` or after `integrityCheck`.
+    func performDebugLogging() {
         debug.angle.from(tracker: angle)
         debug.size.from(tracker: size)
         debug.height.from(tracker: height)
