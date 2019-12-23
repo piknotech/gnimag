@@ -28,7 +28,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// Default initializer.
     public init(
-        absoluteSegmentSwitchTolerance: Value,
+        segmentSwitchTolerance: TrackerTolerance,
         slopeTolerance: TrackerTolerance,
         boundsTolerance: TrackerTolerance,
         decisionCharacteristics: NextSegmentDecisionCharacteristics
@@ -37,7 +37,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         upperBoundTracker = ConstantTracker(tolerancePoints: 0, tolerance: boundsTolerance)
         slopeTracker = ConstantTracker(tolerancePoints: 1, tolerance: slopeTolerance)
 
-        super.init(tolerance: absoluteSegmentSwitchTolerance, decisionCharacteristics: decisionCharacteristics)
+        super.init(tolerance: segmentSwitchTolerance, decisionCharacteristics: decisionCharacteristics)
     }
 
     // MARK: Delegate And DataSource
@@ -93,11 +93,11 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// Create a linear tracker for the next segment.
     public override func trackerForNextSegment() -> LinearTracker {
-        LinearTracker(tolerancePoints: 3, tolerance: .absolute(tolerance))
+        LinearTracker(tolerancePoints: 3, tolerance: tolerance)
     }
 
     /// Make a guess for a segment beginning at (`time`, `value`).
-    public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> Function? {
+    public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> Polynomial? {
         guard
             let direction = currentDirection,
             let positiveSlope = slopeTracker.average ?? slopeTracker.values.last else { return nil }
@@ -109,21 +109,40 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         return Polynomial([intercept, slope])
     }
 
-    /// Move the guess range to the back to
-    public override func guessRange(for timeRange: Time) -> SimpleRange<Time> {
+    /// Move the guess range back to compensate for a possibly too large tolerance (i.e. a very late segment switch detection).
+    public override func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
         guard let slope = slopeTracker.average ?? slopeTracker.values.last else {
             return SimpleRange(from: 0, to: 0.5)
         }
 
-        // d: horizontal distance from tolerance line to actual line (tolerance is the vertical distance)
-        let d = tolerance / abs(slope)
+        // The vertical tolerance at the critical point
+        let verticalTolerance: Double
+
+        switch tolerance {
+        case let .absolute(tolerance):
+            verticalTolerance = tolerance
+
+        case let .absolute2D(dy: dy, dx: dx):
+            // Calculate the tangent point of the ellipse with a line with the regression's slope.
+            // Then, go downwards until hitting the actual regression (going through (0, 0)).
+            let x = dx * sqrt(pow(slope, 2) / (pow(dy/dx, 2) + pow(slope, 2)))
+            let y = sqrt(pow(dy, 2) - pow(x * dy/dx, 2)) // (x, y) is the tangent point on the ellipse
+            verticalTolerance = y + abs(slope) * x
+
+        case let .relative(tolerance):
+            guard let f = currentSegment.tracker.regression else { return SimpleRange(from: 0, to: 0.5) }
+            verticalTolerance = abs(tolerance * f.at(midpoint))
+        }
+
+        // d: horizontal distance from tolerance line to actual line
+        let d = verticalTolerance / abs(slope)
         let from = 0.5 - d / (2 * timeRange) // Go d/2 back in time, starting at 0.5 (midpoint between a and b)
         let to = 0.5 // Range cannot start after the midpoint of a and b
         return SimpleRange(from: from, to: to)
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
-    public override func scatterStrokable(for function: Function, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
-        LinearScatterStrokable(line: function as! Polynomial, drawingRange: drawingRange)
+    public override func scatterStrokable(for function: Polynomial, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+        LinearScatterStrokable(line: function, drawingRange: drawingRange)
     }
 }

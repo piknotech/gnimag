@@ -101,6 +101,7 @@
 		63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */; };
 		63351A5D234DD11E00E42762 /* Array+DropWhile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5B234DD11700E42762 /* Array+DropWhile.swift */; };
 		63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5E234DE23E00E42762 /* SimpleDataSet.swift */; };
+		63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */; };
 		63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */; };
 		63456B38236466A900C71EE5 /* ParameterizableFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B37236466A900C71EE5 /* ParameterizableFunction.swift */; };
 		634AD0152327C8C400D87BAB /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0122327C8C000D87BAB /* Line.swift */; };
@@ -282,6 +283,7 @@
 		63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerSlidingWindow.swift; sourceTree = "<group>"; };
 		63351A5B234DD11700E42762 /* Array+DropWhile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+DropWhile.swift"; sourceTree = "<group>"; };
 		63351A5E234DE23E00E42762 /* SimpleDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDataSet.swift; sourceTree = "<group>"; };
+		63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyFunctionToleranceChecker.swift; sourceTree = "<group>"; };
 		63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatingPingPongTracker.swift; sourceTree = "<group>"; };
 		63456B37236466A900C71EE5 /* ParameterizableFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterizableFunction.swift; sourceTree = "<group>"; };
 		634AD0122327C8C000D87BAB /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -1073,6 +1075,7 @@
 				63351A52234BA2B700E42762 /* CompositeTracker.swift */,
 				63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */,
 				63B64F3523586642005A5E82 /* MonotonicityChecker.swift */,
+				63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1773,6 +1776,7 @@
 				634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */,
 				637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */,
 				6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */,
+				63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */,
 				637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */,
 				63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */,
 				6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */,
