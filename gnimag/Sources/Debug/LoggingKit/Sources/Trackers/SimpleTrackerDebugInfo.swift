@@ -95,7 +95,7 @@ public extension SimpleTrackerProtocol {
     func isDataPointValid(value: Value, time: Time, fallback: TrackerFallbackMethod = .valid, _ debug: inout SimpleTrackerDebugInfo<Self>) -> Bool {
         let result = isDataPointValid(value: value, time: time, fallback: fallback)
 
-        // Fill validityResult according to result
+        // Fill validityResult
         if result {
             debug.validityResult = .valid
         }

@@ -24,7 +24,7 @@ internal struct EllipseScatterStrokable: ScatterStrokable {
     let center: (x: Double, y: Double)
     let radii: (x: Double, y: Double)
 
-    /// Convert the line into pixel space.
+    /// Convert the ellipse into pixel space.
     func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
         let xFactor = scatterPlot.pixelContentRect.width / scatterPlot.dataContentRect.width
         let yFactor = scatterPlot.pixelContentRect.height / scatterPlot.dataContentRect.height
@@ -33,7 +33,9 @@ internal struct EllipseScatterStrokable: ScatterStrokable {
         let rx = CGFloat(radii.x) * xFactor
         let ry = CGFloat(radii.y) * yFactor
 
-        return EllipseStrokable(rect: CGRect(x: center.x - rx, y: center.y - ry, width: 2 * rx, height: 2 * ry))
+        return EllipseStrokable(
+            rect: CGRect(x: center.x - rx, y: center.y - ry, width: 2 * rx, height: 2 * ry)
+        )
     }
 }
 

@@ -18,6 +18,10 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerD
 
     public fileprivate(set) var validityResult: ValidityResult?
 
+    /// A FunctionDebugInfo containing a ScatterStrokable (for example, ellipse or line) which shows the exact tolerance testing range around the latest tested data point, according to the current segment regression (NOT to the guesses for the next segment).
+    /// Nil if the current tracker has no regression.
+    public fileprivate(set) var toleranceRegionInfo: FunctionDebugInfo?
+
     /// Default initializer, creating an emtpy instance.
     public init() {
     }
@@ -52,12 +56,20 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerD
 
     /// Create a scatter plot with `allDataPoints` and `allFunctions`, if existing.
     /// Call `fetchDataSet` beforehand.
-    public func createScatterPlot() -> ScatterPlot? {
+    public func createScatterPlot(includeToleranceRegionForLastDataPoint: Bool = true) -> ScatterPlot? {
         guard let dataPoints = allDataPoints else { return nil }
 
+        // Plot data points
         let plot = ScatterPlot(dataPoints: dataPoints)
+
+        // Plot regression and tolerance functions
         allFunctions?.forEach {
             plot.stroke($0.strokable, with: $0.color, alpha: 0.75, strokeWidth: 0.5, dash: $0.dash.concreteDash)
+        }
+
+        // Plot tolerance region for last data point
+        if includeToleranceRegionForLastDataPoint, let region = toleranceRegionInfo {
+            plot.stroke(region.strokable, with: region.color, alpha: 0.7, strokeWidth: 0.5, dash: region.dash.concreteDash)
         }
         
         return plot
@@ -70,7 +82,15 @@ public extension CompositeTracker {
     /// Perform a validity check on the tracker and write the result into "validityResult" of the provided CompositeTrackerDebugInfo.
     func integrityCheck(with value: Value, at time: Time, _ debug: inout CompositeTrackerDebugInfo<SegmentTrackerType>) -> Bool {
         let result = integrityCheck(with: value, at: time)
+
+        // Fill validityResult
         debug.validityResult = result ? .valid : .invalid
+
+        // Fill toleranceFunctionInfo
+        if let strokable = lastToleranceRegionScatterStrokable {
+            debug.toleranceRegionInfo = FunctionDebugInfo(function: nil, strokable: strokable, color: .emphasize, dash: .solid)
+        }
+
         return result
     }
 }

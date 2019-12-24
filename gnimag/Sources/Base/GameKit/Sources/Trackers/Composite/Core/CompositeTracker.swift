@@ -87,6 +87,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)
     private var allDataPoints = SimpleDataSet()
 
+    /// The tolerance region info from the last data point, applied on the current tracker.
+    /// Nil if the current tracker has no regression.
+    public private(set) var lastToleranceRegionScatterStrokable: ScatterStrokable?
+
     /// The full dataset, containing all points:
     ///  - Valid points that have been added to the tracker,
     ///  - Invalid points that failed the `integrityCheck`,
@@ -123,6 +127,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Check if a point is valid to be added to the tracker.
     /// Call this before actually calling `add(value:at:)`.
     public func integrityCheck(with value: Value, at time: Time) -> Bool {
+        lastToleranceRegionScatterStrokable = nil // Reset debug info; will be set in `currentSegmentMatches`
+
         if !monotonicityChecker.verify(value: time) { print("not monotone! – \(time)"); return false }
 
         if currentSegmentMatches(value: value, at: time) { return true }
@@ -152,7 +158,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Check if the data point matches the current segment regression.
     private func currentSegmentMatches(value: Value, at time: Time) -> Bool {
         // Regression function available
-        if currentSegment.tracker.hasRegression {
+        if let regression = currentSegment.tracker.regression {
+            lastToleranceRegionScatterStrokable = currentSegment.tracker.scatterStrokable(forToleranceRangeAroundTime: time, value: value, f: regression)
             return currentSegment.tracker.isDataPointValid(value: value, time: time, fallback: .valid)
         }
 
