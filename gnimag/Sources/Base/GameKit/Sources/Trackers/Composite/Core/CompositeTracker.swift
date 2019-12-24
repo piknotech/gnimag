@@ -42,7 +42,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         public let guesses: Guesses?
 
         /// The time where the segment has supposedly started. For debugging.
-        internal var supposedStartTime: Time
+        internal var supposedStartTime: Time?
 
         internal var colorForPlotting: ScatterColor {
             index.isMultiple(of: 2) ? .even : .odd
@@ -60,7 +60,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         internal let allStartTimes: [Time]
 
         /// Default initializer.
-        fileprivate init(a:SegmentTrackerType.F, b: SegmentTrackerType.F? = nil, aXStart: Time, bXStart: Time? = nil) {
+        fileprivate init(a: SegmentTrackerType.F, b: SegmentTrackerType.F? = nil, aXStart: Time, bXStart: Time? = nil) {
             all = [a, b].compactMap(id)
             allStartTimes = [aXStart, bXStart].compactMap(id)
         }
@@ -101,13 +101,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     }
 
     /// A monotonicity checker which enforces that values are only added in a time-monontone order.
-    private let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
-
-    /// The most distant value for time.
-    /// Because time direction can either be increasing or decreasing, this is either + or -infinity.
-    internal var timeInfinity: Time {
-        monotonicityChecker.direction == .decreasing ? -.infinity : +.infinity
-    }
+    internal let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
     
     /// Default initializer.
     public init(tolerance: TrackerTolerance, decisionCharacteristics: NextSegmentDecisionCharacteristics) {
@@ -117,7 +111,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         // Create initial tracker
         var tracker = trackerForNextSegment()
         tracker.tolerance = tolerance
-        currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil, supposedStartTime: -timeInfinity)
+        currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil, supposedStartTime: nil)
 
         window.delegate = self
     }
@@ -269,7 +263,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Update `supposedXRange` of the current segment.
     /// `currentSegmentStartTime` is the time value that was returned by the `currentSegmentWasUpdated` delegate call.
     private func updateCurrentStartTime(with startTime: Time?) {
-        currentSegment.supposedStartTime = startTime ?? -timeInfinity
+        currentSegment.supposedStartTime = startTime
     }
 
     // MARK: CompositeTrackerSlidingWindowDelegate

@@ -23,13 +23,13 @@ public extension CompositeTracker {
 
         // Add ScatterStrokables for each segment
         for (i, segment) in all.enumerated() {
-            var endTime = (i < all.count - 1) ? all[i+1].supposedStartTime : timeInfinity
-            if endTime == -timeInfinity { endTime.negate() } // If start time of next segment is unknown
+            let startTime = segment.supposedStartTime ?? -timeInfinity
+            let endTime = ((i < all.count - 1) ? all[i+1].supposedStartTime : nil) ?? timeInfinity
             let color = segment.colorForPlotting
 
             // Regression function
             if let function = segment.tracker.regression {
-                add(function, with: color, dash: .solid, from: segment.supposedStartTime, to: endTime)
+                add(function, with: color, dash: .solid, from: startTime, to: endTime)
             }
 
             // Guesses
@@ -56,5 +56,11 @@ public extension CompositeTracker {
     var segmentwiseFullDebugFunctionInfos: [FunctionDebugInfo] {
         let all = finalizedSegments + [currentSegment!]
         return all.flatMap { $0.tracker.allDebugFunctionInfos }
+    }
+
+    /// The most distant value for time. For debugging.
+    /// Because time direction can either be increasing or decreasing, this is either + or -infinity.
+    private var timeInfinity: Time {
+        monotonicityChecker.direction == .decreasing ? -.infinity : +.infinity
     }
 }
