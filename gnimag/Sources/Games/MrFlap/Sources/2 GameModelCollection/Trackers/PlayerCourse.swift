@@ -23,8 +23,9 @@ final class PlayerCourse {
     private var debug: DebugLoggerFrame.GameModelCollection._Player { debugLogger.currentFrame.gameModelCollection.player }
 
     /// Default initializer.
-    init(playfield: Playfield, debugLogger: DebugLogger) {
+    init(playfield: Playfield, tapDelayTracker: TapDelayTracker, debugLogger: DebugLogger) {
         self.playfield = playfield
+        self.debugLogger = debugLogger
 
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(2% * .pi)))
         height = JumpTracker(
@@ -35,22 +36,37 @@ final class PlayerCourse {
         )
         size = ConstantTracker(tolerance: .relative(10%))
 
-        self.debugLogger = debugLogger
+
+        // Use the player height tracker for tap detection
+        linkPlayerJump(to: tapDelayTracker)
+    }
+
+    /// Use the player height tracker for tap detection.
+    /// Therefore, link the segment switch callbacks to the given TapDelayTracker.
+    private func linkPlayerJump(to tapDelayTracker: TapDelayTracker) {
+        // For tap delay tracking, the actual time (from imageProvider) is required.
+        // Because player jump tracking is performed using the player's angle, it first has to be converted back to an (approximate) time value.
+        func convertPlayerAngleToTime(playerAngle: Double) -> Double? {
+            guard let slope = angle.tracker.slope, let intercept = angle.tracker.intercept else { return nil }
+            return (playerAngle - intercept) / slope
+        }
+
+        // Link segment switch callback
+        height.advancedToNextSegment += { angle in
+            if let time = convertPlayerAngleToTime(playerAngle: angle) {
+                tapDelayTracker.tapDetected(at: time)
+            }
+        }
+
+        // Link segment startTime update callback
+        height.updatedSupposedStartTimeForCurrentSegment += { angle in
+            if let angle = angle, let time = convertPlayerAngleToTime(playerAngle: angle) {
+                tapDelayTracker.refineLastTapDetectionTime(with: time)
+            }
+        }
     }
 
     // MARK: Updating
-
-    /// Update the trackers with the values from the given player.
-    /// Only call this AFTER a successful `integrityCheck`.
-    func update(with player: Player, at time: Double) {
-        debug.integrityCheckSuccessful = true
-
-        angle.add(value: player.angle, at: time)
-        size.add(value: player.size)
-
-        let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
-        height.add(value: player.height, at: linearAngle) // Use angle instead of time to account for small lags (which are really dangerous for exact jump tracking)
-    }
 
     /// Check if all given values match the trackers.
     func integrityCheck(with player: Player, at time: Double) -> Bool {
@@ -62,6 +78,18 @@ final class PlayerCourse {
         return angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
             size.isValueValid(player.size, &debug.size) &&
             height.integrityCheck(with: player.height, at: linearAngle, &debug.height)
+    }
+
+    /// Update the trackers with the values from the given player.
+    /// Only call this AFTER a successful `integrityCheck`.
+    func update(with player: Player, at time: Double) {
+        debug.integrityCheckSuccessful = true
+
+        angle.add(value: player.angle, at: time)
+        size.add(value: player.size)
+
+        let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
+        height.add(value: player.height, at: linearAngle) // Use angle instead of time to account for small lags (which are really dangerous for exact jump tracking)
     }
 
     /// Update the tolerance of the jump tracker so that dx ≈ 25% * dy.

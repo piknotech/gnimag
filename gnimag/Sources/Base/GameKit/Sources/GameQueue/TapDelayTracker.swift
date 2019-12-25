@@ -3,13 +3,8 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
-import Image
-
 public final class TapDelayTracker {
     public typealias Time = Double
-
-    /// The image provider, for getting the current time.
-    private let imageProvider: ImageProvider
 
     /// The tracker creating an average value for the delay time.
     private let tracker: PreliminaryTracker
@@ -27,33 +22,32 @@ public final class TapDelayTracker {
     }
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tolerance: TrackerTolerance) {
-        self.imageProvider = imageProvider
-        tracker = PreliminaryTracker(tolerance: tolerance)
+    public init(tolerance: TrackerTolerance) {
+        tracker = PreliminaryTracker(tolerancePoints: 0, tolerance: tolerance)
     }
 
-    /// Call when a tap has just been scheduled.
-    public func tapScheduled() {
-        scheduledTapTimes.append(imageProvider.time)
+    /// Call when a tap has just been scheduled at the given time.
+    public func tapScheduled(time: Time) {
+        scheduledTapTimes.append(time)
     }
 
     /// Call when a tap has just been detected at the given time.
-    /// When no time is passed, the current time of the ImageProvider will be used.
-    public func tapDetected(at time: Time? = nil) {
+    public func tapDetected(at endTime: Time) {
+        // Finalize previous tap
         tracker.finalizePreliminaryValue()
+        latestTapTime = nil
 
-        guard !scheduledTapTimes.isEmpty else { print("EMPTY!"); return }
+        guard !scheduledTapTimes.isEmpty else { return } // TODO: error detection / fallback mechanism
 
         // Add delay to tracker preliminarily, as it may be updated lateron (`refineLastTapDetectionTime`)
         latestTapTime = scheduledTapTimes.removeFirst()
-        let endTime = time ?? imageProvider.time
         tracker.updatePreliminaryValueIfValid(value: endTime - latestTapTime)
     }
 
     /// Call when the tap detection time of the latest tap has been updated.
     /// This updates the latest delay value.
     public func refineLastTapDetectionTime(with endTime: Time) {
-        guard let startTime = latestTapTime else { print("EMPTY2!"); return }
+        guard let startTime = latestTapTime else { return }
         tracker.updatePreliminaryValueIfValid(value: endTime - startTime)
     }
 }

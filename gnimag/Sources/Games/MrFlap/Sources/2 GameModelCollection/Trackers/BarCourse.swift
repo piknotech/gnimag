@@ -58,24 +58,6 @@ final class BarCourse {
 
     // MARK: Updating
 
-    /// Update the trackers with the values from the given bar.
-    /// Only call this AFTER a successful `integrityCheck`.
-    func update(with bar: Bar, at time: Double) {
-        debug.integrityCheckSuccessful = true
-
-        angle.add(value: bar.angle, at: time)
-        width.add(value: bar.width)
-
-        switch state {
-        case .appearing:
-            appearingHoleSize.add(value: bar.holeSize, at: time)
-
-        case .normal:
-            holeSize.add(value: bar.holeSize, at: time)
-            yCenter.add(value: bar.yCenter, at: time)
-        }
-    }
-
     /// Check if all given values match the trackers.
     /// NOTE: This changes the state from `.appearing` to `.normal` when necessary.
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
@@ -97,6 +79,24 @@ final class BarCourse {
         }
 
         return true
+    }
+
+    /// Update the trackers with the values from the given bar.
+    /// Only call this AFTER a successful `integrityCheck`.
+    func update(with bar: Bar, at time: Double) {
+        debug.integrityCheckSuccessful = true
+
+        angle.add(value: bar.angle, at: time)
+        width.add(value: bar.width)
+
+        switch state {
+        case .appearing:
+            appearingHoleSize.add(value: bar.holeSize, at: time)
+
+        case .normal:
+            holeSize.add(value: bar.holeSize, at: time)
+            yCenter.add(value: bar.yCenter, at: time)
+        }
     }
 
     /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.

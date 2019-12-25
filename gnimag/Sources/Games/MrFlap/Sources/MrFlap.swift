@@ -13,6 +13,7 @@ import Tapping
 
 /// Each instance of MrFlap can play a single game of MrFlap.
 public final class MrFlap {
+    private let imageProvider: ImageProvider
     private let tapper: Tapper
 
     private var queue: GameQueue!
@@ -23,6 +24,8 @@ public final class MrFlap {
     /// Image analyzer and game model collector.
     private let imageAnalyzer: ImageAnalyzer
     private var gameModelCollector: GameModelCollector!
+
+    private let tapDelayTracker = TapDelayTracker(tolerance: .absolute(10))
 
     // TODO: remove once using prediction for hints
     private var lastPlayerCoords: PolarCoordinates?
@@ -41,6 +44,7 @@ public final class MrFlap {
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: Tapper, debugParameters: DebugParameters = .none) {
+        self.imageProvider = imageProvider
         self.tapper = tapper
 
         debugLogger = DebugLogger(parameters: debugParameters)
@@ -86,10 +90,12 @@ public final class MrFlap {
         }
 
         playfield = result.playfield
-        gameModelCollector = GameModelCollector(playfield: playfield, debugLogger: debugLogger)
+        gameModelCollector = GameModelCollector(playfield: playfield, tapDelayTracker: tapDelayTracker, debugLogger: debugLogger)
         state = .waitingForFirstMove(initialPlayerPos: result.player)
 
+        // Tap to begin the game
         tapper.tap()
+        tapDelayTracker.tapScheduled(time: imageProvider.time)
     }
 
     /// Check if the first player move, initiated by `startGame`, is visible.
@@ -99,6 +105,7 @@ public final class MrFlap {
 
         if distance(between: result.player, and: initialPlayerPos) > 1 {
             state = .inGame
+            tapDelayTracker.tapDetected(at: time)
             gameModelCollector.accept(result: result, time: time) // TODO: remove?
         }
     }

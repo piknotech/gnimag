@@ -3,6 +3,8 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import GameKit
+
 /// The full, up-to-date model of the running game.
 final class GameModel {
     /// The playfield. It does not change during the game and is used to filter out malformed input values.
@@ -15,9 +17,9 @@ final class GameModel {
     var bars: [BarCourse]
 
     /// Default initializer.
-    init(playfield: Playfield, debugLogger: DebugLogger) {
+    init(playfield: Playfield, tapDelayTracker: TapDelayTracker, debugLogger: DebugLogger) {
         self.playfield = playfield
-        self.player = PlayerCourse(playfield: playfield, debugLogger: debugLogger)
+        self.player = PlayerCourse(playfield: playfield, tapDelayTracker: tapDelayTracker, debugLogger: debugLogger)
         self.bars = []
     }
 }
