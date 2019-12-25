@@ -13,7 +13,7 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
     public typealias F = Other.F
     
     /// The internal tracker tracking the linearified values.
-    private var tracker: Other
+    public private(set) var tracker: Other
 
     public var tolerance: TrackerTolerance {
         get { tracker.tolerance }

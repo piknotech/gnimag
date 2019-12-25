@@ -36,7 +36,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Information about a segment, either the current segment or a previous one.
     public struct SegmentInfo {
         public let index: Int
-        public let tracker: SegmentTrackerType
+        public var tracker: SegmentTrackerType
 
         /// When the tracker has no regression yet, use the guesses (which come from the last segment) for approximated functions and values.
         public let guesses: Guesses?
@@ -82,7 +82,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     internal var mostRecentGuessesForNextSegment: Guesses?
 
     /// The tolerance for all trackers (including segment trackers and guesses).
-    public let tolerance: TrackerTolerance
+    public var tolerance: TrackerTolerance
 
     /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)
     private var allDataPoints = SimpleDataSet()
@@ -109,8 +109,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         self.window = CompositeTrackerSlidingWindow(characteristics: decisionCharacteristics)
 
         // Create initial tracker
-        var tracker = trackerForNextSegment()
-        tracker.tolerance = tolerance
+        let tracker = trackerForNextSegment()
         currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil, supposedStartTime: nil)
 
         window.delegate = self
@@ -151,6 +150,9 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// Check if the data point matches the current segment regression.
     private func currentSegmentMatches(value: Value, at time: Time) -> Bool {
+        currentSegment.tracker.tolerance = tolerance
+        mostRecentGuessesForNextSegment = nil // Reset required for correct `allDebugFunctionInfos`
+
         // Regression function available
         if let regression = currentSegment.tracker.regression {
             lastToleranceRegionScatterStrokable = currentSegment.tracker.scatterStrokable(forToleranceRangeAroundTime: time, value: value, f: regression)
@@ -289,8 +291,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         finalizedSegments.append(currentSegment)
 
         // Create next segment
-        var nextTracker = trackerForNextSegment()
-        nextTracker.tolerance = tolerance
+        let nextTracker = trackerForNextSegment()
         dataPoints.forEach { nextTracker.add(value: $0.value, at: $0.time, updateRegression: false) }
         nextTracker.updateRegression()
 
