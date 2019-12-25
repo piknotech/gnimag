@@ -7,7 +7,7 @@ import Common
 import TestingTools
 
 /// CompositeTracker defines an abstract class providing basic required functionalities for a composite tracker; that is, a tracker which tracks a piecewise defined funtion.
-/// When you inherit from CompositTracker, you must implement a handful of Delegate and DataSource methods.
+/// When you inherit from CompositeTracker, you must implement a handful of Delegate and DataSource methods.
 open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: CompositeTrackerSlidingWindowDelegate, HasScatterDataSet {
     public typealias Time = Double
     public typealias Value = Double
@@ -94,11 +94,21 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// The full dataset, containing all points:
     ///  - Valid points that have been added to the tracker,
     ///  - Invalid points that failed the `integrityCheck`,
-    ///  - Points that are currently in the decision window and therefore propably belong to the next segment.
+    ///  - Points that are currently in the decision window and therefore probably belong to the next segment.
     public var dataSet: [ScatterDataPoint] {
         allDataPoints.dataSet +
         window.dataPoints.map { ScatterDataPoint(x: $0.time, y: $0.value, color: .inDecisionWindow) }
     }
+
+    /// An event that is triggered each time a segment switch is detected, for external observers.
+    /// Not for subclasses, as they use the abstract delegate methods to get informed about this event.
+    /// The appended time value represents a guess (an approximate value!) of where the segment started (time-wise).
+    public let advancedToNextSegment = Event<Time>()
+
+    /// An event that is triggered each time the supposed start time of the current segment is updated.
+    /// The appended time value can also be nil, for example if there is no regression for the current segment yet.
+    /// This is called arbitrarily often between two `advancedToNextSegment` calls, and at least once (immediately after a `advancedToNextSegment` call).
+    public let updatedSupposedStartTimeForCurrentSegment = Event<Time?>()
 
     /// A monotonicity checker which enforces that values are only added in a time-monontone order.
     internal let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
@@ -262,33 +272,38 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
     }
 
-    /// Update `supposedXRange` of the current segment.
-    /// `currentSegmentStartTime` is the time value that was returned by the `currentSegmentWasUpdated` delegate call.
-    private func updateCurrentStartTime(with startTime: Time?) {
+    /// Update `supposedStartTime` of the current segment and trigger the `updatedSupposedStartTimeForCurrentSegment` event.
+    private func updateCurrentSegmentStartTime(with startTime: Time?) {
         currentSegment.supposedStartTime = startTime
+        updatedSupposedStartTimeForCurrentSegment.trigger(with: startTime)
     }
 
     // MARK: CompositeTrackerSlidingWindowDelegate
 
     /// New data points are available for the current segment.
     /// These definitely match the current tracker/guesses, so simply add them to the current tracker.
-    func flushedDataPointsAvailableForCurrentTracker(dataPoints: [DataPoint]) {
+    final func flushedDataPointsAvailableForCurrentTracker(dataPoints: [DataPoint]) {
         for point in dataPoints {
             currentSegment.tracker.add(value: point.value, at: point.time, updateRegression: false)
             allDataPoints.add(value: point.value, time: point.time, color: currentSegment.colorForPlotting)
         }
-        
+
+        // Update current segment
         currentSegment.tracker.updateRegression()
-        let time = currentSegmentWasUpdated(segment: currentSegment)
-        updateCurrentStartTime(with: time)
+        let startTime = currentSegmentWasUpdated(segment: currentSegment)
+        updateCurrentSegmentStartTime(with: startTime)
     }
 
     /// Actually advance to the next tracker.
-    func madeDecisionToAdvanceToNextTracker(withDataPoints dataPoints: [DataPoint], discardedDataPoints: [DataPoint]) {
+    final func madeDecisionToAdvanceToNextTracker(withDataPoints dataPoints: [DataPoint], discardedDataPoints: [DataPoint]) {
         // Finalize old segment
         updateAllDataPoints(withSet: discardedDataPoints)
         willFinalizeCurrentSegmentAndAdvanceToNextSegment()
         finalizedSegments.append(currentSegment)
+
+        // Trigger next segment event
+        let possibleStartTime = (currentSegment.tracker.times.last! + dataPoints.first!.time) / 2
+        advancedToNextSegment.trigger(with: possibleStartTime)
 
         // Create next segment
         let nextTracker = trackerForNextSegment()
@@ -299,12 +314,13 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
             index: currentSegment.index + 1,
             tracker: nextTracker,
             guesses: mostRecentGuessesForNextSegment,
-            supposedStartTime: dataPoints.first!.time // Time of the least recent data point in the new tracker
+            supposedStartTime: possibleStartTime
         )
 
+        // Update current segment with new data points
         updateAllDataPoints(withSet: dataPoints)
-        let time = currentSegmentWasUpdated(segment: currentSegment)
-        updateCurrentStartTime(with: time)
+        let startTime = currentSegmentWasUpdated(segment: currentSegment)
+        updateCurrentSegmentStartTime(with: startTime)
 
         // Reset guesses
         mostRecentGuessesForNextSegment = nil
