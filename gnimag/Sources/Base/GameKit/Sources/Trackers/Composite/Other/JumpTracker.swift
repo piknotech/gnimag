@@ -14,12 +14,8 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     // MARK: Private Properties
 
     /// The constant trackers for gravity and jump velocity.
-    private let gravityTracker: ConstantTracker
-    private let jumpVelocityTracker: ConstantTracker
-
-    /// True when values (gravity & jump velocity) from the current jump are in the trackers.
-    /// Because these values are updated each frame until the jump has ended (and the next jump begins), these values are only preliminary until the jump has ended.
-    private var usingPreliminaryValues = false
+    private let gravityTracker: PreliminaryTracker
+    private let jumpVelocityTracker: PreliminaryTracker
 
     /// The guess range for when a new jump started.
     /// If you know that jumps will, for example, always exactly begin at the second last data point, return [0, 0].
@@ -45,8 +41,8 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1)
     ) {
         let tolerance = TrackerTolerance.relative(relativeValueRangeTolerance)
-        gravityTracker = ConstantTracker(tolerancePoints: 1, tolerance: tolerance)
-        jumpVelocityTracker = ConstantTracker(tolerancePoints: 1, tolerance: tolerance)
+        gravityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
+        jumpVelocityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
 
         self.customGuessRange = customGuessRange
 
@@ -66,24 +62,18 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     public override func currentSegmentWasUpdated(segment: SegmentInfo) -> Time? {
         guard let jump = segment.tracker.regression else { return nil }
 
-        // Remove old preliminary values before adding new preliminary values
-        if usingPreliminaryValues {
-            gravityTracker.removeLast()
-            jumpVelocityTracker.removeLast()
-        }
-
         // Calculate gravity and jump velocity and jump start
         let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump, currentTrackerStartTime: segment.tracker.times.first!)
         let gravity = -2 * jump.a
         let jumpVelocity = jump.derivative.at(jumpStart)
 
-        // Add preliminary values to trackers if they are valid
+        gravityTracker.removePreliminaryValue()
+        jumpVelocityTracker.removePreliminaryValue()
+
+        // Add preliminary values to trackers if both are valid
         if gravityTracker.isValueValid(gravity) && jumpVelocityTracker.isValueValid(jumpVelocity) {
-            gravityTracker.add(value: gravity)
-            jumpVelocityTracker.add(value: jumpVelocity)
-            usingPreliminaryValues = true
-        } else {
-            usingPreliminaryValues = false
+            gravityTracker.addPreliminary(value: gravity)
+            jumpVelocityTracker.addPreliminary(value: jumpVelocity)
         }
 
         return jumpStart
@@ -92,7 +82,8 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     /// The current jump has finished and the next jump has begun.
     /// Finalize the gravity and jump velocity values.
     public override func willFinalizeCurrentSegmentAndAdvanceToNextSegment() {
-        usingPreliminaryValues = false
+        gravityTracker.finalizePreliminaryValue()
+        jumpVelocityTracker.finalizePreliminaryValue()
     }
 
     /// Calculate the intersection of the last jump and the current jump.

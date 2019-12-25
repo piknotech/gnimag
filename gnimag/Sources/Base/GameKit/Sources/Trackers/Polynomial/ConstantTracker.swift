@@ -5,7 +5,7 @@
 
 /// ConstantTracker is a PolyTracker providing simple access to the calculated average value.
 /// Because data points only consist of values here (time is irrelevant), ConstantTracker provides respective convenience methods.
-public final class ConstantTracker: PolyTracker {
+public class ConstantTracker: PolyTracker {
     /// The number of values that have already been added.
     public private(set) var count: Double = 0
 
