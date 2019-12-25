@@ -36,13 +36,13 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Information about a segment, either the current segment or a previous one.
     public struct SegmentInfo {
         public let index: Int
-        public let tracker: SegmentTrackerType
+        public var tracker: SegmentTrackerType
 
         /// When the tracker has no regression yet, use the guesses (which come from the last segment) for approximated functions and values.
         public let guesses: Guesses?
 
         /// The time where the segment has supposedly started. For debugging.
-        internal var supposedStartTime: Time
+        internal var supposedStartTime: Time?
 
         internal var colorForPlotting: ScatterColor {
             index.isMultiple(of: 2) ? .even : .odd
@@ -54,13 +54,13 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// - Checking if a point is valid in the next segment (as the next segment cannot have a regression before it is created)
     public struct Guesses {
         /// The guesses. At least one guess is guaranteed.
-        public let all: [Function]
+        public let all: [SegmentTrackerType.F]
 
         /// The start times of the respective guesses. For debugging.
         internal let allStartTimes: [Time]
 
         /// Default initializer.
-        fileprivate init(a: Function, b: Function? = nil, aXStart: Time, bXStart: Time? = nil) {
+        fileprivate init(a: SegmentTrackerType.F, b: SegmentTrackerType.F? = nil, aXStart: Time, bXStart: Time? = nil) {
             all = [a, b].compactMap(id)
             allStartTimes = [aXStart, bXStart].compactMap(id)
         }
@@ -81,11 +81,15 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// The most recent guesses that have been made for the next segment. When the next segment is actually created, these guesses are used.
     internal var mostRecentGuessesForNextSegment: Guesses?
 
-    /// The absolute tolerance for all segments/trackers.
-    public let tolerance: Double
+    /// The tolerance for all trackers (including segment trackers and guesses).
+    public var tolerance: TrackerTolerance
 
     /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)
     private var allDataPoints = SimpleDataSet()
+
+    /// The tolerance region info from the last data point, applied on the current tracker.
+    /// Nil if the current tracker has no regression.
+    public private(set) var lastToleranceRegionScatterStrokable: ScatterStrokable?
 
     /// The full dataset, containing all points:
     ///  - Valid points that have been added to the tracker,
@@ -97,22 +101,16 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     }
 
     /// A monotonicity checker which enforces that values are only added in a time-monontone order.
-    private let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
-
-    /// The most distant value for time.
-    /// Because time direction can either be increasing or decreasing, this is either + or -infinity.
-    internal var timeInfinity: Time {
-        monotonicityChecker.direction == .decreasing ? -.infinity : +.infinity
-    }
+    internal let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
     
     /// Default initializer.
-    public init(tolerance: Double, decisionCharacteristics: NextSegmentDecisionCharacteristics) {
+    public init(tolerance: TrackerTolerance, decisionCharacteristics: NextSegmentDecisionCharacteristics) {
         self.tolerance = tolerance
         self.window = CompositeTrackerSlidingWindow(characteristics: decisionCharacteristics)
 
         // Create initial tracker
         let tracker = trackerForNextSegment()
-        currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil, supposedStartTime: -timeInfinity)
+        currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil, supposedStartTime: nil)
 
         window.delegate = self
     }
@@ -122,6 +120,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Check if a point is valid to be added to the tracker.
     /// Call this before actually calling `add(value:at:)`.
     public func integrityCheck(with value: Value, at time: Time) -> Bool {
+        lastToleranceRegionScatterStrokable = nil // Reset debug info; will be set in `currentSegmentMatches`
+
         if !monotonicityChecker.verify(value: time) { print("not monotone! – \(time)"); return false }
 
         if currentSegmentMatches(value: value, at: time) { return true }
@@ -150,8 +150,12 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// Check if the data point matches the current segment regression.
     private func currentSegmentMatches(value: Value, at time: Time) -> Bool {
+        currentSegment.tracker.tolerance = tolerance
+        mostRecentGuessesForNextSegment = nil // Reset required for correct `allDebugFunctionInfos`
+
         // Regression function available
-        if currentSegment.tracker.hasRegression {
+        if let regression = currentSegment.tracker.regression {
+            lastToleranceRegionScatterStrokable = currentSegment.tracker.scatterStrokable(forToleranceRangeAroundTime: time, value: value, f: regression)
             return currentSegment.tracker.isDataPointValid(value: value, time: time, fallback: .valid)
         }
 
@@ -183,13 +187,13 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         let timeB = window.decisionInitiator?.time ?? nextDataPoint.time // timeB is more recent than timeA
 
         // Transform timeslots to match the custom guess range
-        let range = guessRange(for: abs(timeB - timeA))
+        let range = guessRange(for: abs(timeB - timeA), midpoint: (timeA + timeB) / 2)
         let minTime = timeA + (timeB - timeA) * range.lower
         let maxTime = timeA + (timeB - timeA) * range.upper // maxTime is more recent than minTime
         let timeslots = minTime == maxTime ? [minTime] : [minTime, maxTime]
 
         // Use either the regression or the guesses of the current segment
-        var functions: [Function]
+        var functions: [SegmentTrackerType.F]
 
         if let regression = currentSegment.tracker.regression {
             functions = [regression]
@@ -207,10 +211,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     ///  - functions: The functions that enclose the target function. This can either be the target function itself, or guesses for it.
     ///  - timeslots: The timeslots for each of which a guess should be made. The resulting function will be compared by their value at the most recent time.
     ///  - mostRecentTime: The most recent time from `timeslots`. This can either be the smallest or largest time, depending on the direction time is running in.
-    private func createGuesses(forFunctions functions: [Function], andTimeslots timeslots: [Time], mostRecentTime: Time) -> Guesses? {
+    private func createGuesses(forFunctions functions: [SegmentTrackerType.F], andTimeslots timeslots: [Time], mostRecentTime: Time) -> Guesses? {
         if functions.isEmpty || timeslots.isEmpty { return nil }
 
-        typealias GuessAndTime = (guess: Function, time: Time)
+        typealias GuessAndTime = (guess: SegmentTrackerType.F, time: Time)
 
         // Create a guess for each function/time combination
         let guesses: [GuessAndTime] = (functions × timeslots).compactMap { function, time in
@@ -237,12 +241,18 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
     }
 
-    /// Check if the value is either inside the two functions, or is near enough to one of the two functions (using CompositeTracker's tolerance).
+    /// Check if the value is either inside the two functions, or is near enough to one of the two functions (using `self.tolerance`).
     private func value(_ value: Value, at time: Time, matchesGuesses guesses: Guesses) -> Bool {
         let values = guesses.all.map { $0.at(time) }
         let min = values.min()!, max = values.max()!
 
-        return (min <= value && value <= max) || abs(min - value) <= tolerance || abs(max - value) <= tolerance
+        // Check if y-value is inside bounds defined by guesses
+        if min <= value && value <= max { return true }
+
+        // Do normal tolerance checks with all guesses
+        return guesses.all.any {
+            AnyFunctionToleranceChecker(function: $0, tolerance: tolerance).isDataPointValid(value: value, time: time)
+        }
     }
 
     /// Add one or multiple points to `allDataPoints` (just for plotting purposes).
@@ -255,7 +265,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Update `supposedXRange` of the current segment.
     /// `currentSegmentStartTime` is the time value that was returned by the `currentSegmentWasUpdated` delegate call.
     private func updateCurrentStartTime(with startTime: Time?) {
-        currentSegment.supposedStartTime = startTime ?? -timeInfinity
+        currentSegment.supposedStartTime = startTime
     }
 
     // MARK: CompositeTrackerSlidingWindowDelegate
@@ -317,7 +327,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     }
 
     /// Called exactly once per segment to create an appropriate empty tracker for the next partial function.
-    /// For the tolerance value, use `.absolute(tolerance)`.
+    /// You do not need to set a tolerance value, as it will be overridden with `self.tolerance`.
     /// This will be called **after** `willFinalizeCurrentSegmentAndAdvanceToNextSegment` is called on the delegate.
     open func trackerForNextSegment() -> SegmentTrackerType {
         fatalError("Override and implement this method.")
@@ -325,7 +335,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// Make a guess for the next partial function which begins at the given split position.
     /// If you don't have enough information for making the guess, return nil.
-    open func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function? {
+    open func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> SegmentTrackerType.F? {
         fatalError("Override and implement this method.")
     }
 
@@ -335,14 +345,13 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Important: The range must be valid, i.e. the max value must be greater than the min value.
     /// Also, values above 1 do not make sense because they would represent a timepoint in the future.
     /// `timeRange: timeB - timeA`; `timeRange > 0`.
-    open func guessRange(for timeRange: Time) -> SimpleRange<Time> {
+    open func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
         SimpleRange<Time>(from: 0, to: 1)
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
     /// The function is either a regression function from one of the trackers, or a guess.
-    /// This means, the function was provided by you, and you can be certain about its specific type.
-    open func scatterStrokable(for function: Function, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+    open func scatterStrokable(for function: SegmentTrackerType.F, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
         fatalError("Override and implement this method.")
     }
 }

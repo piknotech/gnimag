@@ -24,7 +24,8 @@ class GameModelCollector {
     /// Before actually updating the game model, the integrity of the result is checked.
     func accept(result: AnalysisResult, time: Double) {
         debugLogger.currentFrame.gameModelCollection.wasPerformed = true
-        
+        defer { model.player.performDebugLogging() }
+
         // Update player
         if model.player.integrityCheck(with: result.player, at: time) {
             model.player.update(with: result.player, at: time)
@@ -47,18 +48,23 @@ class GameModelCollector {
     private func updateBars(with pairs: [BarCourse: Bar], newBars: [Bar], playerAngle: Double) {
         // Update existing bars
         for (tracker, bar) in pairs {
+            tracker.setupDebugLogging()
+
             if tracker.integrityCheck(with: bar, at: playerAngle) {
                 tracker.update(with: bar, at: playerAngle)
             } else {
                 print("bar not integer (\(bar))")
             }
+
+            tracker.performDebugLogging()
         }
 
         // Add new bars
         for bar in newBars {
             let tracker = BarCourse(playfield: model.playfield, debugLogger: debugLogger)
-            tracker.performDebugLogging() // Required because there is no call to `integrityCheck`
+            tracker.setupDebugLogging()
             tracker.update(with: bar, at: playerAngle)
+            tracker.performDebugLogging()
             model.bars.append(tracker)
         }
     }

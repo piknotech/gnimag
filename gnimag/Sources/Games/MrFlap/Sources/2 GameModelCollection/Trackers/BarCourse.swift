@@ -46,7 +46,7 @@ final class BarCourse {
         holeSize = ConstantTracker(tolerance: .relative(5%))
         appearingHoleSize = LinearTracker(tolerancePoints: 0, tolerance: .absolute(5% * playfield.freeSpace))
         yCenter = BasicLinearPingPongTracker(
-            absoluteSegmentSwitchTolerance: 0.5% * playfield.freeSpace,
+            segmentSwitchTolerance: .absolute(0.5% * playfield.freeSpace),
             slopeTolerance: .relative(20%),
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
@@ -79,8 +79,6 @@ final class BarCourse {
     /// Check if all given values match the trackers.
     /// NOTE: This changes the state from `.appearing` to `.normal` when necessary.
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
-        performDebugLogging()
-
         guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
         guard width.isValueValid(bar.width, &debug.width) else { return false }
 
@@ -101,9 +99,14 @@ final class BarCourse {
         return true
     }
 
-    /// Write information about the trackers into the current debug logger frame.
-    func performDebugLogging() {
+    /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.
+    func setupDebugLogging() {
         debugLogger.currentFrame.gameModelCollection.bars.nextBar()
+    }
+
+    /// Write information about the trackers into the current debug logger frame.
+    /// Call after the updating has finished, i.e. after `update` or after `integrityCheck`.
+    func performDebugLogging() {
         debug.state = state
         debug.angle.from(tracker: angle)
         debug.width.from(tracker: width)

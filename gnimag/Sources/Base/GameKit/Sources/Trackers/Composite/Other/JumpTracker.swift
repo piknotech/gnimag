@@ -40,7 +40,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     /// Default initializer.
     public init(
         relativeValueRangeTolerance: Value,
-        absoluteJumpTolerance: Value,
+        jumpTolerance: TrackerTolerance,
         consecutiveNumberOfPointsRequiredToDetectJump: Int,
         customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1)
     ) {
@@ -55,7 +55,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
             maxIntermediatePointsMatchingCurrentSegment: 0
         )
 
-        super.init(tolerance: absoluteJumpTolerance, decisionCharacteristics: characteristics)
+        super.init(tolerance: jumpTolerance, decisionCharacteristics: characteristics)
     }
 
     // MARK: Delegate And DataSource
@@ -124,11 +124,11 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
 
     /// Create a parabola tracker for the next jump segment.
     public override func trackerForNextSegment() -> PolyTracker {
-        PolyTracker(degree: 2, tolerance: .absolute(tolerance))
+        PolyTracker(degree: 2, tolerance: tolerance)
     }
 
     /// Make a guess for a jump beginning at (`time`, `value`).
-    public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function? {
+    public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Polynomial? {
         guard let gravity = gravity, let jumpVelocity = jumpVelocity else { return nil }
 
         // Solve f(time) = value and f'(time) = jumpVelocity
@@ -140,12 +140,12 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     }
 
     /// Provide the custom guess range.
-    public override func guessRange(for timeRange: Time) -> SimpleRange<Time> {
+    public override func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
         customGuessRange
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
-    public override func scatterStrokable(for function: Function, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
-        QuadCurveScatterStrokable(parabola: function as! Polynomial, drawingRange: drawingRange)
+    public override func scatterStrokable(for function: Polynomial, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+        QuadCurveScatterStrokable(parabola: function, drawingRange: drawingRange)
     }
 }

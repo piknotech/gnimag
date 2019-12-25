@@ -8,6 +8,8 @@ import GameKit
 
 /// PlayerCourse bundles trackers for the player position which is defined by angle and height.
 final class PlayerCourse {
+    private let playfield: Playfield
+
     /// The angle and height trackers.
     /// For angle tracking, the normal game time is used. For height tracking, the player angle is used.
     let angle: AngularWrapper<LinearTracker>
@@ -22,10 +24,12 @@ final class PlayerCourse {
 
     /// Default initializer.
     init(playfield: Playfield, debugLogger: DebugLogger) {
+        self.playfield = playfield
+
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(2% * .pi)))
         height = JumpTracker(
             relativeValueRangeTolerance: 20%,
-            absoluteJumpTolerance: 1% * playfield.freeSpace,
+            jumpTolerance: .absolute(0), // Will be live-updated lateron
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
             customGuessRange: SimpleRange<Double>(from: 0, to: 0)
         )
@@ -51,16 +55,35 @@ final class PlayerCourse {
     /// Check if all given values match the trackers.
     func integrityCheck(with player: Player, at time: Double) -> Bool {
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
-        performDebugLogging(linearAngle: linearAngle)
+        debug.linearAngle = linearAngle
+
+        updateJumpTrackerTolerance()
 
         return angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
             size.isValueValid(player.size, &debug.size) &&
             height.integrityCheck(with: player.height, at: linearAngle, &debug.height)
     }
 
+    /// Update the tolerance of the jump tracker so that dx ≈ 25% * dy.
+    /// This tolerance depends on the time <-> player-pixel-position conversion factor.
+    private func updateJumpTrackerTolerance() {
+        let dy = 1% * playfield.freeSpace
+
+        if let angularSpeed = angle.tracker.slope {
+            // Movement conversion: time -> angle -> pixel-position:
+            // t -> t * angularSpeed -> t * angularSpeed * r
+            let midRadius = (playfield.innerRadius + playfield.fullRadius / 2)
+            let dydxFactor = abs(angularSpeed) * midRadius
+            let dx = 25% * dy / dydxFactor
+            height.tolerance = .absolute2D(dy: dy, dx: dx)
+        } else {
+            height.tolerance = .absolute(dy)
+        }
+    }
+
     /// Write information about the trackers into the current debug logger frame.
-    private func performDebugLogging(linearAngle: Double) {
-        debug.linearAngle = linearAngle
+    /// Call after the updating has finished, i.e. after `update` or after `integrityCheck`.
+    func performDebugLogging() {
         debug.angle.from(tracker: angle)
         debug.size.from(tracker: size)
         debug.height.from(tracker: height)
