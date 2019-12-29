@@ -34,7 +34,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     }
 
     /// Information about a segment, either the current segment or a previous one.
-    public struct SegmentInfo {
+    public struct Segment {
         public let index: Int
         public var tracker: SegmentTrackerType
 
@@ -73,10 +73,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     private let window: CompositeTrackerSlidingWindow<SegmentTrackerType>
 
     /// All segments prior to the current segments.
-    public private(set) var finalizedSegments = [SegmentInfo]()
+    public private(set) var finalizedSegments = [Segment]()
 
     /// Up-to-date information about the current segment.
-    public private(set) var currentSegment: SegmentInfo!
+    public private(set) var currentSegment: Segment!
 
     /// The most recent guesses that have been made for the next segment. When the next segment is actually created, these guesses are used.
     internal var mostRecentGuessesForNextSegment: Guesses?
@@ -120,7 +120,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
         // Create initial tracker
         let tracker = trackerForNextSegment()
-        currentSegment = SegmentInfo(index: 0, tracker: tracker, guesses: nil, supposedStartTime: nil)
+        currentSegment = Segment(index: 0, tracker: tracker, guesses: nil, supposedStartTime: nil)
 
         window.delegate = self
     }
@@ -228,7 +228,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
         // Create a guess for each function/time combination
         let guesses: [GuessAndTime] = (functions × timeslots).compactMap { function, time in
-            guessForNextPartialFunction(whenSplittingSegmentsAtTime: time, value: function.at(time)).map {
+            guessForNextSegmentFunction(whenSplittingSegmentsAtTime: time, value: function.at(time)).map {
                 ($0, time) // (guess, time) tuple, or nil if guess = nil
             }
         }
@@ -310,7 +310,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         dataPoints.forEach { nextTracker.add(value: $0.value, at: $0.time, updateRegression: false) }
         nextTracker.updateRegression()
 
-        currentSegment = SegmentInfo(
+        currentSegment = Segment(
             index: currentSegment.index + 1,
             tracker: nextTracker,
             guesses: mostRecentGuessesForNextSegment,
@@ -331,7 +331,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// Called each time the regression function or the guesses of the current segment are updated, i.e. each time a new point is added to the current segment.
     /// This is called at least once per segment.
     /// Return the supposed time where the segment started at.
-    open func currentSegmentWasUpdated(segment: SegmentInfo) -> Time? {
+    open func currentSegmentWasUpdated(segment: Segment) -> Time? {
         fatalError("Override and implement this method.")
     }
 
@@ -351,7 +351,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// Make a guess for the next partial function which begins at the given split position.
     /// If you don't have enough information for making the guess, return nil.
-    open func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> SegmentTrackerType.F? {
+    open func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> SegmentTrackerType.F? {
         fatalError("Override and implement this method.")
     }
 

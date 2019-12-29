@@ -41,7 +41,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// A new regression for the current segment may be available.
     /// Update the preliminary value for the slope.
     /// Return the supposed time where the segment started at.
-    public override func currentSegmentWasUpdated(segment: SegmentInfo) -> Time? {
+    public override func currentSegmentWasUpdated(segment: Segment) -> Time? {
         guard let slope = segment.tracker.slope, let intercept = segment.tracker.intercept else { return nil }
 
         // 1.: Determine the direction if it is unknown
@@ -90,7 +90,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     }
 
     /// Make a guess for a segment beginning at (`time`, `value`).
-    public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> Polynomial? {
+    public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> Polynomial? {
         guard
             let direction = currentDirection,
             let positiveSlope = slopeTracker.average ?? slopeTracker.values.last else { return nil }

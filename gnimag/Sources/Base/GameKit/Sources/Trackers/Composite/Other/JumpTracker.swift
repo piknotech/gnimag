@@ -59,7 +59,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     /// A new regression for the current jump may be available.
     /// Update preliminary values for gravity and jump velocity.
     /// Return the supposed time where the segment started at.
-    public override func currentSegmentWasUpdated(segment: SegmentInfo) -> Time? {
+    public override func currentSegmentWasUpdated(segment: Segment) -> Time? {
         guard let jump = segment.tracker.regression else { return nil }
 
         // Calculate gravity and jump velocity and jump start
@@ -119,7 +119,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     }
 
     /// Make a guess for a jump beginning at (`time`, `value`).
-    public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Polynomial? {
+    public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Polynomial? {
         guard let gravity = gravity, let jumpVelocity = jumpVelocity else { return nil }
 
         // Solve f(time) = value and f'(time) = jumpVelocity
