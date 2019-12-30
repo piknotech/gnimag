@@ -11,7 +11,7 @@ import Foundation
 public final class PreliminaryTracker: ConstantTracker {
     private var lastValueIsPreliminary = false
 
-    /// Add a preliminar value.
+    /// Add a preliminary value.
     /// If there currently is a preliminary value, it will be finalized (not removed).
     public func addPreliminary(value: Value) {
         finalizePreliminaryValue()

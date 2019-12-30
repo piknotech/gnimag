@@ -3,16 +3,17 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+/// TapDelayTracker considers taps which have been performed, e.g. by TapScheduler, and calculates the average delay from performing the tap to detection of this tap, which is the total input+output delay.
 public final class TapDelayTracker {
     public typealias Time = Double
 
     /// The tracker creating an average value for the delay time.
     private let tracker: PreliminaryTracker
 
-    /// All tap times where a tap has been scheduled at, but not yet detected – i.e. the next detected tap will correspond to the first value in this collection.
-    private var scheduledTapTimes = [Time]()
+    /// All tap times where a tap has been performed at, but not yet detected – i.e. the next detected tap will correspond to the first value in this collection.
+    private var performedTaps = [Time]()
 
-    /// The scheduled tap time of the tap that has been detected most recently.
+    /// The tap time of the tap that has been detected most recently.
     /// Used when the current tap detection time is refined.
     private var latestTapTime: Time!
 
@@ -26,9 +27,9 @@ public final class TapDelayTracker {
         tracker = PreliminaryTracker(tolerancePoints: 0, tolerance: tolerance)
     }
 
-    /// Call when a tap has just been scheduled at the given time.
-    public func tapScheduled(time: Time) {
-        scheduledTapTimes.append(time)
+    /// Call when a tap has just been performed at the given time.
+    public func tapPerformed(time: Time) {
+        performedTaps.append(time)
     }
 
     /// Call when a tap has just been detected at the given time.
@@ -37,10 +38,10 @@ public final class TapDelayTracker {
         tracker.finalizePreliminaryValue()
         latestTapTime = nil
 
-        guard !scheduledTapTimes.isEmpty else { return } // TODO: error detection / fallback mechanism
+        guard !performedTaps.isEmpty else { return } // TODO: error detection / fallback mechanism
 
         // Add delay to tracker preliminarily, as it may be updated lateron (`refineLastTapDetectionTime`)
-        latestTapTime = scheduledTapTimes.removeFirst()
+        latestTapTime = performedTaps.removeFirst()
         tracker.updatePreliminaryValueIfValid(value: endTime - latestTapTime)
     }
 
