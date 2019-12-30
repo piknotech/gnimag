@@ -132,7 +132,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     public func integrityCheck(with value: Value, at time: Time) -> Bool {
         lastToleranceRegionScatterStrokable = nil // Reset debug info; will be set in `currentSegmentMatches`
 
-        if !monotonicityChecker.verify(value: time) { print("not monotone! – \(time)"); return false }
+        if !monotonicityChecker.verify(value: time) {
+            Terminal.log(.warning, "\(self) – time not in monotone order! Attempted time value: \(time)")
+            return false
+        }
 
         if currentSegmentMatches(value: value, at: time) { return true }
         if nextSegmentMatches(value: value, at: time) { return true }
