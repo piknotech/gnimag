@@ -21,6 +21,10 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     /// If you know that jumps will, for example, always exactly begin at the second last data point, return [0, 0].
     private let customGuessRange: SimpleRange<Time>
 
+    /// The constant height before the first segment started.
+    /// For calculating an exact start point of the initial jump.
+    private let idleHeightBeforeInitialSegment: Value?
+
     // MARK: Public Properties
 
     /// The estimated gravity, if available.
@@ -38,13 +42,15 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         relativeValueRangeTolerance: Value,
         jumpTolerance: TrackerTolerance,
         consecutiveNumberOfPointsRequiredToDetectJump: Int,
-        customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1)
+        customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1),
+        idleHeightBeforeInitialSegment: Value? = nil
     ) {
         let tolerance = TrackerTolerance.relative(relativeValueRangeTolerance)
         gravityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
         jumpVelocityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
 
         self.customGuessRange = customGuessRange
+        self.idleHeightBeforeInitialSegment = idleHeightBeforeInitialSegment
 
         let characteristics = NextSegmentDecisionCharacteristics(
             pointsMatchingNextSegment: consecutiveNumberOfPointsRequiredToDetectJump,
@@ -63,7 +69,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         guard let jump = segment.tracker.regression else { return nil }
 
         // Calculate gravity and jump velocity and jump start
-        let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump, currentTrackerStartTime: segment.tracker.times.first!)
+        let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump)
         let gravity = -2 * jump.a
         let jumpVelocity = jump.derivative.at(jumpStart)
 
@@ -84,33 +90,6 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     public override func willFinalizeCurrentSegmentAndAdvanceToNextSegment() {
         gravityTracker.finalizePreliminaryValue()
         jumpVelocityTracker.finalizePreliminaryValue()
-    }
-
-    /// Calculate the intersection of the last jump and the current jump.
-    /// If there is no regression for the last jump, use a time between the start of the current jump and the end of the last jump.
-    private func calculateStartTimeForCurrentJump(currentJump: Polynomial, currentTrackerStartTime: Time) -> Time {
-        guard let lastSegment = finalizedSegments.last else { return currentTrackerStartTime }
-
-        // Primitive guess
-        var guess = currentTrackerStartTime
-        if let lastJumpEndTime = lastSegment.tracker.times.last {
-            guess = (currentTrackerStartTime + lastJumpEndTime) / 2
-        }
-
-        // Actual polynomial intersection
-        if let lastJump = lastSegment.tracker.regression {
-            let diff = currentJump - lastJump
-            guard let intersections = QuadraticSolver.solve(a: diff.a, b: diff.b, c: diff.c) else { return guess }
-
-            // As the leading factors are probably nearly, but not exactly equal, there are two solutions, one of which is crap
-            if abs(intersections.0 - guess) < abs(intersections.1 - guess) {
-                return intersections.0
-            } else {
-                return intersections.1
-            }
-        }
-
-        return guess
     }
 
     /// Create a parabola tracker for the next jump segment.
@@ -138,5 +117,40 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     /// Return a ScatterStrokable which matches the function. For debugging.
     public override func scatterStrokable(for function: Polynomial, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
         QuadCurveScatterStrokable(parabola: function, drawingRange: drawingRange)
+    }
+
+    // MARK: Intersection Calculation
+
+    /// Calculate the intersection of the last jump and the current jump.
+    /// If there is no regression for the last jump, use a time between the start of the current jump and the end of the last jump.
+    private func calculateStartTimeForCurrentJump(currentJump: Polynomial) -> Time {
+        var guess = currentSegment.tracker.times.first!
+
+        guard let lastSegment = finalizedSegments.last else {
+            // Special case: initial segment
+            return calculateStartTimeForInitialSegment(currentJump: currentJump) ?? guess
+        }
+
+        // Specify guess
+        if let lastJumpEndTime = lastSegment.tracker.times.last {
+            guess = (guess + lastJumpEndTime) / 2
+        }
+
+        // Polynomial intersection between last and current segment
+        if let lastJump = lastSegment.tracker.regression {
+            let diff = currentJump - lastJump
+            return QuadraticSolver.solve(a: diff.a, b: diff.b, c: diff.c, solutionNearestToGuess: guess) ?? guess
+        }
+
+        return guess
+    }
+
+    /// Special case for segment start time calculation: Calculate the start time for the initial segment using `idleHeightBeforeInitialSegment`.
+    private func calculateStartTimeForInitialSegment(currentJump: Polynomial) -> Time? {
+        guard let idleHeight = idleHeightBeforeInitialSegment else { return nil }
+
+        // Solve a*x^2 + b*x + c = idleHeight
+        let guess = currentSegment.tracker.times.first!
+        return QuadraticSolver.solve(a: currentJump.a, b: currentJump.b, c: currentJump.c - idleHeight, solutionNearestToGuess: guess)
     }
 }

@@ -24,6 +24,17 @@ public enum QuadraticSolver {
         let d = sqrt(discriminant)
         return (-p/2 - d, -p/2 + d)
     }
+
+    /// Solve the equation given by ax^2 + bx + c = 0; return the solution which is nearest to the given guess.
+    public static func solve(a: Double, b: Double, c: Double, solutionNearestToGuess guess: Double) -> Double? {
+        guard let (x1, x2) = solve(a: a, b: b, c: c) else { return nil }
+
+        if abs(x1 - guess) < abs(x2 - guess) {
+            return x1
+        } else {
+            return x2
+        }
+    }
 }
 
 public enum LinearSolver {

@@ -23,7 +23,7 @@ final class PlayerCourse {
     private var debug: DebugLoggerFrame.GameModelCollection._Player { debugLogger.currentFrame.gameModelCollection.player }
 
     /// Default initializer.
-    init(playfield: Playfield, debugLogger: DebugLogger) {
+    init(playfield: Playfield, initialPlayer: Player, debugLogger: DebugLogger) {
         self.playfield = playfield
         self.debugLogger = debugLogger
 
@@ -32,7 +32,8 @@ final class PlayerCourse {
             relativeValueRangeTolerance: 20%,
             jumpTolerance: .absolute(0), // Will be live-updated lateron
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
-            customGuessRange: SimpleRange<Double>(from: 0, to: 0)
+            customGuessRange: SimpleRange<Double>(from: 0, to: 0),
+            idleHeightBeforeInitialSegment: initialPlayer.height
         )
         size = ConstantTracker(tolerance: .relative(10%))
     }
