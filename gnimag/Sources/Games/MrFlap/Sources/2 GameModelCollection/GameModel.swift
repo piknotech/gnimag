@@ -17,9 +17,9 @@ final class GameModel {
     var bars: [BarCourse]
 
     /// Default initializer.
-    init(playfield: Playfield, tapDelayTracker: TapDelayTracker, debugLogger: DebugLogger) {
+    init(playfield: Playfield, debugLogger: DebugLogger) {
         self.playfield = playfield
-        self.player = PlayerCourse(playfield: playfield, tapDelayTracker: tapDelayTracker, debugLogger: debugLogger)
+        self.player = PlayerCourse(playfield: playfield, debugLogger: debugLogger)
         self.bars = []
     }
 }

@@ -23,7 +23,7 @@ final class PlayerCourse {
     private var debug: DebugLoggerFrame.GameModelCollection._Player { debugLogger.currentFrame.gameModelCollection.player }
 
     /// Default initializer.
-    init(playfield: Playfield, tapDelayTracker: TapDelayTracker, debugLogger: DebugLogger) {
+    init(playfield: Playfield, debugLogger: DebugLogger) {
         self.playfield = playfield
         self.debugLogger = debugLogger
 
@@ -35,15 +35,11 @@ final class PlayerCourse {
             customGuessRange: SimpleRange<Double>(from: 0, to: 0)
         )
         size = ConstantTracker(tolerance: .relative(10%))
-
-
-        // Use the player height tracker for tap detection
-        linkPlayerJump(to: tapDelayTracker)
     }
 
     /// Use the player height tracker for tap detection.
     /// Therefore, link the segment switch callbacks to the given TapDelayTracker.
-    private func linkPlayerJump(to tapDelayTracker: TapDelayTracker) {
+    func linkPlayerJump(to tapDelayTracker: TapDelayTracker) {
         // For tap delay tracking, the actual time (from imageProvider) is required.
         // Because player jump tracking is performed using the player's angle, it first has to be converted back to an (approximate) time value.
         func convertPlayerAngleToTime(playerAngle: Double) -> Double? {

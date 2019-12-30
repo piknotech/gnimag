@@ -16,16 +16,16 @@ public final class MrFlap {
     private let imageProvider: ImageProvider
     private let tapper: Tapper
 
+    /// The three great actors – one for each step.
+    private let imageAnalyzer: ImageAnalyzer
+    private var gameModelCollector: GameModelCollector!
+    private let tapPredictor: TapPredictor
+
+    /// The queue where image analysis and game model collection is performed on.
     private var queue: GameQueue!
 
     /// The shared playfield.
     private var playfield: Playfield!
-
-    /// Image analyzer and game model collector.
-    private let imageAnalyzer: ImageAnalyzer
-    private var gameModelCollector: GameModelCollector!
-
-    private let tapDelayTracker = TapDelayTracker(tolerance: .absolute(10))
 
     // TODO: remove once using prediction for hints
     private var lastPlayerCoords: PolarCoordinates?
@@ -48,7 +48,10 @@ public final class MrFlap {
         self.tapper = tapper
 
         debugLogger = DebugLogger(parameters: debugParameters)
+        
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
+        tapPredictor = TapPredictor(tapper: tapper, imageProvider: imageProvider)
+
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
     }
 
@@ -57,6 +60,7 @@ public final class MrFlap {
     /// If you want to play a new game, create a new instance of MrFlap.
     public func play() {
         queue.begin()
+        tapPredictor.begin()
     }
 
     /// Update method, called each time a new image is available.
@@ -89,13 +93,14 @@ public final class MrFlap {
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 
-        playfield = result.playfield
-        gameModelCollector = GameModelCollector(playfield: playfield, tapDelayTracker: tapDelayTracker, debugLogger: debugLogger)
+        // Fill properties from first analyzed image
         state = .waitingForFirstMove(initialPlayerPos: result.player)
+        playfield = result.playfield
+        gameModelCollector = GameModelCollector(playfield: playfield, debugLogger: debugLogger)
+        tapPredictor.set(gameModel: gameModelCollector.model)
 
         // Tap to begin the game
-        tapper.tap()
-        tapDelayTracker.tapScheduled(time: imageProvider.time)
+        tapPredictor.performTap()
     }
 
     /// Check if the first player move, initiated by `startGame`, is visible.
@@ -105,7 +110,7 @@ public final class MrFlap {
 
         if distance(between: result.player, and: initialPlayerPos) > 1 {
             state = .inGame
-            tapDelayTracker.tapDetected(at: time)
+            tapPredictor.tapDetected(at: time)
             gameModelCollector.accept(result: result, time: time) // TODO: remove?
         }
     }
