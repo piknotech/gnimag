@@ -55,7 +55,5 @@ class TapPredictor {
     /// Analyze the game model to schedule taps.
     private func predict() {
         guard let model = gameModel else { return }
-        
-        print(model.player.angle.regression)
     }
 }

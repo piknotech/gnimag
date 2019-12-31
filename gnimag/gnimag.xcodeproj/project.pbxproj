@@ -107,6 +107,9 @@
 		63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */; };
 		63440B4223B388B30091A012 /* TapDelayTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B4123B388B30091A012 /* TapDelayTracker.swift */; };
 		63440B4423B39D8C0091A012 /* PreliminaryTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B4323B39D8B0091A012 /* PreliminaryTracker.swift */; };
+		634567FA23BB751A00D32053 /* BarProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634567F923BB751A00D32053 /* BarProperties.swift */; };
+		634567FC23BB761F00D32053 /* PlayerProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634567FB23BB761F00D32053 /* PlayerProperties.swift */; };
+		634567FE23BB7B5A00D32053 /* PlayfieldProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634567FD23BB7B5A00D32053 /* PlayfieldProperties.swift */; };
 		63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */; };
 		63456B38236466A900C71EE5 /* ParameterizableFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B37236466A900C71EE5 /* ParameterizableFunction.swift */; };
 		634AD0152327C8C400D87BAB /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0122327C8C000D87BAB /* Line.swift */; };
@@ -134,6 +137,7 @@
 		637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB4E2392BBD30067BBCC /* GameQueue.swift */; };
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
+		639C745523BB66DF005FD354 /* JumpingProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639C745423BB66DF005FD354 /* JumpingProperties.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
 		63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
@@ -294,6 +298,9 @@
 		63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyFunctionToleranceChecker.swift; sourceTree = "<group>"; };
 		63440B4123B388B30091A012 /* TapDelayTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapDelayTracker.swift; sourceTree = "<group>"; };
 		63440B4323B39D8B0091A012 /* PreliminaryTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreliminaryTracker.swift; sourceTree = "<group>"; };
+		634567F923BB751A00D32053 /* BarProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarProperties.swift; sourceTree = "<group>"; };
+		634567FB23BB761F00D32053 /* PlayerProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProperties.swift; sourceTree = "<group>"; };
+		634567FD23BB7B5A00D32053 /* PlayfieldProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayfieldProperties.swift; sourceTree = "<group>"; };
 		63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatingPingPongTracker.swift; sourceTree = "<group>"; };
 		63456B37236466A900C71EE5 /* ParameterizableFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterizableFunction.swift; sourceTree = "<group>"; };
 		634AD0122327C8C000D87BAB /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -324,6 +331,7 @@
 		637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameQueueTimingStats.swift; sourceTree = "<group>"; };
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
+		639C745423BB66DF005FD354 /* JumpingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingProperties.swift; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CartesianProduct.swift"; sourceTree = "<group>"; };
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
@@ -1066,6 +1074,8 @@
 			isa = PBXGroup;
 			children = (
 				6318966923B4C8B4002FBD4F /* TapPredictor.swift */,
+				639C745323BB66A0005FD354 /* Models */,
+				639C745223BB667F005FD354 /* Strategies */,
 			);
 			path = "3 TapPrediction";
 			sourceTree = "<group>";
@@ -1177,6 +1187,24 @@
 				637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */,
 			);
 			path = GameQueue;
+			sourceTree = "<group>";
+		};
+		639C745223BB667F005FD354 /* Strategies */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Strategies;
+			sourceTree = "<group>";
+		};
+		639C745323BB66A0005FD354 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				634567F923BB751A00D32053 /* BarProperties.swift */,
+				639C745423BB66DF005FD354 /* JumpingProperties.swift */,
+				634567FB23BB761F00D32053 /* PlayerProperties.swift */,
+				634567FD23BB7B5A00D32053 /* PlayfieldProperties.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		63D002922372F31900041069 /* Logging */ = {
@@ -1783,6 +1811,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				634567FA23BB751A00D32053 /* BarProperties.swift in Sources */,
 				634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */,
 				6306CDB823AA48DE00D9EB25 /* ToleranceRangeScatterStrokables.swift in Sources */,
 				6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */,
@@ -1794,6 +1823,7 @@
 				63876E662356093500132A21 /* JumpTracker.swift in Sources */,
 				6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */,
 				6312138C2325793C00C126B4 /* SimpleDefaultTracker.swift in Sources */,
+				634567FC23BB761F00D32053 /* PlayerProperties.swift in Sources */,
 				63440B4423B39D8C0091A012 /* PreliminaryTracker.swift in Sources */,
 				6312138B2325793C00C126B4 /* AngularWrapper.swift in Sources */,
 				631213882325793C00C126B4 /* Polynomial.swift in Sources */,
@@ -1803,6 +1833,7 @@
 				63456B38236466A900C71EE5 /* ParameterizableFunction.swift in Sources */,
 				63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */,
 				631213912325794600C126B4 /* PolyTracker.swift in Sources */,
+				639C745523BB66DF005FD354 /* JumpingProperties.swift in Sources */,
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
 				63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */,
 				632AC97B23B93A53002743D1 /* TapPredictionQueue.swift in Sources */,
@@ -1815,6 +1846,7 @@
 				63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */,
 				6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */,
 				6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */,
+				634567FE23BB7B5A00D32053 /* PlayfieldProperties.swift in Sources */,
 				6312138E2325793C00C126B4 /* Regression.swift in Sources */,
 				6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */,
 			);
