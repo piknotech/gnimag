@@ -3,6 +3,8 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import GameKit
+
 /// JumpingProperties bundles properties describing the jump environment.
 struct JumpingProperties {
     /// The velocity in y-direction that the object has at the jump start.
