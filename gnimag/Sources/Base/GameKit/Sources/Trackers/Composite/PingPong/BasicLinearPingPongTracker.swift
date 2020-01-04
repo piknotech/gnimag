@@ -42,7 +42,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// Update the preliminary value for the slope.
     /// Return the supposed time where the segment started at.
     public override func currentSegmentWasUpdated(segment: Segment) -> Time? {
-        guard let slope = segment.tracker.slope, let intercept = segment.tracker.intercept else { return nil }
+        guard let (slope, intercept) = segment.tracker.slopeAndIntercept else { return nil }
 
         // 1.: Determine the direction if it is unknown
         if currentDirection == nil {

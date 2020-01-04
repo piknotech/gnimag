@@ -8,4 +8,16 @@ struct PlayfieldProperties {
     /// The lower and upper radii limiting the playfield.
     let lowerRadius: Double
     let upperRadius: Double
+
+    // MARK: Conversion
+
+    /// Convert a playfield into PlayfieldProperties.
+    static func from(playfield: Playfield, with player: PlayerCourse) -> PlayfieldProperties? {
+        guard let size = player.size.average else { return nil }
+
+        return PlayfieldProperties(
+            lowerRadius: playfield.innerRadius + size / 2,
+            upperRadius: playfield.fullRadius - size / 2
+        )
+    }
 }

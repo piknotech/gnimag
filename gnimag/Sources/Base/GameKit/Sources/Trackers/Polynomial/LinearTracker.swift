@@ -21,4 +21,13 @@ public final class LinearTracker: PolyTracker {
     public var intercept: Value? {
         regression?.b
     }
+
+    /// The slope and the intercept as a convenience tuple.
+    public var slopeAndIntercept: (slope: Value, intercept: Value)? {
+        if let slope = slope, let intercept = intercept {
+            return (slope, intercept)
+        } else {
+            return nil
+        }
+    }
 }

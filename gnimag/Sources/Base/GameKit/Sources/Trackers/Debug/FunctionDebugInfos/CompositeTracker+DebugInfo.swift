@@ -58,7 +58,7 @@ public extension CompositeTracker {
         return all.flatMap { $0.tracker.allDebugFunctionInfos }
     }
 
-    /// The most distant value for time. For debugging.
+    /// The most distant value for time.
     /// Because time direction can either be increasing or decreasing, this is either + or -infinity.
     private var timeInfinity: Time {
         monotonicityChecker.direction == .decreasing ? -.infinity : +.infinity

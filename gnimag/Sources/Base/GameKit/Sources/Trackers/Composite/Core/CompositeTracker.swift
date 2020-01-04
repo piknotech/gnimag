@@ -41,8 +41,9 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         /// When the tracker has no regression yet, use the guesses (which come from the last segment) for approximated functions and values.
         public let guesses: Guesses?
 
-        /// The time where the segment has supposedly started. For debugging.
-        internal var supposedStartTime: Time?
+        /// The time where the segment has supposedly started, as calculated by the overidding class.
+        /// Can be `nil`, for example when there is no regression yet.
+        public fileprivate(set) var supposedStartTime: Time?
 
         internal var colorForPlotting: ScatterColor {
             index.isMultiple(of: 2) ? .even : .odd
@@ -56,7 +57,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         /// The guesses. At least one guess is guaranteed.
         public let all: [SegmentTrackerType.F]
 
-        /// The start times of the respective guesses. For debugging.
+        /// The start times of the respective guesses. For plotting the ScatterStrokable.
         internal let allStartTimes: [Time]
 
         /// Default initializer.
@@ -305,8 +306,8 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         finalizedSegments.append(currentSegment)
 
         // Trigger next segment event
-        let possibleStartTime = (currentSegment.tracker.times.last! + dataPoints.first!.time) / 2
-        advancedToNextSegment.trigger(with: possibleStartTime)
+        let startTimeGuess = (currentSegment.tracker.times.last! + dataPoints.first!.time) / 2
+        advancedToNextSegment.trigger(with: startTimeGuess)
 
         // Create next segment
         let nextTracker = trackerForNextSegment()
@@ -317,7 +318,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
             index: currentSegment.index + 1,
             tracker: nextTracker,
             guesses: mostRecentGuessesForNextSegment,
-            supposedStartTime: possibleStartTime
+            supposedStartTime: nil
         )
 
         // Update current segment with new data points
@@ -333,7 +334,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// Called each time the regression function or the guesses of the current segment are updated, i.e. each time a new point is added to the current segment.
     /// This is called at least once per segment.
-    /// Return the supposed time where the segment started at.
+    /// Return the exact time where the segment supposedly started at, for example by performing an intersection.
     open func currentSegmentWasUpdated(segment: Segment) -> Time? {
         fatalError("Override and implement this method.")
     }
