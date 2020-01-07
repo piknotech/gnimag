@@ -18,6 +18,11 @@ public final class TapScheduler {
     /// You must inform it about detected taps.
     public let delayTracker: TapDelayTracker
 
+    /// The average tap delay from the delay tracker.
+    public var delay: Double? {
+        delayTracker.delay
+    }
+
     /// Default initializer.
     public init(tapper: Tapper, imageProvider: ImageProvider, tapDelayTolerance: TrackerTolerance) {
         self.tapper = tapper

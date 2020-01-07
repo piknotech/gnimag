@@ -15,4 +15,7 @@ protocol WayToSpecificPointStrategy {
 struct JumpSequence {
     /// The time distances between all consecutive jumps.
     let jumpTimeDistances: [Double]
+
+    /// The time from the last jump until the jump sequence has finished and fulfilled its purpose.
+    let timeFromLastJumpToSequenceFinish: Double
 }

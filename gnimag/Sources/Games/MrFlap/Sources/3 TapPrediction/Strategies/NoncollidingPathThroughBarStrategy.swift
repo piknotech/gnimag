@@ -17,6 +17,6 @@ struct JumpSequenceWithStartingPoint {
     /// The starting point.
     let start: CGPoint
 
-    /// The time distances between all consecutive jumps.
-    let jumpTimeDistances: [Double]
+    /// The jump sequence, beginning at the starting point.
+    let sequence: JumpSequence
 }

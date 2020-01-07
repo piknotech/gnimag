@@ -7,6 +7,8 @@ import GameKit
 import Image
 import Tapping
 
+/// TapPredictor is the main class dealing with tap prediction and scheduling.
+/// It acts as a connection between TapPredictionQueue, TapScheduler and the actual prediction calculation (which is performed by `JumpThroughNextBarCalculator`).
 class TapPredictor {
     private var queue: TapPredictionQueue!
     private let scheduler: TapScheduler
@@ -16,6 +18,9 @@ class TapPredictor {
 
     /// The game model object which is continuously being updated by the game model collector.
     private var gameModel: GameModel?
+
+    /// The calculator performing the prediction calculation.
+    private let calculator = JumpThroughNextBarCalculator()
 
     /// Set the game model. Only call this once.
     /// Call once the game model collector is ready and has a GameModel object.
@@ -53,7 +58,13 @@ class TapPredictor {
     }
 
     /// Analyze the game model to schedule taps.
+    /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
     private func predict() {
-        guard let model = gameModel else { return }
+        guard let model = gameModel, let delay = scheduler.delay else { return }
+
+        let currentTime = imageProvider.time // + delay
+        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, currentTime: currentTime) else { return }
+
+        print(sequence)
     }
 }

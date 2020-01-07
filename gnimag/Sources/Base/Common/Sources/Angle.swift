@@ -13,7 +13,7 @@ public struct Angle {
         self.value = value.truncatingRemainder(dividingBy: 2 * .pi)
     }
 
-    /// Default initializer, using a CGFloat value. Value should be in [0, 2pi).
+    /// Default initializer, using a CGFloat value. A modulo-2-pi is applied to the value.
     public init(_ value: CGFloat) {
         self.value = Double(value)
     }
@@ -24,7 +24,20 @@ public struct Angle {
         return min(dist, 2 * .pi - dist)
     }
 
-    /// Calculate the midpoint between this angle and the other angle.
+    /// Calculate the directed distance to another angle. This means, the radial distance that has to be passed in a given `direction` (positive or negative) to get from `self` to `other`.
+    /// Only the sign of `direction` is relevant; direction must not be 0.
+    /// The result is always in [0, 2pi).
+    public func directedDistance(to other: Angle, direction: Double) -> Double {
+        if direction == 0 { return 0 }
+        let sign: Double = (direction > 0) ? 1 : -1
+
+        var dist = (other.value - value) * sign
+        if dist < 0 { dist += 2 * .pi }
+
+        return dist
+    }
+
+    /// Calculate the midpoint between `self` and `other`.
     public func midpoint(between other: Angle) -> Angle {
         let mid = (value + other.value) / 2
 
