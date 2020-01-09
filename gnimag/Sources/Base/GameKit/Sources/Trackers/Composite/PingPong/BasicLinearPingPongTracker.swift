@@ -9,31 +9,45 @@ import TestingTools
 /// BasicLinearPingPongTracker is a PingPongTracker whose lower and upper bounds are constant, and whose segment function is linear.
 public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The trackers for the upper and lower bound.
+    /// If time is running backwards, these are inverted.
     public let lowerBoundTracker: PreliminaryTracker
     public let upperBoundTracker: PreliminaryTracker
 
-    /// The tracker for the slope. The slope which is being added here is always positive (i.e. for the "up" direction)
-    /// There is one tolerance point because the first value is often too imprecise.
-    public let slopeTracker: PreliminaryTracker
+    /// The tracker for the slope. The slope which is being added here is always positive (i.e. the slope of the "up" direction).
+    private let slopeTracker: PreliminaryTracker
+    public var slope: Value? { slopeTracker.average.map(abs) }
 
-    private enum Direction {
+    internal enum Direction {
         case up
         case down
+
+        var reversed: Direction {
+            switch self {
+            case .up: return .down
+            case .down: return .up
+            }
+        }
     }
-    private var currentDirection: Direction!
+
+    /// The direction of the very first segment (with index 0).
+    private var firstSegmentDirection: Direction?
+
+    internal func direction(for index: Int) -> Direction? {
+        index.isMultiple(of: 2) ? firstSegmentDirection : firstSegmentDirection?.reversed
+    }
 
     /// Default initializer.
     public init(
-        segmentSwitchTolerance: TrackerTolerance,
+        tolerance: TrackerTolerance,
         slopeTolerance: TrackerTolerance,
         boundsTolerance: TrackerTolerance,
         decisionCharacteristics: NextSegmentDecisionCharacteristics
     ) {
         lowerBoundTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: boundsTolerance)
         upperBoundTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: boundsTolerance)
-        slopeTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: slopeTolerance)
+        slopeTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: slopeTolerance)
 
-        super.init(tolerance: segmentSwitchTolerance, decisionCharacteristics: decisionCharacteristics)
+        super.init(tolerance: tolerance, decisionCharacteristics: decisionCharacteristics)
     }
 
     // MARK: Delegate And DataSource
@@ -45,9 +59,10 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         guard let (slope, intercept) = segment.tracker.slopeAndIntercept else { return nil }
 
         // 1.: Determine the direction if it is unknown
-        if currentDirection == nil {
-            currentDirection = (slope > 0) ? .up : .down
+        if firstSegmentDirection == nil {
+            firstSegmentDirection = ((slope > 0) == currentSegment.index.isMultiple(of: 2)) ? .up : .down
         }
+        let currentDirection = direction(for: currentSegment.index)
 
         // 2.: Update slope tracker
         // Add the positive slope to the tracker. Do NOT use abs(slope) because, for slopes near 0, this could distort the average slope value. This means, "positiveSlope" could also be negative if the data points are widely scattered.
@@ -76,8 +91,6 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The current segment has finished and the next segment has begun.
     /// Finalize the value for the slope.
     public override func willFinalizeCurrentSegmentAndAdvanceToNextSegment() {
-        currentDirection = (currentDirection == .up) ? .down : .up
-
         // Mark the preliminary values (if existing) as final
         lowerBoundTracker.finalizePreliminaryValue()
         upperBoundTracker.finalizePreliminaryValue()
@@ -92,8 +105,8 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// Make a guess for a segment beginning at (`time`, `value`).
     public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> Polynomial? {
         guard
-            let direction = currentDirection,
-            let positiveSlope = slopeTracker.average ?? slopeTracker.values.last else { return nil }
+            let direction = direction(for: currentSegment.index),
+            let positiveSlope = slopeTracker.average else { return nil }
 
         // Construct f = ax+b with f(time) = value
         let slope = (direction == .up) ? -positiveSlope : +positiveSlope
@@ -104,7 +117,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// Move the guess range back to compensate for a possibly too large tolerance (i.e. a very late segment switch detection).
     public override func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
-        guard let slope = slopeTracker.average ?? slopeTracker.values.last else {
+        guard let slope = slopeTracker.average else {
             return SimpleRange(from: 0, to: 0.5)
         }
 
@@ -131,6 +144,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         let d = verticalTolerance / abs(slope)
         let from = 0.5 - d / (2 * timeRange) // Go d/2 back in time, starting at 0.5 (midpoint between a and b)
         let to = 0.5 // Range cannot start after the midpoint of a and b
+
         return SimpleRange(from: from, to: to)
     }
 

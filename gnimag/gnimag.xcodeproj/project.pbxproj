@@ -134,6 +134,7 @@
 		636BCC1723BD4C5F00A3BE26 /* LinearWayToSpecificPointStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1623BD4C5F00A3BE26 /* LinearWayToSpecificPointStrategy.swift */; };
 		636BCC1923BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */; };
 		636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1A23BF953B00A3BE26 /* Angle.swift */; };
+		636BCC1E23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */; };
 		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
 		6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */; };
 		6375953F233A53D900ACA969 /* ShapeErasedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953E233A53D900ACA969 /* ShapeErasedImage.swift */; };
@@ -331,6 +332,7 @@
 		636BCC1623BD4C5F00A3BE26 /* LinearWayToSpecificPointStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearWayToSpecificPointStrategy.swift; sourceTree = "<group>"; };
 		636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpThroughNextBarCalculator.swift; sourceTree = "<group>"; };
 		636BCC1A23BF953B00A3BE26 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
+		636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicLinearPingPongTracker+Future.swift"; sourceTree = "<group>"; };
 		637595392331012C00ACA969 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+IsAlmostEqual.swift"; sourceTree = "<group>"; };
 		6375953E233A53D900ACA969 /* ShapeErasedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeErasedImage.swift; sourceTree = "<group>"; };
@@ -1100,6 +1102,7 @@
 				63440B4123B388B30091A012 /* TapDelayTracker.swift */,
 				632AC97A23B93A53002743D1 /* TapPredictionQueue.swift */,
 				6318966C23B621B9002FBD4F /* TapScheduler.swift */,
+				636BCC1C23C4DA3F00A3BE26 /* TrackerFutures */,
 			);
 			path = Tapping;
 			sourceTree = "<group>";
@@ -1183,6 +1186,14 @@
 				6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */,
 			);
 			path = ScatterStrokables;
+			sourceTree = "<group>";
+		};
+		636BCC1C23C4DA3F00A3BE26 /* TrackerFutures */ = {
+			isa = PBXGroup;
+			children = (
+				636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */,
+			);
+			path = TrackerFutures;
 			sourceTree = "<group>";
 		};
 		6375953D233A539800ACA969 /* More */ = {
@@ -1849,6 +1860,7 @@
 				6312138F2325794600C126B4 /* LinearTracker.swift in Sources */,
 				63456B38236466A900C71EE5 /* ParameterizableFunction.swift in Sources */,
 				63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */,
+				636BCC1E23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift in Sources */,
 				631213912325794600C126B4 /* PolyTracker.swift in Sources */,
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
 				63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */,
