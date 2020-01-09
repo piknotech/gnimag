@@ -9,11 +9,10 @@ import TestingTools
 /// BasicLinearPingPongTracker is a PingPongTracker whose lower and upper bounds are constant, and whose segment function is linear.
 public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The trackers for the upper and lower bound.
-    /// If time is running backwards, these are inverted.
     public let lowerBoundTracker: PreliminaryTracker
     public let upperBoundTracker: PreliminaryTracker
 
-    /// The tracker for the slope. The slope which is being added here is always positive (i.e. the slope of the "up" direction).
+    /// The tracker for the slope. The slope is always positive.
     private let slopeTracker: PreliminaryTracker
     public var slope: Value? { slopeTracker.average.map(abs) }
 
@@ -32,6 +31,9 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The direction of the very first segment (with index 0).
     private var firstSegmentDirection: Direction?
 
+    /// The direction of any given segment.
+    /// An "up" direction means that the values are approaching the upper bound, irregardless of the time direction.
+    /// This means that, when time is inverted, the segment slope is negative, even though direction is "up".
     internal func direction(for index: Int) -> Direction? {
         index.isMultiple(of: 2) ? firstSegmentDirection : firstSegmentDirection?.reversed
     }
@@ -57,10 +59,13 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// Return the supposed time where the segment started at.
     public override func currentSegmentWasUpdated(segment: Segment) -> Time? {
         guard let (slope, intercept) = segment.tracker.slopeAndIntercept else { return nil }
+        guard monotonicityChecker.direction != .both else { return nil }
 
         // 1.: Determine the direction if it is unknown
         if firstSegmentDirection == nil {
-            firstSegmentDirection = ((slope > 0) == currentSegment.index.isMultiple(of: 2)) ? .up : .down
+            let approachingUpperBound = (slope > 0) == (monotonicityChecker.direction == .increasing)
+            let isEvenSegment = currentSegment.index.isMultiple(of: 2)
+            firstSegmentDirection = (approachingUpperBound == isEvenSegment) ? .up : .down
         }
         let currentDirection = direction(for: currentSegment.index)
 

@@ -29,8 +29,8 @@ final class PlayerCourse {
 
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(2% * .pi)))
         height = JumpTracker(
-            relativeValueRangeTolerance: 20%,
             jumpTolerance: .absolute(0), // Will be live-updated lateron
+            relativeValueRangeTolerance: 20%,
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
             customGuessRange: SimpleRange<Double>(from: 0, to: 0),
             idleHeightBeforeInitialSegment: initialPlayer.height

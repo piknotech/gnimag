@@ -12,6 +12,7 @@ public extension BasicLinearPingPongTracker {
         let index: Int
 
         /// The time range of the segment portion.
+        /// This range is always regular, regardless of the time direction.
         let timeRange: SimpleRange<Time>
 
         /// The linear function.
@@ -19,15 +20,22 @@ public extension BasicLinearPingPongTracker {
     }
 
     /// Calculate the segment portions that will be passed during a given time range in the future.
+    /// When time is inverted, the time range should also be inverted, i.e. `lower > upper`.
     func segmentPortionsForFutureTimeRange(_ timeRange: SimpleRange<Time>) -> [LinearSegmentPortion]? {
         guard let properties = requiredProperties() else { return nil }
 
-        // Calculate begin and end segment indices
-        let indexOffset = properties.startingPoint.segment.index
-        let beginShift = timeRange.lower - properties.startingPoint.startTime
-        let beginIndex = Int(floor(beginShift / properties.segmentDuration)) + indexOffset
-        let endShift = timeRange.upper - properties.startingPoint.startTime
-        let endIndex = Int(floor(endShift / properties.segmentDuration)) + indexOffset
+        // The index of a segment that contains a given time value.
+        func indexForSegment(atTime time: Time) -> Int {
+            let timeShift = (time - properties.startingPoint.startTime)
+            let indexShift = Double(properties.timeDirection) * timeShift / properties.segmentDuration // >= 0 (when time is in the future)
+
+            let startingIndex = properties.startingPoint.segment.index
+            return Int(floor(indexShift)) + startingIndex
+        }
+
+        // Calculate begin and end segment indices (with end > begin)
+        let beginIndex = indexForSegment(atTime: timeRange.lower)
+        let endIndex = indexForSegment(atTime: timeRange.upper)
 
         // Calculate LinearSegmentPortion for each partial or full segment
         return (beginIndex ... endIndex).compactMap { index in
@@ -37,15 +45,19 @@ public extension BasicLinearPingPongTracker {
 
     // MARK: Required Properties
 
-    /// Properties which are all required (non-nil) for successful calculations.
+    /// Properties which are all required (i.e. non-nil) for further calculations.
     private struct RequiredProperties {
-        let startingPoint: StartingPointForFutureCalculations
         let slope: Double
         let lowerBound: Double
         let upperBound: Double
-        let segmentDuration: Time // Can be negative (when time direction is inverted)
+        let segmentDuration: Time
+
+        /// The direction time is running in. Either +1 or -1.
+        let timeDirection: Int
 
         /// A segment, together with a non-nil starting time and direction value, based on which the future calculations will be executed.
+        let startingPoint: StartingPointForFutureCalculations
+
         struct StartingPointForFutureCalculations {
             let segment: Segment
             let startTime: Time
@@ -61,7 +73,6 @@ public extension BasicLinearPingPongTracker {
         guard let slope = slope else { return nil }
 
         // Calculate the duration each segment takes.
-        // This can be negative (if time direction is inverted).
         let segmentDuration = (upperBound - lowerBound) / slope
 
         // Create starting point for future calculations
@@ -73,8 +84,11 @@ public extension BasicLinearPingPongTracker {
 
         let startingPoint = RequiredProperties.StartingPointForFutureCalculations(segment: goodSegment, startTime: goodSegment.supposedStartTime!, direction: direction)
 
+        // Get time direction
+        guard let timeDirection = monotonicityChecker.direction.intValue else { return nil }
+
         // Collect everything
-        return RequiredProperties(startingPoint: startingPoint, slope: slope, lowerBound: lowerBound, upperBound: upperBound, segmentDuration: segmentDuration)
+        return RequiredProperties(slope: slope, lowerBound: lowerBound, upperBound: upperBound, segmentDuration: segmentDuration, timeDirection: timeDirection, startingPoint: startingPoint)
     }
 
     // MARK: Future Segments
@@ -82,11 +96,15 @@ public extension BasicLinearPingPongTracker {
     /// Calculate a LinearSegmentPortion for a future segment with the given index.
     /// The full segment time range will be intersected with `maximalTimeRange`, which possibly creates a segment portion (instead of a full segment).
     private func segmentPortion(index: Int, maximalTimeRange: SimpleRange<Time>, properties: RequiredProperties) -> LinearSegmentPortion? {
-        let timeRange = segmentTimeRange(index: index, properties: properties).intersection(with: maximalTimeRange)
-        if timeRange.isEmpty { return nil }
+        // Intersect regularized time ranges
+        let regularTimeRange = segmentTimeRange(index: index, properties: properties).regularized
+        let regularMaximalRange = maximalTimeRange.regularized
+        let intersection = regularTimeRange.intersection(with: regularMaximalRange)
+        if intersection.isSinglePoint { return nil }
 
+        // Calculate segment function
         let function = segmentFunction(index: index, properties: properties)
-        return LinearSegmentPortion(index: index, timeRange: timeRange, function: function)
+        return LinearSegmentPortion(index: index, timeRange: intersection, function: function)
     }
 
     /// Calculate the linear function for a future segment with the given index.
@@ -103,10 +121,11 @@ public extension BasicLinearPingPongTracker {
     }
 
     /// Calculate the time range a future segment will have.
+    /// Thereby, lower is the start time and upper the end time of the segment. This means, the range is not necessarily regular.
     private func segmentTimeRange(index: Int, properties: RequiredProperties) -> SimpleRange<Time> {
         let indexDiff = index - properties.startingPoint.segment.index
-        let startTime = properties.startingPoint.startTime + Double(indexDiff) * properties.segmentDuration
-        let endTime = startTime + properties.segmentDuration
+        let startTime = properties.startingPoint.startTime + Double(indexDiff) * properties.segmentDuration * Double(properties.timeDirection)
+        let endTime = startTime + properties.segmentDuration * Double(properties.timeDirection)
 
         return SimpleRange(from: startTime, to: endTime)
     }

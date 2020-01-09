@@ -33,14 +33,15 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     }
 
     /// The estimated jump velocity, if available.
+    /// Can be negative if time direction is inverted.
     public var jumpVelocity: Value? {
         jumpVelocityTracker.average ?? jumpVelocityTracker.values.last
     }
 
     /// Default initializer.
     public init(
-        relativeValueRangeTolerance: Value,
         jumpTolerance: TrackerTolerance,
+        relativeValueRangeTolerance: Value,
         consecutiveNumberOfPointsRequiredToDetectJump: Int,
         customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1),
         idleHeightBeforeInitialSegment: Value? = nil

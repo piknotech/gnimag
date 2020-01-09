@@ -12,6 +12,16 @@ public final class MonotonicityChecker<T: Comparable> {
         case decreasing
         /// The sequence must either be monotonically increasing or monotonically decreasing.
         case both
+
+        /// The integral value of the direction:
+        /// 1 when increasing, -1 when decreasing and nil when both.
+        public var intValue: Int? {
+            switch self {
+            case .increasing: return 1
+            case .decreasing: return -1
+            case .both: return nil
+            }
+        }
     }
 
     /// The determined monotonicity direction.

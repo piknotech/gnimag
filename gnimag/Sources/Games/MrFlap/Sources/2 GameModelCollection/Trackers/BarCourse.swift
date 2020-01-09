@@ -46,7 +46,7 @@ final class BarCourse {
         holeSize = ConstantTracker(tolerance: .relative(5%))
         appearingHoleSize = LinearTracker(tolerancePoints: 0, tolerance: .absolute(5% * playfield.freeSpace))
         yCenter = BasicLinearPingPongTracker(
-            segmentSwitchTolerance: .absolute(0.5% * playfield.freeSpace),
+            tolerance: .absolute(0.5% * playfield.freeSpace),
             slopeTolerance: .relative(40%),
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
