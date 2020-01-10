@@ -16,7 +16,7 @@ public protocol ScalarFunctionArithmetic: Function {
     static func +(f: Self, offset: Double) -> Self
     static func *(f: Self, factor: Double) -> Self
 
-    func shiftLeft(by amount: Double) -> Self
+    func shiftedLeft(by amount: Double) -> Self
 }
 
 public protocol DifferentiableFunction: Function {

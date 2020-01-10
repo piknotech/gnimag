@@ -53,7 +53,7 @@ public extension SimpleTrackerProtocol {
         let offsets: [Double] = [-1, 0, 1]
         return (offsets × offsets).compactMap { (x, y) in
             if (x, y) == (0, 0) { return nil }
-            let f = regression.shiftLeft(by: x * dx) + y * dy
+            let f = regression.shiftedLeft(by: x * dx) + y * dy
             return FunctionDebugInfo(function: f, strokable: scatterStrokable(for: f), color: .emphasize, dash: .dashed)
         }
     }

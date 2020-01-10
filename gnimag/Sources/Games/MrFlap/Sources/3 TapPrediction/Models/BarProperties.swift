@@ -15,7 +15,7 @@ struct BarProperties {
     /// The constant vertical size of the moving hole.
     let holeSize: Double
 
-    /// A function mapping a player-angle range (NOT a time range) to the movement that is performed by the bar's yCenter during that range.
+    /// A function mapping a time range to the movement that is performed by the bar's yCenter during that range.
     let yCenterMovementPortionsForAngularRange: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion]
 
     /// Angular horizontal speed (in radians per second).
@@ -28,35 +28,31 @@ struct BarProperties {
 
     /// Convert a bar tracker into BarProperties.
     static func from(bar: BarCourse, with player: PlayerCourse, currentTime: Double) -> BarProperties? {
-        guard let playerSize = player.size.average,
-              let (speed, intercept) = convertBarAngleToTimeSystem(fromPlayerAngleSystem: player, bar: bar),
-              let width = bar.width.average, let holeSize = bar.holeSize.average else { return nil }
+        guard let converter = PlayerAngleConverter.from(player: player) else { return nil }
+
+        guard
+            let playerSize = player.size.average,
+            let width = bar.width.average,
+            let holeSize = bar.holeSize.average,
+            let (slope, intercept) = bar.angle.tracker.slopeAndIntercept else { return nil }
 
         // widthAtHeight implementation
-        let xPosition = Angle(speed * currentTime + intercept)
         let widthAtHeight: (Double) -> Double = { height in
             2 * tan((width + playerSize) / height) // Extend bar width by player size
         }
 
         // yCenterMovementPortionsForAngularRange implementation
-        let yCenterMovement: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion] = { range in
+        let yCenterMovement: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion] = { timeRange in
+            let angularRange = converter.angleBasedRange(from: timeRange)
             let guesses = BarCourse.momventBoundCollector.guesses(for: bar)
-            return bar.yCenter.segmentPortionsForFutureTimeRange(range, guesses: guesses) ?? []
+            let result = bar.yCenter.segmentPortionsForFutureTimeRange(angularRange, guesses: guesses) ?? []
+            return result.map(converter.timeBasedLinearSegmentPortion)
         }
 
-        return BarProperties(widthAtHeight: widthAtHeight, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: speed, xPosition: xPosition)
-    }
+        // Get speed and current position
+        let (realSpeed, realIntercept) = converter.angleBasedLinearFunction(from: (slope, intercept))
+        let currentAngle = Angle(realSpeed * currentTime + realIntercept)
 
-    /// Because, when tracking the bar's angle, time values are not the real time, but the player angle, this method converts the bar's angle back to normal time system.
-    /// Returns slope and intercept of the linear angle function, in respect to time.
-    private static func convertBarAngleToTimeSystem(fromPlayerAngleSystem player: PlayerCourse, bar: BarCourse) -> (slope: Double, intercept: Double)? {
-        guard
-            let (playerSlope, playerIntercept) = player.angle.tracker.slopeAndIntercept,
-            let (barSlope, barIntercept) = bar.angle.tracker.slopeAndIntercept else { return nil }
-
-        // playerAngle = playerSlope * t + playerIntercept
-        // barAngle = barSlope * playerAngle + barIntercept
-        //          = (barSlope * playerSlope) * t + (barSlope * playerIntercept + barIntercept)
-        return (barSlope * playerSlope, barSlope * playerIntercept + barIntercept)
+        return BarProperties(widthAtHeight: widthAtHeight, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: realSpeed, xPosition: currentAngle)
     }
 }

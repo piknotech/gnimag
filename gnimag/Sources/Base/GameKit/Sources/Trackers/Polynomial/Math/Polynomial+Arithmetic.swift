@@ -71,7 +71,7 @@ public prefix func - (p: Polynomial) -> Polynomial {
 extension Polynomial {
     /// Shift a polynomial to the left.
     /// This runs in O(n^2).
-    public func shiftLeft(by amount: Double) -> Polynomial {
+    public func shiftedLeft(by amount: Double) -> Polynomial {
         var result = [Double](repeating: 0, count: coefficients.count)
 
         // Calculate (x-amount)^n
@@ -95,5 +95,25 @@ extension Polynomial {
         }
 
         return result
+    }
+}
+
+extension Polynomial {
+    /// Stretch or compress the polynomial by the given factor in x-direction, around the given center point, so that the value at the center point doesn't change.
+    /// A factor > 1 means that the polynomial will be stretched, i.e. widened out; factor must not be 0.
+    /// This runs in O(n^2).
+    public func stretched(by factor: Double, center: Double) -> Polynomial {
+        let shifted = shiftedLeft(by: center)
+
+        // Transform coefficients:
+        // a * x^n --> a * (x/factor)^n = a/(factor)^n * x^n
+        let coeffs = shifted.coefficients.enumerated().map { arg -> Double in
+            let (i, coeff) = arg
+            return coeff / pow(factor, Double(i))
+        }
+
+        let shiftedBack = Polynomial(coeffs).shiftedLeft(by: -center)
+
+        return shiftedBack
     }
 }

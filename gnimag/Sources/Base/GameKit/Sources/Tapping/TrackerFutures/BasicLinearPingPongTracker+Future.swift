@@ -9,14 +9,21 @@ public extension BasicLinearPingPongTracker {
     /// A portion of (or a full) segment of the linear ping pong tracker.
     struct LinearSegmentPortion {
         /// The index of the future portion in the composite tracker.
-        let index: Int
+        public let index: Int
 
         /// The time range of the segment portion.
         /// This range is always regular, regardless of the time direction.
-        let timeRange: SimpleRange<Time>
+        public let timeRange: SimpleRange<Time>
 
         /// The linear function.
-        let function: Polynomial
+        public let function: Polynomial
+
+        /// Default initializer.
+        public init(index: Int, timeRange: SimpleRange<Time>, function: Polynomial) {
+            self.index = index
+            self.timeRange = timeRange
+            self.function = function
+        }
     }
 
     /// Calculate the segment portions that will be passed during a given time range in the future.

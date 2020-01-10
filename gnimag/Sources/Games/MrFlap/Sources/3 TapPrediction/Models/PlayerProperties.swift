@@ -26,7 +26,8 @@ struct PlayerProperties {
 
     /// Convert a player tracker into PlayerProperties.
     static func from(player: PlayerCourse, currentTime: Double) -> PlayerProperties? {
-        guard let (speed, intercept) = player.angle.tracker.slopeAndIntercept else { return nil }
+        guard let converter = PlayerAngleConverter.from(player: player) else { return nil }
+        guard let xSpeed = player.angle.tracker.slope else { return nil }
 
         // Get player's jump start position
         guard let startAngle = player.height.currentSegment.supposedStartTime,
@@ -34,9 +35,9 @@ struct PlayerProperties {
         // TODO 1: else, use information from previous tap scheduling to guess starting time
         // TODO 2: use future jump scheduling (-> nicht current segment sondern evtl. nächstes segment wegen absolviertem tap)
 
-        let startTime = (startAngle - intercept) / speed
+        let startTime = converter.time(from: startAngle)
         let jumpStart = PlayerProperties.JumpStart(x: Angle(startAngle), y: startHeight)
 
-        return PlayerProperties(lastJumpStart: jumpStart, timePassedSinceJumpStart: currentTime - startTime, xSpeed: speed)
+        return PlayerProperties(lastJumpStart: jumpStart, timePassedSinceJumpStart: currentTime - startTime, xSpeed: xSpeed)
     }
 }
