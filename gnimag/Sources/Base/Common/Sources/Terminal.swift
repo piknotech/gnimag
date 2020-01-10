@@ -48,6 +48,5 @@ public enum Terminal {
 /// Write a fatal log using Terminal and stop the program execution.
 public func exit(withMessage message: String) -> Never {
     Terminal.log(.fatal, message)
-    raise(SIGINT) // Enable debugging
     exit(1)
 }

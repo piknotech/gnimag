@@ -10,6 +10,8 @@ import TestingTools
 
 /// BarCourse bundles trackers for a single bar.
 final class BarCourse {
+    static var momventBoundCollector: BarMovementBoundCollector!
+
     /// The state the bar is currently in.
     /// Only trackers with a "normal" state should be considered by prediction algorithms.
     private(set) var state = State.appearing
@@ -97,6 +99,9 @@ final class BarCourse {
             holeSize.add(value: bar.holeSize, at: time)
             yCenter.add(value: bar.yCenter, at: time)
         }
+
+        // Update shared movement bounds
+        BarCourse.momventBoundCollector.update(with: self)
     }
 
     /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.

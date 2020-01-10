@@ -21,8 +21,9 @@ public extension BasicLinearPingPongTracker {
 
     /// Calculate the segment portions that will be passed during a given time range in the future.
     /// When time is inverted, the time range should also be inverted, i.e. `lower > upper`.
-    func segmentPortionsForFutureTimeRange(_ timeRange: SimpleRange<Time>) -> [LinearSegmentPortion]? {
-        guard let properties = requiredProperties() else { return nil }
+    /// `guesses` provides guesses for the tracker's lower and upper bounds when they are not yet determined.
+    func segmentPortionsForFutureTimeRange(_ timeRange: SimpleRange<Time>, guesses: (lowerBound: Double, upperBound: Double)) -> [LinearSegmentPortion]? {
+        guard let properties = requiredProperties(guesses: guesses) else { return nil }
 
         // The index of a segment that contains a given time value.
         func indexForSegment(atTime time: Time) -> Int {
@@ -66,11 +67,11 @@ public extension BasicLinearPingPongTracker {
     }
 
     /// Fetch all required properties for calculation.
-    private func requiredProperties() -> RequiredProperties? {
+    private func requiredProperties(guesses: (lowerBound: Double, upperBound: Double)) -> RequiredProperties? {
         // Get required (non-nil) properties
-        guard let lowerBound = lowerBoundTracker.average else { return nil } // TODO: GUESSES
-        guard let upperBound = upperBoundTracker.average else { return nil }
         guard let slope = slope else { return nil }
+        let lowerBound = self.lowerBound ?? guesses.lowerBound
+        let upperBound = self.upperBound ?? guesses.upperBound
 
         // Calculate the duration each segment takes.
         let segmentDuration = (upperBound - lowerBound) / slope

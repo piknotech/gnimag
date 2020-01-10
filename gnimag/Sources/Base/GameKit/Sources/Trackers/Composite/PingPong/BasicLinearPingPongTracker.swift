@@ -9,12 +9,15 @@ import TestingTools
 /// BasicLinearPingPongTracker is a PingPongTracker whose lower and upper bounds are constant, and whose segment function is linear.
 public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The trackers for the upper and lower bound.
-    public let lowerBoundTracker: PreliminaryTracker
-    public let upperBoundTracker: PreliminaryTracker
+    private let lowerBoundTracker: PreliminaryTracker
+    private let upperBoundTracker: PreliminaryTracker
 
     /// The tracker for the slope. The slope is always positive.
     private let slopeTracker: PreliminaryTracker
+
     public var slope: Value? { slopeTracker.average.map(abs) }
+    public var lowerBound: Value? { lowerBoundTracker.average.map(abs) }
+    public var upperBound: Value? { upperBoundTracker.average.map(abs) }
 
     internal enum Direction {
         case up

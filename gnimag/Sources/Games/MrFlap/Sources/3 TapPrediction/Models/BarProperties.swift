@@ -4,6 +4,7 @@
 //
 
 import Common
+import GameKit
 
 /// BarProperties describe a moving bar with a hole in the middle.
 struct BarProperties {
@@ -14,8 +15,8 @@ struct BarProperties {
     /// The constant vertical size of the moving hole.
     let holeSize: Double
 
-    // TODO:
-    // let yCenter: [LinearMovementAbschnitt]
+    /// A function mapping a player-angle range (NOT a time range) to the movement that is performed by the bar's yCenter during that range.
+    let yCenterMovementPortionsForAngularRange: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion]
 
     /// Angular horizontal speed (in radians per second).
     let xSpeed: Double
@@ -31,12 +32,19 @@ struct BarProperties {
               let (speed, intercept) = convertBarAngleToTimeSystem(fromPlayerAngleSystem: player, bar: bar),
               let width = bar.width.average, let holeSize = bar.holeSize.average else { return nil }
 
+        // widthAtHeight implementation
         let xPosition = Angle(speed * currentTime + intercept)
         let widthAtHeight: (Double) -> Double = { height in
             2 * tan((width + playerSize) / height) // Extend bar width by player size
         }
 
-        return BarProperties(widthAtHeight: widthAtHeight, holeSize: holeSize, xSpeed: speed, xPosition: xPosition)
+        // yCenterMovementPortionsForAngularRange implementation
+        let yCenterMovement: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion] = { range in
+            let guesses = BarCourse.momventBoundCollector.guesses(for: bar)
+            return bar.yCenter.segmentPortionsForFutureTimeRange(range, guesses: guesses) ?? []
+        }
+
+        return BarProperties(widthAtHeight: widthAtHeight, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: speed, xPosition: xPosition)
     }
 
     /// Because, when tracking the bar's angle, time values are not the real time, but the player angle, this method converts the bar's angle back to normal time system.
