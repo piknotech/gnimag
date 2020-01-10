@@ -23,10 +23,12 @@ public class PolyTracker: SimpleDefaultTracker<Polynomial> {
     }
 
     /// Provide a specific ScatterStrokable for a polynomial.
-    open override func scatterStrokable(for function: F) -> ScatterStrokable {
+    open override func scatterStrokable(for function: Polynomial) -> ScatterStrokable {
         switch function.degree {
         case 0, 1:
-            return LinearScatterStrokable(line: function, drawingRange: .open)
+            let slope = function.at(1) - function.at(0), intercept = function.at(0)
+            let line = LinearFunction(slope: slope, intercept: intercept)
+            return LinearScatterStrokable(line: line, drawingRange: .open)
 
         case 2:
             return QuadCurveScatterStrokable(parabola: function, drawingRange: .open)

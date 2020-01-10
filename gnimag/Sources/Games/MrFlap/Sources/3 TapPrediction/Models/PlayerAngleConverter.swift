@@ -12,77 +12,80 @@ struct PlayerAngleConverter {
     typealias Angle = Double
     typealias Time = Double
 
-    // TODO: REPLACE THESE with 2 LinearFunctions
+    /// The time to angle conversion function.
+    private let timeToAngle: LinearFunction
 
-    /// The slope and intercept of the time to angle conversion function.
-    private let timeToAngle: (slope: Double, intercept: Double)
-
-    /// The slope and intercept of the time to angle conversion function.
-    private let angleToTime: (slope: Double, intercept: Double)
+    /// The angle conversion function.
+    private let angleToTime: LinearFunction
 
     /// Create a PlayerAngleConverter from the given player tracker.
     static func from(player: PlayerCourse) -> PlayerAngleConverter? {
-        guard let (slope, intercept) = player.angle.tracker.slopeAndIntercept else { return nil }
+        guard let angle = player.angle.tracker.regression else { return nil }
 
         return PlayerAngleConverter(
-            timeToAngle: (slope, intercept),
-            angleToTime: (1 / slope, -intercept / slope)
+            timeToAngle: angle,
+            angleToTime: angle.inverse
         )
     }
 
     // MARK: Value Conversion
 
     func angle(from time: Time) -> Angle {
-        timeToAngle.slope * time + timeToAngle.intercept
+        timeToAngle.at(time)
     }
 
     func time(from angle: Angle) -> Time {
-        angleToTime.slope * angle + angleToTime.intercept
+        angleToTime.at(angle)
     }
 
     // MARK: Linear Function Conversion
 
     /// Convert a linear function whose argument is time into the same linear function whose argument is angle.
-    func angleBasedLinearFunction(from function: (slope: Double, intercept: Double)) -> (slope: Double, intercept: Double) {
-        (function.slope * angleToTime.slope,
-         function.slope * angleToTime.intercept + function.intercept)
+    func angleBasedLinearFunction(from function: LinearFunction) -> LinearFunction {
+        LinearFunction(
+            slope: function.slope * angleToTime.slope,
+            intercept: function.slope * angleToTime.intercept + function.intercept
+        )
     }
 
     /// Convert a linear function whose argument is angle into the same linear function whose argument is time.
-    func timeBasedLinearFunction(from function: (slope: Double, intercept: Double)) -> (slope: Double, intercept: Double) {
-        (function.slope * timeToAngle.slope,
-         function.slope * timeToAngle.intercept + function.intercept)
+    func timeBasedLinearFunction(from function: LinearFunction) -> LinearFunction {
+        LinearFunction(
+            slope: function.slope * timeToAngle.slope,
+            intercept: function.slope * timeToAngle.intercept + function.intercept
+        )
     }
 
     // MARK: Polynomial Conversion
 
     /// Convert a polynomial whose argument is time into the same polynomial whose argument is angle.
     func angleBasedPolynomial(from polynomial: Polynomial) -> Polynomial {
-        linearTransform(polynomial: polynomial, slope: angleToTime.slope, intercept: angleToTime.intercept)
+        linearTransform(polynomial: polynomial, by: angleToTime) // TODO: WRONG DIRECTION!!??
     }
 
     /// Convert a polynomial whose argument is angle into the same polynomial whose argument is time.
     func timeBasedPolynomial(from polynomial: Polynomial) -> Polynomial {
-        linearTransform(polynomial: polynomial, slope: timeToAngle.slope, intercept: timeToAngle.intercept)
+        linearTransform(polynomial: polynomial, by: timeToAngle)
     }
 
     /// Transform the polynomial f linearly, such that g(x) = f(slope * x + intercept).
-    private func linearTransform(polynomial: Polynomial, slope: Double, intercept: Double) -> Polynomial {
+    private func linearTransform(polynomial: Polynomial, by transform: LinearFunction) -> Polynomial {
         // Slope = 0: Constant value
-        if slope == 0 {
-            let constant = polynomial.at(intercept)
+        if transform.slope == 0 {
+            let constant = polynomial.at(transform.intercept)
             return Polynomial([constant])
         }
 
         // Slope = 1: Shift in x-direction
-        else if slope == 1 {
-            return polynomial.shiftedLeft(by: intercept)
+        else if transform.slope == 1 {
+            return polynomial.shiftedLeft(by: transform.intercept)
         }
 
         // Stretch in x-direction
         else {
-            let fixpoint = intercept / (1 - slope) // fixpoint = slope * fixpoint + intercept
-            return polynomial.stretched(by: 1 / slope, center: fixpoint)
+            // fixpoint = slope * fixpoint + intercept
+            let fixpoint = transform.intercept / (1 - transform.slope)
+            return polynomial.stretched(by: 1 / transform.slope, center: fixpoint)
         }
     }
 

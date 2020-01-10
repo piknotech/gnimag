@@ -34,7 +34,7 @@ struct BarProperties {
             let playerSize = player.size.average,
             let width = bar.width.average,
             let holeSize = bar.holeSize.average,
-            let (slope, intercept) = bar.angle.tracker.slopeAndIntercept else { return nil }
+            let angleByPlayerAngle = bar.angle.tracker.regression else { return nil }
 
         // widthAtHeight implementation
         let widthAtHeight: (Double) -> Double = { height in
@@ -50,9 +50,9 @@ struct BarProperties {
         }
 
         // Get speed and current position
-        let (realSpeed, realIntercept) = converter.angleBasedLinearFunction(from: (slope, intercept))
-        let currentAngle = Angle(realSpeed * currentTime + realIntercept)
+        let angleByTime = converter.angleBasedLinearFunction(from: angleByPlayerAngle)
+        let currentAngle = Angle(angleByTime.at(currentTime))
 
-        return BarProperties(widthAtHeight: widthAtHeight, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: realSpeed, xPosition: currentAngle)
+        return BarProperties(widthAtHeight: widthAtHeight, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: angleByTime.slope, xPosition: currentAngle)
     }
 }

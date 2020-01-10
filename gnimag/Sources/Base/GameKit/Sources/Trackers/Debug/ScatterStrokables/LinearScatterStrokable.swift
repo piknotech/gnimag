@@ -11,19 +11,14 @@ import TestingTools
 /// LinaerScatterStrokable is a ScatterStrokable that can draw a line (segment).
 public struct LinearScatterStrokable: ScatterStrokable {
     /// The line in the data point space.
-    /// Can be of degree either 0 or 1.
-    let line: Polynomial
+    let line: LinearFunction
 
     /// The x value range where the line should be drawn (in data point space).
     /// Attention: the range must be regular, i.e. upper > lower.
     let drawingRange: SimpleRange<Double>
 
     /// Default initializer.
-    public init(line: Polynomial, drawingRange: SimpleRange<Double>) {
-        guard line.degree < 2 else {
-            exit(withMessage: "LinearScatterStrokable can only draw polynomials of degree 0 or 1!")
-        }
-
+    public init(line: LinearFunction, drawingRange: SimpleRange<Double>) {
         self.line = line
         self.drawingRange = drawingRange
     }

@@ -61,12 +61,12 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// Update the preliminary value for the slope.
     /// Return the supposed time where the segment started at.
     public override func currentSegmentWasUpdated(segment: Segment) -> Time? {
-        guard let (slope, intercept) = segment.tracker.slopeAndIntercept else { return nil }
+        guard let line = segment.tracker.regression else { return nil }
         guard monotonicityChecker.direction != .both else { return nil }
 
         // 1.: Determine the direction if it is unknown
         if firstSegmentDirection == nil {
-            let approachingUpperBound = (slope > 0) == (monotonicityChecker.direction == .increasing)
+            let approachingUpperBound = (line.slope > 0) == (monotonicityChecker.direction == .increasing)
             let isEvenSegment = currentSegment.index.isMultiple(of: 2)
             firstSegmentDirection = (approachingUpperBound == isEvenSegment) ? .up : .down
         }
@@ -74,19 +74,17 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
         // 2.: Update slope tracker
         // Add the positive slope to the tracker. Do NOT use abs(slope) because, for slopes near 0, this could distort the average slope value. This means, "positiveSlope" could also be negative if the data points are widely scattered.
-        let positiveSlope = (currentDirection == .up) ? +slope : -slope
+        let positiveSlope = (currentDirection == .up) ? +line.slope : -line.slope
 
         // Update preliminary slope if valid
         slopeTracker.updatePreliminaryValueIfValid(value: positiveSlope)
 
         // 3.: Update lower or upper bound tracker
         guard
-            let lastSegment = finalizedSegments.last,
-            let lastSlope = lastSegment.tracker.slope,
-            let lastIntercept = lastSegment.tracker.intercept,
-            let intersectionX = LinearSolver.solve(slope: slope - lastSlope, intercept: intercept - lastIntercept) else { return nil }
+            let lastLine = finalizedSegments.last?.tracker.regression,
+            let intersectionX = LinearSolver.zero(of: line - lastLine) else { return nil }
 
-        let intersectionY = slope * intersectionX + intercept
+        let intersectionY = line.at(intersectionX)
 
         let relevantTracker = (currentDirection == .up) ? lowerBoundTracker : upperBoundTracker
 
@@ -111,7 +109,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     }
 
     /// Make a guess for a segment beginning at (`time`, `value`).
-    public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> Polynomial? {
+    public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> LinearFunction? {
         guard
             let direction = direction(for: currentSegment.index),
             let positiveSlope = slopeTracker.average else { return nil }
@@ -120,7 +118,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         let slope = (direction == .up) ? -positiveSlope : +positiveSlope
         let intercept = value - slope * time
 
-        return Polynomial([intercept, slope])
+        return LinearFunction(slope: slope, intercept: intercept)
     }
 
     /// Move the guess range back to compensate for a possibly too large tolerance (i.e. a very late segment switch detection).
@@ -157,7 +155,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
-    public override func scatterStrokable(for function: Polynomial, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+    public override func scatterStrokable(for function: LinearFunction, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
         LinearScatterStrokable(line: function, drawingRange: drawingRange)
     }
 }

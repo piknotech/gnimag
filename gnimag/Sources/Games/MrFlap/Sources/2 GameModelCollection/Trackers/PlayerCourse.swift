@@ -44,8 +44,8 @@ final class PlayerCourse {
         // For tap delay tracking, the actual time (from imageProvider) is required.
         // Because player jump tracking is performed using the player's angle, it first has to be converted back to an (approximate) time value.
         func convertPlayerAngleToTime(playerAngle: Double) -> Double? {
-            guard let (slope, intercept) = angle.tracker.slopeAndIntercept else { return nil }
-            return (playerAngle - intercept) / slope
+            guard let conversion = angle.tracker.regression?.inverse else { return nil }
+            return conversion.at(playerAngle)
         }
 
         // Link segment switch callback

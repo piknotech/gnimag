@@ -38,9 +38,9 @@ public enum QuadraticSolver {
 }
 
 public enum LinearSolver {
-    /// Solve the equation given by slope * x + intercept = 0 and return the solution.
-    public static func solve(slope: Double, intercept: Double) -> Double? {
-        if slope == 0 { return nil }
-        return -intercept / slope
+    /// Solve the equation given by line(x) = 0.
+    public static func zero(of line: LinearFunction) -> Double? {
+        if line.slope == 0 { return nil }
+        return -line.intercept / line.slope
     }
 }

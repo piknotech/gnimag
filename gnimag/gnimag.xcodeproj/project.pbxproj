@@ -96,6 +96,7 @@
 		631214392326686A00C126B4 /* Terminal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Terminal.swift */; };
 		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
 		6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */; };
+		6316BDA723C91BD10062100F /* LinearFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA623C91BD10062100F /* LinearFunction.swift */; };
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
 		632AC97B23B93A53002743D1 /* TapPredictionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AC97A23B93A53002743D1 /* TapPredictionQueue.swift */; };
@@ -296,6 +297,7 @@
 		631214382326686A00C126B4 /* Terminal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terminal.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
 		6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAngleConverter.swift; sourceTree = "<group>"; };
+		6316BDA623C91BD10062100F /* LinearFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearFunction.swift; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
 		632AC97A23B93A53002743D1 /* TapPredictionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictionQueue.swift; sourceTree = "<group>"; };
@@ -1168,6 +1170,7 @@
 				631213792325793100C126B4 /* Polynomial.swift */,
 				634E4FC02358749F00AE9C91 /* PolynomialSolvers.swift */,
 				634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */,
+				6316BDA623C91BD10062100F /* LinearFunction.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -1851,6 +1854,7 @@
 				6306CDB823AA48DE00D9EB25 /* ToleranceRangeScatterStrokables.swift in Sources */,
 				6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */,
 				6312138A2325793C00C126B4 /* MedianTracker.swift in Sources */,
+				6316BDA723C91BD10062100F /* LinearFunction.swift in Sources */,
 				6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */,
 				63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
