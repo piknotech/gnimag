@@ -96,7 +96,7 @@ public final class MrFlap {
         // Fill properties from first analyzed image
         state = .waitingForFirstMove(initialPlayerPos: result.player)
         playfield = result.playfield
-        gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, debugLogger: debugLogger)
+        gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, mode: result.mode, debugLogger: debugLogger)
         tapPredictor.set(gameModel: gameModelCollector.model)
 
         // Tap to begin the game

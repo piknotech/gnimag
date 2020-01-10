@@ -21,20 +21,39 @@ struct Coloring {
     /// A color that is safe on draw with both on foreground and background.
     let safeLoggingColor: Color
 
+    /// The game mode which corresponds to the coloring.
+    let mode: GameMode
+
     /// Default initializer.
-    init(theme: Color, secondary: Color) {
+    /// Fails when there is no game mode matching the coloring.
+    init?(theme: Color, secondary: Color) {
         self.theme = theme
         self.secondary = secondary
 
+        guard let mode = GameMode.from(secondaryColor: secondary) else { return nil }
+        self.mode = mode
+
         /// Determine eyeColor and safeLoggingColor
-        if secondary.distance(to: .black) < secondary.distance(to: .white) {
-            // Mode: hardcore
-            eye = .white
-            safeLoggingColor = Color(0.5, 0.5, 1) // light blue
-        } else {
-            // Mode: normal
+        switch mode {
+        case .normal:
             eye = .black
             safeLoggingColor = .red
+
+        case .hard:
+            eye = .white
+            safeLoggingColor = Color(0.5, 0.5, 1) // light blue
         }
+    }
+}
+
+enum GameMode {
+    case normal
+    case hard
+
+    /// Read the game mode from the given coloring, if possible.
+    static fileprivate func from(secondaryColor: Color) -> GameMode? {
+        if secondaryColor.distance(to: .white) < 0.1 { return .normal }
+        if secondaryColor.distance(to: .black) < 0.1 { return .hard }
+        return nil
     }
 }

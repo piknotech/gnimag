@@ -15,8 +15,8 @@ class GameModelCollector {
     private var debug: DebugLoggerFrame.GameModelCollection { debugLogger.currentFrame.gameModelCollection }
 
     /// Default initializer.
-    init(playfield: Playfield, initialPlayer: Player, debugLogger: DebugLogger) {
-        model = GameModel(playfield: playfield, initialPlayer: initialPlayer, debugLogger: debugLogger)
+    init(playfield: Playfield, initialPlayer: Player, mode: GameMode, debugLogger: DebugLogger) {
+        model = GameModel(playfield: playfield, initialPlayer: initialPlayer, mode: mode, debugLogger: debugLogger)
         self.debugLogger = debugLogger
     }
 
