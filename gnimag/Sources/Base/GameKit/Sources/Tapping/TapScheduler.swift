@@ -10,6 +10,8 @@ import Tapping
 
 /// Use TapScheduler from within your tap prediction logic to schedule and reschedule future taps.
 public final class TapScheduler {
+    public typealias Time = Double
+
     /// The tapper and imageProvider, for tapping and time obtainment.
     private let tapper: Tapper
     private let imageProvider: ImageProvider
@@ -19,9 +21,12 @@ public final class TapScheduler {
     public let delayTracker: TapDelayTracker
 
     /// The average tap delay from the delay tracker.
-    public var delay: Double? {
+    public var delay: Time? {
         delayTracker.delay
     }
+
+    /// All tap times where a tap has been performed at by the TapScheduler.
+    public private(set) var performedTaps = [Time]()
 
     /// Default initializer.
     public init(tapper: Tapper, imageProvider: ImageProvider, tapDelayTolerance: TrackerTolerance) {
@@ -32,12 +37,15 @@ public final class TapScheduler {
 
     /// Tap now.
     public func tap() {
+        let tapTime = imageProvider.time
         tapper.tap()
-        delayTracker.tapPerformed(time: imageProvider.time)
+
+        delayTracker.tapPerformed(time: tapTime)
+        performedTaps.append(tapTime)
     }
 
     /// Schedule a tap in the future.
-    public func scheduleTap(in time: Double) {
+    public func scheduleTap(in time: Time) {
         if time <= 0 {
             Terminal.log(.warning, "TapScheduler – time interval must be positive, is \(time)!")
             return

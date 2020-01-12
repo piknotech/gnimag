@@ -25,19 +25,18 @@ struct PlayerProperties {
     // MARK: Conversion
 
     /// Convert a player tracker into PlayerProperties.
-    static func from(player: PlayerCourse, currentTime: Double) -> PlayerProperties? {
+    static func from(player: PlayerCourse, performedTaps: [Double], currentTime: Double) -> PlayerProperties? {
         guard let converter = PlayerAngleConverter.from(player: player) else { return nil }
         guard let xSpeed = player.angle.tracker.slope else { return nil }
 
-        // Get player's jump start position
-        guard let startAngle = player.height.currentSegment.supposedStartTime,
-              let startHeight = player.height.currentSegment.tracker.regression?.at(startAngle) else { return nil }
-        // TODO 1: else, use information from previous tap scheduling to guess starting time
-        // TODO 2: use future jump scheduling (-> nicht current segment sondern evtl. nächstes segment wegen absolviertem tap)
+        // Get current jump start
+        // TODO: overlapTolerance must be < the minimal distance between two consecutive taps
+        let tapTimeAngles = performedTaps.map(converter.angle(from:))
+        guard let angularJumpStart = player.height.finalFutureJumpUsingJumpTimes(times: tapTimeAngles, overlapTolerance: 0.05) else { return nil }
 
-        let startTime = converter.time(from: startAngle)
-        let jumpStart = PlayerProperties.JumpStart(x: Angle(startAngle), y: startHeight)
+        let jumpStart = JumpStart(x: Angle(angularJumpStart.time), y: angularJumpStart.value)
+        let jumpStartTime = converter.time(from: angularJumpStart.time)
 
-        return PlayerProperties(lastJumpStart: jumpStart, timePassedSinceJumpStart: currentTime - startTime, xSpeed: xSpeed)
+        return PlayerProperties(lastJumpStart: jumpStart, timePassedSinceJumpStart: currentTime - jumpStartTime, xSpeed: xSpeed)
     }
 }

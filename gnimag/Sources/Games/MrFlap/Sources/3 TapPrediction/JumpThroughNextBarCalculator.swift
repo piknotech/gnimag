@@ -23,13 +23,13 @@ struct JumpThroughNextBarCalculator {
     /// Calculate the jump sequence through the next bar.
     /// `currentTime` denotes the current time, after adding possible input+output delays.
     /// Returns `nil` if not all tracker regressions are available.
-    func jumpSequenceThroughNextBar(model: GameModel, currentTime: Double) -> JumpSequence? {
+    func jumpSequenceThroughNextBar(model: GameModel, performedTaps: [Double], currentTime: Double) -> JumpSequence? {
         // Find next bar
         guard let nextBar = nextBar(model: model, currentTime: currentTime) else { return nil }
 
         // Convert models
         guard
-            let player = PlayerProperties.from(player: model.player, currentTime: currentTime),
+            let player = PlayerProperties.from(player: model.player, performedTaps: performedTaps, currentTime: currentTime),
             let jump = JumpingProperties.from(player: model.player),
             let bar = BarProperties.from(bar: nextBar, with: model.player, currentTime: currentTime),
             let playfield = PlayfieldProperties.from(playfield: model.playfield, with: model.player) else { return nil }
@@ -54,7 +54,7 @@ struct JumpThroughNextBarCalculator {
         let angles = model.bars.map { $0.angle.regression?.at(currentTime) }
         let barsAndAngles = zip(model.bars, angles)
 
-        // Remove non-nil angles
+        // Remove nil-angles
         let validBarsAndAngles: [(bar: BarCourse, angle: Angle)] = barsAndAngles.compactMap { bar, angle in
             guard let angle = angle else { return nil }
             return (bar, Angle(angle))

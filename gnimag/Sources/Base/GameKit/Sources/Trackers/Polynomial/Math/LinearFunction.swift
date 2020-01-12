@@ -20,11 +20,10 @@ public struct LinearFunction: Function {
         slope * x + intercept
     }
 
-    /// The inverse LinearFunction.
+    /// The inverse LinearFunction, such that `self(inverse(x)) = inverse(self(x)) = x`.
     public var inverse: LinearFunction {
         LinearFunction(slope: 1 / slope, intercept: -intercept / slope)
     }
-
 }
 
 // MARK: ScalarFunctionArithmetic

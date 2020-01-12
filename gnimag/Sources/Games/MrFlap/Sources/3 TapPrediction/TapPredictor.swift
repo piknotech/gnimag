@@ -62,8 +62,8 @@ class TapPredictor {
     private func predict() {
         guard let model = gameModel, let delay = scheduler.delay else { return }
 
-        let currentTime = imageProvider.time // + delay
-        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, currentTime: currentTime) else { return }
+        let currentTime = imageProvider.time + delay
+        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTaps: scheduler.performedTaps, currentTime: currentTime) else { return }
 
         print(sequence)
     }

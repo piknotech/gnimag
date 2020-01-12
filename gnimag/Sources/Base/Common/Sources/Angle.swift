@@ -8,14 +8,14 @@ public struct Angle {
     /// The value, which is always in [0, 2pi).
     public let value: Double
 
-    /// Default initializer, using a Double value.
+    /// Default initializer, using a Double value. A modulo-2-pi is applied to the value.
     public init(_ value: Double) {
         self.value = value.truncatingRemainder(dividingBy: 2 * .pi)
     }
 
     /// Default initializer, using a CGFloat value. A modulo-2-pi is applied to the value.
     public init(_ value: CGFloat) {
-        self.value = Double(value)
+        self.init(Double(value))
     }
 
     /// Calculate the distance to another angle. This distance is always in [0, pi].

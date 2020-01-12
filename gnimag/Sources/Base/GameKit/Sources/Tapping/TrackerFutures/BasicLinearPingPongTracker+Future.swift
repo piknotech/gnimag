@@ -80,10 +80,10 @@ public extension BasicLinearPingPongTracker {
         let lowerBound = self.lowerBound ?? guesses.lowerBound
         let upperBound = self.upperBound ?? guesses.upperBound
 
-        // Calculate the duration each segment takes.
+        // Calculate the duration each segment takes
         let segmentDuration = (upperBound - lowerBound) / slope
 
-        // Create starting point for future calculations
+        // Create starting point for future calculations (find latest useful segment)
         let allSegments = [currentSegment!] + finalizedSegments.reversed()
 
         guard
