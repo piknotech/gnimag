@@ -7,7 +7,6 @@
 /// The velocity when hitting the end point is irrelevant.
 protocol WayToSpecificPointStrategy {
     /// Calculate the jump sequence to the given point.
-    /// The current player position is relevant; you must take it into account.
     func jumpSequence(to endPoint: CGPoint, in playfield: PlayfieldProperties, with player: PlayerProperties, jumpProperties: JumpingProperties) -> JumpSequence
 }
 

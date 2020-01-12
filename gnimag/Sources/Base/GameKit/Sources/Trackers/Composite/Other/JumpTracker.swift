@@ -17,6 +17,13 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     private let gravityTracker: PreliminaryTracker
     private let jumpVelocityTracker: PreliminaryTracker
 
+    /// The estimated gravity, if available.
+    private var gravity: Value? { gravityTracker.average ?? gravityTracker.values.last }
+
+    /// The estimated jump velocity, if available.
+    /// Can be negative if time direction is inverted.
+    private var jumpVelocity: Value? { jumpVelocityTracker.average ?? jumpVelocityTracker.values.last }
+
     /// The guess range for when a new jump started.
     /// If you know that jumps will, for example, always exactly begin at the second last data point, return [0, 0].
     private let customGuessRange: SimpleRange<Time>
@@ -27,15 +34,10 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
 
     // MARK: Public Properties
 
-    /// The estimated gravity, if available.
-    public var gravity: Value? {
-        gravityTracker.average ?? gravityTracker.values.last
-    }
-
-    /// The estimated jump velocity, if available.
-    /// Can be negative if time direction is inverted.
-    public var jumpVelocity: Value? {
-        jumpVelocityTracker.average ?? jumpVelocityTracker.values.last
+    /// The jumping parabola, going through (0,0), if available.
+    public var parabola: Polynomial? {
+        guard let jumpVelocity = jumpVelocity, let gravity = gravity else { return nil }
+        return Polynomial([0, jumpVelocity, -0.5 * gravity])
     }
 
     /// Default initializer.
@@ -69,7 +71,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     public override func currentSegmentWasUpdated(segment: Segment) -> Time? {
         guard let jump = segment.tracker.regression else { return nil }
 
-        // Calculate gravity and jump velocity and jump start
+        // Calculate gravity, jump velocity and jump start
         let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump)
         let gravity = -2 * jump.a
         let jumpVelocity = jump.derivative.at(jumpStart)

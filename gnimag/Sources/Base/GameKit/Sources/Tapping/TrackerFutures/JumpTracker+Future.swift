@@ -23,15 +23,13 @@ public extension JumpTracker {
     /// It should contain all jumps that were made during the history (or a reasonable period) of this JumpTracker. This is required to compensate for incertainties like not-yet-available regressions or segment start times.
     func finalFutureJumpUsingJumpTimes(times: [Time], overlapTolerance: Time) -> JumpStart? {
         guard let initialJump = initialJumpStart() else { return nil }
+        guard let parabola = parabola else { return nil }
 
         // Time-direction-specific handling
         guard let direction = monotonicityChecker.direction.intValue else { return nil }
         let smaller: (Time, Time) -> Bool = (direction > 0) ? (<) : (>)
         let smallerEqual: (Time, Time) -> Bool = (direction > 0) ? (<=) : (>=)
 
-        // Jumping parabola (going through (0,0))
-        guard let gravity = gravity, let jumpVelocity = jumpVelocity else { return nil }
-        let parabola = Polynomial([0, jumpVelocity, -0.5 * gravity])
 
         // Remove irrelevant (too much in the past) time values
         var times = times.sorted(by: smaller)
