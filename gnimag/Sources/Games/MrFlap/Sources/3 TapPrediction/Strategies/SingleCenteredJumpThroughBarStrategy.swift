@@ -8,7 +8,7 @@
 /// This is achieved by creating a parabola x-centered at the bar's x-center, and y-aligned such that the minimal distances to the top and to the bottom are equal.
 /// This strategy requires the bar to be thin enough in relation to the jump and player properties – else, a single jump won't be enough to pass the bar without colliding.
 struct SingleCenteredJumpThroughBarStrategy: NoncollidingPathThroughBarStrategy {
-    func jumpSequence(through bar: BarProperties, in playfield: PlayfieldProperties, with player: PlayerProperties, jumpProperties: JumpingProperties) -> JumpSequenceWithStartingPoint {
+    func jumpSequence(through bar: BarProperties, in playfield: PlayfieldProperties, with player: PlayerProperties, jumpProperties: JumpingProperties) -> JumpSequenceFromSpecificPosition {
         fatalError("todo")
     }
 }

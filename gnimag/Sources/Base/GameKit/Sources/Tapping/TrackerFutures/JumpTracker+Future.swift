@@ -60,9 +60,9 @@ public extension JumpTracker {
     /// Jump at the given time, generating a new JumpStart from the given JumpStart.
     /// Or, simpler: Calculate where the given jump current is at the given time.
     private func advance(jump: JumpStart, whenJumpingAt time: Time, parabola: Polynomial) -> JumpStart {
-        let dTime = time - jump.time
-        let dValue = parabola.at(dTime)
+        let timeDiff = time - jump.time
+        let valueDiff = parabola.at(timeDiff)
 
-        return JumpStart(value: jump.value + dValue, time: jump.time + dTime)
+        return JumpStart(value: jump.value + valueDiff, time: jump.time + timeDiff)
     }
 }

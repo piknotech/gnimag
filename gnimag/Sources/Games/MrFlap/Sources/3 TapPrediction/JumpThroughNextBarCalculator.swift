@@ -23,24 +23,24 @@ struct JumpThroughNextBarCalculator {
     /// Calculate the jump sequence through the next bar.
     /// `currentTime` denotes the current time, after adding possible input+output delays.
     /// Returns `nil` if not all tracker regressions are available.
-    func jumpSequenceThroughNextBar(model: GameModel, performedTaps: [Double], currentTime: Double) -> JumpSequence? {
+    func jumpSequenceThroughNextBar(model: GameModel, performedTaps: [Double], currentTime: Double) -> JumpSequenceFromCurrentPosition? {
         // Find next bar
         guard let nextBar = nextBar(model: model, currentTime: currentTime) else { return nil }
 
         // Convert models
         guard
-            let player = PlayerProperties.from(player: model.player, performedTaps: performedTaps, currentTime: currentTime),
             let jump = JumpingProperties.from(player: model.player),
+            let player = PlayerProperties.from(player: model.player, jumping: jump, performedTaps: performedTaps, currentTime: currentTime),
             let bar = BarProperties.from(bar: nextBar, with: model.player, currentTime: currentTime),
             let playfield = PlayfieldProperties.from(playfield: model.playfield, with: model.player) else { return nil }
 
         // Perform strategies
         let pathThroughBar = noncollidingPathThroughBarStrategy.jumpSequence(through: bar, in: playfield, with: player, jumpProperties: jump)
 
-        let pathToStartingPoint = wayToSpecificPointStrategy.jumpSequence(to: pathThroughBar.start, in: playfield, with: player, jumpProperties: jump)
+        let pathToStartingPoint = wayToSpecificPointStrategy.jumpSequence(to: pathThroughBar.startingPoint, in: playfield, with: player, jumpProperties: jump)
 
         // Concatenate sequences
-        return concatenate(sequence1: pathToStartingPoint, sequence2: pathThroughBar.sequence)
+        return concatenate(sequence1: pathToStartingPoint, sequence2: pathThroughBar)
     }
 
     /// Find the next bar following the current player position (at `currentTime`).
@@ -67,11 +67,14 @@ struct JumpThroughNextBarCalculator {
     }
 
     /// Concatenate two jump sequences.
-    private func concatenate(sequence1: JumpSequence, sequence2: JumpSequence) -> JumpSequence {
-        let times1 = sequence1.jumpTimeDistances
-        let times2 = sequence2.jumpTimeDistances.map { $0 + sequence1.timeFromLastJumpToSequenceFinish }
-        let totalFinishTime = sequence1.timeFromLastJumpToSequenceFinish + sequence2.timeFromLastJumpToSequenceFinish
+    private func concatenate(sequence1: JumpSequenceFromCurrentPosition, sequence2: JumpSequenceFromSpecificPosition) -> JumpSequenceFromCurrentPosition {
+        let timeDistances1 = sequence1.jumpTimeDistances
+        let timeDistances2 = sequence2.jumpTimeDistances.map { $0 + sequence1.timeUntilEnd }
 
-        return JumpSequence(jumpTimeDistances: times1 + times2, timeFromLastJumpToSequenceFinish: totalFinishTime)
+        return JumpSequenceFromCurrentPosition(
+            timeUntilStart: sequence1.timeUntilStart,
+            jumpTimeDistances: timeDistances1 + timeDistances2,
+            timeUntilEnd: sequence2.timeUntilEnd
+        )
     }
 }
