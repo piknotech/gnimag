@@ -20,7 +20,14 @@ public final class ScatterPlot {
 
     /// Create a scatter plot with the given data set.
     /// The scatter plot is black/red (using the given colors) and is drawn on a white background.
-    public init(dataPoints: [ScatterDataPoint], scatterCircleSize: CGFloat = 3, outputImageSize: CGSize? = nil) {
+    public init(
+        dataPoints: [ScatterDataPoint],
+        scatterCircleSize: CGFloat = 3,
+        outputImageSize: CGSize? = nil,
+        xRange: SimpleRange<Double>? = nil,
+        yRange: SimpleRange<Double>? = nil,
+        rangeAugmentation: Double = 5%
+    ) {
         let dataPoints = dataPoints.sorted { $0.x < $1.x }
 
         // Map sorted values to ChartDataEntries
@@ -49,17 +56,21 @@ public final class ScatterPlot {
         view.legend.enabled = false
 
         // Specify exact window (the default margin is too large)
-        if let xMin = dataPoints.first?.x, let xMax = dataPoints.last?.x, let yMin = (dataPoints.min { $0.y < $1.y })?.y, let yMax = (dataPoints.max { $0.y < $1.y })?.y {
-            let xRange = xMax - xMin
-            let yRange = yMax - yMin
-            if xRange > 0 && yRange > 0 { // if exactly 0, use the default window, which fits better
-                view.xAxis.axisMinimum = xMin - 5% * xRange
-                view.xAxis.axisMaximum = xMax + 5% * xRange
-                view.leftAxis.axisMinimum = yMin - 5% * yRange
-                view.leftAxis.axisMaximum = yMax + 5% * yRange
-                view.rightAxis.axisMinimum = yMin - 5% * yRange
-                view.rightAxis.axisMaximum = yMax + 5% * yRange
-            }
+
+        if let xMin = xRange?.lower ?? dataPoints.first?.x,
+            let xMax = xRange?.upper ?? dataPoints.last?.x, xMax > xMin {
+            let dist = xMax - xMin
+            view.xAxis.axisMinimum = xMin - dist * rangeAugmentation
+            view.xAxis.axisMaximum = xMax + dist * rangeAugmentation
+        }
+
+        if let yMin = yRange?.lower ?? (dataPoints.min { $0.y < $1.y })?.y,
+            let yMax = yRange?.upper ?? (dataPoints.max { $0.y < $1.y })?.y, yMax > yMin {
+            let dist = yMax - yMin
+            view.leftAxis.axisMinimum = yMin - dist * rangeAugmentation
+            view.leftAxis.axisMaximum = yMax + dist * rangeAugmentation
+            view.rightAxis.axisMinimum = yMin - dist * rangeAugmentation
+            view.rightAxis.axisMaximum = yMax + dist * rangeAugmentation
         }
 
         // Create BitmapCanvas from the scatter view
