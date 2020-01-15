@@ -18,7 +18,7 @@ public extension SimpleTrackerProtocol {
         }
     }
 
-    /// Two FunctionDebugInfos describing the range of values that are valid in respect to the current regression function and tolerance.
+    /// Two or more FunctionDebugInfos enclosing the range of values that are valid in respect to the current regression function and tolerance.
     /// Nil if regression is nil.
     var toleranceBoundsDebugInfos: [FunctionDebugInfo]? {
         guard let regression = regression else { return nil }
@@ -35,7 +35,7 @@ public extension SimpleTrackerProtocol {
 
         case let .relative(tolerance):
             lower = regression * (1 - tolerance)
-            upper = regression * (1 - tolerance)
+            upper = regression * (1 + tolerance)
         }
 
         return [

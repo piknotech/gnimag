@@ -8,6 +8,8 @@ import Common
 /// To keep calculations as simple as possible, the player is depicted as a point.
 /// Therefore, the playfield and obstacles must be enlarged by the player radius in each direction.
 struct PlayerProperties {
+    let converter: PlayerAngleConverter
+
     /// The position where the last jump started.
     /// Together with the passed time, this gives the exact current player position and velocity.
     let lastJumpStart: Position
@@ -39,6 +41,7 @@ struct PlayerProperties {
         let currentPositionY = jumpStart.y + jumping.parabola.at(passedTimeSinceJumpStart)
 
         return PlayerProperties(
+            converter: converter,
             lastJumpStart: jumpStart,
             timePassedSinceJumpStart: passedTimeSinceJumpStart,
             currentPosition: Position(x: Angle(currentPositionX), y: currentPositionY),

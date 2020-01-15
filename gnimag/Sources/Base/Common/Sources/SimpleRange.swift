@@ -17,6 +17,12 @@ public struct SimpleRange<Bound: FloatingPoint> {
         self.upper = enforceRegularity ? max(lower, upper) : upper
     }
 
+    /// Create a range around a given point with a given size.
+    public init(around center: Bound, diameter: Bound) {
+        self.lower = center - diameter / 2
+        self.upper = center + diameter / 2
+    }
+
     /// The open range, from -inf to +inf.
     public static var open: SimpleRange { .init(from: -.infinity, to: .infinity) }
     public static var positiveHalfOpen: SimpleRange { .init(from: 0, to: .infinity) }

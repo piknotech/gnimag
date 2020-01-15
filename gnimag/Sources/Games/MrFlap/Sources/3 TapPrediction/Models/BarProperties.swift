@@ -10,7 +10,10 @@ import GameKit
 struct BarProperties {
     /// A function getting the angular bar width (in radians) at a given height.
     /// The width is obviously not constant because, when converting from euclidean to angular coordinates, the same length further away from the center point maps to a shorter angle as the same length closer to the center point.
-    let widthAtHeight: (Double) -> Double
+    let angularWidthAtHeight: (Double) -> Double
+
+    /// The inverse of the `angularWidthAtHeight` function.
+    let heightAtAngularWidth: (Double) -> Double
 
     /// The constant vertical size of the moving hole.
     let holeSize: Double
@@ -41,6 +44,11 @@ struct BarProperties {
             2 * tan((width + playerSize) / height) // Extend bar width by player size
         }
 
+        // Inverse of widthAtHeight
+        let heightAtWidth: (Double) -> Double = { x in
+            (width + playerSize) / atan(x / 2)
+        }
+
         // yCenterMovementPortionsForAngularRange implementation
         let yCenterMovement: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion] = { timeRange in
             let angularRange = converter.angleBasedRange(from: timeRange)
@@ -53,6 +61,6 @@ struct BarProperties {
         let angleByTime = converter.angleBasedLinearFunction(from: angleByPlayerAngle)
         let currentAngle = Angle(angleByTime.at(currentTime))
 
-        return BarProperties(widthAtHeight: widthAtHeight, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: angleByTime.slope, xPosition: currentAngle)
+        return BarProperties(angularWidthAtHeight: widthAtHeight, heightAtAngularWidth: heightAtWidth, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: angleByTime.slope, xPosition: currentAngle)
     }
 }

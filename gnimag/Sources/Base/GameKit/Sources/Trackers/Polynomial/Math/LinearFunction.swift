@@ -15,6 +15,13 @@ public struct LinearFunction: Function {
         self.intercept = intercept
     }
 
+    /// Create a LinearFunction going through two points.
+    /// The x values must be different.
+    public init(through point1: (x: Value, y: Value), and point2: (x: Value, y: Value)) {
+        slope = (point1.y - point2.y) / (point1.x - point2.x)
+        intercept = point1.y - slope * point1.x
+    }
+
     /// Calculate the value at a given point.
     public func at(_ x: Self.Value) -> Self.Value {
         slope * x + intercept

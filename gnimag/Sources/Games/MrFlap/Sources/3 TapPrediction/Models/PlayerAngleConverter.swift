@@ -28,6 +28,12 @@ struct PlayerAngleConverter {
         )
     }
 
+    /// The identity converter, doing nothing.
+    static var identity: PlayerAngleConverter {
+        let id = LinearFunction(slope: 1, intercept: 0)
+        return PlayerAngleConverter(timeToAngle: id, angleToTime: id)
+    }
+
     // MARK: Value Conversion
 
     func angle(from time: Time) -> Angle {
