@@ -15,19 +15,20 @@ public extension BasicLinearPingPongTracker {
         /// This range is always regular, regardless of the time direction.
         public let timeRange: SimpleRange<Time>
 
-        /// The linear function.
-        public let function: Polynomial
+        /// The line.
+        public let line: LinearFunction
 
         /// Default initializer.
-        public init(index: Int, timeRange: SimpleRange<Time>, function: Polynomial) {
+        public init(index: Int, timeRange: SimpleRange<Time>, line: LinearFunction) {
             self.index = index
             self.timeRange = timeRange
-            self.function = function
+            self.line = line
         }
     }
 
     /// Calculate the segment portions that will be passed during a given time range in the future.
     /// When time is inverted, the time range should also be inverted, i.e. `lower > upper`.
+    /// The range must not be singular!
     /// `guesses` provides guesses for the tracker's lower and upper bounds when they are not yet determined.
     func segmentPortionsForFutureTimeRange(_ timeRange: SimpleRange<Time>, guesses: (lowerBound: Double, upperBound: Double)) -> [LinearSegmentPortion]? {
         guard let properties = requiredProperties(guesses: guesses) else { return nil }
@@ -83,20 +84,42 @@ public extension BasicLinearPingPongTracker {
         // Calculate the duration each segment takes
         let segmentDuration = (upperBound - lowerBound) / slope
 
-        // Create starting point for future calculations (find latest useful segment)
-        let allSegments = [currentSegment!] + finalizedSegments.reversed()
-
-        guard
-            let goodSegment = (allSegments.first { $0.supposedStartTime != nil }),
-            let direction = direction(for: goodSegment.index) else { return nil }
-
-        let startingPoint = RequiredProperties.StartingPointForFutureCalculations(segment: goodSegment, startTime: goodSegment.supposedStartTime!, direction: direction)
-
-        // Get time direction
-        guard let timeDirection = monotonicityChecker.direction.intValue else { return nil }
+        // Get starting point and time direction
+        guard let startingPoint = startingPoint(lowerBound: lowerBound, upperBound: upperBound),
+            let timeDirection = monotonicityChecker.direction.intValue else { return nil }
 
         // Collect everything
         return RequiredProperties(slope: slope, lowerBound: lowerBound, upperBound: upperBound, segmentDuration: segmentDuration, timeDirection: timeDirection, startingPoint: startingPoint)
+    }
+
+    /// Create a starting point for the following calculations; i.e. find the last useful segment.
+    private func startingPoint(lowerBound: Double, upperBound: Double) -> RequiredProperties.StartingPointForFutureCalculations? {
+        let allSegments = finalizedSegments + [currentSegment!]
+
+        // Try finding a good segment with a start time
+        var goodSegment: Segment?
+        var supposedStartTime: Double?
+
+        // Plan A: use latest segment which has an actual supposedStartTime
+        if let segment = (allSegments.last { $0.supposedStartTime != nil }) {
+            goodSegment = segment
+            supposedStartTime = segment.supposedStartTime!
+        }
+
+        // Plan B: use last segment with regression and approximate the start time by intersecting with the upper or lower bound
+        else if let lastSegment = (allSegments.last { $0.tracker.hasRegression }), let direction = direction(for: lastSegment.index), let line = lastSegment.tracker.regression {
+            // Solve line(x) = upperBound (or lowerBound)
+            let bound = (direction == .up) ? lowerBound : upperBound
+
+            if let startTime = LinearSolver.zero(of: line + (-bound)) {
+                goodSegment = lastSegment
+                supposedStartTime = startTime
+            }
+        }
+
+        guard let segment = goodSegment, let startTime = supposedStartTime, let direction = direction(for: segment.index) else { return nil }
+
+        return RequiredProperties.StartingPointForFutureCalculations(segment: segment, startTime: startTime, direction: direction)
     }
 
     // MARK: Future Segments
@@ -107,25 +130,31 @@ public extension BasicLinearPingPongTracker {
         // Intersect regularized time ranges
         let regularTimeRange = segmentTimeRange(index: index, properties: properties).regularized
         let regularMaximalRange = maximalTimeRange.regularized
-        let intersection = regularTimeRange.intersection(with: regularMaximalRange)
+        var intersection = regularTimeRange.intersection(with: regularMaximalRange)
         if intersection.isSinglePoint { return nil }
+
+        // De-regularize range, if required, to go back to the original range direction
+        if properties.timeDirection < 0 {
+            intersection = SimpleRange(from: intersection.upper, to: intersection.lower)
+        }
 
         // Calculate segment function
         let function = segmentFunction(index: index, properties: properties)
-        return LinearSegmentPortion(index: index, timeRange: intersection, function: function)
+        return LinearSegmentPortion(index: index, timeRange: intersection, line: function)
     }
 
     /// Calculate the linear function for a future segment with the given index.
-    private func segmentFunction(index: Int, properties: RequiredProperties) -> Polynomial {
+    private func segmentFunction(index: Int, properties: RequiredProperties) -> LinearFunction {
         let timeRange = segmentTimeRange(index: index, properties: properties)
         let startTime = timeRange.lower
         let startValue = (direction(for: index) == .up) ? properties.lowerBound : properties.upperBound
 
         // Calculate segment function
-        let slope = (direction(for: index) == .up) ? +properties.slope : -properties.slope
+        let sign = Double(properties.timeDirection) * (direction(for: index) == .up ? +1 : -1)
+        let slope = sign * properties.slope
         let intercept = startValue - slope * startTime
 
-        return Polynomial([intercept, slope])
+        return LinearFunction(slope: slope, intercept: intercept)
     }
 
     /// Calculate the time range a future segment will have.

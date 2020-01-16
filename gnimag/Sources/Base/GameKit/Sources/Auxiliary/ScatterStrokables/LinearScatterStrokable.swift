@@ -25,8 +25,11 @@ public struct LinearScatterStrokable: ScatterStrokable {
 
      /// Return the concrete strokable for drawing onto a specific ScatterPlot.
     public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let x1 = max(drawingRange.lower, Double(scatterPlot.dataContentRect.minX))
-        let x2 = min(drawingRange.upper, Double(scatterPlot.dataContentRect.maxX))
+        let bounds = drawingRange.intersection(with: scatterPlot.dataContentXRange)
+        if bounds.isEmpty { return EmptyStrokable() }
+        
+        let x1 = bounds.lower
+        let x2 = bounds.upper
         let y1 = line.at(x1), y2 = line.at(x2)
 
         // Convert into scatter plot space
@@ -34,5 +37,11 @@ public struct LinearScatterStrokable: ScatterStrokable {
         let point2 = scatterPlot.pixelPosition(of: (x2, y2))
 
         return LineSegment(from: point1, to: point2)
+    }
+}
+
+/// A Strokable which does nothing.
+internal struct EmptyStrokable: Strokable {
+    func stroke(onto context: CGContext) {
     }
 }

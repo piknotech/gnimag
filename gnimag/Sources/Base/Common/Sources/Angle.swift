@@ -10,7 +10,11 @@ public struct Angle {
 
     /// Default initializer, using a Double value. A modulo-2-pi is applied to the value.
     public init(_ value: Double) {
-        self.value = value.truncatingRemainder(dividingBy: 2 * .pi)
+        var modulo = value.truncatingRemainder(dividingBy: 2 * .pi)
+
+        // The result of `truncatingRemainder` is negative for negative values; in this case, add 2pi
+        if modulo < 0 { modulo += 2 * .pi }
+        self.value = modulo
     }
 
     /// Default initializer, using a CGFloat value. A modulo-2-pi is applied to the value.

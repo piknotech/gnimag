@@ -96,6 +96,11 @@ public final class ScatterPlot {
         canvas.stroke(strokable, with: color, alpha: alpha, strokeWidth: strokeWidth, dash: dash)
     }
 
+    /// The x range of `dataContentRect`.
+    public var dataContentXRange: SimpleRange<Double> {
+        SimpleRange(from: Double(dataContentRect.minX), to: Double(dataContentRect.maxX))
+    }
+
     /// The drawing area of the plot, in data point space.
     public var dataContentRect: CGRect {
          // Avoid returning an empty or invalid rect

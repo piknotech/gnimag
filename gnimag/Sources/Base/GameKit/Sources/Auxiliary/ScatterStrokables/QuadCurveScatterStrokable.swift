@@ -29,8 +29,11 @@ public struct QuadCurveScatterStrokable: ScatterStrokable {
 
      /// Return the concrete strokable for drawing onto a specific ScatterPlot.
     public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let x1 = max(drawingRange.lower, Double(scatterPlot.dataContentRect.minX))
-        let x3 = min(drawingRange.upper, Double(scatterPlot.dataContentRect.maxX))
+        let bounds = drawingRange.intersection(with: scatterPlot.dataContentXRange)
+        if bounds.isEmpty { return EmptyStrokable() }
+
+        let x1 = bounds.lower
+        let x3 = bounds.upper
         let y1 = parabola.at(x1), y3 = parabola.at(x3)
 
         // Find intersection point of the tangents at (x1, y1) and (x3, y3)

@@ -136,16 +136,16 @@ struct PlayerAngleConverter {
     /// Convert a LinearSegmentPortion whose argument is time into the same LinearSegmentPortion whose argument is angle.
     func angleBasedLinearSegmentPortion(from portion: LinearPortion) -> LinearPortion {
         let timeRange = angleBasedRange(from: portion.timeRange)
-        let function = angleBasedPolynomial(from: portion.function)
+        let line = angleBasedLinearFunction(from: portion.line)
 
-        return LinearPortion(index: portion.index, timeRange: timeRange, function: function)
+        return LinearPortion(index: portion.index, timeRange: timeRange, line: line)
     }
 
     /// Convert a LinearSegmentPortion whose argument is angle into the same LinearSegmentPortion whose argument is time.
     func timeBasedLinearSegmentPortion(from portion: LinearPortion) -> LinearPortion {
         let timeRange = timeBasedRange(from: portion.timeRange)
-        let function = timeBasedPolynomial(from: portion.function)
+        let line = timeBasedLinearFunction(from: portion.line)
 
-        return LinearPortion(index: portion.index, timeRange: timeRange, function: function)
+        return LinearPortion(index: portion.index, timeRange: timeRange, line: line)
     }
 }

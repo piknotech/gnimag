@@ -65,6 +65,7 @@ public struct SimpleRange<Bound: FloatingPoint> {
 
     /// Intersect this range with another range.
     /// Only works when `isEmpty = false`.
+    /// Returns an empty range if there is no intersection.
     public func intersection(with other: SimpleRange<Bound>) -> SimpleRange<Bound> {
         return SimpleRange(from: max(lower, other.lower), to: min(upper, other.upper))
     }
