@@ -62,18 +62,9 @@ struct BarScatterStrokable: ScatterStrokable {
             return self.bar.heightAtAngularWidth(angularWidth)
         }
 
-        let leftLine = ArbitraryFunctionScatterStrokable(function: BlockFunction(block: heightAtX), drawingRange: leftRange, interpolationPoints: 20)
-        let rightLine = ArbitraryFunctionScatterStrokable(function: BlockFunction(block: heightAtX), drawingRange: rightRange, interpolationPoints: 20)
+        let leftLine = ArbitraryFunctionScatterStrokable(function: FunctionWrapper(heightAtX), drawingRange: leftRange, interpolationPoints: 20)
+        let rightLine = ArbitraryFunctionScatterStrokable(function: FunctionWrapper(heightAtX), drawingRange: rightRange, interpolationPoints: 20)
 
         return [leftLine, rightLine]
-    }
-}
-
-/// A Function which is defined by a closure.
-fileprivate struct BlockFunction: Function {
-    let block: (Value) -> Value
-
-    func at(_ x: Self.Value) -> Self.Value {
-        block(x)
     }
 }

@@ -19,6 +19,7 @@ public protocol ScalarFunctionArithmetic: Function {
     func shiftedLeft(by amount: Double) -> Self
 }
 
+/// DifferentiableFunctions provide a derivative function.
 public protocol DifferentiableFunction: Function {
     var derivative: Function { get }
 }
