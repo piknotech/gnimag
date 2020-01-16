@@ -45,7 +45,7 @@ struct JumpingProperties {
             let parabola = player.height.parabola else { return nil }
 
         // Convert from player-angle time system into real time system
-        let timeParabola = converter.timeBasedPolynomial(from: parabola)
+        let timeParabola = converter.timeBasedPolynomialIgnoringIntercept(from: parabola)
 
         return JumpingProperties(parabola: timeParabola)
     }

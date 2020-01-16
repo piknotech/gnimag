@@ -36,10 +36,12 @@ struct PlayerAngleConverter {
 
     // MARK: Value Conversion
 
+    /// Convert a time value into an angular value.
     func angle(from time: Time) -> Angle {
         timeToAngle.at(time)
     }
 
+    /// Convert an angular value into a time value.
     func time(from angle: Angle) -> Time {
         angleToTime.at(angle)
     }
@@ -66,12 +68,26 @@ struct PlayerAngleConverter {
 
     /// Convert a polynomial whose argument is time into the same polynomial whose argument is angle.
     func angleBasedPolynomial(from polynomial: Polynomial) -> Polynomial {
-        linearTransform(polynomial: polynomial, by: angleToTime) // TODO: WRONG DIRECTION!!??
+        linearTransform(polynomial: polynomial, by: angleToTime)
     }
 
     /// Convert a polynomial whose argument is angle into the same polynomial whose argument is time.
     func timeBasedPolynomial(from polynomial: Polynomial) -> Polynomial {
         linearTransform(polynomial: polynomial, by: timeToAngle)
+    }
+
+    /// Convert a polynomial whose argument is time into the same polynomial whose argument is angle.
+    /// Here, the intercept of the conversion function is ignored. This is useful for keeping properties like the function going through the origin.
+    func angleBasedPolynomialIgnoringIntercept(from polynomial: Polynomial) -> Polynomial {
+        let valueTransform = LinearFunction(slope: angleToTime.slope, intercept: 0)
+        return linearTransform(polynomial: polynomial, by: valueTransform)
+    }
+
+    /// Convert a polynomial whose argument is angle into the same polynomial whose argument is time.
+    /// Here, the intercept of the conversion function is ignored. This is useful for keeping properties like the function going through the origin.
+    func timeBasedPolynomialIgnoringIntercept(from polynomial: Polynomial) -> Polynomial {
+        let valueTransform = LinearFunction(slope: timeToAngle.slope, intercept: 0)
+        return linearTransform(polynomial: polynomial, by: valueTransform)
     }
 
     /// Transform the polynomial f linearly, such that g(x) = f(slope * x + intercept).

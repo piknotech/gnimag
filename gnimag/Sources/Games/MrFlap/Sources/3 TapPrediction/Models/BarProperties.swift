@@ -41,12 +41,12 @@ struct BarProperties {
 
         // widthAtHeight implementation
         let widthAtHeight: (Double) -> Double = { height in
-            2 * tan((width + playerSize) / height) // Extend bar width by player size
+            2 * tan(0.5 * (width + playerSize) / height) // Extend bar width by player size
         }
 
         // Inverse of widthAtHeight
         let heightAtWidth: (Double) -> Double = { x in
-            (width + playerSize) / atan(x / 2)
+            0.5 * (width + playerSize) / atan(x / 2)
         }
 
         // yCenterMovementPortionsForAngularRange implementation
@@ -58,7 +58,7 @@ struct BarProperties {
         }
 
         // Get speed and current position
-        let angleByTime = converter.angleBasedLinearFunction(from: angleByPlayerAngle)
+        let angleByTime = converter.timeBasedLinearFunction(from: angleByPlayerAngle)
         let currentAngle = Angle(angleByTime.at(currentTime))
 
         return BarProperties(angularWidthAtHeight: widthAtHeight, heightAtAngularWidth: heightAtWidth, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: angleByTime.slope, xPosition: currentAngle)

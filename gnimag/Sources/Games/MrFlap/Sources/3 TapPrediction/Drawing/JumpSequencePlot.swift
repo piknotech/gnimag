@@ -80,4 +80,3 @@ final class JumpSequencePlot {
         plot.stroke(strokable, with: .normal, alpha: 1, strokeWidth: 1, dash: Dash(on: 1, off: 1))
     }
 }
-}

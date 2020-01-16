@@ -18,20 +18,20 @@ struct BarScatterStrokable: ScatterStrokable {
         // Calculate when the bar will be hit by the player
         let speed = player.xSpeed - bar.xSpeed
         let distanceToBar = player.currentPosition.x.directedDistance(to: bar.xPosition, direction: speed)
-        let barCenterTime = distanceToBar / speed
+        let barCenterTime = distanceToBar / abs(speed) 
 
         // Outer bar lines
-        let outerLines = outerBarLines(barCenterTime: barCenterTime)
-        let outerCurves = outerBarCurves(barCenterTime: barCenterTime)
+        let outerLines = outerBarLines(barCenterTime: barCenterTime, totalSpeed: abs(speed))
+        let outerCurves = outerBarCurves(barCenterTime: barCenterTime, totalSpeed: abs(speed))
         let components = outerLines + outerCurves
 
         return MultiScatterStrokable(components: components).concreteStrokable(for: scatterPlot)
     }
 
     /// Create the two lines enclosing the bar from the left and the right.
-    private func outerBarLines(barCenterTime: Double) -> [ScatterStrokable] {
-        let upperWidth = player.converter.time(from: bar.angularWidthAtHeight(playfield.upperRadius))
-        let lowerWidth = player.converter.time(from: bar.angularWidthAtHeight(playfield.lowerRadius))
+    private func outerBarLines(barCenterTime: Double, totalSpeed: Double) -> [ScatterStrokable] {
+        let upperWidth = bar.angularWidthAtHeight(playfield.upperRadius) / totalSpeed
+        let lowerWidth = bar.angularWidthAtHeight(playfield.lowerRadius) / totalSpeed
 
         // Calculate left and right end points
         let left1 = (x: barCenterTime - upperWidth / 2, y: playfield.upperRadius)
@@ -47,9 +47,9 @@ struct BarScatterStrokable: ScatterStrokable {
     }
 
     /// Create the two curves enclosing the bar from the left and the right.
-    private func outerBarCurves(barCenterTime: Double) -> [ScatterStrokable] {
-        let upperWidth = player.converter.time(from: bar.angularWidthAtHeight(playfield.upperRadius))
-        let lowerWidth = player.converter.time(from: bar.angularWidthAtHeight(playfield.lowerRadius))
+    private func outerBarCurves(barCenterTime: Double, totalSpeed: Double) -> [ScatterStrokable] {
+        let upperWidth = bar.angularWidthAtHeight(playfield.upperRadius) / totalSpeed
+        let lowerWidth = bar.angularWidthAtHeight(playfield.lowerRadius) / totalSpeed
 
         // Calculate left and right end points
         let leftRange = SimpleRange(from: barCenterTime - upperWidth / 2, to: barCenterTime - lowerWidth / 2, enforceRegularity: true)
@@ -57,8 +57,8 @@ struct BarScatterStrokable: ScatterStrokable {
 
         // Bar height at a given time-value
         let heightAtX: (Double) -> Double = { x in
-            let timeWidth = 2 * abs(x - barCenterTime)
-            let angularWidth = self.player.converter.angle(from: timeWidth)
+            let timeWidth = 2 * abs(x -  barCenterTime)
+            let angularWidth = totalSpeed * timeWidth
             return self.bar.heightAtAngularWidth(angularWidth)
         }
 
