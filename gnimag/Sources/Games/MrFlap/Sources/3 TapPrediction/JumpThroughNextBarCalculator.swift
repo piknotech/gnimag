@@ -24,14 +24,10 @@ struct JumpThroughNextBarCalculator {
     /// `currentTime` denotes the current time, after adding possible input+output delays.
     /// Returns `nil` if not all tracker regressions are available.
     func jumpSequenceThroughNextBar(model: GameModel, performedTaps: [Double], currentTime: Double) -> JumpSequenceFromCurrentPosition? {
-        // Find next bar
-        guard let nextBar = nextBar(model: model, currentTime: currentTime) else { return nil }
-
         // Convert models
         guard
             let jump = JumpingProperties.from(player: model.player),
             let player = PlayerProperties.from(player: model.player, jumping: jump, performedTaps: performedTaps, currentTime: currentTime),
-            let bar = BarProperties.from(bar: nextBar, with: model.player, currentTime: currentTime),
             let playfield = PlayfieldProperties.from(playfield: model.playfield, with: model.player) else { return nil }
 
         // Perform strategies
@@ -44,25 +40,21 @@ struct JumpThroughNextBarCalculator {
     }
 
     /// Find the next bar following the current player position (at `currentTime`).
-    private func nextBar(model: GameModel, currentTime: Double) -> BarCourse? {
-        // Get player position and running direction
-        guard let _playerAngle = model.player.angle.regression?.at(currentTime) else { return nil }
-        guard let runningDirection = model.player.angle.tracker.slope else { return nil } // Assumes bars and players do not move in the same direction
-        let playerAngle = Angle(_playerAngle)
-
-        // Get bar-angle pairs
-        let angles = model.bars.map { $0.angle.regression?.at(currentTime) }
-        let barsAndAngles = zip(model.bars, angles)
-
-        // Remove nil-angles
-        let validBarsAndAngles: [(bar: BarCourse, angle: Angle)] = barsAndAngles.compactMap { bar, angle in
-            guard let angle = angle else { return nil }
-            return (bar, Angle(angle))
+    private func nextBar(model: GameModel, player: PlayerProperties, currentTime: Double) -> BarProperties? {
+        let bars = model.bars.compactMap { course in
+            BarProperties.from(bar: course, with: model.player, currentTime: currentTime)
         }
 
-        // Return bar which is nearest to the player position, in respect to the running direction
-        return validBarsAndAngles.min { (pair1, pair2) in
-            playerAngle.directedDistance(to: pair1.angle, direction: runningDirection) < playerAngle.directedDistance(to: pair2.angle, direction: runningDirection)
+        // Calculate directed distance from player to each bar
+        let angularDistances = bars.map { bar -> Double in
+            let speed = player.xSpeed - bar.xSpeed
+            return player.currentPosition.x.directedDistance(to: bar.xPosition, direction: speed)
+        }
+
+        // Return nearest bar
+        let zipped: [(bar: BarProperties, distance: Double)] = Array(zip(bars, angularDistances))
+        return zipped.min { (pair1, pair2) in
+            pair1.distance < pair2.distance
         }?.bar
     }
 
