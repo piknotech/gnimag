@@ -19,7 +19,8 @@ struct BarProperties {
     let holeSize: Double
 
     /// A function mapping a time range to the movement that is performed by the bar's yCenter during that range.
-    let yCenterMovementPortionsForAngularRange: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion]
+    /// The yCenter is translated into playfield coordinate system (adding the lower playfield radius).
+    let yCenterMovementPortionsForTimeRange: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion]
 
     /// Angular horizontal speed (in radians per second).
     let xSpeed: Double
@@ -30,7 +31,7 @@ struct BarProperties {
     // MARK: Conversion
 
     /// Convert a bar tracker into BarProperties.
-    static func from(bar: BarCourse, with player: PlayerCourse, currentTime: Double) -> BarProperties? {
+    static func from(bar: BarCourse, with player: PlayerCourse, playfield: PlayfieldProperties, currentTime: Double) -> BarProperties? {
         guard let converter = PlayerAngleConverter.from(player: player) else { return nil }
 
         guard
@@ -49,18 +50,24 @@ struct BarProperties {
             0.5 * (width + playerSize) / atan(x / 2)
         }
 
-        // yCenterMovementPortionsForAngularRange implementation
+        // yCenterMovementPortionsForTimeRange implementation
         let yCenterMovement: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion] = { timeRange in
             let angularRange = converter.angleBasedRange(from: timeRange)
             let guesses = BarCourse.momventBoundCollector.guesses(for: bar)
             let result = bar.yCenter.segmentPortionsForFutureTimeRange(angularRange, guesses: guesses) ?? []
-            return result.map(converter.timeBasedLinearSegmentPortion)
+            let timeBasedResult = result.map(converter.timeBasedLinearSegmentPortion)
+
+            // Convert into playfield coordinate system
+            return timeBasedResult.map { portion in
+                let newLine = portion.line + playfield.offsetToBarCoordinateSystem
+                return BasicLinearPingPongTracker.LinearSegmentPortion(index: portion.index, timeRange: portion.timeRange, line: newLine)
+            }
         }
 
         // Get speed and current position
         let angleByTime = converter.timeBasedLinearFunction(from: angleByPlayerAngle)
         let currentAngle = Angle(angleByTime.at(currentTime))
 
-        return BarProperties(angularWidthAtHeight: widthAtHeight, heightAtAngularWidth: heightAtWidth, holeSize: holeSize, yCenterMovementPortionsForAngularRange: yCenterMovement, xSpeed: angleByTime.slope, xPosition: currentAngle)
+        return BarProperties(angularWidthAtHeight: widthAtHeight, heightAtAngularWidth: heightAtWidth, holeSize: holeSize, yCenterMovementPortionsForTimeRange: yCenterMovement, xSpeed: angleByTime.slope, xPosition: currentAngle)
     }
 }

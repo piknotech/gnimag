@@ -9,6 +9,9 @@ struct PlayfieldProperties {
     let lowerRadius: Double
     let upperRadius: Double
 
+    /// The offset to the intrinsic bar coordinate system in which the bar's yCenter is defined.
+    let offsetToBarCoordinateSystem: Double
+
     // MARK: Conversion
 
     /// Convert a playfield into PlayfieldProperties.
@@ -17,7 +20,8 @@ struct PlayfieldProperties {
 
         return PlayfieldProperties(
             lowerRadius: playfield.innerRadius + size / 2,
-            upperRadius: playfield.fullRadius - size / 2
+            upperRadius: playfield.fullRadius - size / 2,
+            offsetToBarCoordinateSystem: playfield.innerRadius
         )
     }
 }

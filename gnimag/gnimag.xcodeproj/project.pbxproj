@@ -101,6 +101,8 @@
 		6316BDB523CB8D430062100F /* JumpSequencePlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */; };
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
+		632696B123D0CA39009FE1E0 /* PlayerBarInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */; };
+		632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */; };
 		632AC97B23B93A53002743D1 /* TapPredictionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AC97A23B93A53002743D1 /* TapPredictionQueue.swift */; };
 		6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */; };
 		6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */; };
@@ -309,6 +311,8 @@
 		6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequencePlot.swift; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
+		632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBarInteraction.swift; sourceTree = "<group>"; };
+		632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerBarInteraction+Conversion.swift"; sourceTree = "<group>"; };
 		632AC97A23B93A53002743D1 /* TapPredictionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictionQueue.swift; sourceTree = "<group>"; };
 		6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuousPingPongTracker.swift; sourceTree = "<group>"; };
 		6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicLinearPingPongTracker.swift; sourceTree = "<group>"; };
@@ -1124,6 +1128,7 @@
 				6318966923B4C8B4002FBD4F /* TapPredictor.swift */,
 				636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */,
 				639C745323BB66A0005FD354 /* Models */,
+				632696B223D0CA45009FE1E0 /* Helpers */,
 				639C745223BB667F005FD354 /* Strategies */,
 				6316BDB223CB8CB90062100F /* Drawing */,
 			);
@@ -1139,6 +1144,14 @@
 				636BCC1C23C4DA3F00A3BE26 /* TrackerFutures */,
 			);
 			path = Tapping;
+			sourceTree = "<group>";
+		};
+		632696B223D0CA45009FE1E0 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		63351A50234B4EB300E42762 /* Simple */ = {
@@ -1283,7 +1296,8 @@
 				639C745423BB66DF005FD354 /* JumpingProperties.swift */,
 				634567FB23BB761F00D32053 /* PlayerProperties.swift */,
 				634567FD23BB7B5A00D32053 /* PlayfieldProperties.swift */,
-				6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */,
+				632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */,
+				632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1969,6 +1983,7 @@
 				631213FC23257F4000C126B4 /* AnalysisHints.swift in Sources */,
 				637FCB4B2391AA0C0067BBCC /* DebugLogger.swift in Sources */,
 				637B56A723CE7FDE007E51B0 /* BarScatterStrokable.swift in Sources */,
+				632696B123D0CA39009FE1E0 /* PlayerBarInteraction.swift in Sources */,
 				631213F723257F4000C126B4 /* ImageAnalyzer.swift in Sources */,
 				631213FA23257F4000C126B4 /* Coloring.swift in Sources */,
 				6345680223BB955700D32053 /* JumpingProperties.swift in Sources */,
@@ -1988,6 +2003,7 @@
 				6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */,
 				636BCC1923BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift in Sources */,
 				637B56A523CE3618007E51B0 /* JumpSequencePlot+Jump.swift in Sources */,
+				632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */,
 				63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */,
 				631213FB23257F4000C126B4 /* Player.swift in Sources */,
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,

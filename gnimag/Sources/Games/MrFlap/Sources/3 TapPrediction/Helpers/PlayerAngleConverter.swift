@@ -77,16 +77,16 @@ struct PlayerAngleConverter {
     }
 
     /// Convert a polynomial whose argument is time into the same polynomial whose argument is angle.
-    /// Here, the intercept of the conversion function is ignored. This is useful for keeping properties like the function going through the origin.
+    /// Here, the intercept of the conversion function is ignored, just coefficient multiplication is performed. This retains the value of the function at 0.
     func angleBasedPolynomialIgnoringIntercept(from polynomial: Polynomial) -> Polynomial {
-        let valueTransform = LinearFunction(slope: angleToTime.slope, intercept: 0)
+        let valueTransform = angleToTime + (-angleToTime.intercept)
         return linearTransform(polynomial: polynomial, by: valueTransform)
     }
 
     /// Convert a polynomial whose argument is angle into the same polynomial whose argument is time.
-    /// Here, the intercept of the conversion function is ignored. This is useful for keeping properties like the function going through the origin.
+    /// Here, the intercept of the conversion function is ignored, just coefficient multiplication is performed. This retains the value of the function at 0.
     func timeBasedPolynomialIgnoringIntercept(from polynomial: Polynomial) -> Polynomial {
-        let valueTransform = LinearFunction(slope: timeToAngle.slope, intercept: 0)
+        let valueTransform = timeToAngle + (-timeToAngle.intercept)
         return linearTransform(polynomial: polynomial, by: valueTransform)
     }
 

@@ -46,7 +46,8 @@ public struct SimpleRange<Bound: FloatingPoint> {
     }
 
     /// Negate the range in the following sense:
-    /// [a, b] -> [-b, -a].
+    /// `[a, b] -> [-b, -a]`.
+    /// The regularity of the new range is identical with the regularity of this range.
     public var negated: SimpleRange<Bound> {
         return SimpleRange(from: -upper, to: -lower)
     }
@@ -64,10 +65,19 @@ public struct SimpleRange<Bound: FloatingPoint> {
     }
 
     /// Intersect this range with another range.
-    /// Only works when `isEmpty = false`.
+    /// Only works when both ranges are not empty.
     /// Returns an empty range if there is no intersection.
+    /// Use `.open` as the neutral element.
     public func intersection(with other: SimpleRange<Bound>) -> SimpleRange<Bound> {
         return SimpleRange(from: max(lower, other.lower), to: min(upper, other.upper))
+    }
+
+    /// Return the smallest ranges containing every element in both ranges.
+    /// If the ranges overlap, this is the union of both ranges.
+    /// Only works when both ranges are not empty.
+    /// Use `SimpleRange(from: .infinity, to: -.infinity)` as the neutral element.
+    public func pseudoUnion(with other: SimpleRange<Bound>) -> SimpleRange<Bound> {
+        return SimpleRange(from: min(lower, other.lower), to: max(upper, other.upper))
     }
 
     /// Clamp the element to [lower, upper].
