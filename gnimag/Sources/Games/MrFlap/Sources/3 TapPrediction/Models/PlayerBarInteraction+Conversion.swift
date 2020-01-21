@@ -96,8 +96,7 @@ extension PlayerBarInteraction {
                 }
 
                 // Perform approximate intersection
-                // ...
-                return nil
+                return BisectionSolver.intersection(of: curve.function, and: line, in: intersectionRange)
             }
 
             // Calculate interseting range
