@@ -74,9 +74,9 @@ final class JumpSequencePlot {
         plot.writeToDesktop(name: name)
     }
 
-    /// Draw the given bar.
-    func draw(bar: BarProperties) {
-        let strokable = BarScatterStrokable(bar: bar, player: player, playfield: playfield)
+    /// Draw the bar defined by the given interaction.
+    func draw(interaction: PlayerBarInteraction, currentTime: Double) {
+        let strokable = BarScatterStrokable(interaction: interaction)
         plot.stroke(strokable, with: .normal, alpha: 1, strokeWidth: 1, dash: Dash(on: 1, off: 1))
     }
 }

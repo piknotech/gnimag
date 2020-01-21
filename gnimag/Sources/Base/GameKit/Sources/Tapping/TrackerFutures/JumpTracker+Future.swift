@@ -30,8 +30,7 @@ public extension JumpTracker {
         let smaller: (Time, Time) -> Bool = (direction > 0) ? (<) : (>)
         let smallerEqual: (Time, Time) -> Bool = (direction > 0) ? (<=) : (>=)
 
-
-        // Remove irrelevant (too much in the past) time values
+        // Remove irrelevant (too far in the past) time values
         var times = times.sorted(by: smaller)
         times.dropWhile { smallerEqual($0, initialJump.time + overlapTolerance) }
 

@@ -79,7 +79,7 @@ struct PlayerBarInteraction {
             let upper: LinearMovement // upper = center + 0.5 * holeSize
 
             struct LinearMovement {
-                let line: Function
+                let line: LinearFunction
 
                 /// The range during which the movement is relevant; i.e. this range is always inside `fullInteractionRange`.
                 /// Is nil if the line is not relevant at all.

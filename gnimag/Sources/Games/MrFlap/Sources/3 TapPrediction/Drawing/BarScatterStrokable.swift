@@ -7,64 +7,45 @@ import Common
 import GameKit
 import TestingTools
 
-/// BarScatterStrokable strokes a bar.
+/// BarScatterStrokable strokes a `PlayerBarInteraction` onto a time/height-plot (like JumpSequencePlot).
 struct BarScatterStrokable: ScatterStrokable {
-    let bar: BarProperties
-    let player: PlayerProperties
-    let playfield: PlayfieldProperties
+    let interaction: PlayerBarInteraction
 
     /// Return a MultiStrokable consisting of multiple lines and curves.
     func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        // Calculate when the bar will be hit by the player
-        let speed = player.xSpeed - bar.xSpeed
-        let distanceToBar = player.currentPosition.x.directedDistance(to: bar.xPosition, direction: speed)
-        let barCenterTime = distanceToBar / abs(speed) 
+        // Bounds curves
+        let left = interaction.boundsCurves.left.scatterStrokable
+        let right = interaction.boundsCurves.right.scatterStrokable
 
-        // Outer bar lines
-        let outerLines = outerBarLines(barCenterTime: barCenterTime, totalSpeed: abs(speed))
-        let outerCurves = outerBarCurves(barCenterTime: barCenterTime, totalSpeed: abs(speed))
-        let components = outerLines + outerCurves
+        // Movement sections
+        let sections = interaction.holeMovement.sections.flatMap { $0.boundaryStrokables }
 
-        return MultiScatterStrokable(components: components).concreteStrokable(for: scatterPlot)
+        let all = [left, right] + sections
+        return MultiScatterStrokable(components: all).concreteStrokable(for: scatterPlot)
     }
+}
 
-    /// Create the two lines enclosing the bar from the left and the right.
-    private func outerBarLines(barCenterTime: Double, totalSpeed: Double) -> [ScatterStrokable] {
-        let upperWidth = bar.angularWidthAtHeight(playfield.upperRadius) / totalSpeed
-        let lowerWidth = bar.angularWidthAtHeight(playfield.lowerRadius) / totalSpeed
+// MARK: Extensions for Creating ScatterStrokables
 
-        // Calculate left and right end points
-        let left1 = (x: barCenterTime - upperWidth / 2, y: playfield.upperRadius)
-        let left2 = (x: barCenterTime - lowerWidth / 2, y: playfield.lowerRadius)
-
-        let right1 = (x: barCenterTime + upperWidth / 2, y: playfield.upperRadius)
-        let right2 = (x: barCenterTime + lowerWidth / 2, y: playfield.lowerRadius)
-
-        let leftLine = LinearScatterStrokable(line: LinearFunction(through: left1, and: left2), drawingRange: SimpleRange(from: left1.x, to: left2.x))
-        let rightLine = LinearScatterStrokable(line: LinearFunction(through: right1, and: right2), drawingRange: SimpleRange(from: right1.x, to: right2.x))
-
-        return [leftLine, rightLine]
+private extension PlayerBarInteraction.BoundsCurves.Curve {
+    /// Create a ScatterStrokable drawing `self`.
+    var scatterStrokable: ScatterStrokable {
+        ArbitraryFunctionScatterStrokable(function: function, drawingRange: range, interpolationPoints: 25)
     }
+}
 
-    /// Create the two curves enclosing the bar from the left and the right.
-    private func outerBarCurves(barCenterTime: Double, totalSpeed: Double) -> [ScatterStrokable] {
-        let upperWidth = bar.angularWidthAtHeight(playfield.upperRadius) / totalSpeed
-        let lowerWidth = bar.angularWidthAtHeight(playfield.lowerRadius) / totalSpeed
+private extension PlayerBarInteraction.HoleMovement.Section {
+    /// One or two ScatterStrokables defining the lower and upper bounds of this movement section.
+    var boundaryStrokables: [ScatterStrokable] {
+        [lower, upper].compactMap { $0.scatterStrokable }
+    }
+}
 
-        // Calculate left and right end points
-        let leftRange = SimpleRange(from: barCenterTime - upperWidth / 2, to: barCenterTime - lowerWidth / 2, enforceRegularity: true)
-        let rightRange = SimpleRange(from: barCenterTime + upperWidth / 2, to: barCenterTime + lowerWidth / 2, enforceRegularity: true)
-
-        // Bar height at a given time-value
-        let heightAtX: (Double) -> Double = { x in
-            let timeWidth = 2 * abs(x -  barCenterTime)
-            let angularWidth = totalSpeed * timeWidth
-            return self.bar.heightAtAngularWidth(angularWidth)
-        }
-
-        let leftLine = ArbitraryFunctionScatterStrokable(function: FunctionWrapper(heightAtX), drawingRange: leftRange, interpolationPoints: 20)
-        let rightLine = ArbitraryFunctionScatterStrokable(function: FunctionWrapper(heightAtX), drawingRange: rightRange, interpolationPoints: 20)
-
-        return [leftLine, rightLine]
+private extension PlayerBarInteraction.HoleMovement.Section.LinearMovement {
+    /// Create a ScatterStrokable drawing `self`.
+    /// If `self` has no valid range, return nil.
+    var scatterStrokable: ScatterStrokable? {
+        guard let range = range else { return nil }
+        return LinearScatterStrokable(line: line, drawingRange: range)
     }
 }

@@ -13,6 +13,13 @@ public enum BisectionSolver {
         return zero(of: diff, in: range, epsilon: epsilon)
     }
 
+    /// Find the solution of the given equation inside the given range via bisection.
+    /// `f(range.upper) - const` and `f(range.lower) - const` must have different signs; else, this method returns nil.
+    public static func solve(_ f: Function, equals const: Double, in range: SimpleRange<Double>, epsilon: Double = 1e-8) -> Double? {
+        let const = FunctionWrapper { _ in const }
+        return intersection(of: f, and: const, in: range, epsilon: epsilon)
+    }
+
     /// Find the zero of the given function inside the given range via bisection.
     /// `f(range.upper)` and `f(range.lower)` must have different signs; else, this method returns nil.
     public static func zero(of f: Function, in range: SimpleRange<Double>, epsilon: Double = 1e-8) -> Double? {

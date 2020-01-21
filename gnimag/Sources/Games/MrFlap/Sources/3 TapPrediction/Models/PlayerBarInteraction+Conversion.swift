@@ -63,7 +63,7 @@ extension PlayerBarInteraction {
     /// Calculate the hole movement during the relevant time range.
     private static func holeMovement(bar: BarProperties, currentTime: Double, timeUntilHittingCenter: Double, widths: BarWidths, curves: BoundsCurves) -> HoleMovement {
         // Calculate full yCenter movement (i.e. at the full width)
-        let fullRange = SimpleRange(around: currentTime + timeUntilHittingCenter, diameter: 150 * widths.full)
+        let fullRange = SimpleRange(around: currentTime + timeUntilHittingCenter, diameter: widths.full)
         let yCenterMovement = bar.yCenterMovementPortionsForTimeRange(fullRange)
 
         // Map to HoleMovement.Sections
@@ -90,13 +90,23 @@ extension PlayerBarInteraction {
             func rangeBound(of curve: BoundsCurves.Curve, isLower: Bool) -> Double? {
                 let intersectionRange = timeRange.intersection(with: curve.range)
 
-                // The segment does not intersect with the bound curve because it is fully inside --> the range starts/end at the full timeRange
-                if intersectionRange.isEmpty {
-                    return isLower ? timeRange.lower : timeRange.upper
-                }
+                // Try simple intersection
+                if let intersection = BisectionSolver.intersection(of: curve.function, and: line, in: intersectionRange) { return intersection }
 
-                // Perform approximate intersection
-                return BisectionSolver.intersection(of: curve.function, and: line, in: intersectionRange)
+                // No intersection found; the line segment is either fully inside or outside the bar
+                // Intersect the curve with the horizontal line x = const.
+                let playfieldYRange = SimpleRange(from: curve.function.at(curve.range.lower), to: curve.function.at(curve.range.upper), enforceRegularity: true)
+                let lower = line.at(timeRange.lower), upper = line.at(timeRange.upper)
+                guard let const = playfieldYRange.contains(lower) ? lower : playfieldYRange.contains(upper) ? upper : nil else { return nil }
+
+                guard let intersection = BisectionSolver.solve(curve.function, equals: const, in: curve.range) else { return nil }
+
+                // Depending on wether the intersection is left or right of the range of the segment line, the segment is either inside or outside the bar
+                if (intersection < timeRange.lower) == isLower {
+                    return isLower ? timeRange.lower : timeRange.upper 
+                } else {
+                    return nil
+                }
             }
 
             // Calculate interseting range
