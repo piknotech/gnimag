@@ -118,7 +118,7 @@
 		6345680323BB955700D32053 /* PlayerProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634567FB23BB761F00D32053 /* PlayerProperties.swift */; };
 		6345680423BB955700D32053 /* PlayfieldProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634567FD23BB7B5A00D32053 /* PlayfieldProperties.swift */; };
 		6345680523BB956800D32053 /* NoncollidingPathThroughBarStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634567FF23BB954D00D32053 /* NoncollidingPathThroughBarStrategy.swift */; };
-		6345680723BBB3F600D32053 /* SingleCenteredJumpThroughBarStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6345680623BBB3F600D32053 /* SingleCenteredJumpThroughBarStrategy.swift */; };
+		6345680723BBB3F600D32053 /* SingleCenteredJumpThroughSafeRectangleStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6345680623BBB3F600D32053 /* SingleCenteredJumpThroughSafeRectangleStrategy.swift */; };
 		63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */; };
 		63456B38236466A900C71EE5 /* ParameterizableFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63456B37236466A900C71EE5 /* ParameterizableFunction.swift */; };
 		634AD0152327C8C400D87BAB /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0122327C8C000D87BAB /* Line.swift */; };
@@ -162,6 +162,7 @@
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
 		63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
 		63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame+Data.swift */; };
+		63D8EC9423D8947D00121F2B /* CGRectScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
 		63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */; };
 		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
@@ -328,7 +329,7 @@
 		634567FB23BB761F00D32053 /* PlayerProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProperties.swift; sourceTree = "<group>"; };
 		634567FD23BB7B5A00D32053 /* PlayfieldProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayfieldProperties.swift; sourceTree = "<group>"; };
 		634567FF23BB954D00D32053 /* NoncollidingPathThroughBarStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoncollidingPathThroughBarStrategy.swift; sourceTree = "<group>"; };
-		6345680623BBB3F600D32053 /* SingleCenteredJumpThroughBarStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCenteredJumpThroughBarStrategy.swift; sourceTree = "<group>"; };
+		6345680623BBB3F600D32053 /* SingleCenteredJumpThroughSafeRectangleStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCenteredJumpThroughSafeRectangleStrategy.swift; sourceTree = "<group>"; };
 		63456B33236465DA00C71EE5 /* RepeatingPingPongTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatingPingPongTracker.swift; sourceTree = "<group>"; };
 		63456B37236466A900C71EE5 /* ParameterizableFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterizableFunction.swift; sourceTree = "<group>"; };
 		634AD0122327C8C000D87BAB /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -376,6 +377,7 @@
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		63D002952373037900041069 /* DebugLoggerFrame+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugLoggerFrame+Data.swift"; sourceTree = "<group>"; };
+		63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectScatterStrokable.swift; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
 		63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionDebugInfo.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
@@ -501,8 +503,8 @@
 		631212AF23253DC700C126B4 /* gnimag */ = {
 			isa = PBXGroup;
 			children = (
-				631213BA23257EB600C126B4 /* README.md */,
 				631213BB23257EB600C126B4 /* Sources */,
+				631213BA23257EB600C126B4 /* README.md */,
 			);
 			path = gnimag;
 			sourceTree = "<group>";
@@ -1120,6 +1122,7 @@
 				637B56A423CE3618007E51B0 /* JumpSequencePlot+Jump.swift */,
 				637B56A623CE7FDE007E51B0 /* BarScatterStrokable.swift */,
 				634AFA6F23CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift */,
+				63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */,
 			);
 			path = Drawing;
 			sourceTree = "<group>";
@@ -1205,6 +1208,24 @@
 			path = Other;
 			sourceTree = "<group>";
 		};
+		63521E9623D87A22002706C0 /* NoncollidingPathThroughBar */ = {
+			isa = PBXGroup;
+			children = (
+				634567FF23BB954D00D32053 /* NoncollidingPathThroughBarStrategy.swift */,
+				6345680623BBB3F600D32053 /* SingleCenteredJumpThroughSafeRectangleStrategy.swift */,
+			);
+			path = NoncollidingPathThroughBar;
+			sourceTree = "<group>";
+		};
+		63521E9723D87A32002706C0 /* WayToSpecificPoint */ = {
+			isa = PBXGroup;
+			children = (
+				636BCC1423BD4A9900A3BE26 /* WayToSpecificPointStrategy.swift */,
+				636BCC1623BD4C5F00A3BE26 /* LinearWayToSpecificPointStrategy.swift */,
+			);
+			path = WayToSpecificPoint;
+			sourceTree = "<group>";
+		};
 		636BCC1C23C4DA3F00A3BE26 /* TrackerFutures */ = {
 			isa = PBXGroup;
 			children = (
@@ -1284,10 +1305,8 @@
 		639C745223BB667F005FD354 /* Strategies */ = {
 			isa = PBXGroup;
 			children = (
-				634567FF23BB954D00D32053 /* NoncollidingPathThroughBarStrategy.swift */,
-				6345680623BBB3F600D32053 /* SingleCenteredJumpThroughBarStrategy.swift */,
-				636BCC1423BD4A9900A3BE26 /* WayToSpecificPointStrategy.swift */,
-				636BCC1623BD4C5F00A3BE26 /* LinearWayToSpecificPointStrategy.swift */,
+				63521E9623D87A22002706C0 /* NoncollidingPathThroughBar */,
+				63521E9723D87A32002706C0 /* WayToSpecificPoint */,
 			);
 			path = Strategies;
 			sourceTree = "<group>";
@@ -2007,12 +2026,13 @@
 				6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */,
 				636BCC1923BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift in Sources */,
 				637B56A523CE3618007E51B0 /* JumpSequencePlot+Jump.swift in Sources */,
+				63D8EC9423D8947D00121F2B /* CGRectScatterStrokable.swift in Sources */,
 				632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */,
 				63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */,
 				631213FB23257F4000C126B4 /* Player.swift in Sources */,
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,
 				6316BDB523CB8D430062100F /* JumpSequencePlot.swift in Sources */,
-				6345680723BBB3F600D32053 /* SingleCenteredJumpThroughBarStrategy.swift in Sources */,
+				6345680723BBB3F600D32053 /* SingleCenteredJumpThroughSafeRectangleStrategy.swift in Sources */,
 				6375AFBB237DE6090019981E /* DebugLoggerFrame+Logging.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

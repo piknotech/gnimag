@@ -8,7 +8,7 @@
 /// This means, this strategy DOES NOT take the exact current position or velocity of the player into account – it is only concerned with the final passing of the bar, avoiding crashes.
 protocol NoncollidingPathThroughBarStrategy {
     /// Calculate the jump sequence.
-    func jumpSequence(through bar: BarProperties, in playfield: PlayfieldProperties, with player: PlayerProperties, jumpProperties: JumpingProperties) -> JumpSequenceFromSpecificPosition
+    func jumpSequence(through bar: BarProperties, in playfield: PlayfieldProperties, with player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> JumpSequenceFromSpecificPosition
 }
 
 /// A jump sequence defined by the starting point of the first jump and the time distances for the following jump starts.

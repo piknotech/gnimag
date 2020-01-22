@@ -9,7 +9,7 @@ import Common
 /// The velocity when hitting the end point is irrelevant.
 protocol WayToSpecificPointStrategy {
     /// Calculate the jump sequence to the given point.
-    func jumpSequence(to endPoint: Position, in playfield: PlayfieldProperties, with player: PlayerProperties, jumpProperties: JumpingProperties) -> JumpSequenceFromCurrentPosition
+    func jumpSequence(to endPoint: Position, in playfield: PlayfieldProperties, with player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> JumpSequenceFromCurrentPosition
 }
 
 /// An x/y position.

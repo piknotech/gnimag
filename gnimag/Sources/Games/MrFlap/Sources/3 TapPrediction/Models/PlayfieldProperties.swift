@@ -3,11 +3,18 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
+
 /// Properties of the playfield.
 struct PlayfieldProperties {
     /// The lower and upper radii limiting the playfield.
     let lowerRadius: Double
     let upperRadius: Double
+
+    /// The vertical range limiting the playfield.
+    var range: SimpleRange<Double> {
+        SimpleRange(from: lowerRadius, to: upperRadius)
+    }
 
     /// The offset to the intrinsic bar coordinate system in which the bar's yCenter is defined.
     let offsetToBarCoordinateSystem: Double

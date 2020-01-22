@@ -41,10 +41,17 @@ public extension CompositeTracker {
         }
 
         // Guesses for next segment
+        let colorForGuesses: ScatterColor = {
+            if case .even = currentSegment.colorForPlotting {
+                return .odd
+            } else {
+                return .even
+            }
+        }()
+
         if let guesses = mostRecentGuessesForNextSegment {
-            let color = currentSegment.colorForPlotting == .even ? ScatterColor.odd : .even
             for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
-                add(function, with: color, dash: .dashed, from: startTime, to: timeInfinity)
+                add(function, with: colorForGuesses, dash: .dashed, from: startTime, to: timeInfinity)
             }
         }
 

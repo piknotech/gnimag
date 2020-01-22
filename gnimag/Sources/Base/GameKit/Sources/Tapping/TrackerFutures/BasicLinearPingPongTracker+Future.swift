@@ -26,6 +26,11 @@ public extension BasicLinearPingPongTracker {
         }
     }
 
+    /// States if all conditions are met so that `segmentPortionsForFutureTimeRange` will not return an optional value.
+    func segmentPortionsForFutureTimeRangeAvailable(guesses: (lowerBound: Double, upperBound: Double)) -> Bool {
+        requiredProperties(guesses: guesses) != nil
+    }
+
     /// Calculate the segment portions that will be passed during a given time range in the future.
     /// When time is inverted, the time range should also be inverted, i.e. `lower > upper`.
     /// The range must not be singular!

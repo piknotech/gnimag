@@ -65,6 +65,19 @@ struct PlayerBarInteraction {
     struct HoleMovement {
         // TODO: holeSize + verticalSpeed hier rein?
 
+        /// The intersections of the furthest outward sections with the bar boundary curves.
+        let intersectionsWithBoundsCurves: IntersectionsWithBoundsCurves
+        struct IntersectionsWithBoundsCurves {
+            let left: IntersectionWithBoundsCurve
+            let right: IntersectionWithBoundsCurve
+
+            struct IntersectionWithBoundsCurve {
+                /// The regular x- and y-ranges of the intersection, i.e. the range between the intersection of the lower and the upper bound.
+                let xRange: SimpleRange<Double>
+                let yRange: SimpleRange<Double>
+            }
+        }
+
         /// The movement section. Each section is a linear movement, either upwards or downwards, alternately.
         let sections: [Section]
         struct Section {
@@ -73,8 +86,7 @@ struct PlayerBarInteraction {
             let fullTimeRange: SimpleRange<Double>
 
             let holeSize: Double
-            
-            let center: LinearMovement
+
             let lower: LinearMovement // lower = center - 0.5 * holeSize
             let upper: LinearMovement // upper = center + 0.5 * holeSize
 

@@ -50,10 +50,13 @@ struct BarProperties {
             0.5 * (width + playerSize) / atan(x / 2)
         }
 
+        // Check if yCenterMovementPortionsForTimeRange is non-nil
+        let guesses = BarCourse.momventBoundCollector.guesses(for: bar)
+        guard bar.yCenter.segmentPortionsForFutureTimeRangeAvailable(guesses: guesses) else { return nil }
+
         // yCenterMovementPortionsForTimeRange implementation
         let yCenterMovement: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion] = { timeRange in
             let angularRange = converter.angleBasedRange(from: timeRange)
-            let guesses = BarCourse.momventBoundCollector.guesses(for: bar)
             let result = bar.yCenter.segmentPortionsForFutureTimeRange(angularRange, guesses: guesses) ?? []
             let timeBasedResult = result.map(converter.timeBasedLinearSegmentPortion)
 

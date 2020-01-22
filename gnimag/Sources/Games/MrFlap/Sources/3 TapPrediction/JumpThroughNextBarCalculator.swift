@@ -16,7 +16,7 @@ struct JumpThroughNextBarCalculator {
 
     /// Default initializer.
     init() {
-        noncollidingPathThroughBarStrategy = SingleCenteredJumpThroughBarStrategy()
+        noncollidingPathThroughBarStrategy = SingleCenteredJumpThroughSafeRectangleStrategy()
         wayToSpecificPointStrategy = LinearWayToSpecificPointStrategy()
     }
 
@@ -26,14 +26,17 @@ struct JumpThroughNextBarCalculator {
     func jumpSequenceThroughNextBar(model: GameModel, performedTaps: [Double], currentTime: Double) -> JumpSequenceFromCurrentPosition? {
         // Convert models
         guard
-            let jump = JumpingProperties.from(player: model.player),
-            let player = PlayerProperties.from(player: model.player, jumping: jump, performedTaps: performedTaps, currentTime: currentTime),
+            let jumping = JumpingProperties.from(player: model.player),
+            let player = PlayerProperties.from(player: model.player, jumping: jumping, performedTaps: performedTaps, currentTime: currentTime),
             let playfield = PlayfieldProperties.from(playfield: model.playfield, with: model.player) else { return nil }
 
-        // Perform strategies
-        let pathThroughBar = noncollidingPathThroughBarStrategy.jumpSequence(through: bar, in: playfield, with: player, jumpProperties: jump)
+        // Find next bar
+        guard let bar = nextBar(model: model, player: player, playfield: playfield, currentTime: currentTime) else { return nil }
 
-        let pathToStartingPoint = wayToSpecificPointStrategy.jumpSequence(to: pathThroughBar.startingPoint, in: playfield, with: player, jumpProperties: jump)
+        // Perform strategies
+        let pathThroughBar = noncollidingPathThroughBarStrategy.jumpSequence(through: bar, in: playfield, with: player, jumping: jumping, currentTime: currentTime)
+
+        let pathToStartingPoint = wayToSpecificPointStrategy.jumpSequence(to: pathThroughBar.startingPoint, in: playfield, with: player, jumping: jumping, currentTime: currentTime)
 
         // Concatenate sequences
         return concatenate(sequence1: pathToStartingPoint, sequence2: pathThroughBar)

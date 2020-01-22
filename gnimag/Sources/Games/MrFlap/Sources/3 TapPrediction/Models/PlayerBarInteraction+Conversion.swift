@@ -67,16 +67,21 @@ extension PlayerBarInteraction {
         let yCenterMovement = bar.yCenterMovementPortionsForTimeRange(fullRange)
 
         // Map to HoleMovement.Sections
-        let sections = yCenterMovement.compactMap {
+        let sections = yCenterMovement.map {
             movementSection(from: $0, bar: bar, currentTime: currentTime, widths: widths, curves: curves)
         }
 
-        return HoleMovement(sections: sections)
+        // Calculate intersections with bounds curves
+        let leftIntersection = intersection(of: sections, with: curves.left, isLeft: true)
+        let rightIntersection = intersection(of: sections, with: curves.right, isLeft: false)
+        let intersections = HoleMovement.IntersectionsWithBoundsCurves(left: leftIntersection, right: rightIntersection)
+
+        return HoleMovement(intersectionsWithBoundsCurves: intersections, sections: sections)
     }
 
     /// Convert a LinearSegmentPortion into a HoleMovement.Section.
     /// Returns nil if the section is fully irrelevant, i.e. outside the enclosing curves.
-    private static func movementSection(from portion: Portion, bar: BarProperties, currentTime: Double, widths: BarWidths, curves: BoundsCurves) -> HoleMovement.Section? {
+    private static func movementSection(from portion: Portion, bar: BarProperties, currentTime: Double, widths: BarWidths, curves: BoundsCurves) -> HoleMovement.Section {
         // Shift portion back by currentTime (such that 0 corresponds to currentTime)
         let timeRange = portion.timeRange.shifted(by: -currentTime)
         let line = portion.line.shiftedLeft(by: currentTime)
@@ -122,12 +127,11 @@ extension PlayerBarInteraction {
             }
         }
 
-        let center = linearMovement(forVerticalTranslation: 0)
         let lower = linearMovement(forVerticalTranslation: -bar.holeSize / 2)
         let upper = linearMovement(forVerticalTranslation: +bar.holeSize / 2)
 
         // Calculate full range
-        let validRanges = [center, lower, upper].map { $0.range }.compactMap(id)
+        let validRanges = [lower, upper].map { $0.range }.compactMap(id)
         let fullTimeRange = validRanges.reduce(SimpleRange<Double>(from: .infinity, to: -.infinity)) { fullRange, new in
             fullRange.pseudoUnion(with: new)
         }
@@ -135,9 +139,27 @@ extension PlayerBarInteraction {
         return HoleMovement.Section(
             fullTimeRange: fullTimeRange,
             holeSize: bar.holeSize,
-            center: center,
             lower: lower,
             upper: upper
         )
+    }
+
+    /// Calculate the intersection of the sections with a single enclosing bound curve.
+    /// Attention: if sections is empty (which it never should be), this will not yield the expected results.
+    private static func intersection(of sections: [HoleMovement.Section], with curve: BoundsCurves.Curve, isLeft: Bool) -> HoleMovement.IntersectionsWithBoundsCurves.IntersectionWithBoundsCurve {
+        // Intersect curve with lower movement
+        let lowerRanges = sections.map { $0.lower.range }.compactMap(id)
+        let lowerRange = (isLeft ? lowerRanges.first : lowerRanges.last) ?? curve.range
+        let lowerBound = isLeft ? lowerRange.lower : lowerRange.upper
+
+        // Intersect curve with upper movement
+        let upperRanges = sections.map { $0.upper.range }.compactMap(id)
+        let upperRange = (isLeft ? upperRanges.first : upperRanges.last) ?? curve.range
+        let upperBound = isLeft ? upperRange.lower : upperRange.upper
+
+        let xRange = SimpleRange(from: lowerBound, to: upperBound, enforceRegularity: true)
+        let yRange = SimpleRange(from: curve.function.at(lowerBound), to: curve.function.at(upperBound), enforceRegularity: true)
+
+        return .init(xRange: xRange, yRange: yRange)
     }
 }
