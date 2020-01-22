@@ -13,8 +13,8 @@ protocol NoncollidingPathThroughBarStrategy {
 
 /// A jump sequence defined by the starting point of the first jump and the time distances for the following jump starts.
 struct JumpSequenceFromSpecificPosition {
-    /// The starting point.
-    let startingPoint: Position
+    /// The (time/height) starting point.
+    let startingPoint: Point
 
     /// The time distances between all consecutive jumps.
     let jumpTimeDistances: [Double]

@@ -13,13 +13,9 @@ import TestingTools
 final class JumpSequencePlot {
     let plot: ScatterPlot
 
-    private let player: PlayerProperties
-    private let playfield: PlayfieldProperties
-
-    /// Create a JumpSequencePlot from a jump sequence starting at a specific (player-independent) position.
+    /// Create a JumpSequencePlot from a jump sequence starting at a specific (player-independent) position (where the current time corresponds to 0).
     convenience init(sequence: JumpSequenceFromSpecificPosition, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
-        let startPoint = Point(time: 0, height: sequence.startingPoint.y)
-        let jumps = JumpSequencePlot.jumps(forTimeDistances: sequence.jumpTimeDistances, timeUntilEnd: sequence.timeUntilEnd, startPoint: startPoint, jumping: jumping)
+        let jumps = JumpSequencePlot.jumps(forTimeDistances: sequence.jumpTimeDistances, timeUntilEnd: sequence.timeUntilEnd, startPoint: sequence.startingPoint, jumping: jumping)
 
         self.init(jumps: jumps, player: player, playfield: playfield)
 
@@ -27,7 +23,7 @@ final class JumpSequencePlot {
         jumps.forEach { plot.stroke($0.scatterStrokable, with: .normal) }
     }
 
-    /// Create a JumpSequencePlot from a jump sequence starting at the current player position.
+    /// Create a JumpSequencePlot from a jump sequence starting at the current player position (and time=0).
     convenience init(sequence: JumpSequenceFromCurrentPosition, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
         // Calculate initial player jump and following jumps
         let playerJumpStartPoint = Point(time: -player.timePassedSinceJumpStart, height: player.lastJumpStart.y)
@@ -46,9 +42,6 @@ final class JumpSequencePlot {
     /// Common initializer.
     /// Will create the scatter plot with the points from the (connected!) jumps, but not yet draw the jumps.
     private init(jumps: [Jump], player: PlayerProperties, playfield: PlayfieldProperties) {
-        self.player = player
-        self.playfield = playfield
-
         // Calculate data points
         var dataPoints = jumps.reduce(into: []) { $0.append($1.scatterStartPoint) }
         dataPoints.append(jumps.last!.scatterEndPoint)

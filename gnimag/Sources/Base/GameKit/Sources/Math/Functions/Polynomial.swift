@@ -4,7 +4,7 @@
 //
 
 /// Polynomial describes a collection of coefficients representing a polynomial.
-public final class Polynomial: DifferentiableFunction {
+public struct Polynomial: DifferentiableFunction {
     /// The coefficients, beginning with the lowest one (x^0, x^1, ... x^n).
     public let coefficients: [Value]
 

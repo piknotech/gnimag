@@ -8,16 +8,6 @@ import GameKit
 import TestingTools
 
 extension JumpSequencePlot {
-    /// A time/height data point.
-    struct Point {
-        let time: Double
-        let height: Double
-
-        static func +(lhs: Point, rhs: Point) -> Point {
-            Point(time: lhs.time + rhs.time, height: lhs.height + rhs.height)
-        }
-    }
-
     /// A jump from a start point to an end point.
     struct Jump {
         let startPoint: Point

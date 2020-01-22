@@ -4,6 +4,7 @@
 //
 
 import Common
+import GameKit
 
 /// This NoncollidingPathThroughBarStrategy consists only of a single jump.
 /// This jump passes the bar in such a way that the minimal distance to the upper and lower line of the safe rectangle for points inside the safe rectangle is maximized.
@@ -13,18 +14,33 @@ import Common
 struct SingleCenteredJumpThroughSafeRectangleStrategy: NoncollidingPathThroughBarStrategy {
     func jumpSequence(through bar: BarProperties, in playfield: PlayfieldProperties, with player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> JumpSequenceFromSpecificPosition {
         let interaction = PlayerBarInteraction.from(player: player, bar: bar, playfield: playfield, currentTime: currentTime)
-        let safeRectangle = interaction.safeRectangle(for: playfield)
+        let safeRectangle = interaction.safeRectangle(for: playfield)! // TODO: if nil, use other strategy
+
+        // Move parabola to the right
+        var parabola = jumping.parabola
+        let rightShift = Double(safeRectangle.midX) - jumping.horizontalApexDistance
+        parabola = parabola.shiftedLeft(by: -rightShift)
+
+        // Move parabola upwards
+        let width = Double(safeRectangle.width)
+        let upperValue = jumping.jumpHeight
+        let lowerValue = jumping.parabola.at(jumping.horizontalApexDistance - width / 2)
+        let upShift = Double(safeRectangle.midY) - (upperValue + lowerValue) / 2
+        parabola = parabola + upShift
+
+        // Create sequence
+        let startPoint = Point(time: rightShift, height: upShift)
+        let durationUntilLeavingRectangle = Double(safeRectangle.maxX) - startPoint.time
+        let sequence = JumpSequenceFromSpecificPosition(startingPoint: startPoint, jumpTimeDistances: [], timeUntilEnd: durationUntilLeavingRectangle)
 
         // Testing: draw a plot
-        let seq = JumpSequenceFromCurrentPosition(timeUntilStart: 0, jumpTimeDistances: [Double](repeating: jumping.horizontalJumpLength, count: 3), timeUntilEnd: 0)
-
-        let plot = JumpSequencePlot(sequence: seq, player: player, playfield: playfield, jumping: jumping)
+        let plot = JumpSequencePlot(sequence: sequence, player: player, playfield: playfield, jumping: jumping)
         plot.draw(interaction: interaction, currentTime: currentTime)
-        let rect = CGRectScatterStrokable(rect: safeRectangle!)
+        let rect = CGRectScatterStrokable(rect: safeRectangle)
         plot.plot.stroke(rect, with: .custom(.lightBlue))
         plot.writeToDesktop(name: "plotNew.png")
 
-        return JumpSequenceFromSpecificPosition(startingPoint: Position(x: Angle(Double(0)), y: 0), jumpTimeDistances: [], timeUntilEnd: 0)
+        return sequence
     }
 }
 

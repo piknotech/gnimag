@@ -8,14 +8,8 @@ import Common
 /// A WayToSpecificPointStrategy calculates a jumping strategy (i.e. a series of jumps) that will lead the player from its current position to a specific point.
 /// The velocity when hitting the end point is irrelevant.
 protocol WayToSpecificPointStrategy {
-    /// Calculate the jump sequence to the given point.
-    func jumpSequence(to endPoint: Position, in playfield: PlayfieldProperties, with player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> JumpSequenceFromCurrentPosition
-}
-
-/// An x/y position.
-struct Position {
-    let x: Angle
-    let y: Double
+    /// Calculate the jump sequence to the given (time/height) point.
+    func jumpSequence(to endPoint: Point, in playfield: PlayfieldProperties, with player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> JumpSequenceFromCurrentPosition
 }
 
 /// A jump sequence defined by the time distances for its jump starts.

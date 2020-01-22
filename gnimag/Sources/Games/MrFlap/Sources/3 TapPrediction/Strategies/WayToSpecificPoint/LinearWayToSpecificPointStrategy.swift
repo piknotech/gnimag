@@ -7,7 +7,7 @@
 /// The distance between all consecutive jumps is the same. This means, each jump contributes the same regarding height ascension or descension.
 /// This is an optimal strategy in the following sense: it achieves the maximal possible minimum distance between two consecutive jumps by spacing out all jumps equally.
 struct LinearWayToSpecificPointStrategy: WayToSpecificPointStrategy {
-    func jumpSequence(to endPoint: Position, in playfield: PlayfieldProperties, with player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> JumpSequenceFromCurrentPosition {
+    func jumpSequence(to endPoint: Point, in playfield: PlayfieldProperties, with player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> JumpSequenceFromCurrentPosition {
         return JumpSequenceFromCurrentPosition(timeUntilStart: 0, jumpTimeDistances: [], timeUntilEnd: 0)
     }
 }
