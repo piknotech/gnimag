@@ -10,28 +10,18 @@ extension PlayerBarInteraction {
     private typealias Portion = BasicLinearPingPongTracker.LinearSegmentPortion
 
     /// Create a `PlayerBarInteraction` from the given models and the current time.
-    static func from(player: PlayerProperties, bar: BarProperties, playfield: PlayfieldProperties, currentTime: Double) -> PlayerBarInteraction {
+    init(player: PlayerProperties, bar: BarProperties, playfield: PlayfieldProperties, currentTime: Double) {
         // Calculate when the player will hit the bar
         let direction = player.xSpeed - bar.xSpeed
-        let totalSpeed = abs(direction)
+        totalSpeed = abs(direction)
         let distanceToCenter = player.currentPosition.x.directedDistance(to: bar.xPosition, direction: direction)
-        let timeUntilHittingCenter = distanceToCenter / totalSpeed
+        timeUntilHittingCenter = distanceToCenter / totalSpeed
 
         // Calculate remaining properties
-        let widths = timeWidths(bar: bar, playfield: playfield, totalSpeed: totalSpeed)
-        let fullInteractionRange = SimpleRange(around: timeUntilHittingCenter, diameter: widths.full)
-        let curves = boundsCurves(bar: bar, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, totalSpeed: totalSpeed)
-        let movement = holeMovement(bar: bar, currentTime: currentTime, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, curves: curves)
-
-        // Put everything together
-        return PlayerBarInteraction(
-            totalSpeed: totalSpeed,
-            timeUntilHittingCenter: timeUntilHittingCenter,
-            fullInteractionRange: fullInteractionRange,
-            widths: widths,
-            boundsCurves: curves,
-            holeMovement: movement
-        )
+        widths = PlayerBarInteraction.timeWidths(bar: bar, playfield: playfield, totalSpeed: totalSpeed)
+        fullInteractionRange = SimpleRange(around: timeUntilHittingCenter, diameter: widths.full)
+        boundsCurves = PlayerBarInteraction.boundsCurves(bar: bar, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, totalSpeed: totalSpeed)
+        holeMovement = PlayerBarInteraction.holeMovement(bar: bar, currentTime: currentTime, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, curves: boundsCurves)
     }
 
     /// Calculate the widths of the bar.

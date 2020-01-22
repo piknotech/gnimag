@@ -38,15 +38,13 @@ struct JumpingProperties {
 
     // MARK: Conversion
 
-    /// Read JumpingProperties from a player tracker.
-    static func from(player: PlayerCourse) -> JumpingProperties? {
+    /// Create JumpingProperties from the given player tracker.
+    init?(player: PlayerCourse) {
         guard
-            let converter = PlayerAngleConverter.from(player: player),
+            let converter = PlayerAngleConverter(player: player),
             let parabola = player.height.parabola else { return nil }
 
         // Convert from player-angle time system into real time system
-        let timeParabola = converter.timeBasedPolynomialIgnoringIntercept(from: parabola)
-
-        return JumpingProperties(parabola: timeParabola)
+        self.parabola = converter.timeBasedPolynomialIgnoringIntercept(from: parabola)
     }
 }

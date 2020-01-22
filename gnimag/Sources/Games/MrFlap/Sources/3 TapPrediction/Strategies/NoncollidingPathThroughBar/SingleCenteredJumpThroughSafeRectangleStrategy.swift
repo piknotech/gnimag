@@ -13,7 +13,7 @@ import GameKit
 /// This strategy requires the bar to be thin enough in relation to the jump and player properties – else, a single jump won't be enough to pass the bar without colliding.
 struct SingleCenteredJumpThroughSafeRectangleStrategy: NoncollidingPathThroughBarStrategy {
     func jumpSequence(through bar: BarProperties, in playfield: PlayfieldProperties, with player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> JumpSequenceFromSpecificPosition {
-        let interaction = PlayerBarInteraction.from(player: player, bar: bar, playfield: playfield, currentTime: currentTime)
+        let interaction = PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime)
         let safeRectangle = interaction.safeRectangle(for: playfield)! // TODO: if nil, use other strategy
 
         // Move parabola to the right

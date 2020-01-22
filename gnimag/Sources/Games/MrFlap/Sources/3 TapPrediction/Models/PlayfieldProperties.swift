@@ -21,14 +21,12 @@ struct PlayfieldProperties {
 
     // MARK: Conversion
 
-    /// Convert a playfield into PlayfieldProperties.
-    static func from(playfield: Playfield, with player: PlayerCourse) -> PlayfieldProperties? {
+    /// Create PlayerProperties from the given playfield and player.
+    init?(playfield: Playfield, with player: PlayerCourse) {
         guard let size = player.size.average else { return nil }
 
-        return PlayfieldProperties(
-            lowerRadius: playfield.innerRadius + size / 2,
-            upperRadius: playfield.fullRadius - size / 2,
-            offsetToBarCoordinateSystem: playfield.innerRadius
-        )
+        lowerRadius = playfield.innerRadius + size / 2
+        upperRadius = playfield.fullRadius - size / 2
+        offsetToBarCoordinateSystem = playfield.innerRadius
     }
 }

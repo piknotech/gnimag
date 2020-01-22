@@ -19,19 +19,11 @@ struct PlayerAngleConverter {
     private let angleToTime: LinearFunction
 
     /// Create a PlayerAngleConverter from the given player tracker.
-    static func from(player: PlayerCourse) -> PlayerAngleConverter? {
+    init?(player: PlayerCourse) {
         guard let angle = player.angle.tracker.regression else { return nil }
 
-        return PlayerAngleConverter(
-            timeToAngle: angle,
-            angleToTime: angle.inverse
-        )
-    }
-
-    /// The identity converter, doing nothing.
-    static var identity: PlayerAngleConverter {
-        let id = LinearFunction(slope: 1, intercept: 0)
-        return PlayerAngleConverter(timeToAngle: id, angleToTime: id)
+        timeToAngle = angle
+        angleToTime = angle.inverse
     }
 
     // MARK: Value Conversion

@@ -26,9 +26,9 @@ struct JumpThroughNextBarCalculator {
     func jumpSequenceThroughNextBar(model: GameModel, performedTaps: [Double], currentTime: Double) -> JumpSequenceFromCurrentPosition? {
         // Convert models
         guard
-            let jumping = JumpingProperties.from(player: model.player),
-            let player = PlayerProperties.from(player: model.player, jumping: jumping, performedTaps: performedTaps, currentTime: currentTime),
-            let playfield = PlayfieldProperties.from(playfield: model.playfield, with: model.player) else { return nil }
+            let jumping = JumpingProperties(player: model.player),
+            let player = PlayerProperties(player: model.player, jumping: jumping, performedTaps: performedTaps, currentTime: currentTime),
+            let playfield = PlayfieldProperties(playfield: model.playfield, with: model.player) else { return nil }
 
         // Find next bar
         guard let bar = nextBar(model: model, player: player, playfield: playfield, currentTime: currentTime) else { return nil }
@@ -45,7 +45,7 @@ struct JumpThroughNextBarCalculator {
     /// Find the next bar following the current player position (at `currentTime`).
     private func nextBar(model: GameModel, player: PlayerProperties, playfield: PlayfieldProperties, currentTime: Double) -> BarProperties? {
         let bars = model.bars.compactMap { course in
-            BarProperties.from(bar: course, with: model.player, playfield: playfield, currentTime: currentTime)
+            BarProperties(bar: course, with: model.player, playfield: playfield, currentTime: currentTime)
         }
 
         // Calculate directed distance from player to each bar

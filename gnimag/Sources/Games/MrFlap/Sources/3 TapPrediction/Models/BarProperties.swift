@@ -30,9 +30,9 @@ struct BarProperties {
 
     // MARK: Conversion
 
-    /// Convert a bar tracker into BarProperties.
-    static func from(bar: BarCourse, with player: PlayerCourse, playfield: PlayfieldProperties, currentTime: Double) -> BarProperties? {
-        guard let converter = PlayerAngleConverter.from(player: player) else { return nil }
+    /// Create BarProperties from the given bar tracker.
+    init?(bar: BarCourse, with player: PlayerCourse, playfield: PlayfieldProperties, currentTime: Double) {
+        guard let converter = PlayerAngleConverter(player: player) else { return nil }
 
         guard
             let playerSize = player.size.average,
@@ -40,13 +40,15 @@ struct BarProperties {
             let holeSize = bar.holeSize.average,
             let angleByPlayerAngle = bar.angle.tracker.regression else { return nil }
 
+        self.holeSize = holeSize
+
         // widthAtHeight implementation
-        let widthAtHeight: (Double) -> Double = { height in
+        angularWidthAtHeight = { height in
             2 * tan(0.5 * (width + playerSize) / height) // Extend bar width by player size
         }
 
         // Inverse of widthAtHeight
-        let heightAtWidth: (Double) -> Double = { x in
+        heightAtAngularWidth = { x in
             0.5 * (width + playerSize) / atan(x / 2)
         }
 
@@ -55,7 +57,7 @@ struct BarProperties {
         guard bar.yCenter.segmentPortionsForFutureTimeRangeAvailable(guesses: guesses) else { return nil }
 
         // yCenterMovementPortionsForTimeRange implementation
-        let yCenterMovement: (SimpleRange<Double>) -> [BasicLinearPingPongTracker.LinearSegmentPortion] = { timeRange in
+        yCenterMovementPortionsForTimeRange = { timeRange in
             let angularRange = converter.angleBasedRange(from: timeRange)
             let result = bar.yCenter.segmentPortionsForFutureTimeRange(angularRange, guesses: guesses) ?? []
             let timeBasedResult = result.map(converter.timeBasedLinearSegmentPortion)
@@ -69,8 +71,7 @@ struct BarProperties {
 
         // Get speed and current position
         let angleByTime = converter.timeBasedLinearFunction(from: angleByPlayerAngle)
-        let currentAngle = Angle(angleByTime.at(currentTime))
-
-        return BarProperties(angularWidthAtHeight: widthAtHeight, heightAtAngularWidth: heightAtWidth, holeSize: holeSize, yCenterMovementPortionsForTimeRange: yCenterMovement, xSpeed: angleByTime.slope, xPosition: currentAngle)
+        xSpeed = angleByTime.slope
+        xPosition = Angle(angleByTime.at(currentTime))
     }
 }

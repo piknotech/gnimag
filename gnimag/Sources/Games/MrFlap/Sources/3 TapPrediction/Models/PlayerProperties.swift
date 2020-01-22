@@ -8,8 +8,6 @@ import Common
 /// To keep calculations as simple as possible, the player is depicted as a point.
 /// Therefore, the playfield and obstacles must be enlarged by the player radius in each direction.
 struct PlayerProperties {
-    let converter: PlayerAngleConverter
-
     /// The position where the last jump started.
     /// Together with the passed time, this gives the exact current player position and velocity.
     let lastJumpStart: Position
@@ -23,29 +21,24 @@ struct PlayerProperties {
 
     // MARK: Conversion
 
-    /// Convert a player tracker into PlayerProperties.
-    static func from(player: PlayerCourse, jumping: JumpingProperties, performedTaps: [Double], currentTime: Double) -> PlayerProperties? {
-        guard let converter = PlayerAngleConverter.from(player: player) else { return nil }
+    /// Create PlayerProperties from the given player tracker.
+    init?(player: PlayerCourse, jumping: JumpingProperties, performedTaps: [Double], currentTime: Double) {
+        guard let converter = PlayerAngleConverter(player: player) else { return nil }
         guard let xSpeed = player.angle.tracker.slope else { return nil }
+
+        self.xSpeed = xSpeed
 
         // Get current jump start
         // TODO: overlapTolerance must be < the minimal distance between two consecutive taps
         let tapTimeAngles = performedTaps.map(converter.angle(from:))
         guard let angularJumpStart = player.height.finalFutureJumpUsingJumpTimes(times: tapTimeAngles, overlapTolerance: 0.05) else { return nil }
 
-        let jumpStart = Position(x: Angle(angularJumpStart.time), y: angularJumpStart.value)
-        let passedTimeSinceJumpStart = currentTime - converter.time(from: angularJumpStart.time)
+        lastJumpStart = Position(x: Angle(angularJumpStart.time), y: angularJumpStart.value)
+        timePassedSinceJumpStart = currentTime - converter.time(from: angularJumpStart.time)
 
         // Get current position
-        let currentPositionX = jumpStart.x.value + xSpeed * passedTimeSinceJumpStart
-        let currentPositionY = jumpStart.y + jumping.parabola.at(passedTimeSinceJumpStart)
-
-        return PlayerProperties(
-            converter: converter,
-            lastJumpStart: jumpStart,
-            timePassedSinceJumpStart: passedTimeSinceJumpStart,
-            currentPosition: Position(x: Angle(currentPositionX), y: currentPositionY),
-            xSpeed: xSpeed
-        )
+        let currentPositionX = lastJumpStart.x.value + xSpeed * timePassedSinceJumpStart
+        let currentPositionY = lastJumpStart.y + jumping.parabola.at(timePassedSinceJumpStart)
+        currentPosition = Position(x: Angle(currentPositionX), y: currentPositionY)
     }
 }
