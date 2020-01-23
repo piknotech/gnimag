@@ -25,14 +25,15 @@ final class JumpSequencePlot {
 
     /// Create a JumpSequencePlot from a jump sequence starting at the current player position (and time=0).
     convenience init(sequence: JumpSequenceFromCurrentPosition, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
-        // Calculate initial player jump and following jumps
-        let playerJumpStartPoint = Point(time: -player.timePassedSinceJumpStart, height: player.lastJumpStart.y)
-        let currentPlayerPosition = Point(time: 0, height: player.currentPosition.y)
+        // Calculate current player jump and sequenced jumps
+        let jumpStartPoint = Point(time: -player.timePassedSinceJumpStart, height: player.lastJumpStart.y)
 
-        let initialJump = JumpSequencePlot.jump(from: playerJumpStartPoint, duration: player.timePassedSinceJumpStart, jumping: jumping)
-        let jumps = JumpSequencePlot.jumps(forTimeDistances: sequence.jumpTimeDistances, timeUntilEnd: sequence.timeUntilEnd, startPoint: currentPlayerPosition, jumping: jumping)
+        let initialJump = JumpSequencePlot.jump(from: jumpStartPoint, duration: player.timePassedSinceJumpStart + sequence.timeUntilStart, jumping: jumping)
+        let jumps = JumpSequencePlot.jumps(forTimeDistances: sequence.jumpTimeDistances, timeUntilEnd: sequence.timeUntilEnd, startPoint: initialJump.endPoint, jumping: jumping)
 
-        self.init(jumps: [initialJump] + jumps, player: player, playfield: playfield)
+        let currentPlayerPosition = ScatterDataPoint(x: 0, y: player.currentPosition.y)
+
+        self.init(jumps: [initialJump] + jumps, extraDataPoints: [currentPlayerPosition], player: player, playfield: playfield)
 
         // Draw jumps, distinguishing the initial jump from the remaining jumps
         plot.stroke(initialJump.scatterStrokable, with: .emphasize, alpha: 1, strokeWidth: 1, dash: Dash(on: 3, off: 3))
@@ -41,9 +42,9 @@ final class JumpSequencePlot {
 
     /// Common initializer.
     /// Will create the scatter plot with the points from the (connected!) jumps, but not yet draw the jumps.
-    private init(jumps: [Jump], player: PlayerProperties, playfield: PlayfieldProperties) {
+    private init(jumps: [Jump], extraDataPoints: [ScatterDataPoint] = [], player: PlayerProperties, playfield: PlayfieldProperties) {
         // Calculate data points
-        var dataPoints = jumps.reduce(into: []) { $0.append($1.scatterStartPoint) }
+        var dataPoints = jumps.map { $0.scatterStartPoint } + extraDataPoints
         dataPoints.append(jumps.last!.scatterEndPoint)
 
         // Create ScatterPlot
@@ -68,7 +69,7 @@ final class JumpSequencePlot {
     }
 
     /// Draw the bar defined by the given interaction.
-    func draw(interaction: PlayerBarInteraction, currentTime: Double) {
+    func draw(interaction: PlayerBarInteraction) {
         let strokable = BarScatterStrokable(interaction: interaction)
         plot.stroke(strokable, with: .normal, alpha: 1, strokeWidth: 1, dash: Dash(on: 1, off: 1))
     }
