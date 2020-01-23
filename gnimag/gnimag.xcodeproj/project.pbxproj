@@ -150,7 +150,6 @@
 		6375AFB9237DA96D0019981E /* DebugParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFB7237DA9650019981E /* DebugParameters.swift */; };
 		6375AFBB237DE6090019981E /* DebugLoggerFrame+Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */; };
 		6376A4F123C7BD4700ADF4C2 /* BarMovementBoundCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376A4F023C7BD4700ADF4C2 /* BarMovementBoundCollector.swift */; };
-		637B56A523CE3618007E51B0 /* JumpSequencePlot+Jump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56A423CE3618007E51B0 /* JumpSequencePlot+Jump.swift */; };
 		637B56A723CE7FDE007E51B0 /* BarScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56A623CE7FDE007E51B0 /* BarScatterStrokable.swift */; };
 		637B56A923CF2AEC007E51B0 /* MultiScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56A823CF2AEC007E51B0 /* MultiScatterStrokable.swift */; };
 		637B56B223D070ED007E51B0 /* FunctionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56B123D070ED007E51B0 /* FunctionWrapper.swift */; };
@@ -164,6 +163,7 @@
 		63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame+Data.swift */; };
 		63D8EC9423D8947D00121F2B /* CGRectScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */; };
 		63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9523D89C5D00121F2B /* Point+Position.swift */; };
+		63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9A23D9FFEE00121F2B /* Jump.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
 		63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */; };
 		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
@@ -364,7 +364,6 @@
 		6375AFB7237DA9650019981E /* DebugParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugParameters.swift; sourceTree = "<group>"; };
 		6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugLoggerFrame+Logging.swift"; sourceTree = "<group>"; };
 		6376A4F023C7BD4700ADF4C2 /* BarMovementBoundCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarMovementBoundCollector.swift; sourceTree = "<group>"; };
-		637B56A423CE3618007E51B0 /* JumpSequencePlot+Jump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JumpSequencePlot+Jump.swift"; sourceTree = "<group>"; };
 		637B56A623CE7FDE007E51B0 /* BarScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarScatterStrokable.swift; sourceTree = "<group>"; };
 		637B56A823CF2AEC007E51B0 /* MultiScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiScatterStrokable.swift; sourceTree = "<group>"; };
 		637B56B123D070ED007E51B0 /* FunctionWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionWrapper.swift; sourceTree = "<group>"; };
@@ -380,6 +379,7 @@
 		63D002952373037900041069 /* DebugLoggerFrame+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugLoggerFrame+Data.swift"; sourceTree = "<group>"; };
 		63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectScatterStrokable.swift; sourceTree = "<group>"; };
 		63D8EC9523D89C5D00121F2B /* Point+Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+Position.swift"; sourceTree = "<group>"; };
+		63D8EC9A23D9FFEE00121F2B /* Jump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jump.swift; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
 		63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionDebugInfo.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
@@ -1121,7 +1121,6 @@
 			isa = PBXGroup;
 			children = (
 				6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */,
-				637B56A423CE3618007E51B0 /* JumpSequencePlot+Jump.swift */,
 				637B56A623CE7FDE007E51B0 /* BarScatterStrokable.swift */,
 				634AFA6F23CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift */,
 				63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */,
@@ -1316,13 +1315,8 @@
 		639C745323BB66A0005FD354 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				63D8EC9523D89C5D00121F2B /* Point+Position.swift */,
-				634567F923BB751A00D32053 /* BarProperties.swift */,
-				639C745423BB66DF005FD354 /* JumpingProperties.swift */,
-				634567FB23BB761F00D32053 /* PlayerProperties.swift */,
-				634567FD23BB7B5A00D32053 /* PlayfieldProperties.swift */,
-				632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */,
-				632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */,
+				63D8EC9823D9FFB800121F2B /* General */,
+				63D8EC9923D9FFC500121F2B /* Properties */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1336,6 +1330,28 @@
 				6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */,
 			);
 			path = Logging;
+			sourceTree = "<group>";
+		};
+		63D8EC9823D9FFB800121F2B /* General */ = {
+			isa = PBXGroup;
+			children = (
+				63D8EC9523D89C5D00121F2B /* Point+Position.swift */,
+				63D8EC9A23D9FFEE00121F2B /* Jump.swift */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		63D8EC9923D9FFC500121F2B /* Properties */ = {
+			isa = PBXGroup;
+			children = (
+				634567F923BB751A00D32053 /* BarProperties.swift */,
+				639C745423BB66DF005FD354 /* JumpingProperties.swift */,
+				634567FB23BB761F00D32053 /* PlayerProperties.swift */,
+				634567FD23BB7B5A00D32053 /* PlayfieldProperties.swift */,
+				632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */,
+				632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */,
+			);
+			path = Properties;
 			sourceTree = "<group>";
 		};
 		63F0192F23885B7600E380CB /* Debug */ = {
@@ -2028,7 +2044,7 @@
 				6376A4F123C7BD4700ADF4C2 /* BarMovementBoundCollector.swift in Sources */,
 				6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */,
 				636BCC1923BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift in Sources */,
-				637B56A523CE3618007E51B0 /* JumpSequencePlot+Jump.swift in Sources */,
+				63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */,
 				63D8EC9423D8947D00121F2B /* CGRectScatterStrokable.swift in Sources */,
 				632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */,
 				63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */,

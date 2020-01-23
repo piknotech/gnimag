@@ -16,8 +16,6 @@ struct LinearWayToSpecificPointStrategy: WayToSpecificPointStrategy {
         let currentJumpTime = player.timePassedSinceJumpStart
         let height = endPoint.height - player.lastJumpStart.y // Height difference
 
-        print(T, currentJumpTime, height)
-
         // Check if it is possible to reach the height
         let fullRange = SimpleRange(from: jumping.parabola.at(T), to: jumping.jumpVelocity * T, enforceRegularity: true)
         if !fullRange.contains(height) {
@@ -33,21 +31,16 @@ struct LinearWayToSpecificPointStrategy: WayToSpecificPointStrategy {
             // Exit condition
             if (bestSolution?.rating ?? 0) > Solution.maximumPossibleRating(forN: n, T: T) { break }
 
+            let possibleSolutions = solutions(forReachingHeight: height, n: n, T: T, jumping: jumping, currentJumpTime: currentJumpTime)
+
             // Improve current solution if possible
-            for solution in solutions(forReachingHeight: height, n: n, T: T, jumping: jumping, currentJumpTime: currentJumpTime) {
-
-                print(solution.asSequence)
-                let plot = JumpSequencePlot(sequence: solution.asSequence, player: player, playfield: playfield, jumping: jumping)
-                plot.writeToDesktop(name: "plot_\(n)_\(solution.t).png")
-
-                if !solution.isApplicable(in: playfield, jumping: jumping) { continue }
+            for solution in possibleSolutions {
+                if !solution.isApplicable(in: playfield, player: player, jumping: jumping) { continue }
                 if solution.rating > (bestSolution?.rating ?? 0) { bestSolution = solution }
             }
 
             n += 1
         }
-
-        exit(0)
 
         // Convert solution into jump sequence
         return bestSolution!.asSequence
@@ -86,24 +79,33 @@ private struct Solution {
     /// The from the start of the current jump at which the jump series is begun and the first jump is made.
     let t: Double
 
+    /// The duration of the other (not first) jumps, defined as `tOther = (T-t) / n`.
+    var tOther: Double {
+        (T - t) / Double(n)
+    }
+
     /// The number of jumps that will be performed.
     let n: Int
 
     /// States if the solution is valid/applicable, i.e. `t` is in a valid time range and the solution does not leave the playfield.
-    func isApplicable(in playfield: PlayfieldProperties, jumping: JumpingProperties) -> Bool {
+    func isApplicable(in playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties) -> Bool {
         if !SimpleRange(from: currentJumpTime, to: T).contains(t) { return false }
 
-        let jumpLength = (T-t) / Double(n)
-        jumping.jumpHeight
+        // Construct series of jumps
+        let startPoint = Point(time: 0, height: player.lastJumpStart.y)
+        let distances = [t] + [Double](repeating: tOther, count: n-1)
+        let jumps = Jump.jumps(forTimeDistances: distances, timeUntilEnd: tOther, startPoint: startPoint, jumping: jumping)
 
-        // TODO: playfield
-        return true
+        // Check if jumps are fully contained in the playfield
+        return jumps.allSatisfy { jump in
+            playfield.range.contains(jump.minimum) && playfield.range.contains(jump.maximum)
+        }
     }
 
     /// The rating of the solution, which is defined as the smallest distance between two consecutive jumps.
     /// A larger rating is better.
     var rating: Double {
-        min(t, (T-t) / Double(n))
+        min(t, tOther)
     }
 
     /// The largest rating that can be achieved by a solution with a given n.
@@ -116,8 +118,8 @@ private struct Solution {
     var asSequence: JumpSequenceFromCurrentPosition {
         JumpSequenceFromCurrentPosition(
             timeUntilStart: t - currentJumpTime,
-            jumpTimeDistances: [Double](repeating: (T-t) / Double(n), count: n - 1),
-            timeUntilEnd: (T-t) / Double(n)
+            jumpTimeDistances: [Double](repeating: tOther, count: n-1),
+            timeUntilEnd: tOther
         )
     }
 }

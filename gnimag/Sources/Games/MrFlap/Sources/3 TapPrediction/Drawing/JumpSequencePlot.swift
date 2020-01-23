@@ -4,6 +4,7 @@
 //
 
 import Common
+import GameKit
 import Geometry
 import TestingTools
 
@@ -15,7 +16,7 @@ final class JumpSequencePlot {
 
     /// Create a JumpSequencePlot from a jump sequence starting at a specific (player-independent) position (where the current time corresponds to 0).
     convenience init(sequence: JumpSequenceFromSpecificPosition, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
-        let jumps = JumpSequencePlot.jumps(forTimeDistances: sequence.jumpTimeDistances, timeUntilEnd: sequence.timeUntilEnd, startPoint: sequence.startingPoint, jumping: jumping)
+        let jumps = Jump.jumps(forTimeDistances: sequence.jumpTimeDistances, timeUntilEnd: sequence.timeUntilEnd, startPoint: sequence.startingPoint, jumping: jumping)
 
         self.init(jumps: jumps, player: player, playfield: playfield)
 
@@ -28,8 +29,8 @@ final class JumpSequencePlot {
         // Calculate current player jump and sequenced jumps
         let jumpStartPoint = Point(time: -player.timePassedSinceJumpStart, height: player.lastJumpStart.y)
 
-        let initialJump = JumpSequencePlot.jump(from: jumpStartPoint, duration: player.timePassedSinceJumpStart + sequence.timeUntilStart, jumping: jumping)
-        let jumps = JumpSequencePlot.jumps(forTimeDistances: sequence.jumpTimeDistances, timeUntilEnd: sequence.timeUntilEnd, startPoint: initialJump.endPoint, jumping: jumping)
+        let initialJump = Jump.from(startPoint: jumpStartPoint, duration: player.timePassedSinceJumpStart + sequence.timeUntilStart, jumping: jumping)
+        let jumps = Jump.jumps(forTimeDistances: sequence.jumpTimeDistances, timeUntilEnd: sequence.timeUntilEnd, startPoint: initialJump.endPoint, jumping: jumping)
 
         let currentPlayerPosition = ScatterDataPoint(x: 0, y: player.currentPosition.y)
 
@@ -72,5 +73,24 @@ final class JumpSequencePlot {
     func draw(interaction: PlayerBarInteraction) {
         let strokable = BarScatterStrokable(interaction: interaction)
         plot.stroke(strokable, with: .normal, alpha: 1, strokeWidth: 1, dash: Dash(on: 1, off: 1))
+    }
+}
+
+// MARK: ScatterDataPoints and ScatterStrokables for Jumps
+
+extension Jump {
+    /// The start point as ScatterDataPoint.
+    var scatterStartPoint: ScatterDataPoint {
+        ScatterDataPoint(x: startPoint.time, y: startPoint.height)
+    }
+
+    /// The end point as ScatterDataPoint.
+    var scatterEndPoint: ScatterDataPoint {
+        ScatterDataPoint(x: endPoint.time, y: endPoint.height)
+    }
+
+    /// The ScatterStrokable representing the parabola.
+    var scatterStrokable: ScatterStrokable {
+        QuadCurveScatterStrokable(parabola: parabola, drawingRange: SimpleRange(from: startPoint.time, to: endPoint.time))
     }
 }

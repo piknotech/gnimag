@@ -33,12 +33,12 @@ struct SingleCenteredJumpThroughSafeRectangleStrategy: NoncollidingPathThroughBa
         let durationUntilLeavingRectangle = Double(safeRectangle.maxX) - startPoint.time
         let sequence = JumpSequenceFromSpecificPosition(startingPoint: startPoint, jumpTimeDistances: [], timeUntilEnd: durationUntilLeavingRectangle)
 
-        // Testing: draw a plot
+        /* Testing: draw a plot
         let plot = JumpSequencePlot(sequence: sequence, player: player, playfield: playfield, jumping: jumping)
-        plot.draw(interaction: interaction, currentTime: currentTime)
+        plot.draw(interaction: interaction)
         let rect = CGRectScatterStrokable(rect: safeRectangle)
         plot.plot.stroke(rect, with: .custom(.lightBlue))
-        plot.writeToDesktop(name: "plotNew.png")
+        plot.writeToDesktop(name: "plotNew.png")*/
 
         return sequence
     }
