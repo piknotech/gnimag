@@ -103,7 +103,6 @@
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
 		632696B123D0CA39009FE1E0 /* PlayerBarInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */; };
 		632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */; };
-		632AC97B23B93A53002743D1 /* TapPredictionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632AC97A23B93A53002743D1 /* TapPredictionQueue.swift */; };
 		6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */; };
 		6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */; };
 		63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A52234BA2B700E42762 /* CompositeTracker.swift */; };
@@ -150,6 +149,8 @@
 		6375AFB9237DA96D0019981E /* DebugParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFB7237DA9650019981E /* DebugParameters.swift */; };
 		6375AFBB237DE6090019981E /* DebugLoggerFrame+Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */; };
 		6376A4F123C7BD4700ADF4C2 /* BarMovementBoundCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6376A4F023C7BD4700ADF4C2 /* BarMovementBoundCollector.swift */; };
+		6377C85E23DC746B0084772F /* TapSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6377C85D23DC746B0084772F /* TapSequence.swift */; };
+		6377C86023DC76D40084772F /* Timing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6377C85F23DC76D40084772F /* Timing.swift */; };
 		637B56A723CE7FDE007E51B0 /* BarScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56A623CE7FDE007E51B0 /* BarScatterStrokable.swift */; };
 		637B56A923CF2AEC007E51B0 /* MultiScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56A823CF2AEC007E51B0 /* MultiScatterStrokable.swift */; };
 		637B56B223D070ED007E51B0 /* FunctionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56B123D070ED007E51B0 /* FunctionWrapper.swift */; };
@@ -157,6 +158,7 @@
 		637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB4E2392BBD30067BBCC /* GameQueue.swift */; };
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
+		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
 		63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
@@ -316,7 +318,6 @@
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
 		632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBarInteraction.swift; sourceTree = "<group>"; };
 		632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerBarInteraction+Conversion.swift"; sourceTree = "<group>"; };
-		632AC97A23B93A53002743D1 /* TapPredictionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictionQueue.swift; sourceTree = "<group>"; };
 		6334C73123674AD200BEF218 /* ContinuousPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuousPingPongTracker.swift; sourceTree = "<group>"; };
 		6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicLinearPingPongTracker.swift; sourceTree = "<group>"; };
 		63351A52234BA2B700E42762 /* CompositeTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTracker.swift; sourceTree = "<group>"; };
@@ -364,6 +365,8 @@
 		6375AFB7237DA9650019981E /* DebugParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugParameters.swift; sourceTree = "<group>"; };
 		6375AFBA237DE6090019981E /* DebugLoggerFrame+Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugLoggerFrame+Logging.swift"; sourceTree = "<group>"; };
 		6376A4F023C7BD4700ADF4C2 /* BarMovementBoundCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarMovementBoundCollector.swift; sourceTree = "<group>"; };
+		6377C85D23DC746B0084772F /* TapSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapSequence.swift; sourceTree = "<group>"; };
+		6377C85F23DC76D40084772F /* Timing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timing.swift; sourceTree = "<group>"; };
 		637B56A623CE7FDE007E51B0 /* BarScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarScatterStrokable.swift; sourceTree = "<group>"; };
 		637B56A823CF2AEC007E51B0 /* MultiScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiScatterStrokable.swift; sourceTree = "<group>"; };
 		637B56B123D070ED007E51B0 /* FunctionWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionWrapper.swift; sourceTree = "<group>"; };
@@ -373,6 +376,7 @@
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		639C745423BB66DF005FD354 /* JumpingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingProperties.swift; sourceTree = "<group>"; };
+		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CartesianProduct.swift"; sourceTree = "<group>"; };
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
@@ -625,6 +629,7 @@
 				636BCC1A23BF953B00A3BE26 /* Angle.swift */,
 				6312143A232669B800C126B4 /* AsyncTools.swift */,
 				631212CD2325740000C126B4 /* Event.swift */,
+				6377C85F23DC76D40084772F /* Timing.swift */,
 				631214382326686A00C126B4 /* Terminal.swift */,
 				6364934423270ABA00FEF664 /* SimpleRange.swift */,
 				637595392331012C00ACA969 /* Operators.swift */,
@@ -1144,9 +1149,7 @@
 		6318966B23B620C4002FBD4F /* Tapping */ = {
 			isa = PBXGroup;
 			children = (
-				63440B4123B388B30091A012 /* TapDelayTracker.swift */,
-				632AC97A23B93A53002743D1 /* TapPredictionQueue.swift */,
-				6318966C23B621B9002FBD4F /* TapScheduler.swift */,
+				639EA37123DC659700B880B7 /* Infrastructure */,
 				636BCC1C23C4DA3F00A3BE26 /* TrackerFutures */,
 			);
 			path = Tapping;
@@ -1303,6 +1306,14 @@
 			path = GameQueue;
 			sourceTree = "<group>";
 		};
+		639A83AD23DC79E80023091B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6377C85D23DC746B0084772F /* TapSequence.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		639C745223BB667F005FD354 /* Strategies */ = {
 			isa = PBXGroup;
 			children = (
@@ -1319,6 +1330,17 @@
 				63D8EC9923D9FFC500121F2B /* Properties */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		639EA37123DC659700B880B7 /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */,
+				6318966C23B621B9002FBD4F /* TapScheduler.swift */,
+				63440B4123B388B30091A012 /* TapDelayTracker.swift */,
+				639A83AD23DC79E80023091B /* Models */,
+			);
+			path = Infrastructure;
 			sourceTree = "<group>";
 		};
 		63D002922372F31900041069 /* Logging */ = {
@@ -1907,6 +1929,7 @@
 				63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */,
 				6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */,
 				636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */,
+				6377C86023DC76D40084772F /* Timing.swift in Sources */,
 				6367D906238EAE7200477AD9 /* Array+RemoveAtIndices.swift in Sources */,
 				63351A5D234DD11E00E42762 /* Array+DropWhile.swift in Sources */,
 				6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */,
@@ -1977,13 +2000,14 @@
 				631213912325794600C126B4 /* PolyTracker.swift in Sources */,
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
 				63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */,
-				632AC97B23B93A53002743D1 /* TapPredictionQueue.swift in Sources */,
 				634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */,
 				63440B4223B388B30091A012 /* TapDelayTracker.swift in Sources */,
+				6377C85E23DC746B0084772F /* TapSequence.swift in Sources */,
 				637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */,
 				6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */,
 				637B56A923CF2AEC007E51B0 /* MultiScatterStrokable.swift in Sources */,
 				63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */,
+				639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */,
 				637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */,
 				63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */,
 				6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */,
