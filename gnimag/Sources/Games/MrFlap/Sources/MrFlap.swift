@@ -60,7 +60,6 @@ public final class MrFlap {
     /// If you want to play a new game, create a new instance of MrFlap.
     public func play() {
         queue.begin()
-        tapPredictor.begin()
     }
 
     /// Update method, called each time a new image is available.
@@ -100,7 +99,7 @@ public final class MrFlap {
         tapPredictor.set(gameModel: gameModelCollector.model)
 
         // Tap to begin the game
-        tapPredictor.performTap()
+        tapPredictor.tap()
     }
 
     /// Check if the first player move, initiated by `startGame`, is visible.
@@ -119,6 +118,7 @@ public final class MrFlap {
     private func gameplayUpdate(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image, time: time) else { return }
         gameModelCollector.accept(result: result, time: time)
+        tapPredictor.predict()
     }
 
     /// Calculate the pixel distance between two players.

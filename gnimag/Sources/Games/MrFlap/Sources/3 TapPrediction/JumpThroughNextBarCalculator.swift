@@ -33,13 +33,24 @@ struct JumpThroughNextBarCalculator {
         // Find next bar
         guard let bar = nextBar(model: model, player: player, playfield: playfield, currentTime: currentTime) else { return nil }
 
+        return JumpSequenceFromCurrentPosition(timeUntilStart: 5 - currentTime, jumpTimeDistances: [2], timeUntilEnd: 3)
+
+        /*
         // Perform strategies
         let pathThroughBar = noncollidingPathThroughBarStrategy.jumpSequence(through: bar, in: playfield, with: player, jumping: jumping, currentTime: currentTime)
 
         let pathToStartingPoint = wayToSpecificPointStrategy.jumpSequence(to: pathThroughBar.startingPoint, in: playfield, with: player, jumping: jumping, currentTime: currentTime)
 
         // Concatenate sequences
-        return concatenate(sequence1: pathToStartingPoint, sequence2: pathThroughBar)
+        let seq = concatenate(sequence1: pathToStartingPoint, sequence2: pathThroughBar)
+
+        let plot = JumpSequencePlot(sequence: seq, player: player, playfield: playfield, jumping: jumping)
+        let interaction = PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime)
+        plot.draw(interaction: interaction)
+        plot.writeToDesktop(name: "plot2.png")
+        
+        return seq
+        */
     }
 
     /// Find the next bar following the current player position (at `currentTime`).

@@ -9,6 +9,7 @@ import Tapping
 
 /// TapPredictorBase provides infrastructure for tap prediction, scheduling and locking.
 open class TapPredictorBase {
+    public let imageProvider: ImageProvider
     public let scheduler: TapScheduler
 
     /// States if the prediction lock is currently active.
@@ -21,6 +22,7 @@ open class TapPredictorBase {
 
     /// Default initializer.
     public init(tapper: Tapper, imageProvider: ImageProvider, tapDelayTolerance: TrackerTolerance) {
+        self.imageProvider = imageProvider
         scheduler = TapScheduler(tapper: tapper, imageProvider: imageProvider, tapDelayTolerance: tapDelayTolerance)
 
         // Reassess lock each time a tap has been performed
@@ -34,16 +36,18 @@ open class TapPredictorBase {
 
     /// Call to perform a prediction step.
     /// When the lock is inactive, the predictionLogic will be executed, and its result will be scheduled.
-    public func predictionStep(predictionLogic: () -> TapSequence) {
+    /// When predictionLogic returns nil, the current sequence is performed further (and not updated).
+    public func predictionStep(predictionLogic: () -> TapSequence?) {
         if lockIsActive { return }
 
         // Perform prediction logic
-        let sequence = predictionLogic()
-        reschedule(sequence: sequence)
+        if let sequence = predictionLogic() {
+            reschedule(sequence: sequence)
 
-        // Reassess lock
-        currentSequence = sequence
-        reassessLock()
+            // Reassess lock
+            currentSequence = sequence
+            reassessLock()
+        }
     }
 
     /// Reschedule a tap sequence, including its completion time for locking reassessment.

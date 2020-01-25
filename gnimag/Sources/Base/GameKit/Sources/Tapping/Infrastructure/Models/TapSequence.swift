@@ -42,7 +42,7 @@ public struct TapSequence {
     public let unlockTime: Double?
 
     /// The duration until the first tap of the sequence will be performed.
-    private var nextTapTime: Double? {
+    public var nextTapTime: Double? {
         taps.map { $0.time }.min()
     }
 

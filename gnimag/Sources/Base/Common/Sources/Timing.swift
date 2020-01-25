@@ -25,6 +25,7 @@ public class Timing {
 
     /// Schedule the timer with the given callback.
     /// You can provide a string and an object for later cancellation.
+    /// If `delay <= 0`, the block is executed (quasi) immediately (not necessarily in the same thread).
     public static func perform(after delay: TimeInterval, identifier: String? = nil, object: AnyObject? = nil, block: @escaping () -> Void) {
         let userInfo = UserInfo(block: block, identifier: identifier, object: object)
         let timer = Timer(timeInterval: delay, target: self, selector: #selector(fire(timer:)), userInfo: userInfo, repeats: false)

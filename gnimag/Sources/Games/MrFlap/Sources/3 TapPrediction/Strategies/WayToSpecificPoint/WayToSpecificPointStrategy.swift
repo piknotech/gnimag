@@ -4,6 +4,7 @@
 //
 
 import Common
+import GameKit
 
 /// A WayToSpecificPointStrategy calculates a jumping strategy (i.e. a series of jumps) that will lead the player from its current position to a specific point.
 /// The velocity when hitting the end point is irrelevant.
@@ -23,4 +24,11 @@ struct JumpSequenceFromCurrentPosition {
 
     /// The time from the last jump until the jump sequence has finished and fulfilled its purpose.
     let timeUntilEnd: Double
+
+    /// Convert this sequence to a TapSequence.
+    var asTapSequence: TapSequence {
+        let tapTimes = jumpTimeDistances.scan(initial: timeUntilStart, +) // Never empty
+        let unlockTime = tapTimes.last! + timeUntilEnd
+        return TapSequence(tapTimes: tapTimes, unlockTime: unlockTime)
+    }
 }
