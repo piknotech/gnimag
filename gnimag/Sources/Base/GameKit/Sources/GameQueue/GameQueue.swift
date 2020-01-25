@@ -9,7 +9,7 @@ import Foundation
 import Image
 
 public final class GameQueue {
-    public typealias Frame = (Image, Double)
+    public typealias Frame = ImageProvider.Frame
 
     /// The timing stats which give you information about frame durations, frame dismissal rates and more.
     public let timingStats: GameQueueTimingStats
@@ -39,13 +39,13 @@ public final class GameQueue {
 
     /// Begin receiving images.
     public func begin() {
-        imageProvider.newImage += newFrame
+        imageProvider.newFrame += self • newFrame
     }
 
     /// Stop receiving images.
     /// Attention: this removes all subscribers from the image provider.
     public func stop() {
-        imageProvider.newImage.unsubscribeAll()
+        imageProvider.newFrame.unsubscribe(self)
     }
 
     /// This method schedules frame analysis in the background.

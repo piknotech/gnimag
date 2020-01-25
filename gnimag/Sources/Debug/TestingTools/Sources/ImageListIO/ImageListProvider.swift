@@ -24,7 +24,7 @@ public final class ImageListProvider: ImageProvider {
     private var timer: Timer?
 
     /// The event that is called each time a new image is available.
-    public var newImage = Event<(Image, Time)>()
+    public var newFrame = Event<Frame>()
 
     /// Conversion block from CGImages to Images.
     private let imageFromCGImage: (CGImage) -> Image
@@ -71,7 +71,7 @@ public final class ImageListProvider: ImageProvider {
             self.i += self.speed // Next image
             let time = self.time // Get current time before copying the image
             if let image = self.currentImage {
-                self.newImage.trigger(with: (self.imageFromCGImage(image), time))
+                self.newFrame.trigger(with: (self.imageFromCGImage(image), time))
             }
         }
     }
