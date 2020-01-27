@@ -22,7 +22,7 @@ struct PlayerProperties {
     // MARK: Conversion
 
     /// Create PlayerProperties from the given player tracker.
-    init?(player: PlayerCourse, jumping: JumpingProperties, performedTaps: [Double], currentTime: Double) {
+    init?(player: PlayerCourse, jumping: JumpingProperties, performedTapTimes: [Double], currentTime: Double) {
         guard let converter = PlayerAngleConverter(player: player) else { return nil }
         guard let xSpeed = player.angle.tracker.slope else { return nil }
 
@@ -30,7 +30,7 @@ struct PlayerProperties {
 
         // Get current jump start
         // TODO: overlapTolerance must be < the minimal distance between two consecutive taps
-        let tapTimeAngles = performedTaps.map(converter.angle(from:))
+        let tapTimeAngles = performedTapTimes.map(converter.angle(from:))
         guard let angularJumpStart = player.height.finalFutureJumpUsingJumpTimes(times: tapTimeAngles, overlapTolerance: 0.05) else { return nil }
 
         lastJumpStart = Position(x: Angle(angularJumpStart.time), y: angularJumpStart.value)

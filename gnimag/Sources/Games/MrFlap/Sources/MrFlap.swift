@@ -99,7 +99,7 @@ public final class MrFlap {
         tapPredictor.set(gameModel: gameModelCollector.model)
 
         // Tap to begin the game
-        tapPredictor.tap()
+        tapPredictor.tapNow()
     }
 
     /// Check if the first player move, initiated by `startGame`, is visible.

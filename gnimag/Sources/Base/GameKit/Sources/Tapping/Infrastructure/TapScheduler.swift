@@ -24,10 +24,14 @@ public final class TapScheduler {
         delayTracker.delay
     }
 
-    /// All tap times where a tap has been performed at by the TapScheduler.
-    public private(set) var performedTaps = [Time]()
+    /// All taps which are currently scheduled (but not yet performed).
+    public private(set) var scheduledTaps = [Tap]()
+
+    /// All (absolute) times where a tap has been performed at.
+    public private(set) var performedTapTimes = [Time]()
 
     /// An event which is triggered each time a scheduled tap is actually performed.
+    /// The time of the tap parameter is not necessarily exactly equal to the actual tap time (i.e. current time) – there could be small deviations (for example if the tap was scheduled for a time in the past).
     public let tapPerformed = Event<Tap>()
 
     /// Default initializer.
@@ -38,36 +42,51 @@ public final class TapScheduler {
     }
 
     /// Tap now, creating a new Tap object.
-    public func tap() {
-        let tap = Tap(time: 0)
+    public func tapNow() {
+        let tap = Tap(absoluteTime: imageProvider.time)
         actuallyPerform(tap: tap)
-    }
-
-    /// Clear all scheduled taps.
-    public func clearScheduledTaps() {
-        Timing.cancelPerform(object: self)
     }
 
     /// Schedule a single tap in the future.
     public func schedule(tap: Tap) {
-        guard tap.time >= 0 else {
-            Terminal.log(.warning, "TapScheduler – time interval must be positive, is \(tap.time)!")
-            return
+        let distance = tap.absoluteTime - imageProvider.time
+        if distance < 0 {
+            Terminal.log(.warning, "TapScheduler – `schedule` called with a negative time interval (\(distance)). Tap will be executed immediately.")
         }
 
-        Timing.perform(after: tap.time, object: self) {
+        scheduledTaps.append(tap)
+
+        Timing.perform(after: distance, identification: .object(self, string: "\(tap.absoluteTime)")) {
             self.actuallyPerform(tap: tap)
         }
+    }
+
+    /// Unschedule a previously scheduled tap.
+    /// Returns `true` if the tap has been unscheduled.
+    /// When returning false, the tap has either never been scheduled, or has already been performed.
+    @discardableResult
+    public func unschedule(tap: Tap) -> Bool {
+        let result = Timing.cancelTasks(matching: .object(self, string: "\(tap.absoluteTime)"))
+        scheduledTaps.removeAll { tap == $0 }
+        return result
+    }
+
+    /// Clear all currently scheduled taps.
+    public func unscheduleAll() {
+        Timing.cancelTasks(withObject: self)
+        scheduledTaps.removeAll()
     }
 
     /// Perform a tap at the current moment.
     private func actuallyPerform(tap: Tap) {
         let tapTime = imageProvider.time
-        tapper.tap()
 
-        // Inform delay tracker and trigger event
+        tapper.tap()
         delayTracker.tapPerformed(time: tapTime)
-        performedTaps.append(tapTime)
+
+        // Update tap arrays and reference time
+        performedTapTimes.append(tapTime)
+        scheduledTaps.removeAll { tap == $0 }
 
         tapPerformed.trigger(with: tap)
     }

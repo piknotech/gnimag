@@ -23,17 +23,17 @@ struct JumpThroughNextBarCalculator {
     /// Calculate the jump sequence through the next bar.
     /// `currentTime` denotes the current time, after adding possible input+output delays.
     /// Returns `nil` if not all tracker regressions are available.
-    func jumpSequenceThroughNextBar(model: GameModel, performedTaps: [Double], currentTime: Double) -> JumpSequenceFromCurrentPosition? {
+    func jumpSequenceThroughNextBar(model: GameModel, performedTapTimes: [Double], currentTime: Double) -> JumpSequenceFromCurrentPosition? {
         // Convert models
         guard
             let jumping = JumpingProperties(player: model.player),
-            let player = PlayerProperties(player: model.player, jumping: jumping, performedTaps: performedTaps, currentTime: currentTime),
+            let player = PlayerProperties(player: model.player, jumping: jumping, performedTapTimes: performedTapTimes, currentTime: currentTime),
             let playfield = PlayfieldProperties(playfield: model.playfield, with: model.player) else { return nil }
 
         // Find next bar
         guard let bar = nextBar(model: model, player: player, playfield: playfield, currentTime: currentTime) else { return nil }
 
-        return JumpSequenceFromCurrentPosition(timeUntilStart: 5 - currentTime, jumpTimeDistances: [2], timeUntilEnd: 3)
+        return JumpSequenceFromCurrentPosition(timeUntilStart: 5 - currentTime, jumpTimeDistances: [], timeUntilEnd: 3)
 
         /*
         // Perform strategies

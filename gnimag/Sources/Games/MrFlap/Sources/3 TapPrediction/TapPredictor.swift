@@ -30,11 +30,6 @@ class TapPredictor: TapPredictorBase {
         gameModel.player.linkPlayerJump(to: scheduler.delayTracker)
     }
 
-    /// Call to perform a tap at the current moment.
-    func tap() {
-        scheduler.tap()
-    }
-
     /// Call after each successful game model collection to perform tap prediction.
     func predict() {
         predictionStep(predictionLogic: predictionLogic)
@@ -46,15 +41,15 @@ class TapPredictor: TapPredictorBase {
         guard let model = gameModel, let delay = scheduler.delay else { return nil }
 
         let currentTime = imageProvider.time + delay
-        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTaps: scheduler.performedTaps, currentTime: currentTime) else { return nil }
+        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: scheduler.performedTapTimes, currentTime: currentTime) else { return nil }
 
-        print(sequence.asTapSequence)
-        return sequence.asTapSequence
+        print(sequence.asTapSequence(relativeTo: imageProvider.time).taps)
+        return sequence.asTapSequence(relativeTo: imageProvider.time)
     }
 
     /// Check if a prediction lock should be applied.
     override func shouldLock(scheduledSequence: TapSequence) -> Bool {
-        guard let time = scheduledSequence.nextTapTime else { return false }
-        return time < 0.1
+        guard let time = scheduledSequence.nextTapTime else { return true } // When the sequence is empty, wait until the sequence unlocks (via unlockTime)
+        return (time - imageProvider.time) < 0.1
     }
 }

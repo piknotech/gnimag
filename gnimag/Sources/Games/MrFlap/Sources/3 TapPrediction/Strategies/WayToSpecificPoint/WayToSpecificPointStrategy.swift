@@ -26,8 +26,8 @@ struct JumpSequenceFromCurrentPosition {
     let timeUntilEnd: Double
 
     /// Convert this sequence to a TapSequence.
-    var asTapSequence: TapSequence {
-        let tapTimes = jumpTimeDistances.scan(initial: timeUntilStart, +) // Never empty
+    func asTapSequence(relativeTo currentTime: Double) -> TapSequence {
+        let tapTimes = jumpTimeDistances.scan(initial: currentTime + timeUntilStart, +) // Never empty
         let unlockTime = tapTimes.last! + timeUntilEnd
         return TapSequence(tapTimes: tapTimes, unlockTime: unlockTime)
     }
