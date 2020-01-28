@@ -10,14 +10,12 @@ import Common
 ///  • Collecting relevant regressions from trackers and converting them into abstract models (`BarProperties`, `JumpingProperties` etc.) Thereby, all obstacles are enlarged to allow treating the player as a single point.
 ///  • Choosing concrete strategies and using them to perform the actual jump sequence calculations, given the constructed abstract models.
 struct JumpThroughNextBarCalculator {
-    /// The concrete strategies that are used for jump sequence calculation.
-    private let noncollidingPathThroughBarStrategy: NoncollidingPathThroughBarStrategy
-    private let wayToSpecificPointStrategy: WayToSpecificPointStrategy
+    /// The concrete strategy that is used for jump sequence calculation.
+    private let strategy: InteractionSolutionStrategy
 
     /// Default initializer.
     init() {
-        noncollidingPathThroughBarStrategy = SingleCenteredJumpThroughSafeRectangleStrategy()
-        wayToSpecificPointStrategy = LinearWayToSpecificPointStrategy()
+        strategy = OptimalSolutionViaRandomizedSearchStrategy()
     }
 
     /// Calculate the jump sequence through the next bar.
@@ -33,23 +31,14 @@ struct JumpThroughNextBarCalculator {
         // Find next bar
         guard let bar = nextBar(model: model, player: player, playfield: playfield, currentTime: currentTime) else { return nil }
 
-        return JumpSequenceFromCurrentPosition(timeUntilStart: 5 - currentTime, jumpTimeDistances: [], timeUntilEnd: 3)
-
-        /*
-        // Perform strategies
-        let pathThroughBar = noncollidingPathThroughBarStrategy.jumpSequence(through: bar, in: playfield, with: player, jumping: jumping, currentTime: currentTime)
-
-        let pathToStartingPoint = wayToSpecificPointStrategy.jumpSequence(to: pathThroughBar.startingPoint, in: playfield, with: player, jumping: jumping, currentTime: currentTime)
-
-        // Concatenate sequences
-        let seq = concatenate(sequence1: pathToStartingPoint, sequence2: pathThroughBar)
-
-        let plot = JumpSequencePlot(sequence: seq, player: player, playfield: playfield, jumping: jumping)
         let interaction = PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime)
+        return strategy.solution(for: interaction, on: playfield)
+
+        /* Plotting
+        let solution = strategy.solution(for: interaction, on: playfield)
+        let plot = JumpSequencePlot(sequence: solution, player: player, playfield: playfield, jumping: jumping)
         plot.draw(interaction: interaction)
-        plot.writeToDesktop(name: "plot2.png")
-        
-        return seq
+        plot.writeToDesktop(name: "plot.png")
         */
     }
 
@@ -70,17 +59,5 @@ struct JumpThroughNextBarCalculator {
         return zipped.min { (pair1, pair2) in
             pair1.distance < pair2.distance
         }?.bar
-    }
-
-    /// Concatenate two jump sequences.
-    private func concatenate(sequence1: JumpSequenceFromCurrentPosition, sequence2: JumpSequenceFromSpecificPosition) -> JumpSequenceFromCurrentPosition {
-        let timeDistances1 = sequence1.jumpTimeDistances
-        let timeDistances2 = sequence2.jumpTimeDistances.map { $0 + sequence1.timeUntilEnd }
-
-        return JumpSequenceFromCurrentPosition(
-            timeUntilStart: sequence1.timeUntilStart,
-            jumpTimeDistances: timeDistances1 + timeDistances2,
-            timeUntilEnd: sequence2.timeUntilEnd
-        )
     }
 }
