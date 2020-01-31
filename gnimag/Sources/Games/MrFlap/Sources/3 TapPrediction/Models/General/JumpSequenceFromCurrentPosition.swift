@@ -32,10 +32,33 @@ struct JumpSequenceFromCurrentPosition {
         return Jump.jumps(forTimeDistances: jumpTimeDistances, timeUntilEnd: timeUntilEnd, startPoint: currentJump.endPoint, jumping: properties)
     }
 
+    /// Calculate the height at the given time value.
+    /// A time of 0 represents the current time.
+    func height(at t: Double, for player: PlayerProperties, with properties: JumpingProperties) -> Double {
+        // Translate everything to start at the player's current jump start
+        let t = t + player.timePassedSinceJumpStart
+        let allJumps = [player.timePassedSinceJumpStart + timeUntilStart] + jumpTimeDistances
+        let cumulated = allJumps.scan(initial: 0, +) // Never empty
+
+        // Find jump we're currently in at time t
+        let jumpIndex = cumulated.firstIndex { $0 > t } ?? (cumulated.count - 1) // in 0 ..< count
+
+        // Calculate height of completed jumps and of current one
+        let completedJumpsHeight = allJumps[0 ..< jumpIndex].reduce(0) { height, jumpDuration in
+            height + properties.parabola.at(jumpDuration)
+        }
+
+        let currentJumpDuration = t - cumulated[jumpIndex]
+        let currentJumpHeight = properties.parabola.at(currentJumpDuration)
+
+        // Add initial height (from player's current jump start)
+        return completedJumpsHeight + currentJumpHeight + player.lastJumpStart.y
+    }
+
     /// Convert this sequence to a TapSequence.
     func asTapSequence(relativeTo currentTime: Double) -> TapSequence {
-        let tapTimes = jumpTimeDistances.scan(initial: currentTime + timeUntilStart, +) // Never empty
-        let unlockTime = tapTimes.last! + timeUntilEnd
-        return TapSequence(tapTimes: tapTimes, unlockTime: unlockTime)
+        let cumulated = jumpTimeDistances.scan(initial: currentTime + timeUntilStart, +) // Never empty
+        let unlockTime = cumulated.last! + timeUntilEnd
+        return TapSequence(tapTimes: cumulated, unlockTime: unlockTime)
     }
 }
