@@ -5,6 +5,7 @@
 
 import Common
 import Foundation
+import HandySwift
 
 /// SolutionGenerator generates a set of possible solutions to a given interaction.
 /// These solutions can be required to meet certain requirements, e.g. a minimum distance between consecutive taps etc.
@@ -16,26 +17,67 @@ struct SolutionGenerator {
     let jumping: JumpingProperties
     let interaction: PlayerBarInteraction
 
-    /// The current best solution, as rated by SolutionVerifier.
-    /// Update from outside after improving the best solution.
-    var bestSolution: Solution?
-
     /// Generate a random solution meeting the requirements.
     /// Returns nil if it is not possible to solve the interaction or to meet the requirements.
-    func randomSolution(minimumConsecutiveTapDistance: Double) -> Solution? {
-        guard let minTaps = minimumNumberOfTaps else { return nil } // Else, impossible
-        // ...
-        return nil
+    func randomSolution(minimumConsecutiveTapDistance: Double?, currentBestNumberOfTaps: Int?) -> Solution? {
+        let T = interaction.holeMovement.intersectionsWithBoundsCurves.right.xRange.upper
+
+        // Find min and max tap distances
+        guard let minTaps = minimumNumberOfTaps else { return nil } // Else, impossible // TODO: Only calculate once!
+        let maxTaps = minimumConsecutiveTapDistance.map { Int(ceil(T / $0)) }
+
+        // Generate random solution
+        // TODO: allow empty solution? i.e. zero taps
+        let taps = pickRandomNumberOfTaps(minimum: max(1, minTaps), maximum: maxTaps, currentBest: currentBestNumberOfTaps)
+        let tapRange = SimpleRange(from: 0, to: T)
+        guard let points = RandomPoints.on(tapRange, minimumDistance: minimumConsecutiveTapDistance ?? 0, numPoints: taps) else { return nil }
+        return solutionFromRandomPointsSequence(points, T: T)
+
+        // TODO: condition for first tap (must be before a given time, i.e. lower playfield touch time)
     }
 
-    /// Pick a random number of taps between the given interval.
+    /// Convert a random points sequence (as obtained from `RandomPoints.on(_:)`) into a Solution.
+    private func solutionFromRandomPointsSequence(_ points: [Double], T: Double) -> Solution {
+        // "Anti-scan" the array to find the element differences
+        var lastValue: Double = 0
+        var differences = points.map { element -> Double in
+            let diff = element - lastValue
+            lastValue = element
+            return diff
+        }
+
+        // Find start and end time and create solution
+        let timeUntilStart = differences.removeFirst()
+        let timeUntilEnd = T - points.last!
+
+        return Solution(timeUntilStart: timeUntilStart, jumpTimeDistances: differences, timeUntilEnd: timeUntilEnd)
+    }
+
+    //jetzt: erst make fixen, dann accio
+    
+    /// Pick a (positive) random number of taps between the given interval.
     /// Thereby, the minimum is the minimum required number of taps to solve the interaction.
-    private func randomNumberOfTaps(
-        minimum: Int,
-        maximum: Int?,
-        currentBest: Int?
-    ) -> Int {
-        0
+    /// All parameters must be positive.
+    private func pickRandomNumberOfTaps(minimum: Int, maximum: Int?, currentBest: Int?) -> Int {
+        switch (maximum, currentBest) {
+        case let (.some(maximum), .some(currentBest)):
+            // Use a mix of `minimum` and `currentBest` as average (to hinder bad solutions from affecting the choice in a bad way, as the best solutions are often very near the `minimum` value)
+            var average = Double(minimum + currentBest) / 2
+            average.clamp(to: Double(minimum + 1) ... Double(maximum - 1)) // Allow a bit of leeway
+            return Distributions.binomialSample(in: minimum ... maximum, average: average)
+
+        case let (.none, .some(currentBest)):
+            var average = Double(minimum + currentBest) / 2
+            average.clamp(to: Double(minimum + 1)...)
+            return Distributions.poissonSample(in: minimum..., average: average)
+
+        case let (.some(maximum), .none):
+            // `minimum + 1` is often a good approximation for real solutions
+            return Distributions.binomialSample(in: minimum ... maximum, average: Double(minimum + 1))
+
+        case (.none, .none):
+            return Distributions.poissonSample(in: minimum..., average: Double(minimum + 1))
+        }
     }
 
     /// A value where it is not possible to complete the interaction (i.e. pass the bar) with less taps.
@@ -67,13 +109,15 @@ struct SolutionGenerator {
     }
 }
 
-// MARK: - Poisson
+// MARK: - Distributions
 
-private enum Poisson {
+private enum Distributions {
     /// Generate a random variable distributed by the possion(lambda) distribution.
-    /// lambda (> 0) is the expected value of the random variable.
+    /// lambda (nonnegative) is the expected value of the random variable.
     /// Requires O(lambda) time (on average).
-    private static func poissonSample(lambda: Double) -> Int {
+    static func poissonSample(lambda: Double) -> Int {
+        if lambda <= 0 { return 0 }
+
         let L = exp(-lambda)
         var k = 0, p = Double(1)
 
@@ -83,6 +127,29 @@ private enum Poisson {
         }
 
         return k - 1
+    }
+
+    /// Generate a random variable distributed by the possion distribution inside the given half-open range.
+    /// Requires O(lambda) time (on average), where `lambda = average - range.lowerBound`.
+    static func poissonSample(in range: PartialRangeFrom<Int>, average: Double) -> Int {
+        let lambda = average - Double(range.lowerBound)
+        return range.lowerBound + poissonSample(lambda: lambda)
+    }
+
+    /// Generate a random variable distributed by the binomial(n, p) distribution.
+    /// n must be nonnegative.
+    /// Requires O(n) time.
+    static func binomialSample(n: Int, p: Double) -> Int {
+        let values = (0 ..< n).map { _ in Double.random(in: 0 ..< 1) }
+        return values.count { $0 < p }
+    }
+
+    /// Generate a random variable distributed by the binomial distribution inside the given range with the given average value.
+    /// Requires O(n) time, where n is the size of the range.
+    static func binomialSample(in range: ClosedRange<Int>, average: Double) -> Int {
+        let offset = range.lowerBound, size = range.upperBound - range.lowerBound
+        let p = average / Double(size)
+        return offset + binomialSample(n: size, p: p)
     }
 }
 

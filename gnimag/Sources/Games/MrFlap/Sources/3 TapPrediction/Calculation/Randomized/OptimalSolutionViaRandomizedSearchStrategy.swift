@@ -11,10 +11,21 @@ struct OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
 
     /// Calculate the solution for the given interaction properties.
     func solution(for interaction: PlayerBarInteraction, on playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties) -> Solution? {
-        // Create generator and verifier
-        let verifier = SolutionVerifier(playfield: playfield, player: player, jumping: jumping, interaction: interaction)
-        let generator = SolutionGenerator(playfield: playfield, player: player, jumping: jumping, interaction: interaction, bestSolution: lastSolution)
 
-        return Solution(timeUntilStart: 10, jumpTimeDistances: [], timeUntilEnd: 0)
+        func plot(_ solution: Solution, name: String) {
+            let plot = JumpSequencePlot(sequence: solution, player: player, playfield: playfield, jumping: jumping)
+            plot.draw(interaction: interaction)
+            plot.writeToDesktop(name: name)
+        }
+
+        // Create generator and verifier
+        let generator = SolutionGenerator(playfield: playfield, player: player, jumping: jumping, interaction: interaction)
+        let verifier = SolutionVerifier(playfield: playfield, player: player, jumping: jumping, interaction: interaction)
+
+        let solution = generator.randomSolution(minimumConsecutiveTapDistance: nil, currentBestNumberOfTaps: nil)
+        print(solution)
+        solution.map { plot($0, name: "test.png") }
+
+        return solution
     }
 }
