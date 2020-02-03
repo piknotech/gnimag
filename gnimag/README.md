@@ -2,7 +2,7 @@ Here lives the Xcode project.
 
 The project uses Swift 5.1.3; you need Xcode 11 for building and running gnimag.
 
-All libraries are defined as targets. Dependencies are managed via [Accio](https://github.com/JamitLabs/Accio). Call `accio update` to fetch dependencies.
+All libraries are defined as targets. Dependencies are managed via Xcode, using SPM.
 
 To create a new library, create a new target and choose `macOS -> Framework`.
 

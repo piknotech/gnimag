@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 import GameKit
 
 /// BarProperties describe a moving bar with a hole in the middle.

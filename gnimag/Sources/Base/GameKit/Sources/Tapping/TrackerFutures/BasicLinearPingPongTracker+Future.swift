@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 
 public extension BasicLinearPingPongTracker {
     /// A portion of (or a full) segment of the linear ping pong tracker.

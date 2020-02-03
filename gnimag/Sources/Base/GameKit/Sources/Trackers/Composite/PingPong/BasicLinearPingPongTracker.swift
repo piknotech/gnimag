@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 import TestingTools
 
 /// BasicLinearPingPongTracker is a PingPongTracker whose lower and upper bounds are constant, and whose segment function is linear.

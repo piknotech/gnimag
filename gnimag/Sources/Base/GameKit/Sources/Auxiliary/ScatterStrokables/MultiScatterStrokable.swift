@@ -3,6 +3,7 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Foundation
 import TestingTools
 
 /// A composition of ScatterStrokables, which is drawn by drawing all components consecutively.

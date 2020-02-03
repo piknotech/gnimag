@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -128,6 +128,8 @@
 		634AD0172327C8D000D87BAB /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0162327C8D000D87BAB /* Ray.swift */; };
 		634AD0192327D75200D87BAB /* Strokable+Fillable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD0182327D75200D87BAB /* Strokable+Fillable.swift */; };
 		634AD01B2327E78C00D87BAB /* Drawing Shapes+Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */; };
+		634AF72023E84879005FE241 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 634AF71F23E84879005FE241 /* Charts */; };
+		634AF72323E848C3005FE241 /* Surge in Frameworks */ = {isa = PBXBuildFile; productRef = 634AF72223E848C3005FE241 /* Surge */; };
 		634AFA7023CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AFA6F23CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift */; };
 		634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC02358749F00AE9C91 /* PolynomialSolvers.swift */; };
 		634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */; };
@@ -160,6 +162,7 @@
 		637FCB4B2391AA0C0067BBCC /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB492391A9FA0067BBCC /* DebugLogger.swift */; };
 		637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB4E2392BBD30067BBCC /* GameQueue.swift */; };
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
+		6383139423E7296C0014B844 /* HandySwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6383139323E7296C0014B844 /* HandySwift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
 		63B62B2423DC8D06009B07DF /* Array+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B62B2323DC8D06009B07DF /* Array+Scan.swift */; };
@@ -180,7 +183,6 @@
 		63FABDC3239181640088FD77 /* TrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */; };
 		63FABDC4239181640088FD77 /* SimpleTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */; };
 		63FABDC6239186DB0088FD77 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
-		9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8B5AE54AE4C6A103DA27FF /* Surge.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -196,7 +198,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		61ED5ED8A0CFA3E40265F162 /* Charts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Charts.framework; path = Dependencies/macOS/Charts.framework; sourceTree = "<group>"; };
 		6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerProtocol.swift; sourceTree = "<group>"; };
 		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToleranceRangeScatterStrokables.swift; sourceTree = "<group>"; };
@@ -400,7 +401,6 @@
 		63FABDB423917D6F0088FD77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63FABDBD23917F6C0088FD77 /* DebugParameterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugParameterType.swift; sourceTree = "<group>"; };
 		63FABDC02391811F0088FD77 /* DebugLoggerFrameProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLoggerFrameProtocol.swift; sourceTree = "<group>"; };
-		9A8B5AE54AE4C6A103DA27FF /* Surge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Surge.framework; path = Dependencies/macOS/Surge.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -443,7 +443,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9040C12CFFDFF7CB67FE5AA2 /* Surge.framework in Frameworks */,
+				634AF72323E848C3005FE241 /* Surge in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +451,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				634AF72023E84879005FE241 /* Charts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +459,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6383139423E7296C0014B844 /* HandySwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,14 +480,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		11578D4D3B87173763296AD3 /* GameKit */ = {
-			isa = PBXGroup;
-			children = (
-				9A8B5AE54AE4C6A103DA27FF /* Surge.framework */,
-			);
-			name = GameKit;
-			sourceTree = "<group>";
-		};
 		6311E0B023E0E56A0080288D /* Calculation */ = {
 			isa = PBXGroup;
 			children = (
@@ -513,7 +507,6 @@
 				631212CC2325731F00C126B4 /* README.md */,
 				631212CA23256D5000C126B4 /* Sources */,
 				631212AE23253DC700C126B4 /* Products */,
-				9F432FA5361DFCE0850BFC33 /* Dependencies */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1154,8 +1147,8 @@
 		6316BDB223CB8CB90062100F /* Drawing */ = {
 			isa = PBXGroup;
 			children = (
-				6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */,
 				637B56A623CE7FDE007E51B0 /* BarScatterStrokable.swift */,
+				6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */,
 				634AFA6F23CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift */,
 				63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */,
 			);
@@ -1440,23 +1433,6 @@
 			path = Trackers;
 			sourceTree = "<group>";
 		};
-		9F432FA5361DFCE0850BFC33 /* Dependencies */ = {
-			isa = PBXGroup;
-			children = (
-				11578D4D3B87173763296AD3 /* GameKit */,
-				AB4CB9B3FFFA119AE1170175 /* TestingTools */,
-			);
-			name = Dependencies;
-			sourceTree = "<group>";
-		};
-		AB4CB9B3FFFA119AE1170175 /* TestingTools */ = {
-			isa = PBXGroup;
-			children = (
-				61ED5ED8A0CFA3E40265F162 /* Charts.framework */,
-			);
-			name = TestingTools;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1632,13 +1608,15 @@
 				6312136A2325791600C126B4 /* Sources */,
 				6312136B2325791600C126B4 /* Frameworks */,
 				6312136C2325791600C126B4 /* Resources */,
-				46E360BE94AD138BD006AB52 /* Accio */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = GameKit;
+			packageProductDependencies = (
+				634AF72223E848C3005FE241 /* Surge */,
+			);
 			productName = GameKit;
 			productReference = 6312136E2325791600C126B4 /* GameKit.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1651,13 +1629,15 @@
 				631213932325798E00C126B4 /* Sources */,
 				631213942325798E00C126B4 /* Frameworks */,
 				631213952325798E00C126B4 /* Resources */,
-				3CBE3417ADFC36E9DF5DD611 /* Accio */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = TestingTools;
+			packageProductDependencies = (
+				634AF71F23E84879005FE241 /* Charts */,
+			);
 			productName = MacTestingTools;
 			productReference = 631213972325798E00C126B4 /* TestingTools.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1676,6 +1656,9 @@
 			dependencies = (
 			);
 			name = MrFlap;
+			packageProductDependencies = (
+				6383139323E7296C0014B844 /* HandySwift */,
+			);
 			productName = MrFlap;
 			productReference = 631213D623257EF600C126B4 /* MrFlap.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1767,6 +1750,11 @@
 				Base,
 			);
 			mainGroup = 631212A223253DA100C126B4;
+			packageReferences = (
+				6383139223E7296C0014B844 /* XCRemoteSwiftPackageReference "HandySwift" */,
+				634AF71E23E84879005FE241 /* XCRemoteSwiftPackageReference "Charts" */,
+				634AF72123E848C3005FE241 /* XCRemoteSwiftPackageReference "Surge" */,
+			);
 			productRefGroup = 631212AE23253DC700C126B4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1850,41 +1838,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3CBE3417ADFC36E9DF5DD611 /* Accio */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Dependencies/macOS/Charts.framework",
-			);
-			name = Accio;
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Charts.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-		46E360BE94AD138BD006AB52 /* Accio */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Dependencies/macOS/Surge.framework",
-			);
-			name = Accio;
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Surge.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		631212A923253DC700C126B4 /* Sources */ = {
@@ -2193,6 +2146,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path";
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=500 -Xfrontend -warn-long-function-bodies=2000";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -2244,7 +2198,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -2263,7 +2216,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -2327,7 +2279,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -2384,7 +2336,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -2411,7 +2362,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2490,7 +2440,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2545,7 +2495,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -2572,7 +2521,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2647,7 +2595,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2706,7 +2654,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -2733,7 +2680,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2812,7 +2758,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2867,7 +2813,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -2894,7 +2839,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -2969,7 +2913,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3028,7 +2972,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -3055,7 +2998,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3134,7 +3076,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3193,7 +3135,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -3220,7 +3161,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3299,7 +3239,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3354,7 +3294,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -3381,7 +3320,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3456,7 +3394,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3511,7 +3449,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -3538,7 +3475,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3613,7 +3549,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3648,7 +3584,6 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -3670,7 +3605,6 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3722,7 +3656,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -3832,6 +3766,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		634AF71E23E84879005FE241 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.4.0;
+			};
+		};
+		634AF72123E848C3005FE241 /* XCRemoteSwiftPackageReference "Surge" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Jounce/Surge";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
+		6383139223E7296C0014B844 /* XCRemoteSwiftPackageReference "HandySwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Flinesoft/HandySwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		634AF71F23E84879005FE241 /* Charts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 634AF71E23E84879005FE241 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = Charts;
+		};
+		634AF72223E848C3005FE241 /* Surge */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 634AF72123E848C3005FE241 /* XCRemoteSwiftPackageReference "Surge" */;
+			productName = Surge;
+		};
+		6383139323E7296C0014B844 /* HandySwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6383139223E7296C0014B844 /* XCRemoteSwiftPackageReference "HandySwift" */;
+			productName = HandySwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 631212A323253DA100C126B4 /* Project object */;
 }
