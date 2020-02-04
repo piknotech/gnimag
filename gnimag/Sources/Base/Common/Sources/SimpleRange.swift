@@ -59,14 +59,13 @@ public struct SimpleRange<Bound: FloatingPoint> {
     }
 
     /// Check if the element is in the range.
-    /// Only works when `isEmpty = false`.
+    /// Returns false when self is empty.
     public func contains(_ element: Bound) -> Bool {
         return lower <= element && element <= upper
     }
 
     /// Intersect this range with another range.
-    /// Only works when both ranges are not empty.
-    /// Returns an empty range if there is no intersection.
+    /// Returns an empty range if there is no intersection of if one of the ranges is empty.
     /// Use `.open` as the neutral element.
     public func intersection(with other: SimpleRange<Bound>) -> SimpleRange<Bound> {
         return SimpleRange(from: max(lower, other.lower), to: min(upper, other.upper))

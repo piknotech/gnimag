@@ -38,17 +38,18 @@ struct JumpSequenceFromCurrentPosition {
         // Translate everything to start at the player's current jump start
         let t = t + player.timePassedSinceJumpStart
         let allJumps = [player.timePassedSinceJumpStart + timeUntilStart] + jumpTimeDistances
-        let cumulated = allJumps.scan(initial: 0, +) // Never empty
+        let cumulated = Array(allJumps.scan(initial: 0, +)[1...]) // Never empty
 
         // Find jump we're currently in at time t
-        let jumpIndex = cumulated.firstIndex { $0 > t } ?? (cumulated.count - 1) // in 0 ..< count
+        let jumpIndex = cumulated.firstIndex { $0 > t } ?? allJumps.count // in 0 ... count
 
         // Calculate height of completed jumps and of current one
         let completedJumpsHeight = allJumps[0 ..< jumpIndex].reduce(0) { height, jumpDuration in
             height + properties.parabola.at(jumpDuration)
         }
 
-        let currentJumpDuration = t - cumulated[jumpIndex]
+        let cumulatedPlusZero = [0] + cumulated
+        let currentJumpDuration = t - cumulatedPlusZero[jumpIndex]
         let currentJumpHeight = properties.parabola.at(currentJumpDuration)
 
         // Add initial height (from player's current jump start)

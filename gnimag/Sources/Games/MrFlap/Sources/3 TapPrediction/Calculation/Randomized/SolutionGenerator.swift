@@ -5,6 +5,7 @@
 
 import Common
 import Foundation
+import GameKit
 import HandySwift
 
 /// SolutionGenerator generates a set of possible solutions to a given interaction.
@@ -30,10 +31,11 @@ struct SolutionGenerator {
         // TODO: allow empty solution? i.e. zero taps
         let taps = pickRandomNumberOfTaps(minimum: max(1, minTaps), maximum: maxTaps, currentBest: currentBestNumberOfTaps)
         let tapRange = SimpleRange(from: 0, to: T)
-        guard let points = RandomPoints.on(tapRange, minimumDistance: minimumConsecutiveTapDistance ?? 0, numPoints: taps) else { return nil }
+        guard let points = RandomPoints.on(tapRange, minimumDistance: minimumConsecutiveTapDistance ?? 0, numPoints: taps, maximumValueForFirstPoint: maxTimeForFirstTap) else { return nil }
+
         return solutionFromRandomPointsSequence(points, T: T)
 
-        // TODO: condition for first tap (must be before a given time, i.e. lower playfield touch time)
+        // todo: after verification: remove last tap, if possible?
     }
 
     /// Convert a random points sequence (as obtained from `RandomPoints.on(_:)`) into a Solution.
@@ -53,8 +55,6 @@ struct SolutionGenerator {
         return Solution(timeUntilStart: timeUntilStart, jumpTimeDistances: differences, timeUntilEnd: timeUntilEnd)
     }
 
-    //jetzt: erst make fixen, dann accio
-    
     /// Pick a (positive) random number of taps between the given interval.
     /// Thereby, the minimum is the minimum required number of taps to solve the interaction.
     /// All parameters must be positive.
@@ -107,6 +107,15 @@ struct SolutionGenerator {
         N = Int(ceil(0.5 * jumping.gravity * T * T / (jumping.jumpVelocity * T - heightDiff)))
         return N
     }
+
+    /// The time (from now) in which the first tap must be executed to not hit the playfield floor.
+    private var maxTimeForFirstTap: Double {
+        let heightDiff = playfield.lowerRadius - player.lastJumpStart.y
+        guard let solutions = QuadraticSolver.solve(jumping.parabola, equals: heightDiff) else { return .infinity }
+
+        // Return larger (future) solution; subtract frame shift
+        return max(solutions.0, solutions.1) - player.timePassedSinceJumpStart
+    }
 }
 
 // MARK: - Distributions
@@ -150,36 +159,5 @@ private enum Distributions {
         let offset = range.lowerBound, size = range.upperBound - range.lowerBound
         let p = average / Double(size)
         return offset + binomialSample(n: size, p: p)
-    }
-}
-
-// MARK: - RandomPoints
-
-private enum RandomPoints {
-    /// Returns an array of size `numPoints` containing evenly distributed points in the given range. The range must be regular.
-    /// Additionally, the distance between each pair of points is at least `minimumDistance`.
-    /// Returns nil if it is not possible to satisfy this condition.
-    static func on(_ range: SimpleRange<Double>, minimumDistance: Double, numPoints: Int) -> [Double]? {
-        let reducedLength = range.upper - range.lower - Double(numPoints - 1) * minimumDistance
-        let reducedRange = SimpleRange(from: range.lower, to: range.lower + reducedLength)
-
-        // If the required minimum distance is too large (respective to N), the reduced range is empty
-        if reducedRange.isEmpty { return nil }
-
-        // Calculate N points on the reduced interval
-        var points = (0 ..< numPoints).map { _ in random(in: reducedRange) }
-        points.sort()
-
-        // Shift points upwards to satisfy minimum distance
-        points = points.enumerated().map { i, point in
-            point + Double(i) * minimumDistance
-        }
-
-        return points
-    }
-
-    /// Return a random point in the given range. The range must be regular.
-    private static func random(in range: SimpleRange<Double>) -> Double {
-        .random(in: range.lower ... range.upper)
     }
 }

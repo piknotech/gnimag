@@ -142,7 +142,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         // Polynomial intersection between last and current segment
         if let lastJump = lastSegment.tracker.regression {
             let diff = currentJump - lastJump
-            return QuadraticSolver.solve(a: diff.a, b: diff.b, c: diff.c, solutionNearestToGuess: guess) ?? guess
+            return QuadraticSolver.solve(diff, equals: 0, solutionNearestToGuess: guess) ?? guess
         }
 
         return guess
@@ -154,6 +154,6 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
 
         // Solve a*x^2 + b*x + c = idleHeight
         let guess = currentSegment.tracker.times.first!
-        return QuadraticSolver.solve(a: currentJump.a, b: currentJump.b, c: currentJump.c - idleHeight, solutionNearestToGuess: guess)
+        return QuadraticSolver.solve(currentJump, equals: idleHeight, solutionNearestToGuess: guess)
     }
 }

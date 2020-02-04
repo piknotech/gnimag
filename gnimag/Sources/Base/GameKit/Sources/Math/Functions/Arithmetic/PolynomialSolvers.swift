@@ -7,6 +7,25 @@ import Common
 import Foundation
 
 public enum QuadraticSolver {
+    /// Solve the equation given by `parabola` = `value` and return the solution which is nearest to the given guess.
+    public static func solve(_ parabola: Polynomial, equals value: Double) -> (Double, Double)? {
+        guard parabola.degree <= 2 else {
+            exit(withMessage: "QuadraticSolver cannot solve polynomials of degree \(parabola.degree)!")
+        }
+
+        return solve(a: parabola.a, b: parabola.b, c: parabola.c - value)
+    }
+
+    /// Solve the equation given by `parabola` = `value` and return both solutions.
+    /// If there is only one solution, it is returned twice.
+    public static func solve(_ parabola: Polynomial, equals value: Double, solutionNearestToGuess guess: Double) -> Double? {
+        guard parabola.degree <= 2 else {
+            exit(withMessage: "QuadraticSolver cannot solve polynomials of degree \(parabola.degree)!")
+        }
+
+        return solve(a: parabola.a, b: parabola.b, c: parabola.c - value, solutionNearestToGuess: guess)
+    }
+
     /// Solve the equation given by ax^2 + bx + c = 0 and return both solutions.
     /// If there is only one solution, it is returned twice.
     public static func solve(a: Double, b: Double, c: Double) -> (Double, Double)? {
@@ -25,7 +44,7 @@ public enum QuadraticSolver {
         return (-p/2 - d, -p/2 + d)
     }
 
-    /// Solve the equation given by ax^2 + bx + c = 0; return the solution which is nearest to the given guess.
+    /// Solve the equation given by ax^2 + bx + c = 0 and return the solution which is nearest to the given guess.
     public static func solve(a: Double, b: Double, c: Double, solutionNearestToGuess guess: Double) -> Double? {
         guard let (x1, x2) = solve(a: a, b: b, c: c) else { return nil }
 
