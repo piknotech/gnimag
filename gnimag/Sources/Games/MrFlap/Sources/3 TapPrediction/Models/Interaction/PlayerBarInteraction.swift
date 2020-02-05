@@ -32,12 +32,6 @@ struct PlayerBarInteraction {
 
     // MARK: Subtypes
 
-    /// A time/height-point.
-    struct Point {
-        let time: Double
-        let height: Double
-    }
-
     /// Time-valued widths of the bar, i.e. describing the required duration to pass the bar.
     struct BarWidths {
         let lower: Double
@@ -63,7 +57,7 @@ struct PlayerBarInteraction {
 
     /// HoleMovement describes the movement of a hole which moves upwards and downwards alternately (but has a fixed vertical size).
     struct HoleMovement {
-        // TODO: holeSize + verticalSpeed hier rein?
+        let holeSize: Double
 
         /// The intersections of the furthest outward sections with the bar boundary curves.
         let intersectionsWithBoundsCurves: IntersectionsWithBoundsCurves
@@ -84,8 +78,6 @@ struct PlayerBarInteraction {
             /// The full range during which this section is active.
             /// The different section bounds are not active during the exact same range because the bar curves are not vertical.
             let fullTimeRange: SimpleRange<Double>
-
-            let holeSize: Double
 
             let lower: LinearMovement // lower = center - 0.5 * holeSize
             let upper: LinearMovement // upper = center + 0.5 * holeSize

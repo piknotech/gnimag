@@ -66,7 +66,7 @@ extension PlayerBarInteraction {
         let rightIntersection = intersection(of: sections, with: curves.right, isLeft: false)
         let intersections = HoleMovement.IntersectionsWithBoundsCurves(left: leftIntersection, right: rightIntersection)
 
-        return HoleMovement(intersectionsWithBoundsCurves: intersections, sections: sections)
+        return HoleMovement(holeSize: bar.holeSize, intersectionsWithBoundsCurves: intersections, sections: sections)
     }
 
     /// Convert a LinearSegmentPortion into a HoleMovement.Section.
@@ -128,7 +128,6 @@ extension PlayerBarInteraction {
 
         return HoleMovement.Section(
             fullTimeRange: fullTimeRange,
-            holeSize: bar.holeSize,
             lower: lower,
             upper: upper
         )

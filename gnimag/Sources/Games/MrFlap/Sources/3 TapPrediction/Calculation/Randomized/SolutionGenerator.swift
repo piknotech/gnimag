@@ -83,10 +83,10 @@ struct SolutionGenerator {
     /// A value where it is not possible to complete the interaction (i.e. pass the bar) with less taps.
     /// This is a required value for the number of taps; not necessarily a sufficient one.
     private var minimumNumberOfTaps: Int? {
-        // Calculate distance for the lower right point of the hole (respective to the last jump start of the player)
+        // Calculate distance for the lower right point of the hole (respective to the current jump start of the player)
         let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right
-        var heightDiff = rightSide.yRange.lower - player.lastJumpStart.y
-        var T = rightSide.xRange.upper + player.timePassedSinceJumpStart // We consider the timespan since the last jump
+        var heightDiff = rightSide.yRange.lower - player.currentJumpStart.y
+        var T = rightSide.xRange.upper + player.timePassedSinceJumpStart // Consider the full timespan starting at the jump start
 
         // First: Try performing N equistant jumps in [0,T] (this is the strategy achieving the highest end result after N jumps)
         // --> Find smallest N with hDiff <= N * f(T/N) (f being the jump parabola)
@@ -110,7 +110,7 @@ struct SolutionGenerator {
 
     /// The time (from now) in which the first tap must be executed to not hit the playfield floor.
     private var maxTimeForFirstTap: Double {
-        let heightDiff = playfield.lowerRadius - player.lastJumpStart.y
+        let heightDiff = playfield.lowerRadius - player.currentJumpStart.y
         guard let solutions = QuadraticSolver.solve(jumping.parabola, equals: heightDiff) else { return .infinity }
 
         // Return larger (future) solution; subtract frame shift
@@ -149,7 +149,7 @@ private enum Distributions {
     /// n must be nonnegative.
     /// Requires O(n) time.
     static func binomialSample(n: Int, p: Double) -> Int {
-        let values = (0 ..< n).map { _ in Double.random(in: 0 ..< 1) }
+        let values = n.timesMake { Double.random(in: 0 ..< 1) }
         return values.count { $0 < p }
     }
 

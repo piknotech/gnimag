@@ -11,6 +11,11 @@ struct PlayfieldProperties {
     let lowerRadius: Double
     let upperRadius: Double
 
+    /// The vertical size of the playfield.
+    var size: Double {
+        upperRadius - lowerRadius
+    }
+
     /// The vertical range limiting the playfield.
     var range: SimpleRange<Double> {
         SimpleRange(from: lowerRadius, to: upperRadius)

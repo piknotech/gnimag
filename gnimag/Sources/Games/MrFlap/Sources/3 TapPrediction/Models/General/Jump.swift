@@ -18,16 +18,6 @@ struct Jump {
         SimpleRange(from: startPoint.time, to: endPoint.time)
     }
 
-    /// The minimal value the jump attains on its interval.
-    var minimum: Double {
-        min(startPoint.height, endPoint.height, parabola.apexValue)
-    }
-
-    /// The maximal value the jump attains on its interval.
-    var maximum: Double {
-        max(startPoint.height, endPoint.height, parabola.apexValue)
-    }
-
     // MARK: Creating Jumps
 
     /// Calculate the jump from the given point with the given duration.
@@ -51,12 +41,5 @@ struct Jump {
         }
 
         return result
-    }
-}
-
-private extension Polynomial {
-    /// The value of the apex. Only valid for parabolas.
-    var apexValue: Value {
-        at(-0.5 * b / a)
     }
 }

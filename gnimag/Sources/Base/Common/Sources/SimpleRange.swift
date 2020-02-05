@@ -9,6 +9,11 @@ public struct SimpleRange<Bound: FloatingPoint> {
     public let lower: Bound
     public let upper: Bound
 
+    /// The center point of the range.
+    public var center: Bound {
+        (lower + upper) / 2
+    }
+
     /// Default initializer.
     /// If `enforceRegularity`, `from` and `to` are swapped, if required, to guarantee `lower <= upper`.
     /// Else, `from` and `to` are left as-is. Defaults to false.

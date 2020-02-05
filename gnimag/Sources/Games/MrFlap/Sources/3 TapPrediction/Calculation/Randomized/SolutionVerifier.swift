@@ -3,7 +3,9 @@
 //  Copyright © 2019 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
+import GameKit
 
 struct SolutionVerifier {
     typealias Solution = InteractionSolutionStrategy.Solution
@@ -13,18 +15,18 @@ struct SolutionVerifier {
     let jumping: JumpingProperties
     let interaction: PlayerBarInteraction
 
-    /// Checks if the given solution fulfills a precondition. If not, the solution can immediately be discarded because it will not solve the interaction (and would receive a rating of 0).
+    /// Checks if the given solution fulfills a precondition. If not, the solution can immediately be discarded because it will probably not solve the interaction (and would receive a rating of 0).
     /// The precondition is a simple check whether the player passes through the left and right hole bounds.
-    private static func precondition(forValidSolution solution: Solution, interaction: PlayerBarInteraction, player: PlayerProperties, jumping: JumpingProperties) -> Bool {
-        // Left side. Attention: we assume the direction of the bounds curve (as it is always shaped like this)
+    func precondition(forValidSolution solution: Solution) -> Bool {
+        // Left side. Approximate via center (just requiring 1 instead of 2 height calculations)
         let leftSide = interaction.holeMovement.intersectionsWithBoundsCurves.left
-        if solution.height(at: leftSide.xRange.lower, for: player, with: jumping) <= leftSide.yRange.lower { return false }
-        if solution.height(at: leftSide.xRange.upper, for: player, with: jumping) >= leftSide.yRange.upper { return false }
+        let leftHeight = solution.height(at: leftSide.xRange.center, for: player, with: jumping)
+        if !leftSide.yRange.contains(leftHeight) { return false }
 
-        // Right side (same assumptions)
+        // Right side (same as above)
         let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right
-        if solution.height(at: rightSide.xRange.lower, for: player, with: jumping) >= rightSide.yRange.upper { return false }
-        if solution.height(at: rightSide.xRange.upper, for: player, with: jumping) <= rightSide.yRange.lower { return false }
+        let rightHeight = solution.height(at: rightSide.xRange.center, for: player, with: jumping)
+        if !rightSide.yRange.contains(rightHeight) { return false }
 
         return true
     }
@@ -33,15 +35,190 @@ struct SolutionVerifier {
     /// The rating depends on two factors: the tap time rating and the safety rating.
     /// The tap time rating is just the minimum distance between two consecutive jumps; the safety rating rates the player trajectory, i.e. the distance to playfield and bar hole bounds.
     /// These two factors are multiplied. The safety rating is in [0, 1], 0 meaning a definite crash or contact with the playfield bounds (which is bad for player jump tracking and is therefore avoided).
-    private static func rating(of solution: Solution, interaction: PlayerBarInteraction, on playfield: Playfield, player: PlayerProperties, jumping: JumpingProperties) -> Double {
+    func rating(of solution: Solution) -> Double {
         // Determine time rating
         let timeDistanceForFirstJump = player.timePassedSinceJumpStart + solution.timeUntilStart
         let allTimeDistances = solution.jumpTimeDistances + [timeDistanceForFirstJump]
         let timeRating = allTimeDistances.min()!
 
-        // Determine safety rating
-        let safetyRating: Double = 1
+        // Multiply with safety rating
+        return timeRating * safetyRating(of: solution)
+    }
 
-        return timeRating * safetyRating
+    /// The safety rating of a solution, in [0, 1].
+    /// 0 if the solution leads to a crash, either into the bar on into the playfield bounds.
+    private func safetyRating(of solution: Solution) -> Double {
+        // All jumps (starting at current time)
+        let firstJump = solution.currentJump(for: player, with: jumping, startingAt: .currentTime)
+        let nextJumps = solution.jumps(for: player, with: jumping)
+        let allJumps = [firstJump] + nextJumps
+
+        // Calculate all ratings
+        let playfield = playfieldRating(for: allJumps)
+        if playfield == 0 { return 0 } // Shortcut
+        let vertical = verticalHoleRating(for: allJumps)
+        if vertical == 0 { return 0 } // Shortcut
+        let horizontal = horizontalHoleRating(for: allJumps)
+
+        // Return weakest rating
+        return min(vertical, playfield, horizontal)
+    }
+
+    /// The rating respective the vertical distance to the bar hole.
+    /// Inside [0, 1].
+    private func verticalHoleRating(for jumps: [Jump]) -> Double {
+        let desiredValue = 30% * interaction.holeMovement.holeSize
+        let distance = interaction.holeMovement.distance(to: jumps)
+        return min(1, distance / desiredValue)
+    }
+
+    /// The rating respective the horizontal distance to the bar hole curve intersections.
+    /// Inside [0, 1].
+    private func horizontalHoleRating(for jumps: [Jump]) -> Double {
+        let desiredValue = 25% * jumping.horizontalJumpLength
+        let distance = interaction.holeMovement.intersectionsWithBoundsCurves.distance(to: jumps)
+        return min(1, distance / desiredValue)
+    }
+
+    /// The rating respective the distance to the playfield bounds.
+    /// Inside [0, 1].
+    private func playfieldRating(for jumps: [Jump]) -> Double {
+        let desiredValue = 25% * playfield.size
+        let distance = playfield.distance(to: jumps)
+        return min(1, distance / desiredValue)
+    }
+}
+
+// MARK: Horizontal Jump / Hole Distance
+
+extension PlayerBarInteraction.HoleMovement {
+    /// Return the minimal vertical distance from any of the jumps to one of the movement sections.
+    /// 0 means there is a crash or touching point.
+    func distance(to jumps: [Jump]) -> Double {
+        let distances = (jumps × sections).map { jump, section in
+            section.distance(to: jump)
+        }
+
+        return distances.min() ?? .infinity
+    }
+}
+
+extension PlayerBarInteraction.HoleMovement.Section {
+    /// Return the minimal vertical distance to the lower or upper bound.
+    /// 0 means there is a crash or touching point.
+    func distance(to jump: Jump) -> Double {
+        let lowerDistance = lower.distance(to: jump) ?? .infinity
+        let upperDistance = upper.distance(to: jump) ?? .infinity
+        return min(lowerDistance, upperDistance)
+    }
+}
+
+extension PlayerBarInteraction.HoleMovement.Section.LinearMovement {
+    /// Return the minimal vertical distance in the shared range; if the range is empty, return nil.
+    /// 0 means there is a crash or touching point.
+    func distance(to jump: Jump) -> Double? {
+        // Create common range
+        guard let range = range else { return nil }
+        let intersection = jump.timeRange.intersection(with: range)
+        if intersection.isEmpty { return nil }
+
+        // Find minimal distance
+        let linePoly = Polynomial([line.intercept, line.slope])
+        let difference = jump.parabola - linePoly
+        return difference.minimalAbsoluteValue(in: intersection)
+    }
+}
+
+private extension Polynomial {
+    /// The minimal absolute value in the given range. Only works for parabolas.
+    func minimalAbsoluteValue(in range: SimpleRange<Double>) -> Double {
+        // Check for a zero
+        if let zeroes = QuadraticSolver.solve(self, equals: .zero) {
+            if range.contains(zeroes.0) || range.contains(zeroes.1) {
+                return 0
+            }
+        }
+
+        // Parabola is either fully positive or negative inside the range
+        return min(abs(minimum(in: range)), abs(maximum(in: range)))
+    }
+
+    /// The x value of the apex.
+    private var apexXValue: Double {
+        -0.5 * b / a
+    }
+
+    /// The values of the (up to three) extremal points inside the range.
+    private func extremalPoints(in range: SimpleRange<Double>) -> [Double] {
+        if range.contains(apexXValue) {
+            return [at(range.lower), at(range.upper), at(apexXValue)]
+        } else {
+            return [at(range.lower), at(range.upper)]
+        }
+    }
+
+    /// The minimal value the parabola attains in the range.
+    func minimum(in range: SimpleRange<Double>) -> Double {
+        extremalPoints(in: range).min()!
+    }
+
+    /// The maximal value the parabola attains in the range.
+    func maximum(in range: SimpleRange<Double>) -> Double {
+        extremalPoints(in: range).max()!
+    }
+}
+
+// MARK: Vertical Jump / Hole Distance
+
+private extension PlayerBarInteraction.HoleMovement.IntersectionsWithBoundsCurves {
+    /// Return the minimal vertical distance from any of the jumps to the left or right intersection curve.
+    func distance(to jumps: [Jump]) -> Double {
+        // Only look at one or two jumps inside the hole range: one for left and one for right
+        let leftJump = jumps.first { !$0.timeRange.intersection(with: left.xRange).isEmpty }!
+        let rightJump = jumps.last! // Matches because we set `T = right.xRange.upper` in SolutionGenerator
+
+        // Return minimal distance
+        let leftDistance = left.distance(to: leftJump, isLeft: true)
+        let rightDistance = right.distance(to: rightJump, isLeft: false)
+        return min(leftDistance, rightDistance)
+    }
+}
+
+private extension PlayerBarInteraction.HoleMovement.IntersectionsWithBoundsCurves.IntersectionWithBoundsCurve {
+    /// Return the minimal horizontal distance from the jump to the upper or lower line y = const.
+    func distance(to jump: Jump, isLeft: Bool) -> Double {
+        let lowerDistance = distance(of: jump, to: yRange.lower, guess: isLeft ? xRange.lower : xRange.upper) ?? .infinity
+        let upperDistance = distance(of: jump, to: yRange.upper, guess: isLeft ? xRange.upper : xRange.lower) ?? .infinity
+        return min(lowerDistance, upperDistance)
+    }
+
+    /// The horizontal distance to a point (guess, const)
+    private func distance(of jump: Jump, to const: Double, guess: Double) -> Double? {
+        guard let solution = QuadraticSolver.solve(jump.parabola, equals: const, solutionNearestToGuess: guess) else { return nil }
+        return abs(solution - guess)
+    }
+}
+
+// MARK: Jump / Playfield Distance
+
+private extension PlayfieldProperties {
+    /// Return the minimal vertical distance from any of the jumps to the playfield bounds (lower and upper).
+    /// 0 means there is a intersection or touching point.
+    func distance(to jumps: [Jump]) -> Double {
+        jumps.map(distance(to:)).min() ?? .infinity
+    }
+
+    /// Return the minimal vertical distance from the jump to the playfield bounds (lower and upper).
+    /// 0 means there is a intersection or touching point.
+    private func distance(to jump: Jump) -> Double {
+        let lower = jump.parabola.minimum(in: jump.timeRange)
+        let lowerDistance = lower - lowerRadius
+        if lowerDistance <= 0 { return 0 }
+
+        let upper = jump.parabola.maximum(in: jump.timeRange)
+        let upperDistance = 2 * (upperRadius - upper) // Top is less dangerous than bottom
+        if upperDistance <= 0 { return 0 }
+
+        return min(lowerDistance, upperDistance)
     }
 }

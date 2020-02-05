@@ -26,7 +26,7 @@ final class JumpSequencePlot {
 
     /// Create a JumpSequencePlot from a jump sequence starting at the current player position (and time=0).
     convenience init(sequence: JumpSequenceFromCurrentPosition, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
-        let initialJump = sequence.currentJump(for: player, with: jumping)
+        let initialJump = sequence.currentJump(for: player, with: jumping, startingAt: .currentJumpStart)
         let jumps = sequence.jumps(for: player, with: jumping)
 
         let currentPlayerPosition = ScatterDataPoint(x: 0, y: player.currentPosition.y)

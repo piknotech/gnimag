@@ -8,9 +8,9 @@ import Common
 /// To keep calculations as simple as possible, the player is depicted as a point.
 /// Therefore, the playfield and obstacles must be enlarged by the player radius in each direction.
 struct PlayerProperties {
-    /// The position where the last jump started.
+    /// The position where the current jump started.
     /// Together with the passed time, this gives the exact current player position and velocity.
-    let lastJumpStart: Position
+    let currentJumpStart: Position
     let timePassedSinceJumpStart: Double
 
     /// The current position of the player.
@@ -33,12 +33,12 @@ struct PlayerProperties {
         let tapTimeAngles = performedTapTimes.map(converter.angle(from:))
         guard let angularJumpStart = player.height.finalFutureJumpUsingJumpTimes(times: tapTimeAngles, overlapTolerance: 0.05) else { return nil }
 
-        lastJumpStart = Position(x: Angle(angularJumpStart.time), y: angularJumpStart.value)
+        currentJumpStart = Position(x: Angle(angularJumpStart.time), y: angularJumpStart.value)
         timePassedSinceJumpStart = currentTime - converter.time(from: angularJumpStart.time)
 
         // Get current position
-        let currentPositionX = lastJumpStart.x.value + xSpeed * timePassedSinceJumpStart
-        let currentPositionY = lastJumpStart.y + jumping.parabola.at(timePassedSinceJumpStart)
+        let currentPositionX = currentJumpStart.x.value + xSpeed * timePassedSinceJumpStart
+        let currentPositionY = currentJumpStart.y + jumping.parabola.at(timePassedSinceJumpStart)
         currentPosition = Position(x: Angle(currentPositionX), y: currentPositionY)
     }
 }
