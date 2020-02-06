@@ -9,7 +9,7 @@ import TestingTools
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.
 /// Important: This assumes that, on each jump, the object's y-velocity is set to a constant value which is NOT dependent on the previous object velocity (i.e. absolute jumping instead of relative jumping).
-public final class JumpTracker: CompositeTracker<PolyTracker> {
+public final class JumpTracker: CompositeTracker<ParabolaTracker> {
 
     // MARK: Private Properties
 
@@ -35,9 +35,9 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     // MARK: Public Properties
 
     /// The jumping parabola, going through (0,0), if available.
-    public var parabola: Polynomial? {
+    public var parabola: Parabola? {
         guard let jumpVelocity = jumpVelocity, let gravity = gravity else { return nil }
-        return Polynomial([0, jumpVelocity, -0.5 * gravity])
+        return Parabola(a: -0.5 * gravity, b: jumpVelocity, c: 0)
     }
 
     /// Default initializer.
@@ -96,12 +96,12 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     }
 
     /// Create a parabola tracker for the next jump segment.
-    public override func trackerForNextSegment() -> PolyTracker {
-        PolyTracker(degree: 2, tolerance: tolerance)
+    public override func trackerForNextSegment() -> ParabolaTracker {
+        ParabolaTracker(tolerance: tolerance)
     }
 
     /// Make a guess for a jump beginning at (`time`, `value`).
-    public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Polynomial? {
+    public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Parabola? {
         guard let gravity = gravity, let jumpVelocity = jumpVelocity else { return nil }
 
         // Solve f(time) = value and f'(time) = jumpVelocity
@@ -109,7 +109,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         let b = jumpVelocity - 2 * a * time // 2ax + b = jumpVelocity
         let c = value - (a * time * time + b * time) // ax^2 + bx + c = value
 
-        return Polynomial([c, b, a])
+        return Parabola(a: a, b: b, c: c)
     }
 
     /// Provide the custom guess range.
@@ -118,7 +118,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
-    public override func scatterStrokable(for function: Polynomial, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+    public override func scatterStrokable(for function: Parabola, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
         QuadCurveScatterStrokable(parabola: function, drawingRange: drawingRange)
     }
 
@@ -126,7 +126,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
 
     /// Calculate the intersection of the last jump and the current jump.
     /// If there is no regression for the last jump, use a time between the start of the current jump and the end of the last jump.
-    private func calculateStartTimeForCurrentJump(currentJump: Polynomial) -> Time {
+    private func calculateStartTimeForCurrentJump(currentJump: Parabola) -> Time {
         var guess = currentSegment.tracker.times.first!
 
         guard let lastSegment = finalizedSegments.last else {
@@ -149,7 +149,7 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     }
 
     /// Special case for segment start time calculation: Calculate the start time for the initial segment using `idleHeightBeforeInitialSegment`.
-    private func calculateStartTimeForInitialSegment(currentJump: Polynomial) -> Time? {
+    private func calculateStartTimeForInitialSegment(currentJump: Parabola) -> Time? {
         guard let idleHeight = idleHeightBeforeInitialSegment else { return nil }
 
         // Solve a*x^2 + b*x + c = idleHeight

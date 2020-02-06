@@ -105,6 +105,9 @@
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
 		6323F11123EB2C7200182D13 /* Int+TimesMake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323F11023EB2C7200182D13 /* Int+TimesMake.swift */; };
+		6323F11323EC355B00182D13 /* Parabola.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323F11223EC355B00182D13 /* Parabola.swift */; };
+		6323F11823EC4A8900182D13 /* LinearSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323F11723EC4A8900182D13 /* LinearSolver.swift */; };
+		6323F11A23EC4CE000182D13 /* ParabolaTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323F11923EC4CE000182D13 /* ParabolaTracker.swift */; };
 		6324C12E23E3773A007E26EB /* JumpSequenceFromSpecificPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6324C12D23E3773A007E26EB /* JumpSequenceFromSpecificPosition.swift */; };
 		6324C13223E49689007E26EB /* SolutionGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6324C13123E49689007E26EB /* SolutionGenerator.swift */; };
 		6324C13423E49695007E26EB /* SolutionVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6324C13323E49695007E26EB /* SolutionVerifier.swift */; };
@@ -133,7 +136,7 @@
 		634AF72023E84879005FE241 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 634AF71F23E84879005FE241 /* Charts */; };
 		634AF72323E848C3005FE241 /* Surge in Frameworks */ = {isa = PBXBuildFile; productRef = 634AF72223E848C3005FE241 /* Surge */; };
 		634AFA7023CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AFA6F23CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift */; };
-		634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC02358749F00AE9C91 /* PolynomialSolvers.swift */; };
+		634E4FC423589BA700AE9C91 /* QuadraticSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC02358749F00AE9C91 /* QuadraticSolver.swift */; };
 		634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */; };
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
 		63521E9523D7511F002706C0 /* BisectionSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63521E9423D7511F002706C0 /* BisectionSolver.swift */; };
@@ -326,6 +329,9 @@
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
 		6323F11023EB2C7200182D13 /* Int+TimesMake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+TimesMake.swift"; sourceTree = "<group>"; };
+		6323F11223EC355B00182D13 /* Parabola.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parabola.swift; sourceTree = "<group>"; };
+		6323F11723EC4A8900182D13 /* LinearSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearSolver.swift; sourceTree = "<group>"; };
+		6323F11923EC4CE000182D13 /* ParabolaTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParabolaTracker.swift; sourceTree = "<group>"; };
 		6324C12D23E3773A007E26EB /* JumpSequenceFromSpecificPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequenceFromSpecificPosition.swift; sourceTree = "<group>"; };
 		6324C13123E49689007E26EB /* SolutionGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolutionGenerator.swift; sourceTree = "<group>"; };
 		6324C13323E49695007E26EB /* SolutionVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolutionVerifier.swift; sourceTree = "<group>"; };
@@ -351,7 +357,7 @@
 		634AD0182327D75200D87BAB /* Strokable+Fillable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strokable+Fillable.swift"; sourceTree = "<group>"; };
 		634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawing Shapes+Lines.swift"; sourceTree = "<group>"; };
 		634AFA6F23CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalLineScatterStrokable.swift; sourceTree = "<group>"; };
-		634E4FC02358749F00AE9C91 /* PolynomialSolvers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolynomialSolvers.swift; sourceTree = "<group>"; };
+		634E4FC02358749F00AE9C91 /* QuadraticSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadraticSolver.swift; sourceTree = "<group>"; };
 		634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polynomial+Arithmetic.swift"; sourceTree = "<group>"; };
 		634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
 		63521E9423D7511F002706C0 /* BisectionSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BisectionSolver.swift; sourceTree = "<group>"; };
@@ -895,6 +901,7 @@
 			children = (
 				631213802325793100C126B4 /* Regression.swift */,
 				631213842325793100C126B4 /* PolyTracker.swift */,
+				6323F11923EC4CE000182D13 /* ParabolaTracker.swift */,
 				631213822325793100C126B4 /* LinearTracker.swift */,
 				631213832325793100C126B4 /* ConstantTracker.swift */,
 			);
@@ -1180,6 +1187,33 @@
 			path = Tapping;
 			sourceTree = "<group>";
 		};
+		6323F11423EC4A5200182D13 /* LinearFunction */ = {
+			isa = PBXGroup;
+			children = (
+				6316BDA623C91BD10062100F /* LinearFunction.swift */,
+				6323F11723EC4A8900182D13 /* LinearSolver.swift */,
+			);
+			path = LinearFunction;
+			sourceTree = "<group>";
+		};
+		6323F11523EC4A6C00182D13 /* Parabola */ = {
+			isa = PBXGroup;
+			children = (
+				6323F11223EC355B00182D13 /* Parabola.swift */,
+				634E4FC02358749F00AE9C91 /* QuadraticSolver.swift */,
+			);
+			path = Parabola;
+			sourceTree = "<group>";
+		};
+		6323F11623EC4A7300182D13 /* Polynomial */ = {
+			isa = PBXGroup;
+			children = (
+				631213792325793100C126B4 /* Polynomial.swift */,
+				634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */,
+			);
+			path = Polynomial;
+			sourceTree = "<group>";
+		};
 		632696B223D0CA45009FE1E0 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1259,6 +1293,7 @@
 			isa = PBXGroup;
 			children = (
 				637B56B023D07003007E51B0 /* Functions */,
+				637B56B323D07144007E51B0 /* More */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -1276,21 +1311,19 @@
 			children = (
 				63F3CC1B234B36D000AA8228 /* Function.swift */,
 				637B56B123D070ED007E51B0 /* FunctionWrapper.swift */,
-				6316BDA623C91BD10062100F /* LinearFunction.swift */,
-				631213792325793100C126B4 /* Polynomial.swift */,
-				637B56B323D07144007E51B0 /* Arithmetic */,
+				6323F11423EC4A5200182D13 /* LinearFunction */,
+				6323F11523EC4A6C00182D13 /* Parabola */,
+				6323F11623EC4A7300182D13 /* Polynomial */,
 			);
 			path = Functions;
 			sourceTree = "<group>";
 		};
-		637B56B323D07144007E51B0 /* Arithmetic */ = {
+		637B56B323D07144007E51B0 /* More */ = {
 			isa = PBXGroup;
 			children = (
-				634E4FC02358749F00AE9C91 /* PolynomialSolvers.swift */,
-				634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */,
 				63521E9423D7511F002706C0 /* BisectionSolver.swift */,
 			);
-			path = Arithmetic;
+			path = More;
 			sourceTree = "<group>";
 		};
 		637B56B423D0718E007E51B0 /* ScatterStrokables */ = {
@@ -1939,7 +1972,9 @@
 				637B56B223D070ED007E51B0 /* FunctionWrapper.swift in Sources */,
 				6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */,
 				6312138A2325793C00C126B4 /* MedianTracker.swift in Sources */,
+				6323F11323EC355B00182D13 /* Parabola.swift in Sources */,
 				6316BDA723C91BD10062100F /* LinearFunction.swift in Sources */,
+				6323F11823EC4A8900182D13 /* LinearSolver.swift in Sources */,
 				6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */,
 				6316BDA923CA49FB0062100F /* JumpTracker+Future.swift in Sources */,
 				63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */,
@@ -1962,7 +1997,8 @@
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
 				63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */,
 				635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */,
-				634E4FC423589BA700AE9C91 /* PolynomialSolvers.swift in Sources */,
+				634E4FC423589BA700AE9C91 /* QuadraticSolver.swift in Sources */,
+				6323F11A23EC4CE000182D13 /* ParabolaTracker.swift in Sources */,
 				63440B4223B388B30091A012 /* TapDelayTracker.swift in Sources */,
 				6377C85E23DC746B0084772F /* TapSequence.swift in Sources */,
 				637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */,

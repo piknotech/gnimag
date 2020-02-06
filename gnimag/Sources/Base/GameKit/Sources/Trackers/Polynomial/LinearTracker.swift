@@ -6,7 +6,7 @@
 import Common
 import TestingTools
 
-/// LinearTracker is a PolyTracker providing simple access to the calculated linear function.
+/// LinearTracker is a simple tracker providing a linear regression function.
 public final class LinearTracker: SimpleDefaultTracker<LinearFunction> {
     /// Default initializer.
     public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1, tolerance: TrackerTolerance) {
@@ -32,6 +32,6 @@ public final class LinearTracker: SimpleDefaultTracker<LinearFunction> {
 
     /// Provide a specific ScatterStrokable for a polynomial.
     public override func scatterStrokable(for function: LinearFunction) -> ScatterStrokable {
-        return LinearScatterStrokable(line: function, drawingRange: .open)
+        LinearScatterStrokable(line: function, drawingRange: .open)
     }
 }

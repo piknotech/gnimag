@@ -11,18 +11,14 @@ import TestingTools
 /// QuadCurveScatterStrokable is a ScatterStrokable that can draw a parabola curve using a bezier path.
 public struct QuadCurveScatterStrokable: ScatterStrokable {
     /// The parabola in the data point space.
-    let parabola: Polynomial
+    let parabola: Parabola
 
     /// The x value range where the parabola should be drawn (in data point space).
     /// Attention: the range must be regular, i.e. upper > lower.
     let drawingRange: SimpleRange<Double>
 
     /// Default initializer.
-    public init(parabola: Polynomial, drawingRange: SimpleRange<Double>) {
-        guard parabola.degree == 2 else {
-            exit(withMessage: "QuadCurveScatterStrokable can only draw polynomials of degree 2!")
-        }
-
+    public init(parabola: Parabola, drawingRange: SimpleRange<Double>) {
         self.parabola = parabola
         self.drawingRange = drawingRange
     }

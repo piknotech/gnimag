@@ -31,7 +31,8 @@ public class PolyTracker: SimpleDefaultTracker<Polynomial> {
             return LinearScatterStrokable(line: line, drawingRange: .open)
 
         case 2:
-            return QuadCurveScatterStrokable(parabola: function, drawingRange: .open)
+            let parabola = Parabola(a: function.a, b: function.b, c: function.c)
+            return QuadCurveScatterStrokable(parabola: parabola, drawingRange: .open)
 
         default:
             return ArbitraryFunctionScatterStrokable(function: function, drawingRange: .open, interpolationPoints: 50)

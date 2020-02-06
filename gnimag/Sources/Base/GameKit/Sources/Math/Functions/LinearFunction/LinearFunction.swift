@@ -4,7 +4,6 @@
 //
 
 /// A linear function, which is defined by its slope and intercept.
-/// A special case of a polynomial.
 public struct LinearFunction: Function {
     public let slope: Value
     public let intercept: Value
@@ -37,6 +36,10 @@ public struct LinearFunction: Function {
 extension LinearFunction: ScalarFunctionArithmetic {
     public static func +(f: LinearFunction, offset: Double) -> LinearFunction {
         LinearFunction(slope: f.slope, intercept: f.intercept + offset)
+    }
+
+    public static func -(f: LinearFunction, offset: Double) -> LinearFunction {
+        LinearFunction(slope: f.slope, intercept: f.intercept - offset)
     }
 
     public static func *(f: LinearFunction, factor: Double) -> LinearFunction {
