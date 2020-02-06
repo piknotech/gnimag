@@ -12,10 +12,7 @@ import GameKit
 struct SolutionGenerator {
     typealias Solution = InteractionSolutionStrategy.Solution
 
-    let playfield: PlayfieldProperties
-    let player: PlayerProperties
-    let jumping: JumpingProperties
-    let interaction: PlayerBarInteraction
+    let frame: PredictionFrame
 
     /// The minimum number of taps that is required to complete the interaction.
     /// As this does not change, it is calculated once.
@@ -26,24 +23,21 @@ struct SolutionGenerator {
     let maxTimeForFirstTap: Double
 
     /// Default initializer.
-    init(playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties, interaction: PlayerBarInteraction) {
-        self.playfield = playfield
-        self.player = player
-        self.jumping = jumping
-        self.interaction = interaction
+    init(frame: PredictionFrame) {
+        self.frame = frame
 
-        minimumNumberOfTaps = Self.calculateMinimumNumberOfTaps(playfield: playfield, player: player, jumping: jumping, interaction: interaction)
-        maxTimeForFirstTap = Self.calculateMaxTimeForFirstTap(playfield: playfield, player: player, jumping: jumping)
+        minimumNumberOfTaps = Self.calculateMinimumNumberOfTaps(for: frame)
+        maxTimeForFirstTap = Self.calculateMaxTimeForFirstTap(for: frame)
     }
 
     /// Generate a random solution meeting the requirements.
     /// Returns nil if it is not possible to solve the interaction or to meet the requirements.
     func randomSolution(minimumConsecutiveTapDistance: Double) -> Solution? {
-        let T = interaction.holeMovement.intersectionsWithBoundsCurves.right.xRange.upper
+        let T = frame.interaction.holeMovement.intersectionsWithBoundsCurves.right.xRange.upper
         guard var taps = randomNumberOfTaps else { return nil }
 
         // Calculate tap range
-        let minimumFirstTap = max(0, minimumConsecutiveTapDistance - player.timePassedSinceJumpStart)
+        let minimumFirstTap = max(0, minimumConsecutiveTapDistance - frame.player.timePassedSinceJumpStart)
         let tapRange = SimpleRange(from: minimumFirstTap, to: T)
 
         // Decrease number of taps if it would be impossible to satisfy `minimumConsecutiveTapDistance`
@@ -89,7 +83,9 @@ struct SolutionGenerator {
 
     /// A value where it is not possible to complete the interaction (i.e. pass the bar) with less taps.
     /// This is a required value for the number of taps; not necessarily a sufficient one.
-    private static func calculateMinimumNumberOfTaps(playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties, interaction: PlayerBarInteraction) -> Int? {
+    private static func calculateMinimumNumberOfTaps(for frame: PredictionFrame) -> Int? {
+        let player = frame.player, jumping = frame.jumping, interaction = frame.interaction
+
         // Calculate distance for the lower right point of the hole (respective to the current jump start of the player)
         let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right
         var heightDiff = rightSide.yRange.lower - player.currentJumpStart.y
@@ -116,7 +112,9 @@ struct SolutionGenerator {
     }
 
     /// The time (from now) in which the first tap must be executed to not hit the playfield floor.
-    private static func calculateMaxTimeForFirstTap(playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties) -> Double {
+    private static func calculateMaxTimeForFirstTap(for frame: PredictionFrame) -> Double {
+        let player = frame.player, jumping = frame.jumping, playfield = frame.playfield
+
         let heightDiff = playfield.lowerRadius - player.currentJumpStart.y
         guard let solutions = QuadraticSolver.solve(jumping.parabola, equals: heightDiff) else { return .infinity }
 

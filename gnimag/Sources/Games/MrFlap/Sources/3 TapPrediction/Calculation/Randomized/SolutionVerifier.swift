@@ -10,14 +10,13 @@ import GameKit
 struct SolutionVerifier {
     typealias Solution = InteractionSolutionStrategy.Solution
 
-    let playfield: PlayfieldProperties
-    let player: PlayerProperties
-    let jumping: JumpingProperties
-    let interaction: PlayerBarInteraction
+    let frame: PredictionFrame
 
     /// Checks if the given solution fulfills a precondition. If not, the solution can immediately be discarded because it will probably not solve the interaction (and would receive a rating of 0).
     /// The precondition is a simple check whether the player passes through the left and right hole bounds.
     func precondition(forValidSolution solution: Solution) -> Bool {
+        let player = frame.player, jumping = frame.jumping, interaction = frame.interaction
+
         // Left side. Approximate via center (just requiring 1 instead of 2 height calculations)
         let leftSide = interaction.holeMovement.intersectionsWithBoundsCurves.left
         let leftHeight = solution.height(at: leftSide.xRange.center, for: player, with: jumping)
@@ -38,7 +37,7 @@ struct SolutionVerifier {
     /// `requiredMinimum` is used as a performance boost: when, during evaluation, it becomes impossible to beat the required minimum rating, terminate evaluation early and return 0.
     func rating(of solution: Solution, requiredMinimum: Double) -> Double {
         // Determine time rating
-        let timeDistanceForFirstJump = player.timePassedSinceJumpStart + solution.timeUntilStart
+        let timeDistanceForFirstJump = frame.player.timePassedSinceJumpStart + solution.timeUntilStart
         let allTimeDistances = solution.jumpTimeDistances + [timeDistanceForFirstJump]
         let timeRating = allTimeDistances.min()!
 
@@ -51,6 +50,8 @@ struct SolutionVerifier {
     /// 0 if the solution leads to a crash, either into the bar on into the playfield bounds.
     /// `requiredMinimum` is used as a performance boost: when, during evaluation, it becomes impossible to beat the required minimum rating, terminate evaluation early and return 0.
     private func safetyRating(of solution: Solution, requiredMinimum: Double) -> Double {
+        let player = frame.player, jumping = frame.jumping
+
         if requiredMinimum >= 1 { return 0 }
 
         // All jumps (starting at current time)
@@ -72,24 +73,24 @@ struct SolutionVerifier {
     /// The rating respective the vertical distance to the bar hole.
     /// Inside [0, 1].
     private func verticalHoleRating(for jumps: [Jump]) -> Double {
-        let desiredValue = 30% * interaction.holeMovement.holeSize
-        let distance = interaction.holeMovement.distance(to: jumps)
+        let desiredValue = 30% * frame.interaction.holeMovement.holeSize
+        let distance = frame.interaction.holeMovement.distance(to: jumps)
         return min(1, distance / desiredValue)
     }
 
     /// The rating respective the horizontal distance to the bar hole curve intersections.
     /// Inside [0, 1].
     private func horizontalHoleRating(for jumps: [Jump]) -> Double {
-        let desiredValue = 25% * jumping.horizontalJumpLength
-        let distance = interaction.holeMovement.intersectionsWithBoundsCurves.distance(to: jumps)
+        let desiredValue = 25% * frame.jumping.horizontalJumpLength
+        let distance = frame.interaction.holeMovement.intersectionsWithBoundsCurves.distance(to: jumps)
         return min(1, distance / desiredValue)
     }
 
     /// The rating respective the distance to the playfield bounds.
     /// Inside [0, 1].
     private func playfieldRating(for jumps: [Jump]) -> Double {
-        let desiredValue = 20% * playfield.size
-        let distance = playfield.distance(to: jumps)
+        let desiredValue = 20% * frame.playfield.size
+        let distance = frame.playfield.distance(to: jumps)
         return min(1, distance / desiredValue)
     }
 }

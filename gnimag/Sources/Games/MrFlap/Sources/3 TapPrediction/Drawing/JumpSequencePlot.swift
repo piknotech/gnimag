@@ -14,6 +14,13 @@ import TestingTools
 final class JumpSequencePlot {
     let plot: ScatterPlot
 
+    /// Create a JumpSequencePlot from a frame and a solution.
+    /// Draw both the jump sequence and the player-bar interaction.
+    convenience init(frame: PredictionFrame, solution: JumpSequenceFromCurrentPosition) {
+        self.init(sequence: solution, player: frame.player, playfield: frame.playfield, jumping: frame.jumping)
+        draw(interaction: frame.interaction)
+    }
+    
     /// Create a JumpSequencePlot from a jump sequence starting at a specific (player-independent) position (where the current time corresponds to 0).
     convenience init(sequence: JumpSequenceFromSpecificPosition, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
         let jumps = sequence.jumps(with: jumping)
