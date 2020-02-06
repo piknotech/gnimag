@@ -8,6 +8,7 @@ import Foundation
 
 public enum QuadraticSolver {
     /// Solve the equation given by `parabola` = `value` and return the solution which is nearest to the given guess.
+    @_transparent
     public static func solve(_ parabola: Polynomial, equals value: Double) -> (Double, Double)? {
         guard parabola.degree <= 2 else {
             exit(withMessage: "QuadraticSolver cannot solve polynomials of degree \(parabola.degree)!")
@@ -18,6 +19,7 @@ public enum QuadraticSolver {
 
     /// Solve the equation given by `parabola` = `value` and return both solutions.
     /// If there is only one solution, it is returned twice.
+    @_transparent
     public static func solve(_ parabola: Polynomial, equals value: Double, solutionNearestToGuess guess: Double) -> Double? {
         guard parabola.degree <= 2 else {
             exit(withMessage: "QuadraticSolver cannot solve polynomials of degree \(parabola.degree)!")
@@ -28,6 +30,7 @@ public enum QuadraticSolver {
 
     /// Solve the equation given by ax^2 + bx + c = 0 and return both solutions.
     /// If there is only one solution, it is returned twice.
+    @_transparent
     public static func solve(a: Double, b: Double, c: Double) -> (Double, Double)? {
         // Special case: a == 0
         if a == 0 {
@@ -45,6 +48,7 @@ public enum QuadraticSolver {
     }
 
     /// Solve the equation given by ax^2 + bx + c = 0 and return the solution which is nearest to the given guess.
+    @_transparent
     public static func solve(a: Double, b: Double, c: Double, solutionNearestToGuess guess: Double) -> Double? {
         guard let (x1, x2) = solve(a: a, b: b, c: c) else { return nil }
 
@@ -58,6 +62,7 @@ public enum QuadraticSolver {
 
 public enum LinearSolver {
     /// Solve the equation given by line(x) = 0.
+    @_transparent
     public static func zero(of line: LinearFunction) -> Double? {
         if line.slope == 0 { return nil }
         return -line.intercept / line.slope

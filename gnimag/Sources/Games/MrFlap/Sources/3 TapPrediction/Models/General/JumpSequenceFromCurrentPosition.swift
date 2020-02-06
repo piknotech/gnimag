@@ -53,25 +53,30 @@ extension JumpSequenceFromCurrentPosition {
     /// Calculate the height at the given time value.
     /// A time of 0 represents the current time.
     func height(at t: Double, for player: PlayerProperties, with properties: JumpingProperties) -> Double {
-        // Translate everything to start at the player's current jump start
-        let t = t + player.timePassedSinceJumpStart
-        let allJumps = [player.timePassedSinceJumpStart + timeUntilStart] + jumpTimeDistances
-        let cumulated = Array(allJumps.scan(initial: 0, +)[1...]) // Never empty
+        // Shift frame to start at the player's current jump start
+        var result = player.currentJumpStart.y
+        var remainingTime = t + player.timePassedSinceJumpStart
 
-        // Find jump we're currently in at time t
-        let jumpIndex = cumulated.firstIndex { $0 > t } ?? allJumps.count // in 0 ... count
+        // Compute each jump until reaching the required time
+        for i in 0 ... jumpTimeDistances.count {
+            // Subscript [firstJumpDuration] + jumpTimeDistances
+            let jumpDuration = (i == 0)
+                ? player.timePassedSinceJumpStart + timeUntilStart
+                : jumpTimeDistances[i-1]
 
-        // Calculate height of completed jumps and of current one
-        let completedJumpsHeight = allJumps[0 ..< jumpIndex].reduce(0) { height, jumpDuration in
-            height + properties.parabola.at(jumpDuration)
+            // Stop when the jump is not fully finished
+            if remainingTime < jumpDuration {
+                break
+            }
+
+            // Add full jump
+            remainingTime -= jumpDuration
+            result += properties.parabola.at(jumpDuration)
         }
 
-        let cumulatedPlusZero = [0] + cumulated
-        let currentJumpDuration = t - cumulatedPlusZero[jumpIndex]
-        let currentJumpHeight = properties.parabola.at(currentJumpDuration)
-
-        // Add initial height (from player's current jump start)
-        return completedJumpsHeight + currentJumpHeight + player.currentJumpStart.y
+        // Add last (partial) jump
+        result += properties.parabola.at(remainingTime)
+        return result
     }
 
     /// Convert this sequence to a TapSequence.

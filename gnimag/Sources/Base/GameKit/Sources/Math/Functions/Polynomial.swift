@@ -20,14 +20,15 @@ public struct Polynomial: DifferentiableFunction {
     }
 
     /// Calculate the value at a given point.
+    @_transparent
     public func at(_ x: Value) -> Value {
         var result = Value.zero
-        
+
         for i in stride(from: degree, through: 0, by: -1) {
             result *= x
             result += coefficients[i]
         }
-        
+
         return result
     }
     

@@ -7,8 +7,8 @@ extension Int {
     /// Perform a closure `self` times.
     @_transparent
     public func `repeat`<T>(_ closure: () -> T) {
-        for i in 0 ..< self {
-            closure()
+        for _ in 0 ..< self {
+            _ = closure()
         }
     }
 

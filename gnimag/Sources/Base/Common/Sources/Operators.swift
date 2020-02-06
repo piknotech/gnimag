@@ -8,6 +8,7 @@ import Foundation
 infix operator ??=
 
 /// Shorthand for lhs = lhs ?? rhs.
+@_transparent
 public func ??=<T>(lhs: inout Optional<T>, rhs: @autoclosure () -> Optional<T>) {
     lhs = lhs ?? rhs()
 }
@@ -31,6 +32,7 @@ public postfix func %(a: Double) -> Double {
 
 
 /// Syntactic sugar for { $0 }.
+@_transparent
 public func id<T>(_ t: T) -> T {
     t
 }

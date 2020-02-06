@@ -21,6 +21,10 @@ struct SolutionGenerator {
     /// As this does not change, it is calculated once.
     let minimumNumberOfTaps: Int?
 
+    /// The time (from now) in which the first tap must be executed to not hit the playfield floor.
+    /// As this does not change, it is calculated once.
+    let maxTimeForFirstTap: Double
+
     /// Default initializer.
     init(playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties, interaction: PlayerBarInteraction) {
         self.playfield = playfield
@@ -29,6 +33,7 @@ struct SolutionGenerator {
         self.interaction = interaction
 
         minimumNumberOfTaps = Self.calculateMinimumNumberOfTaps(playfield: playfield, player: player, jumping: jumping, interaction: interaction)
+        maxTimeForFirstTap = Self.calculateMaxTimeForFirstTap(playfield: playfield, player: player, jumping: jumping)
     }
 
     /// Generate a random solution meeting the requirements.
@@ -43,7 +48,7 @@ struct SolutionGenerator {
 
         // Decrease number of taps if it would be impossible to satisfy `minimumConsecutiveTapDistance`
         if minimumConsecutiveTapDistance > 0 {
-            taps = min(Int(ceil(tapRange.size / minimumConsecutiveTapDistance)), taps)
+            taps = max(1, min(Int(ceil(tapRange.size / minimumConsecutiveTapDistance)), taps))
         }
         
         guard let points = RandomPoints.on(tapRange, minimumDistance: minimumConsecutiveTapDistance, numPoints: taps, maximumValueForFirstPoint: maxTimeForFirstTap) else { return nil }
@@ -54,26 +59,32 @@ struct SolutionGenerator {
     /// Convert a random points sequence (as obtained from `RandomPoints.on(_:)`) into a Solution.
     private func solutionFromRandomPointsSequence(_ points: [Double], T: Double) -> Solution {
         // Find time differences between subsequent elements
-        let points = [0] + points + [T]
-        var differences = (1 ..< points.count).map { i -> Double in
-            points[i] - points[i-1]
+        var differences = [Double]()
+        differences.reserveCapacity(points.count - 1)
+        for i in 1 ..< points.count {
+            differences.append(points[i] - points[i-1])
         }
 
-        // Extract start and end time and create solution
-        let timeUntilStart = differences.removeFirst()
-        let timeUntilEnd = differences.removeLast()
+        // Find start and end time and create solution
+        let timeUntilStart = points.first!
+        let timeUntilEnd = T - points.last!
 
         return Solution(timeUntilStart: timeUntilStart, jumpTimeDistances: differences, timeUntilEnd: timeUntilEnd)
     }
 
     /// Pick a positive random number of taps.
-    /// It is always in the interval `[minTaps, minTaps + 1]` as these are the two values where the optimal solution (normally) comes from.
+    /// It is always in the interval `[minTaps, minTaps + 1]` as these are the two values where the optimal solution always comes from.
     private var randomNumberOfTaps: Int? {
         guard var minTaps = minimumNumberOfTaps else { return nil }
         minTaps = max(1, minTaps)
-        let maxTaps = minTaps + 1 // In MrFlap, solution is always in [minTaps, minTaps + 1]
 
-        return Distributions.binomialSample(in: minTaps ... maxTaps, average: 0.5 * Double(minTaps + maxTaps))
+        // We choose a number of taps in the range [minTaps, minTaps + 1].
+        // In MrFlap, the optimal solution is always in this range – there are no cases where more taps are required to produce a betters solution.
+        if arc4random() < .max / 2 {
+            return minTaps
+        } else {
+            return minTaps + 1
+        }
     }
 
     /// A value where it is not possible to complete the interaction (i.e. pass the bar) with less taps.
@@ -105,55 +116,11 @@ struct SolutionGenerator {
     }
 
     /// The time (from now) in which the first tap must be executed to not hit the playfield floor.
-    private var maxTimeForFirstTap: Double {
+    private static func calculateMaxTimeForFirstTap(playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties) -> Double {
         let heightDiff = playfield.lowerRadius - player.currentJumpStart.y
         guard let solutions = QuadraticSolver.solve(jumping.parabola, equals: heightDiff) else { return .infinity }
 
         // Return larger (future) solution; subtract frame shift
         return max(solutions.0, solutions.1) - player.timePassedSinceJumpStart
-    }
-}
-
-// MARK: - Distributions
-
-private enum Distributions {
-    /// Generate a random variable distributed by the possion(lambda) distribution.
-    /// lambda (nonnegative) is the expected value of the random variable.
-    /// Requires O(lambda) time (on average).
-    static func poissonSample(lambda: Double) -> Int {
-        if lambda <= 0 { return 0 }
-
-        let L = exp(-lambda)
-        var k = 0, p = Double(1)
-
-        while p > L {
-            k += 1
-            p *= .random(in: 0 ... 1)
-        }
-
-        return k - 1
-    }
-
-    /// Generate a random variable distributed by the possion distribution inside the given half-open range.
-    /// Requires O(lambda) time (on average), where `lambda = average - range.lowerBound`.
-    static func poissonSample(in range: PartialRangeFrom<Int>, average: Double) -> Int {
-        let lambda = average - Double(range.lowerBound)
-        return range.lowerBound + poissonSample(lambda: lambda)
-    }
-
-    /// Generate a random variable distributed by the binomial(n, p) distribution.
-    /// n must be nonnegative.
-    /// Requires O(n) time.
-    static func binomialSample(n: Int, p: Double) -> Int {
-        let values = n.timesMake { Double.random(in: 0 ..< 1) }
-        return values.count { $0 < p }
-    }
-
-    /// Generate a random variable distributed by the binomial distribution inside the given range with the given average value.
-    /// Requires O(n) time, where n is the size of the range.
-    static func binomialSample(in range: ClosedRange<Int>, average: Double) -> Int {
-        let offset = range.lowerBound, size = range.upperBound - range.lowerBound
-        let p = (average - Double(offset)) / Double(size)
-        return offset + binomialSample(n: size, p: p)
     }
 }

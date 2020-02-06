@@ -14,8 +14,9 @@ enum RandomPoints {
         guard let reducedRange = reducedRange(for: range, minimumDistance: minimumDistance, numPoints: numPoints) else { return nil }
 
         // Calculate N points on the reduced interval
-        let points = random(in: reducedRange, count: numPoints)
-        return spreadOut(points: points, minimumDistance: minimumDistance)
+        var points = random(in: reducedRange, count: numPoints)
+        spreadOut(points: &points, minimumDistance: minimumDistance)
+        return points
     }
 
     /// Returns an array of size `numPoints` (positive) containing evenly distributed points in the given range. The range must be regular.
@@ -31,8 +32,9 @@ enum RandomPoints {
         let firstPoint = random(in: firstPointRange)
 
         // Calculate remaining points on the reduced interval
-        let points = [firstPoint] + random(in: reducedRange, count: numPoints - 1)
-        return spreadOut(points: points, minimumDistance: minimumDistance)
+        var points = [firstPoint] + random(in: reducedRange, count: numPoints - 1)
+        spreadOut(points: &points, minimumDistance: minimumDistance)
+        return points
     }
 
     /// Calculate the reduced range for calculating random points in an interval with a minimum pairwise distance.
@@ -45,9 +47,10 @@ enum RandomPoints {
 
     /// Spread out points so that their minimum pairwise distance is at least `minimumDistance`.
     /// Thereby, the first point is left untouched, and the other ones are shifted to the right.
-    private static func spreadOut(points: [Double], minimumDistance: Double) -> [Double] {
-        points.sorted().enumerated().map { i, point in
-            point + Double(i) * minimumDistance
+    private static func spreadOut(points: inout [Double], minimumDistance: Double) {
+        points.sort()
+        for i in 0 ..< points.count {
+            points[i] += Double(i) * minimumDistance
         }
     }
 
@@ -58,6 +61,7 @@ enum RandomPoints {
 
     /// Return a random point in the given range. The range must be regular.
     private static func random(in range: SimpleRange<Double>) -> Double {
-        .random(in: range.lower ... range.upper)
+        let t = Double(arc4random()) / Double(UInt32.max)
+        return range.lower + t * range.size
     }
 }

@@ -22,9 +22,15 @@ struct Jump {
 
     /// Calculate the jump from the given point with the given duration.
     static func from(startPoint: Point, duration: Double, jumping: JumpingProperties) -> Jump {
-        let parabola = jumping.parabola.shiftedLeft(by: -startPoint.time) + startPoint.height
+        // Calculate parabola with f(startPoint.x) = startPoint.y, f'(startPoint.x) = jumpVelocity
+        let a = -1/2 * jumping.gravity
+        let b = jumping.jumpVelocity - 2 * a * startPoint.time
+        let c = startPoint.height - (a * startPoint.time * startPoint.time + b * startPoint.time)
+
+        let parabola = Polynomial([c, b, a])
         let endTime = startPoint.time + duration
         let endHeight = parabola.at(endTime)
+
         return Jump(startPoint: startPoint, endPoint: Point(time: endTime, height: endHeight), parabola: parabola)
     }
 

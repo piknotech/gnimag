@@ -15,6 +15,7 @@ extension Polynomial: ScalarFunctionArithmetic {
 }
 
 /// Perform polynomial addition.
+@_transparent
 public func + (lhs: Polynomial, rhs: Polynomial) -> Polynomial {
     let degree = max(lhs.degree, rhs.degree)
 
@@ -26,12 +27,14 @@ public func + (lhs: Polynomial, rhs: Polynomial) -> Polynomial {
 }
 
 /// Perform polynomial subtraction.
+@_transparent
 public func - (lhs: Polynomial, rhs: Polynomial) -> Polynomial {
     lhs + (-rhs)
 }
 
 /// Perform polynomial multiplication.
 /// This runs in O(n*m).
+@_transparent
 public func * (lhs: Polynomial, rhs: Polynomial) -> Polynomial {
     var result = [Double](repeating: 0, count: lhs.degree + rhs.degree + 1)
 
@@ -44,8 +47,11 @@ public func * (lhs: Polynomial, rhs: Polynomial) -> Polynomial {
 }
 
 /// Add a constant to a polynomial.
+@_transparent
 public func + (lhs: Polynomial, rhs: Double) -> Polynomial {
-    lhs + Polynomial([rhs])
+    var new = lhs.coefficients
+    new[0] += rhs
+    return Polynomial(new)
 }
 
 /// Multiply a polynomial by a constant.
@@ -64,6 +70,7 @@ public func / (lhs: Polynomial, rhs: Double) -> Polynomial {
 }
 
 /// Negate a polynomial.
+@_transparent
 public prefix func - (p: Polynomial) -> Polynomial {
     Polynomial(p.coefficients.map(-))
 }
@@ -71,6 +78,7 @@ public prefix func - (p: Polynomial) -> Polynomial {
 extension Polynomial {
     /// Shift a polynomial to the left.
     /// This runs in O(n^2).
+    @_transparent
     public func shiftedLeft(by amount: Double) -> Polynomial {
         var result = [Double](repeating: 0, count: coefficients.count)
 
@@ -86,7 +94,8 @@ extension Polynomial {
     }
 
     /// Calculate the binomial coefficient.
-    private func choose(_ n: Int, _ k: Int) -> Double {
+    @usableFromInline
+    internal func choose(_ n: Int, _ k: Int) -> Double {
         var result: Double = 1
 
         for i in 0 ..< k {

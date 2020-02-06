@@ -59,14 +59,14 @@ struct SolutionVerifier {
         let allJumps = [firstJump] + nextJumps
 
         // Calculate safety ratings
-        let playfield = playfieldRating(for: allJumps)
-        if playfield <= requiredMinimum { return 0 } // Shortcut
+        let horizontal = horizontalHoleRating(for: allJumps)
+        if horizontal <= requiredMinimum { return 0 } // Shortcut
         let vertical = verticalHoleRating(for: allJumps)
         if vertical <= requiredMinimum { return 0 } // Shortcut
-        let horizontal = horizontalHoleRating(for: allJumps)
+        let playfield = playfieldRating(for: allJumps)
 
         // Return weakest rating
-        return min(vertical, playfield, horizontal)
+        return min(horizontal, vertical, playfield)
     }
 
     /// The rating respective the vertical distance to the bar hole.
@@ -153,23 +153,22 @@ private extension Polynomial {
         -0.5 * b / a
     }
 
-    /// The values of the (up to three) extremal points inside the range.
-    private func extremalPoints(in range: SimpleRange<Double>) -> [Double] {
-        if range.contains(apexXValue) {
-            return [at(range.lower), at(range.upper), at(apexXValue)]
-        } else {
-            return [at(range.lower), at(range.upper)]
-        }
-    }
-
     /// The minimal value the parabola attains in the range.
     func minimum(in range: SimpleRange<Double>) -> Double {
-        extremalPoints(in: range).min()!
+        if range.contains(apexXValue) {
+            return min(at(range.lower), at(range.upper), at(apexXValue))
+        } else {
+            return min(at(range.lower), at(range.upper))
+        }
     }
 
     /// The maximal value the parabola attains in the range.
     func maximum(in range: SimpleRange<Double>) -> Double {
-        extremalPoints(in: range).max()!
+        if range.contains(apexXValue) {
+            return max(at(range.lower), at(range.upper), at(apexXValue))
+        } else {
+            return max(at(range.lower), at(range.upper))
+        }
     }
 }
 
