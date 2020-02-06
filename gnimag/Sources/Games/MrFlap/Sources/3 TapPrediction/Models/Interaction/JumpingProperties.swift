@@ -8,7 +8,7 @@ import GameKit
 /// JumpingProperties bundles properties describing the jump environment.
 struct JumpingProperties {
     /// The jump parabola, with f(0) = 0, f'(0) = jumpVelocity and f''(x) = -gravity.
-    let parabola: Polynomial
+    let parabola: Parabola
 
     /// The gravity of the environment; the leading factor of the jump polynomial is -1/2*g.
     var gravity: Double {
@@ -45,6 +45,6 @@ struct JumpingProperties {
             let parabola = player.height.parabola else { return nil }
 
         // Convert from player-angle time system into real time system
-        self.parabola = converter.timeBasedPolynomialIgnoringIntercept(from: parabola)
+        self.parabola = converter.timeBasedJumpingParabola(from: parabola)
     }
 }

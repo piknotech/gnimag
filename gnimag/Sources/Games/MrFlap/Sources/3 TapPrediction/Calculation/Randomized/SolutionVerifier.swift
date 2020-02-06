@@ -100,7 +100,7 @@ extension PlayerBarInteraction.HoleMovement {
     /// Return the minimal vertical distance from any of the jumps to one of the movement sections.
     /// 0 means there is a crash or touching point.
     func distance(to jumps: [Jump]) -> Double {
-        let distances = (jumps × sections).map { jump, section in
+        let distances = cartesianMap(jumps, sections) { jump, section in
             section.distance(to: jump)
         }
 
@@ -128,13 +128,13 @@ extension PlayerBarInteraction.HoleMovement.Section.LinearMovement {
         if intersection.isEmpty { return nil }
 
         // Find minimal distance
-        let linePoly = Polynomial([line.intercept, line.slope])
-        let difference = jump.parabola - linePoly
+        let lineParabola = Parabola(a: 0, b: line.slope, c: line.intercept)
+        let difference = jump.parabola - lineParabola
         return difference.minimalAbsoluteValue(in: intersection)
     }
 }
 
-private extension Polynomial {
+private extension Parabola {
     /// The minimal absolute value in the given range. Only works for parabolas.
     func minimalAbsoluteValue(in range: SimpleRange<Double>) -> Double {
         // Check for a zero

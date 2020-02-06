@@ -12,7 +12,7 @@ struct Jump {
     let endPoint: Point
 
     /// The parabola going through startPoint and endPoint.
-    let parabola: Polynomial
+    let parabola: Parabola
 
     var timeRange: SimpleRange<Double> {
         SimpleRange(from: startPoint.time, to: endPoint.time)
@@ -27,7 +27,7 @@ struct Jump {
         let b = jumping.jumpVelocity - 2 * a * startPoint.time
         let c = startPoint.height - (a * startPoint.time * startPoint.time + b * startPoint.time)
 
-        let parabola = Polynomial([c, b, a])
+        let parabola = Parabola(a: a, b: b, c: c)
         let endTime = startPoint.time + duration
         let endHeight = parabola.at(endTime)
 
@@ -37,6 +37,8 @@ struct Jump {
     /// Calculate all jumps for the jump sequence defined by the given time distances, starting at the given point.
     static func jumps(forTimeDistances timeDistances: [Double], timeUntilEnd: Double, startPoint: Point, jumping: JumpingProperties) -> [Jump] {
         var result = [Jump]()
+        result.reserveCapacity(timeDistances.count + 1)
+
         var currentPoint = startPoint
 
         // Perform each jump

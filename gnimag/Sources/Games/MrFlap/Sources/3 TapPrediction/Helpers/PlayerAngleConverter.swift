@@ -56,6 +56,20 @@ struct PlayerAngleConverter {
         )
     }
 
+    // MARK: Jumping Parabola Conversion
+
+    /// Convert a jumping parabola (i.e. a parabola going through (0,0)) whose argument is time into the same parabola whose argument is angle.
+    func angleBasedJumpingParabola(from parabola: Parabola) -> Parabola {
+        let factor = angleToTime.slope
+        return Parabola(a: parabola.a * factor * factor, b: parabola.b * factor, c: parabola.c)
+    }
+
+    /// Convert a jumping parabola (i.e. a parabola going through (0,0)) whose argument is angle into the same parabola whose argument is time.
+    func timeBasedJumpingParabola(from parabola: Parabola) -> Parabola {
+        let factor = timeToAngle.slope
+        return Parabola(a: parabola.a * factor * factor, b: parabola.b * factor, c: parabola.c)
+    }
+
     // MARK: Polynomial Conversion
 
     /// Convert a polynomial whose argument is time into the same polynomial whose argument is angle.
@@ -71,14 +85,14 @@ struct PlayerAngleConverter {
     /// Convert a polynomial whose argument is time into the same polynomial whose argument is angle.
     /// Here, the intercept of the conversion function is ignored, just coefficient multiplication is performed. This retains the value of the function at 0.
     func angleBasedPolynomialIgnoringIntercept(from polynomial: Polynomial) -> Polynomial {
-        let valueTransform = angleToTime + (-angleToTime.intercept)
+        let valueTransform = angleToTime - angleToTime.intercept
         return linearTransform(polynomial: polynomial, by: valueTransform)
     }
 
     /// Convert a polynomial whose argument is angle into the same polynomial whose argument is time.
     /// Here, the intercept of the conversion function is ignored, just coefficient multiplication is performed. This retains the value of the function at 0.
     func timeBasedPolynomialIgnoringIntercept(from polynomial: Polynomial) -> Polynomial {
-        let valueTransform = timeToAngle + (-timeToAngle.intercept)
+        let valueTransform = timeToAngle - timeToAngle.intercept
         return linearTransform(polynomial: polynomial, by: valueTransform)
     }
 

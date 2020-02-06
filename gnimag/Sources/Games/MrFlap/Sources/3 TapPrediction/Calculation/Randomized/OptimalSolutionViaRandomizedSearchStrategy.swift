@@ -27,8 +27,8 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
 
         // Generate random solutions
         // Consider: 100 solutions doesn't seem much, but: once a (good enough) solution is available, all generated solutions will just get better and better (because they have to obey minimum requirements to be able to beat the current best solution, therefore SolutionGenerator will generate only sensible solutions, designed to beat the currently best solution).
-        // Combined with the fact that the best solution from the last frame is used as a starting point, this leads to an immensely good final solution after (60fps * 100solutions/frame) = 6,000 solutions generated in e.g. 1 second.
-        let numTries = 100
+        // Combined with the fact that the best solution from the last frame is used as a starting point, this leads to an immensely good final solution after (60fps * 250solutions/frame) = 15,000 solutions generated in e.g. 1 second.
+        let numTries = 250
 
         numTries.repeat {
             guard let solution = generator.randomSolution(minimumConsecutiveTapDistance: bestRating) else { return }
@@ -42,13 +42,6 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
                 bestSolution = solution
                 bestRating = rating
             }
-        }
-
-        // Plot best solution
-        if let solution = bestSolution {
-            let plot = JumpSequencePlot(sequence: solution, player: player, playfield: playfield, jumping: jumping)
-            plot.draw(interaction: interaction)
-            plot.writeToDesktop(name: "Solutions/\(bestRating).png")
         }
 
         lastSolution = bestSolution

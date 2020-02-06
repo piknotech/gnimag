@@ -6,7 +6,7 @@
 import Foundation
 
 /// TapSequence defines a sequence of future taps that can be scheduled.
-public class TapSequence {
+public final class TapSequence {
     /// All taps the sequence consists of.
     public var taps: [Tap]
 
