@@ -10,6 +10,8 @@ import TestingTools
 
 /// BarCourse bundles trackers for a single bar.
 final class BarCourse {
+    static var momventBoundCollector: BarMovementBoundCollector!
+
     /// The state the bar is currently in.
     /// Only trackers with a "normal" state should be considered by prediction algorithms.
     private(set) var state = State.appearing
@@ -46,8 +48,8 @@ final class BarCourse {
         holeSize = ConstantTracker(tolerance: .relative(5%))
         appearingHoleSize = LinearTracker(tolerancePoints: 0, tolerance: .absolute(5% * playfield.freeSpace))
         yCenter = BasicLinearPingPongTracker(
-            absoluteSegmentSwitchTolerance: 0.5% * playfield.freeSpace,
-            slopeTolerance: .relative(20%),
+            tolerance: .absolute(0.5% * playfield.freeSpace),
+            slopeTolerance: .relative(40%),
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
                 pointsMatchingNextSegment: 4,
@@ -58,29 +60,9 @@ final class BarCourse {
 
     // MARK: Updating
 
-    /// Update the trackers with the values from the given bar.
-    /// Only call this AFTER a successful `integrityCheck`.
-    func update(with bar: Bar, at time: Double) {
-        debug.integrityCheckSuccessful = true
-
-        angle.add(value: bar.angle, at: time)
-        width.add(value: bar.width)
-
-        switch state {
-        case .appearing:
-            appearingHoleSize.add(value: bar.holeSize, at: time)
-
-        case .normal:
-            holeSize.add(value: bar.holeSize, at: time)
-            yCenter.add(value: bar.yCenter, at: time)
-        }
-    }
-
     /// Check if all given values match the trackers.
     /// NOTE: This changes the state from `.appearing` to `.normal` when necessary.
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
-        performDebugLogging()
-
         guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
         guard width.isValueValid(bar.width, &debug.width) else { return false }
 
@@ -101,9 +83,35 @@ final class BarCourse {
         return true
     }
 
-    /// Write information about the trackers into the current debug logger frame.
-    func performDebugLogging() {
+    /// Update the trackers with the values from the given bar.
+    /// Only call this AFTER a successful `integrityCheck`.
+    func update(with bar: Bar, at time: Double) {
+        debug.integrityCheckSuccessful = true
+
+        angle.add(value: bar.angle, at: time)
+        width.add(value: bar.width)
+
+        switch state {
+        case .appearing:
+            appearingHoleSize.add(value: bar.holeSize, at: time)
+
+        case .normal:
+            holeSize.add(value: bar.holeSize, at: time)
+            yCenter.add(value: bar.yCenter, at: time)
+        }
+
+        // Update shared movement bounds
+        BarCourse.momventBoundCollector.update(with: self)
+    }
+
+    /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.
+    func setupDebugLogging() {
         debugLogger.currentFrame.gameModelCollection.bars.nextBar()
+    }
+
+    /// Write information about the trackers into the current debug logger frame.
+    /// Call after the updating has finished, i.e. after `update` or after `integrityCheck`.
+    func performDebugLogging() {
         debug.state = state
         debug.angle.from(tracker: angle)
         debug.width.from(tracker: width)

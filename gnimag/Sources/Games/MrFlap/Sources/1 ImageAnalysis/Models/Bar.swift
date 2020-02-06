@@ -20,5 +20,7 @@ struct Bar {
     /// The hole size and the y-center of the hole.
     let holeSize: Double
 
+    /// The y-center, in bar coordinates (ignoring the playfield radius).
+    /// This means, yCenter is in [0, playfield.freeSpace].
     var yCenter: Double { innerHeight + holeSize / 2 }
 }

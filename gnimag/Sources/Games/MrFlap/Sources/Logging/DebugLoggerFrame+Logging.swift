@@ -46,7 +46,7 @@ extension DebugLoggerFrame {
         switch parameters.severity {
         case .none: return false
         case .alwaysText: return true
-        case .onErrors, .textOnly: return hasError
+        case .onErrors, .onErrorsTextOnly: return hasError
         }
     }
 
@@ -55,10 +55,8 @@ extension DebugLoggerFrame {
     /// These preparations are performed synchronously.
     func prepareSynchronously(with parameters: DebugParameters) {
         // Prepare tracker debug infos
-        if !parameters.severity.noImages {
-            gameModelCollection.player.prepareForLogging()
-            gameModelCollection.bars.all.forEach { $0.prepareForLogging() }
-        }
+        gameModelCollection.player.prepareForLogging()
+        gameModelCollection.bars.all.forEach { $0.prepareForLogging() }
     }
 
     // MARK: - Logging
@@ -144,8 +142,6 @@ extension DebugLoggerFrame {
                 plot.write(to: directory +/ String(format: "bar_%02d_yCenter.png", i + 1))
             }
         }
-
-        // TODO: wider when more data points (e.g. als default beim ScatterPlot init)
 
         // Plot the player height
         if let plot = self.gameModelCollection.player.height.createScatterPlot() {

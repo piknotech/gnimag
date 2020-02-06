@@ -10,6 +10,10 @@ struct AnalysisResult {
     let playfield: Playfield
     let coloring: Coloring
     let bars: [Bar] // May be empty.
+
+    var mode: GameMode {
+        coloring.mode
+    }
 }
 
 enum AnalysisError: Error {

@@ -9,53 +9,58 @@ import TestingTools
 /// JumpTracker tracks the height of an object in a physics environment with gravity.
 /// It detects jumps of the object, calculating the the jump velocity and the gravity of the environment.
 /// Important: This assumes that, on each jump, the object's y-velocity is set to a constant value which is NOT dependent on the previous object velocity (i.e. absolute jumping instead of relative jumping).
-public final class JumpTracker: CompositeTracker<PolyTracker> {
+public final class JumpTracker: CompositeTracker<ParabolaTracker> {
 
     // MARK: Private Properties
 
     /// The constant trackers for gravity and jump velocity.
-    private let gravityTracker: ConstantTracker
-    private let jumpVelocityTracker: ConstantTracker
+    private let gravityTracker: PreliminaryTracker
+    private let jumpVelocityTracker: PreliminaryTracker
 
-    /// True when values (gravity & jump velocity) from the current jump are in the trackers.
-    /// Because these values are updated each frame until the jump has ended (and the next jump begins), these values are only preliminary until the jump has ended.
-    private var usingPreliminaryValues = false
+    /// The estimated gravity, if available.
+    private var gravity: Value? { gravityTracker.average ?? gravityTracker.values.last }
+
+    /// The estimated jump velocity, if available.
+    /// Can be negative if time direction is inverted.
+    private var jumpVelocity: Value? { jumpVelocityTracker.average ?? jumpVelocityTracker.values.last }
 
     /// The guess range for when a new jump started.
     /// If you know that jumps will, for example, always exactly begin at the second last data point, return [0, 0].
     private let customGuessRange: SimpleRange<Time>
 
+    /// The constant height before the first segment started.
+    /// For calculating an exact start point of the initial jump.
+    private let idleHeightBeforeInitialSegment: Value?
+
     // MARK: Public Properties
 
-    /// The estimated gravity, if available.
-    public var gravity: Value? {
-        gravityTracker.average ?? gravityTracker.values.last
-    }
-
-    /// The estimated jump velocity, if available.
-    public var jumpVelocity: Value? {
-        jumpVelocityTracker.average ?? jumpVelocityTracker.values.last
+    /// The jumping parabola, going through (0,0), if available.
+    public var parabola: Parabola? {
+        guard let jumpVelocity = jumpVelocity, let gravity = gravity else { return nil }
+        return Parabola(a: -0.5 * gravity, b: jumpVelocity, c: 0)
     }
 
     /// Default initializer.
     public init(
+        jumpTolerance: TrackerTolerance,
         relativeValueRangeTolerance: Value,
-        absoluteJumpTolerance: Value,
         consecutiveNumberOfPointsRequiredToDetectJump: Int,
-        customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1)
+        customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1),
+        idleHeightBeforeInitialSegment: Value? = nil
     ) {
         let tolerance = TrackerTolerance.relative(relativeValueRangeTolerance)
-        gravityTracker = ConstantTracker(tolerancePoints: 1, tolerance: tolerance)
-        jumpVelocityTracker = ConstantTracker(tolerancePoints: 1, tolerance: tolerance)
+        gravityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
+        jumpVelocityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
 
         self.customGuessRange = customGuessRange
+        self.idleHeightBeforeInitialSegment = idleHeightBeforeInitialSegment
 
         let characteristics = NextSegmentDecisionCharacteristics(
             pointsMatchingNextSegment: consecutiveNumberOfPointsRequiredToDetectJump,
             maxIntermediatePointsMatchingCurrentSegment: 0
         )
 
-        super.init(tolerance: absoluteJumpTolerance, decisionCharacteristics: characteristics)
+        super.init(tolerance: jumpTolerance, decisionCharacteristics: characteristics)
     }
 
     // MARK: Delegate And DataSource
@@ -63,27 +68,21 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     /// A new regression for the current jump may be available.
     /// Update preliminary values for gravity and jump velocity.
     /// Return the supposed time where the segment started at.
-    public override func currentSegmentWasUpdated(segment: SegmentInfo) -> Time? {
+    public override func currentSegmentWasUpdated(segment: Segment) -> Time? {
         guard let jump = segment.tracker.regression else { return nil }
 
-        // Remove old preliminary values before adding new preliminary values
-        if usingPreliminaryValues {
-            gravityTracker.removeLast()
-            jumpVelocityTracker.removeLast()
-        }
-
-        // Calculate gravity and jump velocity and jump start
-        let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump, currentTrackerStartTime: segment.tracker.times.first!)
+        // Calculate gravity, jump velocity and jump start
+        let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump)
         let gravity = -2 * jump.a
         let jumpVelocity = jump.derivative.at(jumpStart)
 
-        // Add preliminary values to trackers if they are valid
+        gravityTracker.removePreliminaryValue()
+        jumpVelocityTracker.removePreliminaryValue()
+
+        // Add preliminary values to trackers if both are valid
         if gravityTracker.isValueValid(gravity) && jumpVelocityTracker.isValueValid(jumpVelocity) {
-            gravityTracker.add(value: gravity)
-            jumpVelocityTracker.add(value: jumpVelocity)
-            usingPreliminaryValues = true
-        } else {
-            usingPreliminaryValues = false
+            gravityTracker.addPreliminary(value: gravity)
+            jumpVelocityTracker.addPreliminary(value: jumpVelocity)
         }
 
         return jumpStart
@@ -92,43 +91,17 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
     /// The current jump has finished and the next jump has begun.
     /// Finalize the gravity and jump velocity values.
     public override func willFinalizeCurrentSegmentAndAdvanceToNextSegment() {
-        usingPreliminaryValues = false
-    }
-
-    /// Calculate the intersection of the last jump and the current jump.
-    /// If there is no regression for the last jump, use a time between the start of the current jump and the end of the last jump.
-    private func calculateStartTimeForCurrentJump(currentJump: Polynomial, currentTrackerStartTime: Time) -> Time {
-        guard let lastSegment = finalizedSegments.last else { return currentTrackerStartTime }
-
-        // Primitive guess
-        var guess = currentTrackerStartTime
-        if let lastJumpEndTime = lastSegment.tracker.times.last {
-            guess = (currentTrackerStartTime + lastJumpEndTime) / 2
-        }
-
-        // Actual polynomial intersection
-        if let lastJump = lastSegment.tracker.regression {
-            let diff = currentJump - lastJump
-            guard let intersections = QuadraticSolver.solve(a: diff.a, b: diff.b, c: diff.c) else { return guess }
-
-            // As the leading factors are probably nearly, but not exactly equal, there are two solutions, one of which is crap
-            if abs(intersections.0 - guess) < abs(intersections.1 - guess) {
-                return intersections.0
-            } else {
-                return intersections.1
-            }
-        }
-
-        return guess
+        gravityTracker.finalizePreliminaryValue()
+        jumpVelocityTracker.finalizePreliminaryValue()
     }
 
     /// Create a parabola tracker for the next jump segment.
-    public override func trackerForNextSegment() -> PolyTracker {
-        PolyTracker(degree: 2, tolerance: .absolute(tolerance))
+    public override func trackerForNextSegment() -> ParabolaTracker {
+        ParabolaTracker(tolerance: tolerance)
     }
 
     /// Make a guess for a jump beginning at (`time`, `value`).
-    public override func guessForNextPartialFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Function? {
+    public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Double, value: Double) -> Parabola? {
         guard let gravity = gravity, let jumpVelocity = jumpVelocity else { return nil }
 
         // Solve f(time) = value and f'(time) = jumpVelocity
@@ -136,16 +109,51 @@ public final class JumpTracker: CompositeTracker<PolyTracker> {
         let b = jumpVelocity - 2 * a * time // 2ax + b = jumpVelocity
         let c = value - (a * time * time + b * time) // ax^2 + bx + c = value
 
-        return Polynomial([c, b, a])
+        return Parabola(a: a, b: b, c: c)
     }
 
     /// Provide the custom guess range.
-    public override func guessRange(for timeRange: Time) -> SimpleRange<Time> {
+    public override func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
         customGuessRange
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
-    public override func scatterStrokable(for function: Function, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
-        QuadCurveScatterStrokable(parabola: function as! Polynomial, drawingRange: drawingRange)
+    public override func scatterStrokable(for function: Parabola, drawingRange: SimpleRange<Time>) -> ScatterStrokable {
+        QuadCurveScatterStrokable(parabola: function, drawingRange: drawingRange)
+    }
+
+    // MARK: Intersection Calculation
+
+    /// Calculate the intersection of the last jump and the current jump.
+    /// If there is no regression for the last jump, use a time between the start of the current jump and the end of the last jump.
+    private func calculateStartTimeForCurrentJump(currentJump: Parabola) -> Time {
+        var guess = currentSegment.tracker.times.first!
+
+        guard let lastSegment = finalizedSegments.last else {
+            // Special case: initial segment
+            return calculateStartTimeForInitialSegment(currentJump: currentJump) ?? guess
+        }
+
+        // Specify guess
+        if let lastJumpEndTime = lastSegment.tracker.times.last {
+            guess = (guess + lastJumpEndTime) / 2
+        }
+
+        // Polynomial intersection between last and current segment
+        if let lastJump = lastSegment.tracker.regression {
+            let diff = currentJump - lastJump
+            return QuadraticSolver.solve(diff, equals: 0, solutionNearestToGuess: guess) ?? guess
+        }
+
+        return guess
+    }
+
+    /// Special case for segment start time calculation: Calculate the start time for the initial segment using `idleHeightBeforeInitialSegment`.
+    private func calculateStartTimeForInitialSegment(currentJump: Parabola) -> Time? {
+        guard let idleHeight = idleHeightBeforeInitialSegment else { return nil }
+
+        // Solve a*x^2 + b*x + c = idleHeight
+        let guess = currentSegment.tracker.times.first!
+        return QuadraticSolver.solve(currentJump, equals: idleHeight, solutionNearestToGuess: guess)
     }
 }

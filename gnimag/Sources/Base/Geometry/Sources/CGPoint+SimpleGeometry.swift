@@ -66,4 +66,3 @@ public extension CGPoint {
         return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
     }
 }
-

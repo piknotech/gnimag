@@ -8,25 +8,31 @@ import Surge
 /// Regression encapsulates capabilities of calculating linear and polynomial regression, using Surge.
 /// (Surge: https://github.com/mattt/Surge).
 public enum Regression {
-    /// Perform a polynomial regression.
+    /// Perform a polynomial regression and return a Polynomial.
     public static func polyRegression(x: [Double], y: [Double], n: Int) -> Polynomial {
         switch n {
         case 0:
             return Polynomial([mean(y)])
         case 1:
-            let (a, b) = linear(x: x, y: y)
+            let (a, b) = linearRegressionImp(x: x, y: y)
             return Polynomial([b, a])
         default:
             let coefficients = polyRegressionImp(x: x, y: y, n: n)
             return Polynomial(coefficients)
         }
     }
+
+    /// Perform a linear regression and return a LinearFunction.
+    public static func linearRegression(x: [Double], y: [Double]) -> LinearFunction {
+        let (slope, intercept) = linearRegressionImp(x: x, y: y)
+        return LinearFunction(slope: slope, intercept: intercept)
+    }
     
     // MARK: Implementation
     
     /// Linear regression. (Much faster than performing a polynomial regression with n = 1).
     /// Return ax + b.
-    private static func linear(x: [Double], y: [Double]) -> (a: Double, b: Double) {
+    private static func linearRegressionImp(x: [Double], y: [Double]) -> (a: Double, b: Double) {
         let meanx = mean(x)
         let meany = mean(y)
         let meanxy = mean(x .* y)

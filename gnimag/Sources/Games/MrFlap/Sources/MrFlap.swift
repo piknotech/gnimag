@@ -5,6 +5,7 @@
 
 import Common
 import Foundation
+import GameKit
 import Geometry
 import Image
 import TestingTools
@@ -15,12 +16,16 @@ public final class MrFlap {
     private let imageProvider: ImageProvider
     private let tapper: Tapper
 
-    /// The shared playfield.
-    private var playfield: Playfield!
-
-    /// Image analyzer and game model collector.
+    /// The three great actors – one for each step.
     private let imageAnalyzer: ImageAnalyzer
     private var gameModelCollector: GameModelCollector!
+    private let tapPredictor: TapPredictor
+
+    /// The queue where image analysis and game model collection is performed on.
+    private var queue: GameQueue!
+
+    /// The shared playfield.
+    private var playfield: Playfield!
 
     // TODO: remove once using prediction for hints
     private var lastPlayerCoords: PolarCoordinates?
@@ -41,24 +46,27 @@ public final class MrFlap {
     public init(imageProvider: ImageProvider, tapper: Tapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
         self.tapper = tapper
-        self.debugLogger = DebugLogger(parameters: debugParameters)
+
+        debugLogger = DebugLogger(parameters: debugParameters)
         
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
+        tapPredictor = TapPredictor(tapper: tapper, imageProvider: imageProvider)
+
+        queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
     }
 
     /// Begin receiving images and play the game.
     /// Only call this once.
     /// If you want to play a new game, create a new instance of MrFlap.
     public func play() {
-        imageProvider.newImage.subscribe { value in
-            self.debugLogger.currentFrame.time = value.1
-            self.update(image: value.0, time: value.1)
-            self.debugLogger.advance()
-        }
+        queue.begin()
     }
 
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
+        debugLogger.currentFrame.time = time
+
+        // State-specific update
         switch state {
         case .beforeGame:
             startGame(image: image, time: time)
@@ -72,6 +80,8 @@ public final class MrFlap {
         case .finished:
             ()
         }
+
+        debugLogger.advance()
     }
 
     // MARK: State-Specific Update Methods
@@ -82,11 +92,14 @@ public final class MrFlap {
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 
-        playfield = result.playfield
-        gameModelCollector = GameModelCollector(playfield: playfield, debugLogger: debugLogger)
+        // Fill properties from first analyzed image
         state = .waitingForFirstMove(initialPlayerPos: result.player)
+        playfield = result.playfield
+        gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, mode: result.mode, debugLogger: debugLogger)
+        tapPredictor.set(gameModel: gameModelCollector.model)
 
-        tapper.tap()
+        // Tap to begin the game
+        tapPredictor.tapNow()
     }
 
     /// Check if the first player move, initiated by `startGame`, is visible.
@@ -96,6 +109,7 @@ public final class MrFlap {
 
         if distance(between: result.player, and: initialPlayerPos) > 1 {
             state = .inGame
+            tapPredictor.tapDetected(at: time)
             gameModelCollector.accept(result: result, time: time) // TODO: remove?
         }
     }
@@ -104,6 +118,7 @@ public final class MrFlap {
     private func gameplayUpdate(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image, time: time) else { return }
         gameModelCollector.accept(result: result, time: time)
+        tapPredictor.predict()
     }
 
     /// Calculate the pixel distance between two players.

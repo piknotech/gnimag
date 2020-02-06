@@ -126,7 +126,7 @@ final class DebugLoggerFrame: DebugLoggerFrameProtocol {
 
             var angle = SimpleTrackerDebugInfo<AngularWrapper<LinearTracker>>()
             var size = SimpleTrackerDebugInfo<ConstantTracker>()
-            var height = CompositeTrackerDebugInfo<PolyTracker>()
+            var height = CompositeTrackerDebugInfo<ParabolaTracker>()
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {

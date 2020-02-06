@@ -22,7 +22,7 @@ class AppWindowScreenProvider: ImageProvider {
     private let topWindowBorder = 22
 
     /// The event that is called each time a new image is available.
-    var newImage = Event<(Image, Time)>()
+    var newFrame = Event<Frame>()
 
     /// Default initializer.
     /// Start providing images immediately.
@@ -47,12 +47,17 @@ class AppWindowScreenProvider: ImageProvider {
         }
     }
 
+    /// The current time.
+    var time: Time {
+        CACurrentMediaTime()
+    }
+
     /// Called each time the display link fires.
     private func displayLinkFire(_: CVDisplayLink, _: UnsafePointer<CVTimeStamp>, _: UnsafePointer<CVTimeStamp>, _: CVOptionFlags, _: UnsafeMutablePointer<CVOptionFlags>) -> CVReturn {
         // Get image and call block (on same thread)
-        let time = CACurrentMediaTime()
+        let time = self.time // Get current time before copying the image
         let image = NativeImage(currentImage)
-        newImage.trigger(with: (image, time))
+        newFrame.trigger(with: (image, time))
 
         return 0
     }

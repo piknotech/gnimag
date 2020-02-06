@@ -148,8 +148,7 @@ public final class BitmapCanvas {
     // MARK: Write to File
     /// Write the current canvas content to a file.
     public func write(to file: String) {
-        let image = context.makeImage()!
-        image.write(to: file)
+        CGImage.write(to: file)
     }
 
     /// Write the current canvas content to the users desktop.

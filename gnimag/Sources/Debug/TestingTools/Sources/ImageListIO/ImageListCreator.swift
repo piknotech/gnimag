@@ -13,7 +13,7 @@ public final class ImageListCreator {
     /// The directory path.
     private let directoryPath: String
 
-    /// The next image to create.
+    /// The next image to create (1-based).
     private var i = 1
 
     /// The maximum number of images to write.
@@ -30,7 +30,7 @@ public final class ImageListCreator {
     /// Listen for images produced by the ImageProvider and save each image to the specified directory.
     /// Attention: The produced images MUST be ConvertibleToCGImage.
     public func link(to provider: ImageProvider) {
-        provider.newImage += { image in
+        provider.newFrame += { (image, _) in
             if self.i > self.maxImages { return }
 
             let cgImage = (image as! ConvertibleToCGImage).CGImage

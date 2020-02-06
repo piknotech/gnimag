@@ -14,3 +14,19 @@ public func ×<S, T>(lhs: [S], rhs: [T]) -> [(S, T)] {
         }
     }
 }
+
+/// A performant version of (a × b).map(block).
+@_transparent
+public func cartesianMap<T, U, V>(_ array1: [T], _ array2: [U], block: (T, U) -> V) -> [V] {
+    var result = [V]()
+    result.reserveCapacity(array2.count * array2.count)
+
+    // Use plain loops for a great performance increase in comparsion to ×/map
+    for elem1 in array1 {
+        for elem2 in array2 {
+            result.append(block(elem1, elem2))
+        }
+    }
+
+    return result
+}

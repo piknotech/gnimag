@@ -43,6 +43,8 @@ public enum ScatterColor {
     case inDecisionWindow
     case invalid
 
+    case custom(Color)
+
     internal var concreteColor: Color {
         switch self {
         case .normal, .even:
@@ -56,6 +58,9 @@ public enum ScatterColor {
 
         case .invalid, .emphasize:
             return .lightBlue
+
+        case .custom(let color):
+            return color
         }
     }
 }

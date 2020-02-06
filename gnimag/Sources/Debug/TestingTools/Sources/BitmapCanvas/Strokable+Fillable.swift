@@ -7,7 +7,7 @@ import Foundation
 import Image
 
 public protocol Strokable {
-    /// Stroke `self onto the context. Perform transforms as neccessary, but revert them after drawing.
+    /// Stroke `self` onto the context. Perform transforms as neccessary, but revert them after drawing.
     func stroke(onto context: CGContext)
 }
 

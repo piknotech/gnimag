@@ -4,19 +4,19 @@
 //
 
 import Common
-import Foundation
+import QuartzCore
 
 public enum Measurement {
     private static var runningMeasurements = [String: TimeInterval]()
 
     /// Begin or restart a measurement with the given identifier.
     public static func begin(id: String) {
-        runningMeasurements[id] = CFAbsoluteTimeGetCurrent()
+        runningMeasurements[id] = CACurrentMediaTime()
     }
 
     /// End the measurement with the given identifier and print the result in milliseconds.
     public static func end(id: String) {
-        let time = CFAbsoluteTimeGetCurrent()
+        let time = CACurrentMediaTime()
 
         if let index = runningMeasurements.index(forKey: id) {
             let (_, startTime) = runningMeasurements.remove(at: index)

@@ -6,7 +6,7 @@
 import Foundation
 
 /// Synchronize a code of block, so only one thread can enter it at any given time.
-public func synchronized<T>(_ object: AnyObject, closure: () -> T) -> T {
+public func synchronized<T>(_ object: AnyObject, _ closure: () -> T) -> T {
     objc_sync_enter(object)
     defer { objc_sync_exit(object) }
     return closure()

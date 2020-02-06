@@ -1,9 +1,6 @@
-# Accio dependency management
-Dependencies/
-.accio/
-
 # Building via make
 .build/
+Package.resolved
 
 # User settings
 xcuserdata/

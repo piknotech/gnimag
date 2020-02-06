@@ -1,6 +1,10 @@
 // swift-tools-version:5.1
 import PackageDescription
 
+// This Package.swift is only required for building via `swift build`, e.g. inside the makefile.
+// It is not required during development inside Xcode.
+// When adding or updating a (local) module, or a (remote) dependency, update this Package.swift accordingly to keep `make` intact.
+
 let package = Package(
     name: "gnimag",
     platforms: [
@@ -11,10 +15,13 @@ let package = Package(
     ],
     dependencies: [
         /// A Swift library that uses the Accelerate framework to provide high-performance functions for matrix math, digital signal processing, and image manipulation.
-        .package(url: "https://github.com/mattt/Surge", .upToNextMajor(from: "2.0.0")),
+        .package(url: "https://github.com/Jounce/Surge", .upToNextMajor(from: "2.3.0")),
 
         /// Beautiful charts for iOS/tvOS/OSX! The Apple side of the crossplatform MPAndroidChart.
-        .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.3.0")),
+        .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.4.0")),
+
+        /// Handy Swift features that didn't make it into the Swift standard library.
+        .package(url: "https://github.com/Flinesoft/HandySwift", .upToNextMajor(from: "3.1.0")),
     ],
     targets: [
         // BASE
@@ -94,7 +101,9 @@ let package = Package(
             name: "MrFlap",
             dependencies: [
                 "Common",
+                "GameKit",
                 "Geometry",
+                "HandySwift",
                 "Image",
                 "ImageAnalysisKit",
                 "LoggingKit",

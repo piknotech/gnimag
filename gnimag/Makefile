@@ -9,30 +9,22 @@ REPODIR = $(shell pwd)
 BUILDDIR = $(REPODIR)/.build
 SOURCES = $(wildcard $(srcdir)/**/*.swift)
 
-.DEFAULT_GOAL = all
-
-.PHONY: all
-all: gnimag
+.DEFAULT_GOAL = install
 
 gnimag: $(SOURCES)
 	@swift build \
 		-c release \
+		-Xswiftc "-whole-module-optimization" \
+		-Xswiftc "-Ounchecked" \
 		--disable-sandbox \
 		--build-path "$(BUILDDIR)"
 
-.PHONY: install
 install: gnimag
 	@install -d "$(bindir)" "$(libdir)"
 	@install "$(BUILDDIR)/release/gnimag" "$(bindir)"
 
-.PHONY: uninstall
 uninstall:
 	@rm -rf "$(bindir)/gnimag"
 
-.PHONY: clean
-distclean:
-	@rm -f $(BUILDDIR)/release
-
-.PHONY: clean
-clean: distclean
+clean:
 	@rm -rf $(BUILDDIR)
