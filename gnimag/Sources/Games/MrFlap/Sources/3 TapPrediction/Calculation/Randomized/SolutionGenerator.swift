@@ -6,7 +6,6 @@
 import Common
 import Foundation
 import GameKit
-import HandySwift
 
 /// SolutionGenerator generates a set of possible solutions to a given interaction.
 /// These solutions can be required to meet certain requirements, e.g. a minimum distance between consecutive taps etc.
@@ -18,71 +17,68 @@ struct SolutionGenerator {
     let jumping: JumpingProperties
     let interaction: PlayerBarInteraction
 
+    /// The minimum number of taps that is required to complete the interaction.
+    /// As this does not change, it is calculated once.
+    let minimumNumberOfTaps: Int?
+
+    /// Default initializer.
+    init(playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties, interaction: PlayerBarInteraction) {
+        self.playfield = playfield
+        self.player = player
+        self.jumping = jumping
+        self.interaction = interaction
+
+        minimumNumberOfTaps = Self.calculateMinimumNumberOfTaps(playfield: playfield, player: player, jumping: jumping, interaction: interaction)
+    }
+
     /// Generate a random solution meeting the requirements.
     /// Returns nil if it is not possible to solve the interaction or to meet the requirements.
-    func randomSolution(minimumConsecutiveTapDistance: Double?, currentBestNumberOfTaps: Int?) -> Solution? {
+    func randomSolution(minimumConsecutiveTapDistance: Double) -> Solution? {
         let T = interaction.holeMovement.intersectionsWithBoundsCurves.right.xRange.upper
+        guard var taps = randomNumberOfTaps else { return nil }
 
-        // Find min and max tap distances
-        guard let minTaps = minimumNumberOfTaps else { return nil } // Else, impossible // TODO: Only calculate once!
-        let maxTaps = minimumConsecutiveTapDistance.map { Int(ceil(T / $0)) }
+        // Calculate tap range
+        let minimumFirstTap = max(0, minimumConsecutiveTapDistance - player.timePassedSinceJumpStart)
+        let tapRange = SimpleRange(from: minimumFirstTap, to: T)
 
-        // Generate random solution
-        // TODO: allow empty solution? i.e. zero taps
-        let taps = pickRandomNumberOfTaps(minimum: max(1, minTaps), maximum: maxTaps, currentBest: currentBestNumberOfTaps)
-        let tapRange = SimpleRange(from: 0, to: T)
-        guard let points = RandomPoints.on(tapRange, minimumDistance: minimumConsecutiveTapDistance ?? 0, numPoints: taps, maximumValueForFirstPoint: maxTimeForFirstTap) else { return nil }
+        // Decrease number of taps if it would be impossible to satisfy `minimumConsecutiveTapDistance`
+        if minimumConsecutiveTapDistance > 0 {
+            taps = min(Int(ceil(tapRange.size / minimumConsecutiveTapDistance)), taps)
+        }
+        
+        guard let points = RandomPoints.on(tapRange, minimumDistance: minimumConsecutiveTapDistance, numPoints: taps, maximumValueForFirstPoint: maxTimeForFirstTap) else { return nil }
 
         return solutionFromRandomPointsSequence(points, T: T)
-
-        // todo: after verification: remove last tap, if possible?
     }
 
     /// Convert a random points sequence (as obtained from `RandomPoints.on(_:)`) into a Solution.
     private func solutionFromRandomPointsSequence(_ points: [Double], T: Double) -> Solution {
-        // "Anti-scan" the array to find the element differences
-        var lastValue: Double = 0
-        var differences = points.map { element -> Double in
-            let diff = element - lastValue
-            lastValue = element
-            return diff
+        // Find time differences between subsequent elements
+        let points = [0] + points + [T]
+        var differences = (1 ..< points.count).map { i -> Double in
+            points[i] - points[i-1]
         }
 
-        // Find start and end time and create solution
+        // Extract start and end time and create solution
         let timeUntilStart = differences.removeFirst()
-        let timeUntilEnd = T - points.last!
+        let timeUntilEnd = differences.removeLast()
 
         return Solution(timeUntilStart: timeUntilStart, jumpTimeDistances: differences, timeUntilEnd: timeUntilEnd)
     }
 
-    /// Pick a (positive) random number of taps between the given interval.
-    /// Thereby, the minimum is the minimum required number of taps to solve the interaction.
-    /// All parameters must be positive.
-    private func pickRandomNumberOfTaps(minimum: Int, maximum: Int?, currentBest: Int?) -> Int {
-        switch (maximum, currentBest) {
-        case let (.some(maximum), .some(currentBest)):
-            // Use a mix of `minimum` and `currentBest` as average (to hinder bad solutions from affecting the choice in a bad way, as the best solutions are often very near the `minimum` value)
-            var average = Double(minimum + currentBest) / 2
-            average.clamp(to: Double(minimum + 1) ... Double(maximum - 1)) // Allow a bit of leeway
-            return Distributions.binomialSample(in: minimum ... maximum, average: average)
+    /// Pick a positive random number of taps.
+    /// It is always in the interval `[minTaps, minTaps + 1]` as these are the two values where the optimal solution (normally) comes from.
+    private var randomNumberOfTaps: Int? {
+        guard var minTaps = minimumNumberOfTaps else { return nil }
+        minTaps = max(1, minTaps)
+        let maxTaps = minTaps + 1 // In MrFlap, solution is always in [minTaps, minTaps + 1]
 
-        case let (.none, .some(currentBest)):
-            var average = Double(minimum + currentBest) / 2
-            average.clamp(to: Double(minimum + 1)...)
-            return Distributions.poissonSample(in: minimum..., average: average)
-
-        case let (.some(maximum), .none):
-            // `minimum + 1` is often a good approximation for real solutions
-            return Distributions.binomialSample(in: minimum ... maximum, average: Double(minimum + 1))
-
-        case (.none, .none):
-            return Distributions.poissonSample(in: minimum..., average: Double(minimum + 1))
-        }
+        return Distributions.binomialSample(in: minTaps ... maxTaps, average: 0.5 * Double(minTaps + maxTaps))
     }
 
     /// A value where it is not possible to complete the interaction (i.e. pass the bar) with less taps.
     /// This is a required value for the number of taps; not necessarily a sufficient one.
-    private var minimumNumberOfTaps: Int? {
+    private static func calculateMinimumNumberOfTaps(playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties, interaction: PlayerBarInteraction) -> Int? {
         // Calculate distance for the lower right point of the hole (respective to the current jump start of the player)
         let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right
         var heightDiff = rightSide.yRange.lower - player.currentJumpStart.y
@@ -149,7 +145,7 @@ private enum Distributions {
     /// n must be nonnegative.
     /// Requires O(n) time.
     static func binomialSample(n: Int, p: Double) -> Int {
-        let values = n.timesMake { Double.random(in: 0 ..< 1) }
+        let values = n.timesMake { Double.random(in: 0 ..< 1) }
         return values.count { $0 < p }
     }
 
@@ -157,7 +153,7 @@ private enum Distributions {
     /// Requires O(n) time, where n is the size of the range.
     static func binomialSample(in range: ClosedRange<Int>, average: Double) -> Int {
         let offset = range.lowerBound, size = range.upperBound - range.lowerBound
-        let p = average / Double(size)
+        let p = (average - Double(offset)) / Double(size)
         return offset + binomialSample(n: size, p: p)
     }
 }

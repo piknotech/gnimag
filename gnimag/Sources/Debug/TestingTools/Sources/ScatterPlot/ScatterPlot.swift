@@ -124,9 +124,9 @@ public final class ScatterPlot {
 
         /// Convert a value from one range to another range, keeping its relative position.
         func convert<T: FloatingPoint>(_ value: T, from: SimpleRange<T>, to: SimpleRange<T>) -> T {
-            if from.lower == from.upper { return value }
-            let pos = (value - from.lower) / (from.upper - from.lower)
-            return to.lower + pos * (to.upper - to.lower)
+            if from.isSinglePoint { return value }
+            let pos = (value - from.lower) / from.size
+            return to.lower + pos * to.size
         }
 
         // Convert x and y values

@@ -7,5 +7,5 @@
 protocol InteractionSolutionStrategy {
     typealias Solution = JumpSequenceFromCurrentPosition
     
-    func solution(for interaction: PlayerBarInteraction, on playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties) -> Solution?
+    func solution(for interaction: PlayerBarInteraction, on playfield: PlayfieldProperties, player: PlayerProperties, jumping: JumpingProperties, currentTime: Double) -> Solution?
 }

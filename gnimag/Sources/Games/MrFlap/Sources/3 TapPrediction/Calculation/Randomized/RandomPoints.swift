@@ -38,7 +38,7 @@ enum RandomPoints {
     /// Calculate the reduced range for calculating random points in an interval with a minimum pairwise distance.
     /// Returns nil if the reduced range does not exist / would be empty.
     private static func reducedRange(for range: SimpleRange<Double>, minimumDistance: Double, numPoints: Int) -> SimpleRange<Double>? {
-        let reducedLength = range.upper - range.lower - Double(numPoints - 1) * minimumDistance
+        let reducedLength = range.size - Double(numPoints - 1) * minimumDistance
         let reducedRange = SimpleRange(from: range.lower, to: range.lower + reducedLength)
         return reducedRange.isEmpty ? nil : reducedRange
     }
@@ -53,7 +53,7 @@ enum RandomPoints {
 
     /// Returns random points in the given range. The range must be regular.
     private static func random(in range: SimpleRange<Double>, count: Int) -> [Double] {
-        (0 ..< count).map { _ in random(in: range) }
+        count.timesMake { random(in: range) }
     }
 
     /// Return a random point in the given range. The range must be regular.

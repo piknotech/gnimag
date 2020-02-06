@@ -14,6 +14,11 @@ public struct SimpleRange<Bound: FloatingPoint> {
         (lower + upper) / 2
     }
 
+    /// The size of the range.
+    public var size: Bound {
+        upper - lower
+    }
+
     /// Default initializer.
     /// If `enforceRegularity`, `from` and `to` are swapped, if required, to guarantee `lower <= upper`.
     /// Else, `from` and `to` are left as-is. Defaults to false.

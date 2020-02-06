@@ -32,7 +32,7 @@ struct JumpThroughNextBarCalculator {
         guard let bar = nextBar(model: model, player: player, playfield: playfield, currentTime: currentTime) else { return nil }
 
         let interaction = PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime)
-        return strategy.solution(for: interaction, on: playfield, player: player, jumping: jumping)
+        return strategy.solution(for: interaction, on: playfield, player: player, jumping: jumping, currentTime: currentTime)
 
         /* Plotting
         let solution = strategy.solution(for: interaction, on: playfield)

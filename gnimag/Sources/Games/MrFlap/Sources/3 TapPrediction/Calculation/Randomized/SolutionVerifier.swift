@@ -35,29 +35,34 @@ struct SolutionVerifier {
     /// The rating depends on two factors: the tap time rating and the safety rating.
     /// The tap time rating is just the minimum distance between two consecutive jumps; the safety rating rates the player trajectory, i.e. the distance to playfield and bar hole bounds.
     /// These two factors are multiplied. The safety rating is in [0, 1], 0 meaning a definite crash or contact with the playfield bounds (which is bad for player jump tracking and is therefore avoided).
-    func rating(of solution: Solution) -> Double {
+    /// `requiredMinimum` is used as a performance boost: when, during evaluation, it becomes impossible to beat the required minimum rating, terminate evaluation early and return 0.
+    func rating(of solution: Solution, requiredMinimum: Double) -> Double {
         // Determine time rating
         let timeDistanceForFirstJump = player.timePassedSinceJumpStart + solution.timeUntilStart
         let allTimeDistances = solution.jumpTimeDistances + [timeDistanceForFirstJump]
         let timeRating = allTimeDistances.min()!
 
         // Multiply with safety rating
-        return timeRating * safetyRating(of: solution)
+        let requiredSafetyRating = requiredMinimum / timeRating
+        return timeRating * safetyRating(of: solution, requiredMinimum: requiredSafetyRating)
     }
 
     /// The safety rating of a solution, in [0, 1].
     /// 0 if the solution leads to a crash, either into the bar on into the playfield bounds.
-    private func safetyRating(of solution: Solution) -> Double {
+    /// `requiredMinimum` is used as a performance boost: when, during evaluation, it becomes impossible to beat the required minimum rating, terminate evaluation early and return 0.
+    private func safetyRating(of solution: Solution, requiredMinimum: Double) -> Double {
+        if requiredMinimum >= 1 { return 0 }
+
         // All jumps (starting at current time)
         let firstJump = solution.currentJump(for: player, with: jumping, startingAt: .currentTime)
         let nextJumps = solution.jumps(for: player, with: jumping)
         let allJumps = [firstJump] + nextJumps
 
-        // Calculate all ratings
+        // Calculate safety ratings
         let playfield = playfieldRating(for: allJumps)
-        if playfield == 0 { return 0 } // Shortcut
+        if playfield <= requiredMinimum { return 0 } // Shortcut
         let vertical = verticalHoleRating(for: allJumps)
-        if vertical == 0 { return 0 } // Shortcut
+        if vertical <= requiredMinimum { return 0 } // Shortcut
         let horizontal = horizontalHoleRating(for: allJumps)
 
         // Return weakest rating
@@ -83,7 +88,7 @@ struct SolutionVerifier {
     /// The rating respective the distance to the playfield bounds.
     /// Inside [0, 1].
     private func playfieldRating(for jumps: [Jump]) -> Double {
-        let desiredValue = 25% * playfield.size
+        let desiredValue = 20% * playfield.size
         let distance = playfield.distance(to: jumps)
         return min(1, distance / desiredValue)
     }
@@ -174,11 +179,11 @@ private extension PlayerBarInteraction.HoleMovement.IntersectionsWithBoundsCurve
     /// Return the minimal vertical distance from any of the jumps to the left or right intersection curve.
     func distance(to jumps: [Jump]) -> Double {
         // Only look at one or two jumps inside the hole range: one for left and one for right
-        let leftJump = jumps.first { !$0.timeRange.intersection(with: left.xRange).isEmpty }!
-        let rightJump = jumps.last! // Matches because we set `T = right.xRange.upper` in SolutionGenerator
+        let leftJump = jumps.first { !$0.timeRange.intersection(with: left.xRange).isEmpty }
+        let rightJump = jumps.last! // Always matches because we set `T = right.xRange.upper` in SolutionGenerator
 
         // Return minimal distance
-        let leftDistance = left.distance(to: leftJump, isLeft: true)
+        let leftDistance = leftJump.map { left.distance(to: $0, isLeft: true) } ?? .infinity
         let rightDistance = right.distance(to: rightJump, isLeft: false)
         return min(leftDistance, rightDistance)
     }
