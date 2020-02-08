@@ -9,7 +9,7 @@ import Common
 /// Once one data point matches the next segment, following data points are written into the CompositeTrackerSlidingWindow.
 /// Once enough data points are in the window, the decision is made (i.e. the segment is either advanced or not) and the appropriate data points are flushed and given to the respective (either old or new) tracker.
 internal class CompositeTrackerSlidingWindow<SegmentTrackerType: SimpleTrackerProtocol> {
-    private typealias DataPoint = (value: Double, time: Double, matching: Segment)
+    typealias DataPoint = (value: Double, time: Double, matching: Segment)
     
     enum Segment {
         case current

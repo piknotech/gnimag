@@ -12,7 +12,7 @@ public extension CompositeTracker {
     /// Attention: this is a possibly expensive operation.
     var allDebugFunctionInfos: [FunctionDebugInfo] {
         var result = [FunctionDebugInfo]()
-        var all = finalizedSegments + [currentSegment!]
+        let all = finalizedSegments + [currentSegment!]
 
         /// Convenience function to add a ScatterStrokable for a given function to the result.
         func add(_ function: SegmentTrackerType.F, with color: ScatterColor, dash: FunctionDebugInfo.DashType, from startTime: Time, to endTime: Time) {
