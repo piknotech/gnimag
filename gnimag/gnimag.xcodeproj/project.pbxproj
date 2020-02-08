@@ -104,6 +104,7 @@
 		6316BDB523CB8D430062100F /* JumpSequencePlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */; };
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
+		631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631BE25723EF53EE008DDEE1 /* CwlRandom.swift */; };
 		6323F11123EB2C7200182D13 /* Int+TimesMake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323F11023EB2C7200182D13 /* Int+TimesMake.swift */; };
 		6323F11323EC355B00182D13 /* Parabola.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323F11223EC355B00182D13 /* Parabola.swift */; };
 		6323F11823EC4A8900182D13 /* LinearSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6323F11723EC4A8900182D13 /* LinearSolver.swift */; };
@@ -329,6 +330,7 @@
 		6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequencePlot.swift; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
+		631BE25723EF53EE008DDEE1 /* CwlRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CwlRandom.swift; sourceTree = "<group>"; };
 		6323F11023EB2C7200182D13 /* Int+TimesMake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+TimesMake.swift"; sourceTree = "<group>"; };
 		6323F11223EC355B00182D13 /* Parabola.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parabola.swift; sourceTree = "<group>"; };
 		6323F11723EC4A8900182D13 /* LinearSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearSolver.swift; sourceTree = "<group>"; };
@@ -666,6 +668,7 @@
 				6364934423270ABA00FEF664 /* SimpleRange.swift */,
 				637595392331012C00ACA969 /* Operators.swift */,
 				6312143423258A2600C126B4 /* Extensions */,
+				631BE25623EF53C4008DDEE1 /* Miscellaneous */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1187,6 +1190,14 @@
 				636BCC1C23C4DA3F00A3BE26 /* TrackerFutures */,
 			);
 			path = Tapping;
+			sourceTree = "<group>";
+		};
+		631BE25623EF53C4008DDEE1 /* Miscellaneous */ = {
+			isa = PBXGroup;
+			children = (
+				631BE25723EF53EE008DDEE1 /* CwlRandom.swift */,
+			);
+			path = Miscellaneous;
 			sourceTree = "<group>";
 		};
 		6323F11423EC4A5200182D13 /* LinearFunction */ = {
@@ -1924,6 +1935,7 @@
 				6312143B232669B900C126B4 /* AsyncTools.swift in Sources */,
 				63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */,
 				6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */,
+				631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */,
 				636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */,
 				6377C86023DC76D40084772F /* Timing.swift in Sources */,
 				6367D906238EAE7200477AD9 /* Array+RemoveAtIndices.swift in Sources */,
@@ -2318,8 +2330,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_DISABLE_SAFETY_CHECKS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
