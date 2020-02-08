@@ -32,7 +32,8 @@ enum RandomPoints {
         let firstPoint = random(in: firstPointRange)
 
         // Calculate remaining points on the reduced interval
-        var points = [firstPoint] + random(in: reducedRange, count: numPoints - 1)
+        var points = random(in: reducedRange, count: numPoints - 1)
+        points.insert(firstPoint, at: 0)
         spreadOut(points: &points, minimumDistance: minimumDistance)
         return points
     }

@@ -38,7 +38,8 @@ struct SolutionVerifier {
     func rating(of solution: Solution, requiredMinimum: Double) -> Double {
         // Determine time rating
         let timeDistanceForFirstJump = frame.player.timePassedSinceJumpStart + solution.timeUntilStart
-        let allTimeDistances = solution.jumpTimeDistances + [timeDistanceForFirstJump]
+        var allTimeDistances = solution.jumpTimeDistances
+        allTimeDistances.append(timeDistanceForFirstJump)
         let timeRating = allTimeDistances.min()!
 
         // Multiply with safety rating
@@ -56,8 +57,8 @@ struct SolutionVerifier {
 
         // All jumps (starting at current time)
         let firstJump = solution.currentJump(for: player, with: jumping, startingAt: .currentTime)
-        let nextJumps = solution.jumps(for: player, with: jumping)
-        let allJumps = [firstJump] + nextJumps
+        var allJumps = solution.jumps(for: player, with: jumping)
+        allJumps.insert(firstJump, at: 0)
 
         // Calculate safety ratings
         let horizontal = horizontalHoleRating(for: allJumps)

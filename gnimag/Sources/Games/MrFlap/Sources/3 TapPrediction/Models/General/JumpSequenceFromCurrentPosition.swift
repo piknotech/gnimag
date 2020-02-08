@@ -59,7 +59,7 @@ extension JumpSequenceFromCurrentPosition {
 
         // Compute each jump until reaching the required time
         for i in 0 ... jumpTimeDistances.count {
-            // Subscript [firstJumpDuration] + jumpTimeDistances
+            // Performantly subscript `[firstJumpDuration] + jumpTimeDistances`
             let jumpDuration = (i == 0)
                 ? player.timePassedSinceJumpStart + timeUntilStart
                 : jumpTimeDistances[i-1]
