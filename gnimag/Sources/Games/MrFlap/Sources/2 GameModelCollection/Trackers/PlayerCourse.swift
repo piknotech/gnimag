@@ -32,7 +32,6 @@ final class PlayerCourse {
             jumpTolerance: .absolute(0), // Will be live-updated lateron
             relativeValueRangeTolerance: 20%,
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
-            customGuessRange: SimpleRange<Double>(from: 0, to: 0),
             idleHeightBeforeInitialSegment: initialPlayer.height
         )
         size = ConstantTracker(tolerance: .relative(10%))

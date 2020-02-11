@@ -165,7 +165,7 @@ class ImageAnalyzer {
         return pixels.compactMap { pixel in
             guard (innerOBBs.none { $0.contains(pixel.CGPoint) }) else { return nil }
             guard let (bar, innerOBB) = locateBar(from: pixel, in: image, with: coloring) else { return nil }
-            innerOBBs.append(innerOBB)
+            innerOBBs.append(innerOBB.inset(by: (-2, -2))) // Bugfix: make OBB marginally smaller
             return bar
         }
     }
