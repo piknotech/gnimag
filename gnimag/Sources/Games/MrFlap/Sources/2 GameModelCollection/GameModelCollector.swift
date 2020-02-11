@@ -44,6 +44,8 @@ class GameModelCollector {
         updateBars(with: pairs, newBars: newBars, playerAngle: playerAngle)
     }
 
+    // MARK: Bar Matching & Update
+
     /// Update the bar trackers with the result from the matching algorithm.
     private func updateBars(with pairs: [BarCourse: Bar], newBars: [Bar], playerAngle: Double) {
         // Update existing bars
@@ -59,13 +61,24 @@ class GameModelCollector {
             tracker.performDebugLogging()
         }
 
-        // Add new bars
+        // Record trackers that have not been matched
+        let remainingTrackers = model.bars.filter { !pairs.keys.contains($0) }
+        for tracker in remainingTrackers {
+            tracker.consecutiveNumberOfFramesWithoutUpdate += 1
+        }
+
+        // Create trackers from new bars
         for bar in newBars {
             let tracker = BarCourse(playfield: model.playfield, debugLogger: debugLogger)
             tracker.setupDebugLogging()
             tracker.update(with: bar, at: playerAngle)
             tracker.performDebugLogging()
             model.bars.append(tracker)
+        }
+
+        // Remove orphaned trackers
+        model.bars.removeAll { tracker in
+            tracker.consecutiveNumberOfFramesWithoutUpdate >= 10
         }
     }
 
@@ -75,18 +88,26 @@ class GameModelCollector {
         var pairs = [BarCourse: Bar]()
         var newBars = [Bar]()
 
-        // Check if the given tracker matches the given bar, angle-wise.
-        func tracker(_ tracker: BarCourse, matches bar: Bar) -> Bool {
-            pairs[tracker] == nil && // Tracker cannot be already taken by another bar
-            tracker.angle.isDataPoint(value: bar.angle, time: time, validWithTolerance: .absolute(.pi / 8), fallback: .useLastValue) // Works for up to 8 bars
-        }
-
         // Find matching tracker for each bar
         for bar in bars {
-            if let match = (trackers.first { tracker($0, matches: bar) }) {
-                pairs[match] = bar
-            } else {
+            // Find all trackers that match the given bar, angle-wise
+            let matches = trackers.filter {
+                $0.angle.isDataPointValid(value: bar.angle, time: time, fallback: .useLastValue)
+            }
+
+            switch matches.count {
+            case 0:
                 newBars.append(bar)
+
+            case 1:
+                let match = matches.first!
+                pairs[match] = bar
+
+            default: // More than 1 matching tracker – give bar to the one with the most values
+                let match = matches.max {
+                    $0.angle.values.count < $1.angle.values.count
+                }!
+                pairs[match] = bar
             }
         }
 

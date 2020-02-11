@@ -19,6 +19,10 @@ final class BarCourse {
         case appearing, normal
     }
 
+    /// The number of frames the tracker has not been updated for.
+    /// Increase from outside.
+    var consecutiveNumberOfFramesWithoutUpdate = 0
+
     // The angle and the center of the hole. yCenter is only used in state "normal".
     let angle: AngularWrapper<LinearTracker>
     let yCenter: BasicLinearPingPongTracker
@@ -87,6 +91,8 @@ final class BarCourse {
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with bar: Bar, at time: Double) {
         debug.integrityCheckSuccessful = true
+
+        consecutiveNumberOfFramesWithoutUpdate = 0
 
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)
