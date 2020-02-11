@@ -27,7 +27,7 @@ final class PlayerCourse {
         self.playfield = playfield
         self.debugLogger = debugLogger
 
-        angle = AngularWrapper(LinearTracker(tolerance: .absolute(2% * .pi)))
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
         height = JumpTracker(
             jumpTolerance: .absolute(0), // Will be live-updated lateron
             relativeValueRangeTolerance: 20%,
@@ -35,6 +35,8 @@ final class PlayerCourse {
             idleHeightBeforeInitialSegment: initialPlayer.height
         )
         size = ConstantTracker(tolerance: .relative(10%))
+
+        height.assumeNoInvalidDataPoints = true
     }
 
     /// Use the player height tracker for tap detection.

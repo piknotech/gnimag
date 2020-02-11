@@ -85,6 +85,11 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// The tolerance for all trackers (including segment trackers and guesses).
     public var tolerance: TrackerTolerance
 
+    /// When this is true, every data point which doesn't match the current segment will automatically be treated as belonging to the next segment.
+    /// This means, the normal process of guess creation and checking whether the data point matches the guess is avoided.
+    /// This has two implications: First, there are no invalid data points (i.e. you don't need to call `integrityCheck`), and second, there are will no guesses be made at all.
+    public var assumeNoInvalidDataPoints: Bool = false
+
     /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)
     private var allDataPoints = SimpleDataSet()
 
@@ -184,7 +189,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// Check if the data point matches the predicted next segment (using `mostRecentGuessesForNextSegment`).
     /// NOTE: This method calls `updateNextSegmentGuesses` to refresh the guesses before checking for a match.
+    /// Attention: If `assumeNoInvalidDataPoints` is true, this always returns true.
     private func nextSegmentMatches(value: Value, at time: Time) -> Bool {
+        if assumeNoInvalidDataPoints { return true } // Skip guess creation – all data points are valid
+
         updateNextSegmentGuesses(forNextDataPoint: (time: time, value: value))
         guard let guesses = mostRecentGuessesForNextSegment else { return false }
         return self.value(value, at: time, matchesGuesses: guesses)
