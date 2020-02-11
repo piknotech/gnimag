@@ -22,6 +22,11 @@ public final class TapDelayTracker {
         tracker.average
     }
 
+    /// The standard deviation of the tap delay.
+    public var standardDeviation: Time? {
+        tracker.standardDeviation
+    }
+
     /// Default initializer.
     public init(tolerance: TrackerTolerance) {
         tracker = PreliminaryTracker(tolerancePoints: 0, tolerance: tolerance)

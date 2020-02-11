@@ -3,6 +3,8 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Surge
+
 /// ConstantTracker is a PolyTracker providing simple access to the calculated average value.
 /// Because data points only consist of values here (time is irrelevant), ConstantTracker provides respective convenience methods.
 public class ConstantTracker: PolyTracker {
@@ -29,5 +31,10 @@ public class ConstantTracker: PolyTracker {
     /// Nil if not enough data points are available.
     public var average: Value? {
         regression?.a
+    }
+
+    /// The standard deviation of the data points.
+    public var standardDeviation: Value? {
+        average.map { Surge.std(values, mean: $0) }
     }
 }
