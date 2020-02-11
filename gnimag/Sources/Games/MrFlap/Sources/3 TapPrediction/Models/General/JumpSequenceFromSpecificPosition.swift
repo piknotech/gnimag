@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 30.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// A jump sequence defined by the starting point of the first jump and the time distances for the following jump starts.

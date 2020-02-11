@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 16.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 25.12.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// TapDelayTracker considers taps which have been performed, e.g. by TapScheduler, and calculates the average delay from performing the tap to detection of this tap, which is the total input+output delay.

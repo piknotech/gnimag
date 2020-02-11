@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 09.04.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// ConstantTracker is a PolyTracker providing simple access to the calculated average value.

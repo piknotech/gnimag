@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 26.12.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import GameKit
@@ -40,7 +40,7 @@ class TapPredictor: TapPredictorBase {
     private func predictionLogic() -> TapSequence? {
         guard let model = gameModel, let delay = scheduler.delay else { return nil }
 
-        let currentTime = imageProvider.time + delay
+        let currentTime = imageProvider.time
         guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: scheduler.performedTapTimes, currentTime: currentTime) else { return nil }
 
         return sequence.asTapSequence(relativeTo: imageProvider.time)
