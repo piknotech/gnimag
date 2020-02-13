@@ -12,13 +12,12 @@ import TestingTools
 final class BarTracker {
     static var momventBoundCollector: BarMovementBoundCollector!
 
+    /// Orphanage detector to see whether the bar tracker should be removed from the game model.
+    let orphanage = BarTrackerOrphanageDetector()
+
     /// The state the bar is currently in.
     /// Only trackers with a "normal" state should be considered by prediction algorithms.
     var state: BarTrackerState!
-
-    /// The number of frames the tracker has not been updated for.
-    /// Increase from outside.
-    var consecutiveNumberOfFramesWithoutUpdate = 0
 
     // The angle and the center of the hole. yCenter is only used in state "normal".
     let angle: AngularWrapper<LinearTracker>
@@ -76,7 +75,7 @@ final class BarTracker {
     func update(with bar: Bar, at time: Double) {
         debug.integrityCheckSuccessful = true
 
-        consecutiveNumberOfFramesWithoutUpdate = 0
+        orphanage.barIsValid()
 
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)

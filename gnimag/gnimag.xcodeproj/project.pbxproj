@@ -177,6 +177,7 @@
 		63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
 		63C7F6D023F588CF00187840 /* BarUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6CF23F588CE00187840 /* BarUpdater.swift */; };
 		63C7F6D223F58AD100187840 /* BarTracker+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6D123F58AD100187840 /* BarTracker+State.swift */; };
+		63C7F6D423F5A12A00187840 /* BarTracker+OrphanageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */; };
 		63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugLoggerFrame+Data.swift */; };
 		63D8EC9423D8947D00121F2B /* CGRectScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */; };
 		63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9523D89C5D00121F2B /* Point+Position.swift */; };
@@ -405,6 +406,7 @@
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63C7F6CF23F588CE00187840 /* BarUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarUpdater.swift; sourceTree = "<group>"; };
 		63C7F6D123F58AD100187840 /* BarTracker+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarTracker+State.swift"; sourceTree = "<group>"; };
+		63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarTracker+OrphanageDetector.swift"; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		63D002952373037900041069 /* DebugLoggerFrame+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugLoggerFrame+Data.swift"; sourceTree = "<group>"; };
 		63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectScatterStrokable.swift; sourceTree = "<group>"; };
@@ -1085,6 +1087,7 @@
 				631213E623257F4000C126B4 /* PlayerTracker.swift */,
 				631213E523257F4000C126B4 /* BarTracker.swift */,
 				63C7F6D123F58AD100187840 /* BarTracker+State.swift */,
+				63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -2107,6 +2110,7 @@
 				6324C12E23E3773A007E26EB /* JumpSequenceFromSpecificPosition.swift in Sources */,
 				63D002962373037900041069 /* DebugLoggerFrame+Data.swift in Sources */,
 				631213FB23257F4000C126B4 /* Player.swift in Sources */,
+				63C7F6D423F5A12A00187840 /* BarTracker+OrphanageDetector.swift in Sources */,
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,
 				63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */,
 				6316BDB523CB8D430062100F /* JumpSequencePlot.swift in Sources */,

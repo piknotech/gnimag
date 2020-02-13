@@ -49,6 +49,9 @@ struct BarUpdater {
 
     /// Update the bar trackers with the matching result.
     private func updateTrackers(with pairs: [BarTracker: Bar], newBars: [Bar], time: Double, debugLogger: DebugLogger) {
+        // Orphanage counter update
+        model.bars.forEach { $0.orphanage.newFrame() }
+
         // Update existing bars
         for (tracker, bar) in pairs {
             tracker.setupDebugLogging()
@@ -62,12 +65,6 @@ struct BarUpdater {
             tracker.performDebugLogging()
         }
 
-        // Record trackers that have not been matched
-        let remainingTrackers = model.bars.filter { !pairs.keys.contains($0) }
-        for tracker in remainingTrackers {
-            tracker.consecutiveNumberOfFramesWithoutUpdate += 1
-        }
-
         // Create trackers from new bars
         for bar in newBars {
             let tracker = BarTracker(playfield: model.playfield, debugLogger: debugLogger)
@@ -79,7 +76,7 @@ struct BarUpdater {
 
         // Remove orphaned trackers
         model.bars.removeAll { tracker in
-            tracker.consecutiveNumberOfFramesWithoutUpdate >= 10
+            tracker.orphanage.isOrphaned
         }
     }
 }

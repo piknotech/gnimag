@@ -28,7 +28,7 @@ extension BarTrackerState {
 // appearing -> normal <-> decideDisappearing -> disappearing
 
 /// Appearing state: wait until 3 consecutive "normal" frames (i.e. with constant hole size) happen, then switch to normal state.
-class BarTrackerStateAppearing: BarTrackerState {
+final class BarTrackerStateAppearing: BarTrackerState {
     unowned let tracker: BarTracker
 
     init(tracker: BarTracker) {
@@ -63,7 +63,7 @@ class BarTrackerStateAppearing: BarTrackerState {
 
 /// Normal state: normally update holeSize and yCenter.
 /// When holeSize is too large, switch to decision (between normal and disappearing) state.
-class BarTrackerStateNormal: BarTrackerState {
+final class BarTrackerStateNormal: BarTrackerState {
     unowned let tracker: BarTracker
 
     init(tracker: BarTracker) {
@@ -80,9 +80,13 @@ class BarTrackerStateNormal: BarTrackerState {
             // Hole size didn't match – if too high, go to BarTrackerStateDecideDisappearing state
             if bar.holeSize > tracker.holeSize.average ?? 0 {
                 tracker.state = BarTrackerStateDecideDisappearing(tracker: tracker)
+                return true
             }
 
-            return true
+            // If hole size was too low, an integrity error has happened
+            else {
+                return false
+            }
         }
     }
 
@@ -94,7 +98,7 @@ class BarTrackerStateNormal: BarTrackerState {
 
 /// After holeSize was too high in normal state, go into this state to decide whether the bar is actually disappearing or not.
 /// Switch either back to normal or disappearing state.
-class BarTrackerStateDecideDisappearing: BarTrackerState {
+final class BarTrackerStateDecideDisappearing: BarTrackerState {
     unowned let tracker: BarTracker
 
     init(tracker: BarTracker) {
@@ -139,7 +143,7 @@ class BarTrackerStateDecideDisappearing: BarTrackerState {
 
 /// In disappearing state, the bar is not interesting anymore.
 /// Do nothing, and return true for integrityCheck (to avoid false integrity check errors).
-class BarTrackerStateDisappearing: BarTrackerState {
+final class BarTrackerStateDisappearing: BarTrackerState {
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         true
     }
