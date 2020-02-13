@@ -149,7 +149,7 @@ final class DebugLoggerFrame: DebugLoggerFrameProtocol {
 
         /// A single bar tracker.
         class _Bar {
-            var state: BarCourse.State?
+            var state: BarTracker.State?
             var stateSwitch = false // True when a state switch was detected in this exact frame
             var integrityCheckSuccessful = false
 

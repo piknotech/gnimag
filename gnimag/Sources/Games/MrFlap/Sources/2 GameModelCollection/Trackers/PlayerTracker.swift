@@ -6,8 +6,8 @@
 import Common
 import GameKit
 
-/// PlayerCourse bundles trackers for the player position which is defined by angle and height.
-final class PlayerCourse {
+/// PlayerTracker bundles trackers for the player position which is defined by angle and height.
+final class PlayerTracker {
     private let playfield: Playfield
 
     /// The angle and height trackers.

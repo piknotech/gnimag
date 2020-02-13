@@ -39,7 +39,7 @@ struct JumpingProperties {
     // MARK: Conversion
 
     /// Create JumpingProperties from the given player tracker.
-    init?(player: PlayerCourse) {
+    init?(player: PlayerTracker) {
         guard
             let converter = PlayerAngleConverter(player: player),
             let parabola = player.height.parabola else { return nil }

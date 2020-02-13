@@ -40,7 +40,7 @@ class TapPredictor: TapPredictorBase {
     private func predictionLogic() -> TapSequence? {
         guard let model = gameModel, let delay = scheduler.delay else { return nil }
 
-        let currentTime = imageProvider.time
+        let currentTime = imageProvider.time + delay
         guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: scheduler.performedTapTimes, currentTime: currentTime) else { return nil }
 
         return sequence.asTapSequence(relativeTo: imageProvider.time)

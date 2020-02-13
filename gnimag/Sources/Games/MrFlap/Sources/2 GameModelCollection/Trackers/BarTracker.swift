@@ -8,8 +8,8 @@ import Foundation
 import GameKit
 import TestingTools
 
-/// BarCourse bundles trackers for a single bar.
-final class BarCourse {
+/// BarTracker bundles trackers for a single bar.
+final class BarTracker {
     static var momventBoundCollector: BarMovementBoundCollector!
 
     /// The state the bar is currently in.
@@ -107,7 +107,7 @@ final class BarCourse {
         }
 
         // Update shared movement bounds
-        BarCourse.momventBoundCollector.update(with: self)
+        BarTracker.momventBoundCollector.update(with: self)
     }
 
     /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.
@@ -127,8 +127,8 @@ final class BarCourse {
     }
 }
 
-extension BarCourse: Hashable {
-    static func == (lhs: BarCourse, rhs: BarCourse) -> Bool {
+extension BarTracker: Hashable {
+    static func == (lhs: BarTracker, rhs: BarTracker) -> Bool {
         return lhs === rhs
     }
 

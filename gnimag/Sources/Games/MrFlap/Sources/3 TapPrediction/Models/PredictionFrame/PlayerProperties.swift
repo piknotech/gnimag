@@ -22,7 +22,7 @@ struct PlayerProperties {
     // MARK: Conversion
 
     /// Create PlayerProperties from the given player tracker.
-    init?(player: PlayerCourse, jumping: JumpingProperties, performedTapTimes: [Double], currentTime: Double) {
+    init?(player: PlayerTracker, jumping: JumpingProperties, performedTapTimes: [Double], currentTime: Double) {
         guard let converter = PlayerAngleConverter(player: player) else { return nil }
         guard let xSpeed = player.angle.tracker.slope else { return nil }
 

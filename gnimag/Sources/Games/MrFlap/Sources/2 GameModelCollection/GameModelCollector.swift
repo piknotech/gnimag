@@ -47,7 +47,7 @@ class GameModelCollector {
     // MARK: Bar Matching & Update
 
     /// Update the bar trackers with the result from the matching algorithm.
-    private func updateBars(with pairs: [BarCourse: Bar], newBars: [Bar], playerAngle: Double) {
+    private func updateBars(with pairs: [BarTracker: Bar], newBars: [Bar], playerAngle: Double) {
         // Update existing bars
         for (tracker, bar) in pairs {
             tracker.setupDebugLogging()
@@ -69,7 +69,7 @@ class GameModelCollector {
 
         // Create trackers from new bars
         for bar in newBars {
-            let tracker = BarCourse(playfield: model.playfield, debugLogger: debugLogger)
+            let tracker = BarTracker(playfield: model.playfield, debugLogger: debugLogger)
             tracker.setupDebugLogging()
             tracker.update(with: bar, at: playerAngle)
             tracker.performDebugLogging()
@@ -84,8 +84,8 @@ class GameModelCollector {
 
     /// Match the bars to the bar trackers, solely based on their respective angles.
     /// Return the matched pairs and the bars that did not match to any tracker (and thus are new).
-    private func match(bars: [Bar], to trackers: [BarCourse], time: Double) -> (pairs: [BarCourse: Bar], newBars: [Bar]) {
-        var pairs = [BarCourse: Bar]()
+    private func match(bars: [Bar], to trackers: [BarTracker], time: Double) -> (pairs: [BarTracker: Bar], newBars: [Bar]) {
+        var pairs = [BarTracker: Bar]()
         var newBars = [Bar]()
 
         // Find matching tracker for each bar

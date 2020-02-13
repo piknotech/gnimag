@@ -27,7 +27,7 @@ struct PlayfieldProperties {
     // MARK: Conversion
 
     /// Create PlayerProperties from the given playfield and player.
-    init?(playfield: Playfield, with player: PlayerCourse) {
+    init?(playfield: Playfield, with player: PlayerTracker) {
         guard let size = player.size.average else { return nil }
 
         lowerRadius = playfield.innerRadius + size / 2

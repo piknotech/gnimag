@@ -19,7 +19,7 @@ struct PlayerAngleConverter {
     private let angleToTime: LinearFunction
 
     /// Create a PlayerAngleConverter from the given player tracker.
-    init?(player: PlayerCourse) {
+    init?(player: PlayerTracker) {
         guard let angle = player.angle.tracker.regression else { return nil }
 
         timeToAngle = angle
