@@ -14,10 +14,7 @@ final class BarTracker {
 
     /// The state the bar is currently in.
     /// Only trackers with a "normal" state should be considered by prediction algorithms.
-    private(set) var state = State.appearing
-    enum State {
-        case appearing, normal
-    }
+    var state: BarTrackerState!
 
     /// The number of frames the tracker has not been updated for.
     /// Increase from outside.
@@ -31,16 +28,12 @@ final class BarTracker {
     let width: ConstantTracker
     let holeSize: ConstantTracker
 
-    /// The hole size while the bar is appearing.
-    /// Only used during the appearing state (which is really short). Once the hole size stays constant, the bar has stopped appearing and the "holeSize" tracker is used.
-    let appearingHoleSize: LinearTracker
-
     /// The shared playfield.
     private let playfield: Playfield
 
     /// The debug logger and a shorthand form for the current debug frame.
-    private let debugLogger: DebugLogger
-    private var debug: DebugLoggerFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
+    let debugLogger: DebugLogger
+    var debug: DebugLoggerFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
 
     // Default initializer.
     init(playfield: Playfield, debugLogger: DebugLogger) {
@@ -50,7 +43,6 @@ final class BarTracker {
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
         width = ConstantTracker(tolerance: .relative(10%))
         holeSize = ConstantTracker(tolerance: .relative(5%))
-        appearingHoleSize = LinearTracker(tolerancePoints: 0, tolerance: .absolute(5% * playfield.freeSpace))
         yCenter = BasicLinearPingPongTracker(
             tolerance: .absolute(0.5% * playfield.freeSpace),
             slopeTolerance: .relative(40%),
@@ -60,31 +52,23 @@ final class BarTracker {
                 maxIntermediatePointsMatchingCurrentSegment: 1
             )
         )
+
+        state = BarTrackerStateAppearing(tracker: self)
     }
 
     // MARK: Updating
 
     /// Check if all given values match the trackers.
-    /// NOTE: This changes the state from `.appearing` to `.normal` when necessary.
+    /// NOTE: This changes the state if necessary.
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
         guard width.isValueValid(bar.width, &debug.width) else { return false }
 
-        switch state {
-        case .appearing:
-            // If the appearing hole size does not match (but the angle and width did), the appearing state has ended; switch to normal state
-            if !appearingHoleSize.isDataPointValid(value: bar.holeSize, time: time, &debug.appearingHoleSize) {
-                print("state switch!")
-                debug.stateSwitch = true
-                state = .normal
-            }
-
-        case .normal:
-            return holeSize.isValueValid(bar.holeSize, &debug.holeSize) &&
-                yCenter.integrityCheck(with: bar.yCenter, at: time, &debug.yCenter)
+        // State-specific integrityCheck
+        // Extend lifetime as state may be changed (i.e. dereferenced) within its own integrityCheck
+        return withExtendedLifetime(state) {
+            state.integrityCheck(with: bar, at: time)
         }
-
-        return true
     }
 
     /// Update the trackers with the values from the given bar.
@@ -97,14 +81,8 @@ final class BarTracker {
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)
 
-        switch state {
-        case .appearing:
-            appearingHoleSize.add(value: bar.holeSize, at: time)
-
-        case .normal:
-            holeSize.add(value: bar.holeSize, at: time)
-            yCenter.add(value: bar.yCenter, at: time)
-        }
+        // State-specific update
+        state.update(with: bar, at: time)
 
         // Update shared movement bounds
         BarTracker.momventBoundCollector.update(with: self)
@@ -121,7 +99,6 @@ final class BarTracker {
         debug.state = state
         debug.angle.from(tracker: angle)
         debug.width.from(tracker: width)
-        debug.appearingHoleSize.from(tracker: appearingHoleSize)
         debug.holeSize.from(tracker: holeSize)
         debug.yCenter.from(tracker: yCenter)
     }

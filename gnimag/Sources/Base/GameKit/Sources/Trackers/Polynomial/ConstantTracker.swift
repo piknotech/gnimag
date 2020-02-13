@@ -18,7 +18,12 @@ public class ConstantTracker: PolyTracker {
 
     /// Convenience method to check for validity, ignoring the time component.
     public func isValueValid(_ value: Value, fallback: TrackerFallbackMethod = .valid) -> Bool {
-        return isDataPointValid(value: value, time: count, fallback: fallback)
+        isDataPointValid(value: value, time: count, fallback: fallback)
+    }
+
+    /// Convenience method to check for validity, with a given tolerance, ignoring the time component.
+    public func isValue(_ value: Value, validWithTolerance tolerance: TrackerTolerance, fallback: TrackerFallbackMethod = .valid) -> Bool {
+        isDataPoint(value: value, time: count, validWithTolerance: tolerance, fallback: fallback)
     }
 
     /// Convenience method, ignoring the time component.

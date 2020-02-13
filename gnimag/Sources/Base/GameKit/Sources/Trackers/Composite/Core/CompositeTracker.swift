@@ -87,7 +87,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// When this is true, every data point which doesn't match the current segment will automatically be treated as belonging to the next segment.
     /// This means, the normal process of guess creation and checking whether the data point matches the guess is avoided.
-    /// This has two implications: First, there are no invalid data points (i.e. you don't need to call `integrityCheck`), and second, there are will no guesses be made at all.
+    /// This has two implications: First, there are no invalid data points (i.e. you don't need to call `integrityCheck`), and second, there won't be made any guesses at all.
     public var assumeNoInvalidDataPoints: Bool = false
 
     /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)

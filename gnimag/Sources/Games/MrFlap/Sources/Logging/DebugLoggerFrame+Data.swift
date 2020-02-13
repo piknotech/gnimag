@@ -149,20 +149,18 @@ final class DebugLoggerFrame: DebugLoggerFrameProtocol {
 
         /// A single bar tracker.
         class _Bar {
-            var state: BarTracker.State?
-            var stateSwitch = false // True when a state switch was detected in this exact frame
+            var state: BarTrackerState?
             var integrityCheckSuccessful = false
 
             var angle = SimpleTrackerDebugInfo<AngularWrapper<LinearTracker>>()
             var width = SimpleTrackerDebugInfo<ConstantTracker>()
-            var appearingHoleSize = SimpleTrackerDebugInfo<LinearTracker>()
             var holeSize = SimpleTrackerDebugInfo<ConstantTracker>()
             var yCenter = CompositeTrackerDebugInfo<LinearTracker>()
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
                 yCenter.fetchFunctionInfos()
-                for tracker in [yCenter, angle, width, appearingHoleSize, holeSize] as [TrackerDebugInfo] {
+                for tracker in [yCenter, angle, width, holeSize] as [TrackerDebugInfo] {
                     tracker.fetchDataSet()
                 }
             }

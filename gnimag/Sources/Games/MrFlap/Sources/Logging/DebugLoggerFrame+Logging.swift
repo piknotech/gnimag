@@ -218,12 +218,10 @@ extension DebugLoggerFrame {
             """
             –– Bar \(i + 1) –– (\(bar.integrityCheckSuccessful ? "okay" : "FAILURE"))
             • integer: \(bar.integrityCheckSuccessful)
-            • state: \(bar.state ??? "nil"), stateSwitch: \(bar.stateSwitch)
+            • state: \(bar.state ??? "nil")
             • angle: \(bar.angle ??? "nil")
             • width: \(bar.width ??? "nil")
-            \(bar.state == .some(.appearing) ?
-            "• appearingHoleSize: \(bar.appearingHoleSize ??? "nil")" :
-            "• holeSize: \(bar.holeSize ??? "nil")")
+            • holeSize: \(bar.holeSize ??? "nil")
             • yCenter: \(bar.yCenter ??? "nil")
             """
         }
