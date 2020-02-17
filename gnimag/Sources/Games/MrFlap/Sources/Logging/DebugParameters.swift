@@ -16,7 +16,7 @@ public struct DebugParameters: DebugParameterType {
     public enum Severity {
         case none
 
-        /// Log text and images on errors – most useful severity for normal use.
+        /// Log text and images on errors.
         /// Error means either an image analysis error or a data integrity error.
         case onErrors
 

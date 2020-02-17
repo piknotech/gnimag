@@ -24,7 +24,7 @@ class ImageAnalyzer {
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
-    private var debug: DebugLoggerFrame.ImageAnalysis { debugLogger.currentFrame.imageAnalysis }
+    private var debug: DebugFrame.ImageAnalysis { debugLogger.currentFrame.imageAnalysis }
 
     /// Default initializer.
     init(debugLogger: DebugLogger) {

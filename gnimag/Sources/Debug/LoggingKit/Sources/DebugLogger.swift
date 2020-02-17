@@ -6,7 +6,7 @@
 import Common
 import Dispatch
 
-open class DebugLogger<Parameters, Frame: DebugLoggerFrameProtocol> where Frame.ParameterType == Parameters {
+open class DebugLogger<Parameters, Frame: DebugFrameProtocol> where Frame.ParameterType == Parameters {
     public let parameters: Parameters
 
     /// The current debug frame. Enumeration starts at one.

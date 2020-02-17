@@ -32,7 +32,7 @@ final class BarTracker {
 
     /// The debug logger and a shorthand form for the current debug frame.
     let debugLogger: DebugLogger
-    var debug: DebugLoggerFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
+    var debug: DebugFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
 
     // Default initializer.
     init(playfield: Playfield, debugLogger: DebugLogger) {

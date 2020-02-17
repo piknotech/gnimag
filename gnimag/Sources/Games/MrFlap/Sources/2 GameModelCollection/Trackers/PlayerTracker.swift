@@ -20,7 +20,7 @@ final class PlayerTracker {
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
-    private var debug: DebugLoggerFrame.GameModelCollection._Player { debugLogger.currentFrame.gameModelCollection.player }
+    private var debug: DebugFrame.GameModelCollection._Player { debugLogger.currentFrame.gameModelCollection.player }
 
     /// Default initializer.
     init(playfield: Playfield, initialPlayer: Player, debugLogger: DebugLogger) {

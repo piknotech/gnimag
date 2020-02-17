@@ -14,7 +14,7 @@ class GameModelCollector {
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
-    private var debug: DebugLoggerFrame.GameModelCollection { debugLogger.currentFrame.gameModelCollection }
+    private var debug: DebugFrame.GameModelCollection { debugLogger.currentFrame.gameModelCollection }
 
     /// Default initializer.
     init(playfield: Playfield, initialPlayer: Player, mode: GameMode, debugLogger: DebugLogger) {

@@ -3,9 +3,9 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-/// A DebugLoggerFrame stores all relevant data of a single frame.
+/// A DebugFrame stores all relevant data of a single frame.
 /// When this data is erroneous / otherwise relevant, it will be logged asynchronously.
-public protocol DebugLoggerFrameProtocol {
+public protocol DebugFrameProtocol {
     associatedtype ParameterType: DebugParameterType
 
     /// The index of the frame, starting at 1.

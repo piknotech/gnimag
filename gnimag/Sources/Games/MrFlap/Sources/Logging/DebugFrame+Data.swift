@@ -10,7 +10,7 @@ import Image
 import ImageAnalysisKit
 import LoggingKit
 
-final class DebugLoggerFrame: DebugLoggerFrameProtocol {
+final class DebugFrame: DebugFrameProtocol {
     typealias ParameterType = DebugParameters
 
     var index: Int
