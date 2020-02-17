@@ -57,7 +57,7 @@ public enum ScatterColor {
             return .white
 
         case .invalid, .emphasize:
-            return .lightBlue
+            return .blue
 
         case .custom(let color):
             return color

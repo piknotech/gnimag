@@ -19,7 +19,7 @@ public final class ScatterPlot {
     }
 
     /// Create a scatter plot with the given data set.
-    /// The scatter plot is black/red (using the given colors) and is drawn on a white background.
+    /// The scatter plot is black/red (using the given colors) and is drawn on a transparent background.
     public init(
         dataPoints: [ScatterDataPoint],
         scatterCircleSize: CGFloat = 3,
