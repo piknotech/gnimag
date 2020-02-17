@@ -47,6 +47,7 @@ extension DebugLoggerFrame {
         case .none: return false
         case .alwaysText: return true
         case .onErrors, .onErrorsTextOnly: return hasError
+        case .onIntegrityErrors: return hasIntegrityError
         }
     }
 

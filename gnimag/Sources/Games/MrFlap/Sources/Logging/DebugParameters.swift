@@ -24,6 +24,9 @@ public struct DebugParameters: DebugParameterType {
         /// Error means either an image analysis error or a data integrity error.
         case onErrorsTextOnly
 
+        /// Log text and images, but only for integrity errors.
+        case onIntegrityErrors
+
         /// Always log text. Log text and images on errors.
         case alwaysText
 

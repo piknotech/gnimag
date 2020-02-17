@@ -24,6 +24,13 @@ open class DebugLogger<Parameters, Frame: DebugLoggerFrameProtocol> where Frame.
     open func setup() {
     }
 
+    /// Delete, if required, and then recreate the logging directory.
+    /// This is not called automatically – call from within "setup" if you want to create a clean logging directory.
+    public func createCleanDirectory() {
+        try? FileManager.default.removeItem(atPath: parameters.location)
+        try! FileManager.default.createDirectory(atPath: parameters.location, withIntermediateDirectories: true)
+    }
+
     /// Log the current frame to disk, if required, and advance to the next frame.
     public func advance() {
         let frame = currentFrame
