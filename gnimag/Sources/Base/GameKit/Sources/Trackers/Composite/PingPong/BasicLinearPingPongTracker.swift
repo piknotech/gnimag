@@ -35,7 +35,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The direction of the very first segment (with index 0).
     private var firstSegmentDirection: Direction?
 
-    /// The direction of any given segment.
+    /// The bound direction of any given segment.
     /// An "up" direction means that the values are approaching the upper bound, irregardless of the time direction.
     /// This means that, when time is inverted, the segment slope is negative, even though direction is "up".
     internal func direction(for index: Int) -> Direction? {
@@ -71,25 +71,20 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
             let isEvenSegment = currentSegment.index.isMultiple(of: 2)
             firstSegmentDirection = (approachingUpperBound == isEvenSegment) ? .up : .down
         }
-        let currentDirection = direction(for: currentSegment.index)
 
-        // 2.: Update slope tracker
-        // Add the positive slope to the tracker. Do NOT use abs(slope) because, for slopes near 0, this could distort the average slope value. This means, "positiveSlope" could also be negative if the data points are widely scattered.
-        let positiveSlope = (currentDirection == .up) ? +line.slope : -line.slope
-
-        // Update preliminary slope if valid
-        slopeTracker.updatePreliminaryValueIfValid(value: positiveSlope)
+        // 2.: Update slope tracker (with absolute slope value)
+        slopeTracker.updatePreliminaryValueIfValid(value: abs(line.slope))
 
         // 3.: Update lower or upper bound tracker
         guard
             let lastLine = finalizedSegments.last?.tracker.regression,
             let intersectionX = LinearSolver.zero(of: line - lastLine) else { return nil }
 
-        let intersectionY = line.at(intersectionX)
-
+        let currentDirection = direction(for: currentSegment.index)
         let relevantTracker = (currentDirection == .up) ? lowerBoundTracker : upperBoundTracker
 
         // Update preliminary bound if valid
+        let intersectionY = line.at(intersectionX)
         relevantTracker.updatePreliminaryValueIfValid(value: intersectionY)
 
         return intersectionX
@@ -112,11 +107,14 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// Make a guess for a segment beginning at (`time`, `value`).
     public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> LinearFunction? {
         guard
-            let direction = direction(for: currentSegment.index),
+            let direction = direction(for: currentSegment.index + 1),
+            let timeDirection = monotonicityChecker.direction.intValue,
             let absoluteSlope = slope else { return nil }
 
+        let slopeSign = Double(timeDirection) * (direction == .up ? +1 : -1)
+
         // Construct f = ax+b with f(time) = value
-        let slope = (direction == .up) ? -absoluteSlope : +absoluteSlope
+        let slope = slopeSign * absoluteSlope
         let intercept = value - slope * time
 
         return LinearFunction(slope: slope, intercept: intercept)
@@ -148,7 +146,8 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         
         // delta: horizontal distance from tolerance line to actual line
         let delta = verticalTolerance / (2 * slope)
-        return SimpleRange(from: proposedGuessRange.lower - delta, to: proposedGuessRange.upper)
+        let timeDirectionSign = Double(monotonicityChecker.direction.intValue ?? 0)
+        return SimpleRange(from: proposedGuessRange.lower - timeDirectionSign * delta, to: proposedGuessRange.upper)
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.

@@ -117,7 +117,7 @@ public extension BasicLinearPingPongTracker {
             // Solve line(x) = upperBound (or lowerBound)
             let bound = (direction == .up) ? lowerBound : upperBound
 
-            if let startTime = LinearSolver.zero(of: line + (-bound)) {
+            if let startTime = LinearSolver.solve(line, equals: bound) {
                 goodSegment = lastSegment
                 supposedStartTime = startTime
             }
