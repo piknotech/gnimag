@@ -111,10 +111,8 @@ final class BarTrackerStateDecideDisappearing: BarTrackerState {
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         // If holeSize is valid again, go back to normal state
         if tracker.holeSize.isValueValid(bar.holeSize, &tracker.debug.holeSize) {
-            return withExtendedLifetime(self) {
-                tracker.state = BarTrackerStateNormal(tracker: tracker)
-                return tracker.state.integrityCheck(with: bar, at: time)
-            }
+            tracker.state = BarTrackerStateNormal(tracker: tracker)
+            return tracker.state.integrityCheck(with: bar, at: time)
         }
 
         else {

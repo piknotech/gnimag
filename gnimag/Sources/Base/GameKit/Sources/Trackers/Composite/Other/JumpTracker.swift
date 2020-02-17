@@ -24,9 +24,9 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
     /// Can be negative if time direction is inverted.
     private var jumpVelocity: Value? { jumpVelocityTracker.average ?? jumpVelocityTracker.values.last }
 
-    /// The guess range for when a new jump started.
+    /// The relative guess range for when a new jump started. Must be regular.
     /// If you know that jumps will, for example, always exactly begin at the second last data point, return [0, 0].
-    private let customGuessRange: SimpleRange<Time>
+    private let customRelativeGuessRange: SimpleRange<Time>
 
     /// The constant height before the first segment started.
     /// For calculating an exact start point of the initial jump.
@@ -45,14 +45,14 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         jumpTolerance: TrackerTolerance,
         relativeValueRangeTolerance: Value,
         consecutiveNumberOfPointsRequiredToDetectJump: Int,
-        customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1),
+        customRelativeGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1),
         idleHeightBeforeInitialSegment: Value? = nil
     ) {
         let tolerance = TrackerTolerance.relative(relativeValueRangeTolerance)
         gravityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
         jumpVelocityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
 
-        self.customGuessRange = customGuessRange
+        self.customRelativeGuessRange = customRelativeGuessRange
         self.idleHeightBeforeInitialSegment = idleHeightBeforeInitialSegment
 
         let characteristics = NextSegmentDecisionCharacteristics(
@@ -113,8 +113,12 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
     }
 
     /// Provide the custom guess range.
-    public override func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
-        customGuessRange
+    public override func adaptedGuessRange(for proposedGuessRange: SimpleRange<Time>) -> SimpleRange<Time> {
+        let offset = proposedGuessRange.lower, size = proposedGuessRange.size
+
+        let lower = offset + customRelativeGuessRange.lower * size
+        let upper = offset + customRelativeGuessRange.upper * size
+        return SimpleRange(from: lower, to: upper)
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.

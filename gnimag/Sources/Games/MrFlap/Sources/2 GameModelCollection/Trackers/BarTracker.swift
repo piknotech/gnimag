@@ -75,7 +75,7 @@ final class BarTracker {
     func update(with bar: Bar, at time: Double) {
         debug.integrityCheckSuccessful = true
 
-        orphanage.barIsValid()
+        orphanage.markBarAsValid()
 
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)

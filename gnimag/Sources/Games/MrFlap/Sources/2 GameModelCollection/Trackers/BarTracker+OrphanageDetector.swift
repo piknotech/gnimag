@@ -20,7 +20,7 @@ final class BarTrackerOrphanageDetector {
     }
 
     /// Call when the bar has been validly updated. This resets the `consecutiveNumberOfFramesWithoutUpdate` counter.
-    func barIsValid() {
+    func markBarAsValid() {
         consecutiveNumberOfFramesWithoutUpdate = 0
     }
 }
