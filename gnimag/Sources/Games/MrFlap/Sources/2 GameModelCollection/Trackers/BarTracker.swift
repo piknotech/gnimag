@@ -43,7 +43,7 @@ final class BarTracker {
         width = ConstantTracker(tolerance: .relative(10%))
         holeSize = ConstantTracker(tolerance: .relative(5%))
         yCenter = BasicLinearPingPongTracker(
-            tolerance: .absolute(0.5% * playfield.freeSpace),
+            tolerance: Self.circularTolerance(dy: 0.5% * playfield.freeSpace, on: playfield),
             slopeTolerance: .relative(40%),
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
@@ -53,6 +53,15 @@ final class BarTracker {
         )
 
         state = BarTrackerStateAppearing(tracker: self)
+    }
+
+    /// Return a circular tolerance with the given dy value, such that `dx ≈ dy * factor`, assuming that the playfield's directions are equivalent (i.e. x-direction = y-direction)
+    /// This tolerance depends on the time <-> pixel-position conversion factor.
+    private static func circularTolerance(dy: Double, on playfield: Playfield, factor: Double = 100%) -> TrackerTolerance {
+        // Movement conversion from angle <-> pixel-position: [0, 2pi] <-> [0, 2pi*r]
+        let midRadius = (playfield.innerRadius + playfield.fullRadius) / 2
+        let dx = factor * dy / midRadius
+        return .absolute2D(dy: dy, dx: dx)
     }
 
     // MARK: Updating

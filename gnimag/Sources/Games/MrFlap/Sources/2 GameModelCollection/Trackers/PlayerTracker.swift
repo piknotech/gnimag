@@ -29,7 +29,7 @@ final class PlayerTracker {
 
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
         height = JumpTracker(
-            jumpTolerance: .absolute(0), // Will be live-updated lateron
+            jumpTolerance: Self.circularTolerance(dy: 1% * playfield.freeSpace, on: playfield),
             relativeValueRangeTolerance: 20%,
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
             idleHeightBeforeInitialSegment: initialPlayer.height
@@ -37,6 +37,15 @@ final class PlayerTracker {
         size = ConstantTracker(tolerance: .relative(10%))
 
         height.assumeNoInvalidDataPoints = true
+    }
+
+    /// Return a circular tolerance with the given dy value, such that `dx ≈ dy * factor`, assuming that the playfield's directions are equivalent (i.e. x-direction = y-direction)
+    /// This tolerance depends on the time <-> pixel-position conversion factor.
+    private static func circularTolerance(dy: Double, on playfield: Playfield, factor: Double = 100%) -> TrackerTolerance {
+        // Movement conversion from angle <-> pixel-position: [0, 2pi] <-> [0, 2pi*r]
+        let midRadius = (playfield.innerRadius + playfield.fullRadius) / 2
+        let dx = factor * dy / midRadius
+        return .absolute2D(dy: dy, dx: dx)
     }
 
     /// Use the player height tracker for tap detection.
@@ -71,8 +80,6 @@ final class PlayerTracker {
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
         debug.linearAngle = linearAngle
 
-        updateJumpTrackerTolerance()
-
         return angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
             size.isValueValid(player.size, &debug.size) &&
             height.integrityCheck(with: player.height, at: linearAngle, &debug.height)
@@ -88,23 +95,6 @@ final class PlayerTracker {
 
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
         height.add(value: player.height, at: linearAngle) // Use angle instead of time to account for small lags (which are really dangerous for exact jump tracking)
-    }
-
-    /// Update the tolerance of the jump tracker so that dx ≈ 25% * dy.
-    /// This tolerance depends on the time <-> player-pixel-position conversion factor.
-    private func updateJumpTrackerTolerance() {
-        let dy = 1% * playfield.freeSpace
-
-        if let angularSpeed = angle.tracker.slope {
-            // Movement conversion: time -> angle -> pixel-position:
-            // t -> t * angularSpeed -> t * angularSpeed * r
-            let midRadius = (playfield.innerRadius + playfield.fullRadius / 2)
-            let dydxFactor = abs(angularSpeed) * midRadius
-            let dx = 25% * dy / dydxFactor
-            height.tolerance = .absolute2D(dy: dy, dx: dx)
-        } else {
-            height.tolerance = .absolute(dy)
-        }
     }
 
     /// Write information about the trackers into the current debug logger frame.
