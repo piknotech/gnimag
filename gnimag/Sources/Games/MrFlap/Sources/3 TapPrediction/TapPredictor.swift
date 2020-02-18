@@ -16,8 +16,8 @@ class TapPredictor: TapPredictorBase {
     private let calculator = JumpThroughNextBarCalculator()
 
     /// Default initializer.
-    init(tapper: Tapper, imageProvider: ImageProvider) {
-        super.init(tapper: tapper, imageProvider: imageProvider, tapDelayTolerance: .absolute(10)) // ...?
+    init(tapper: Tapper, timeProvider: TimeProvider) {
+        super.init(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: .absolute(10)) // ...?
     }
 
     /// Set the game model. Only call this once.
@@ -40,15 +40,15 @@ class TapPredictor: TapPredictorBase {
     private func predictionLogic() -> TapSequence? {
         guard let model = gameModel, let delay = scheduler.delay else { return nil }
 
-        let currentTime = imageProvider.time + delay
+        let currentTime = timeProvider.currentTime + delay
         guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: scheduler.performedTapTimes, currentTime: currentTime) else { return nil }
 
-        return sequence.asTapSequence(relativeTo: imageProvider.time)
+        return sequence.asTapSequence(relativeTo: timeProvider.currentTime)
     }
 
     /// Check if a prediction lock should be applied.
     override func shouldLock(scheduledSequence: TapSequence) -> Bool {
         guard let time = scheduledSequence.nextTapTime else { return true } // When the sequence is empty, wait until the sequence unlocks (via unlockTime)
-        return (time - imageProvider.time) < 0.1
+        return (time - timeProvider.currentTime) < 0.1
     }
 }

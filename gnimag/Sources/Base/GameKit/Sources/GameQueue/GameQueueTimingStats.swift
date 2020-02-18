@@ -7,12 +7,11 @@ import Foundation
 import Image
 
 public final class GameQueueTimingStats {
-    /// The image provider, for getting the current time.
-    private let imageProvider: ImageProvider
+    private let timeProvider: TimeProvider
 
     /// Default initializer.
-    init(imageProvider: ImageProvider) {
-        self.imageProvider = imageProvider
+    init(timeProvider: TimeProvider) {
+        self.timeProvider = timeProvider
     }
 
     /// The average total duration of a frame (1/framerate).
@@ -94,7 +93,7 @@ public final class GameQueueTimingStats {
         totalFrames += 1
 
         // Update average image copy duration
-        let time = imageProvider.time
+        let time = timeProvider.currentTime
         imageCopyDuration.add(value: time - frame.1)
 
         // Update average frame duration
@@ -119,12 +118,12 @@ public final class GameQueueTimingStats {
     /// Must be called in an alternating fashion with `currentFrameAnalysisEnded`, and always before `currentFrameAnalysisEnded`.
     internal func currentFrameAnalysisStarted() {
         guard !paused else { return }
-        currentFrameAnalysisBeginTime = imageProvider.time
+        currentFrameAnalysisBeginTime = timeProvider.currentTime
     }
 
     /// Must be called in an alternating fashion with `currentFrameAnalysisStarted`, and always after `currentFrameAnalysisStarted`.
     internal func currentFrameAnalysisEnded() {
         guard !paused, let beginTime = currentFrameAnalysisBeginTime else { return }
-        analysisDuration.add(value: imageProvider.time - beginTime)
+        analysisDuration.add(value: timeProvider.currentTime - beginTime)
     }
 }

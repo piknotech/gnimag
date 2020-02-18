@@ -50,7 +50,7 @@ public final class MrFlap {
         debugLogger = DebugLogger(parameters: debugParameters)
         
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
-        tapPredictor = TapPredictor(tapper: tapper, imageProvider: imageProvider)
+        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider)
 
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
     }

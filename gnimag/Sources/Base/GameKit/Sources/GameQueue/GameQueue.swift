@@ -34,7 +34,7 @@ public final class GameQueue {
         self.imageProvider = imageProvider
         self.synchronousFrameCallback = synchronousFrameCallback
         self.queue = DispatchQueue(label: "GameQueue", qos: .userInteractive) // High-priority queue
-        self.timingStats = GameQueueTimingStats(imageProvider: imageProvider)
+        self.timingStats = GameQueueTimingStats(timeProvider: imageProvider.timeProvider)
     }
 
     /// Begin receiving images.

@@ -14,7 +14,7 @@ public protocol ImageProvider {
     /// The time in the event can be different from the event trigger time (because of image copying or other preparation operations).
     var newFrame: Event<Frame> { get }
 
-    /// Return the precise current time.
-    /// Must be consistent (same time-source) with time used in `newFrame`.
-    var time: Time { get }
+    /// A TimeProvider returning the precise current time.
+    /// Use this timeProvider to obtain the time values that are used in `newFrame`.
+    var timeProvider: TimeProvider { get }
 }
