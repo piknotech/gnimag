@@ -105,7 +105,7 @@ public final class GameQueueTimingStats {
 
     /// Call when a frame was dropped.
     internal func frameDropped() {
-        guard !paused else { return } // TODO: last frame -> other paused validation
+        guard !paused else { return }
         dismissedFrames += 1
     }
 

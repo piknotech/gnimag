@@ -35,8 +35,6 @@ class GameModelCollector {
             model.player.update(with: result.player, at: time)
         } else {
             // When the player is not integer, bar tracking cannot proceed correctly
-            // TODO: what happens when bar never leaves the appearing state? – detect this!
-            print("player not integer (\(result.player))")
             return
         }
 

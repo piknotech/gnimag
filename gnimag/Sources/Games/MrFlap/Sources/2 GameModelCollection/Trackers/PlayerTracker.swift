@@ -49,8 +49,8 @@ final class PlayerTracker {
     }
 
     /// Use the player height tracker for tap detection.
-    /// Therefore, link the segment switch callbacks to the given TapDelayTracker.
-    func linkPlayerJump(to tapDelayTracker: TapDelayTracker) {
+    /// Therefore, link the segment switch callbacks to the given TapPredictor.
+    func linkPlayerJump(to predictor: TapPredictor) {
         // For tap delay tracking, the actual time (from imageProvider) is required.
         // Because player jump tracking is performed using the player's angle, it first has to be converted back to an (approximate) time value.
         func convertPlayerAngleToTime(playerAngle: Double) -> Double? {
@@ -61,14 +61,14 @@ final class PlayerTracker {
         // Link segment switch callback
         height.advancedToNextSegment += { angle in
             if let time = convertPlayerAngleToTime(playerAngle: angle) {
-                tapDelayTracker.tapDetected(at: time)
+                predictor.tapDetected(at: time)
             }
         }
 
         // Link segment startTime update callback
         height.updatedSupposedStartTimeForCurrentSegment += { angle in
             if let angle = angle, let time = convertPlayerAngleToTime(playerAngle: angle) {
-                tapDelayTracker.refineLastTapDetectionTime(with: time)
+                predictor.refineLastTapDetectionTime(with: time)
             }
         }
     }

@@ -26,8 +26,8 @@ class TapPredictor: TapPredictorBase {
         precondition(self.gameModel == nil)
         self.gameModel = gameModel
 
-        // Link player jump to tap delay tracker
-        gameModel.player.linkPlayerJump(to: scheduler.delayTracker)
+        // Link player jump for tap delay detection
+        gameModel.player.linkPlayerJump(to: self)
     }
 
     /// Call after each successful game model collection to perform tap prediction.

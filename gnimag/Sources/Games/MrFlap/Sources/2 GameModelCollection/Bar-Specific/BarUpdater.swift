@@ -58,8 +58,6 @@ struct BarUpdater {
 
             if tracker.integrityCheck(with: bar, at: time) {
                 tracker.update(with: bar, at: time)
-            } else {
-                print("bar not integer (\(bar))")
             }
 
             tracker.performDebugLogging()

@@ -73,7 +73,7 @@ struct SolutionGenerator {
         minTaps = max(1, minTaps)
 
         // We choose a number of taps in the range [minTaps, minTaps + 1].
-        // In MrFlap, the optimal solution is always in this range – there are no cases where more taps are required to produce a betters solution.
+        // In MrFlap, the optimal solution is always in this range – there are no cases where more taps are required to produce a better solution.
         if RandomPoints.fiftyFifty() {
             return minTaps
         } else {
