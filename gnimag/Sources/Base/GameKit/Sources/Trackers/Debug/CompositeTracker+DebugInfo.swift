@@ -62,7 +62,7 @@ public extension CompositeTracker {
     /// Does not include any guesses.
     var segmentwiseFullDebugFunctionInfos: [FunctionDebugInfo] {
         let all = finalizedSegments + [currentSegment!]
-        return all.flatMap { $0.tracker.allDebugFunctionInfos }
+        return all.flatMap(\.tracker.allDebugFunctionInfos)
     }
 
     /// The most distant value for time.

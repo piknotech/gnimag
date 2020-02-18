@@ -18,7 +18,7 @@ struct BarScatterStrokable: ScatterStrokable {
         let right = interaction.boundsCurves.right.scatterStrokable
 
         // Movement sections
-        let sections = interaction.holeMovement.sections.flatMap { $0.boundaryStrokables }
+        let sections = interaction.holeMovement.sections.flatMap(\.boundaryStrokables)
 
         let all = [left, right] + sections
         return MultiScatterStrokable(components: all).concreteStrokable(for: scatterPlot)
@@ -37,7 +37,7 @@ private extension PlayerBarInteraction.BoundsCurves.Curve {
 private extension PlayerBarInteraction.HoleMovement.Section {
     /// One or two ScatterStrokables defining the lower and upper bounds of this movement section.
     var boundaryStrokables: [ScatterStrokable] {
-        [lower, upper].compactMap { $0.scatterStrokable }
+        [lower, upper].compactMap(\.scatterStrokable)
     }
 }
 

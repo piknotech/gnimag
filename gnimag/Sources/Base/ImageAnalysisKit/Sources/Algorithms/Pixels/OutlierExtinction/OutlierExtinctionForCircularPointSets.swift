@@ -16,8 +16,8 @@ public enum OutlierExtinctionForCircularPointSets {
         guard set.count > 2 else { return set }
 
         // Median point
-        let medX = set.map { $0.x }.median
-        let medY = set.map { $0.y }.median
+        let medX = set.map(\.x).median
+        let medY = set.map(\.y).median
         let medianPoint = CGPoint(x: medX, y: medY)
 
         // Distances
@@ -28,7 +28,7 @@ public enum OutlierExtinctionForCircularPointSets {
         return zip(set, distances).filter {
             let (_, distance) = $0
             return abs(distance - medianDistance) <= medianDistance * threshold
-        } .map { $0.0 } // Convert (point, distance) back to (point)
+        } .map(\.0) // Convert (point, distance) back to (point)
     }
 }
 

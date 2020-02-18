@@ -38,7 +38,7 @@ public final class ScatterPlot {
         dataSet.setScatterShape(.circle)
         dataSet.scatterShapeSize = scatterCircleSize
         dataSet.drawValuesEnabled = false
-        dataSet.colors = dataPoints.map { $0.color.concreteColor.NSColor }
+        dataSet.colors = dataPoints.map(\.color.concreteColor.NSColor)
         let data = ScatterChartData(dataSet: dataSet)
 
         // Calculate view size depending on dataset size

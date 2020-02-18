@@ -121,7 +121,7 @@ extension PlayerBarInteraction {
         let upper = linearMovement(forVerticalTranslation: +bar.holeSize / 2)
 
         // Calculate full range
-        let validRanges = [lower, upper].map { $0.range }.compactMap(id)
+        let validRanges = [lower, upper].map(\.range).compactMap(id)
         let fullTimeRange = validRanges.reduce(SimpleRange<Double>(from: .infinity, to: -.infinity)) { fullRange, new in
             fullRange.pseudoUnion(with: new)
         }
@@ -137,12 +137,12 @@ extension PlayerBarInteraction {
     /// Attention: if sections is empty (which it never should be), this will not yield the expected results.
     private static func intersection(of sections: [HoleMovement.Section], with curve: BoundsCurves.Curve, isLeft: Bool) -> HoleMovement.IntersectionsWithBoundsCurves.IntersectionWithBoundsCurve {
         // Intersect curve with lower movement
-        let lowerRanges = sections.map { $0.lower.range }.compactMap(id)
+        let lowerRanges = sections.map(\.lower.range).compactMap(id)
         let lowerRange = (isLeft ? lowerRanges.first : lowerRanges.last) ?? curve.range
         let lowerBound = isLeft ? lowerRange.lower : lowerRange.upper
 
         // Intersect curve with upper movement
-        let upperRanges = sections.map { $0.upper.range }.compactMap(id)
+        let upperRanges = sections.map(\.upper.range).compactMap(id)
         let upperRange = (isLeft ? upperRanges.first : upperRanges.last) ?? curve.range
         let upperBound = isLeft ? upperRange.lower : upperRange.upper
 

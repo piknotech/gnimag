@@ -16,7 +16,7 @@ public final class TapSequence {
 
     /// The smallest time value in this sequence.
     public var nextTapTime: Double? {
-        taps.map { $0.absoluteTime }.min()
+        taps.map(\.absoluteTime).min()
     }
 
     /// Default intializer.

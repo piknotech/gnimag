@@ -3,8 +3,6 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-import Common
-import Foundation
 import LoggingKit
 
 final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugFrame> {

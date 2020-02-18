@@ -5,6 +5,7 @@
 
 import Common
 import Dispatch
+import Foundation
 
 open class DebugLogger<Parameters, Frame: DebugFrameProtocol> where Frame.ParameterType == Parameters {
     public let parameters: Parameters

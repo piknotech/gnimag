@@ -23,8 +23,8 @@ public struct AABB {
     /// Initialize with the smallest AABB that contains the given (non-empty) set of points.
     /// This runs in O(n) time.
     public init(containing points: [CGPoint]) {
-        let xs = points.map { $0.x }
-        let ys = points.map { $0.y }
+        let xs = points.map(\.x)
+        let ys = points.map(\.y)
 
         let minX = xs.min()!, minY = ys.min()!
         let maxX = xs.max()!, maxY = ys.max()!
