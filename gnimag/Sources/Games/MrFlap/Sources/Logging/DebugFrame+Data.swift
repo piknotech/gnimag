@@ -26,7 +26,6 @@ final class DebugFrame: DebugFrameProtocol {
 
     /// Properties of the image analysis hints calculation.
     class Hints {
-        var usingInitialHints = false
         var hints: AnalysisHints?
     }
 

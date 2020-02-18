@@ -52,7 +52,7 @@ public final class ScatterPlot {
 
         view = ScatterChartView(frame: CGRect(origin: .zero, size: size))
         view.canDrawConcurrently = true
-        view.data = data
+        if !dataSet.isEmpty { view.data = data }
         view.legend.enabled = false
 
         // Specify exact window (the default margin is too large)

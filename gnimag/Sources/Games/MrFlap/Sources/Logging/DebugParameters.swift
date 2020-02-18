@@ -30,6 +30,9 @@ public struct DebugParameters: DebugParameterType {
         /// Always log text. Log text and images on errors.
         case alwaysText
 
+        /// Always log text and images.
+        case always
+
         /// True if logging of images is disabled.
         var noImages: Bool {
             return [.none, .onErrorsTextOnly].contains(self)

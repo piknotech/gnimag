@@ -45,7 +45,7 @@ extension DebugFrame {
     func isValidForLogging(with parameters: DebugParameters) -> Bool {
         switch parameters.severity {
         case .none: return false
-        case .alwaysText: return true
+        case .always, .alwaysText: return true
         case .onErrors, .onErrorsTextOnly: return hasError
         case .onIntegrityErrors: return hasIntegrityError
         }
@@ -96,7 +96,7 @@ extension DebugFrame {
         try? fullLoggingText.write(toFile: textPath, atomically: false, encoding: .utf8)
 
         // Log images
-        if hasError && !parameters.severity.noImages {
+        if parameters.severity == .always || (hasError && !parameters.severity.noImages) {
             logImageAnalysisImages(to: directory)
             logRelevantScatterPlots(to: directory)
         }
@@ -166,7 +166,6 @@ extension DebugFrame {
     private var logTextForHints: String {
         """
         ––––– IMAGE ANALYSIS HINTS –––––
-        • Using Initial Hints: \(hints.usingInitialHints)
         • Hints: \(hints.hints ??? "nil")
         """
     }

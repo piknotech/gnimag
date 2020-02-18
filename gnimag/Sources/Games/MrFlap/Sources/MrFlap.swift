@@ -86,6 +86,7 @@ public final class MrFlap {
     /// Analyze the first image to find the playfield. Then tap the screen to start the game.
     private func startGame(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image, time: time) else {
+            debugLogger.logSynchronously()
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 
@@ -134,18 +135,27 @@ public final class MrFlap {
         debugLogger.currentFrame.hints.hints = hints
 
         // TODO: auf real device: das testen (i.e. ob delay-shift von performedTaps zu actualTaps korrekt ist)
-        /*if case let .success(result) = result {
-            print("h", hints.expectedPlayer)
-            print("r", result.player)
-        }*/
+        if case let .success(result) = result {
+            //print("h", hints.expectedPlayer)
+            //print("r", result.player)
+            lastPos = result.player.coords
+        }
 
         return result
     }
 
     /// Calculate the hints for the current image.
     private func hintsForCurrentFrame(image: Image, time: Double) -> AnalysisHints {
-        tapPredictor.analysisHints(for: time) ?? initialHints(for: image)
+        //tapPredictor.analysisHints(for: time) ?? initialHints(for: image) (TODO)
+        if let pos = lastPos {
+            return AnalysisHints(expectedPlayer: Player(coords: pos, size: 20))
+        } else {
+            return initialHints(for: image)
+        }
     }
+
+    // TODO: remove
+    var lastPos: PolarCoordinates?
 
     /// Use approximated default values to create hints for the first image.
     private func initialHints(for image: Image) -> AnalysisHints {
