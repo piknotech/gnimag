@@ -5,6 +5,7 @@
 
 import Common
 import simd
+import Surge
 import TestingTools
 
 /// SimpleDefaultTracker is an abstract class providing useful default implementations for SimpleTrackerProtocol.
@@ -77,6 +78,15 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
         distinctTimes.remove(last)
         values.removeLast()
         updateRegression()
+    }
+
+    /// Calculate the variance of the data points.
+    open var variance: Value? {
+        guard let regression = regression else { return nil }
+
+        let expectedValues = times.map(regression.at(_:))
+        let differences = sub(expectedValues, values) // X-λ
+        return measq(differences)
     }
 
     /// Check if a value will be valid (compared to the expected value) at a given time, using the existing regression.
@@ -160,18 +170,6 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
         return isDataPointValid(value: value, time: time, fallback: fallback)
     }
 
-    // MARK: Abstract Methods
-    /// Override this to calculate the regression for the current time/value-pairs.
-    /// This method is only called if the number of data points is at least `requiredPointsForCalculatingRegression`.
-    open func calculateRegression() -> F? {
-        fatalError("This is an abstract method.")
-    }
-
-    /// Return a ScatterStrokable which matches the function. For debugging.
-    open func scatterStrokable(for function: F) -> ScatterStrokable {
-        fatalError("This is an abstract method")
-    }
-
     /// Return a ScatterStrokable which describes the valid tolerance range around the given point, respective to the current tolerance and the given regression function. For debugging.
     public final func scatterStrokable(forToleranceRangeAroundTime time: Time, value: Value, f: F) -> ScatterStrokable {
         switch tolerance {
@@ -185,5 +183,17 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
             let tolerance = tolerance * f.at(time) // Relative tolerance
             return VerticalLineSegmentScatterStrokable(x: time, yCenter: value, yRadius: tolerance)
         }
+    }
+
+    // MARK: Abstract Methods
+    /// Override this to calculate the regression for the current time/value-pairs.
+    /// This method is only called if the number of data points is at least `requiredPointsForCalculatingRegression`.
+    open func calculateRegression() -> F? {
+        fatalError("This is an abstract method.")
+    }
+
+    /// Return a ScatterStrokable which matches the function. For debugging.
+    open func scatterStrokable(for function: F) -> ScatterStrokable {
+        fatalError("This is an abstract method")
     }
 }

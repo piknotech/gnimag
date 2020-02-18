@@ -27,8 +27,8 @@ public class ConstantTracker: PolyTracker {
     }
 
     /// Convenience method, ignoring the time component.
-    public func add(value: Value) {
-        add(value: value, at: count)
+    public func add(value: Value, updateRegression: Bool = true) {
+        add(value: value, at: count, updateRegression: updateRegression)
         count += 1
     }
     
@@ -38,8 +38,8 @@ public class ConstantTracker: PolyTracker {
         regression?.a
     }
 
-    /// The standard deviation of the data points.
-    public var standardDeviation: Value? {
-        average.map { Surge.std(values, mean: $0) }
+    /// The variance of the data points.
+    public override var variance: Value? {
+        average.map { Surge.variance(values, mean: $0) }
     }
 }

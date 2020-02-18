@@ -22,9 +22,9 @@ public final class TapDelayTracker {
         tracker.average
     }
 
-    /// The standard deviation of the tap delay.
-    public var standardDeviation: Time? {
-        tracker.standardDeviation
+    /// The variance of the tap delay tracker.
+    public var variance: Time? {
+        tracker.variance
     }
 
     /// Default initializer.

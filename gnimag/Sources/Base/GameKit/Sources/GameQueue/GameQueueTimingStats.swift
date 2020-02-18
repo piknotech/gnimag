@@ -52,6 +52,7 @@ public final class GameQueueTimingStats {
         let frameDurationAverage = frameDuration.average ?? 0
         let imageCopyDurationAverage = imageCopyDuration.average ?? 0
         let analysisDurationAverage = analysisDuration.average ?? 0
+        let variance = (imageCopyDuration.variance ?? 0) + (analysisDuration.variance ?? 0) // Approximation
 
         let waiting = String(format: "%.1f%%", 100 * Double(waitingFrames) / Double(totalFrames))
         let dismissed = String(format: "%.1f%%", 100 * Double(dismissedFrames) / Double(totalFrames))
@@ -60,6 +61,7 @@ public final class GameQueueTimingStats {
         let timeslot = String(format: "%.1f ms", 1000 * frameDurationAverage)
 
         let processing = String(format: "%.1f ms", 1000 * (imageCopyDurationAverage + analysisDurationAverage))
+        let deviation = String(format: "%.1f ms", 1000 * sqrt(variance))
         let imageCopying = String(format: "%.1f ms", 1000 * imageCopyDurationAverage)
         let analysis = String(format: "%.1f ms", 1000 * analysisDurationAverage)
 
@@ -69,7 +71,7 @@ public final class GameQueueTimingStats {
             - totally dismissed: \(dismissed)
         • Avg. framerate: \(framerate)
             (which is a timeslot of \(timeslot))
-        • Avg. image processing duration: \(processing)
+        • Avg. image processing duration: \(processing); std-deviation: \(deviation)
             - image copying: \(imageCopying)
             - actual analysis: \(analysis)
         """

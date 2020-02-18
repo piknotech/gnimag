@@ -35,6 +35,8 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
     public func reset() { tracker.reset() }
     public func removeLast() { tracker.removeLast() }
 
+    public var variance: Value? { tracker.variance }
+
     public func scatterStrokable(for function: F) -> ScatterStrokable {
         tracker.scatterStrokable(for: function)
     }

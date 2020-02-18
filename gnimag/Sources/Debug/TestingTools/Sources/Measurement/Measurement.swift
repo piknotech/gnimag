@@ -25,4 +25,21 @@ public enum Measurement {
             Terminal.log(.warning, "There is no task named \"\(id)\"!")
         }
     }
+
+    /// End all running measurements.
+    public static func endAll() {
+        let time = CACurrentMediaTime()
+
+        for (id, startTime) in runningMeasurements {
+            Terminal.log(.nice, "Task \"\(id)\" took \(1000 * (time - startTime)) ms!")
+        }
+
+        runningMeasurements.removeAll()
+    }
+
+    /// End all running measurements and begin a new onea with the given identifier.
+    public static func next(id: String) {
+        endAll()
+        runningMeasurements[id] = CACurrentMediaTime()
+    }
 }

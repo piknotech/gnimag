@@ -33,15 +33,17 @@ final class BarTrackerStateAppearing: BarTrackerState {
 
     init(tracker: BarTracker) {
         self.tracker = tracker
+
+        // Use same tolerance as BarTracker
+        constantHoleSize = ConstantTracker(tolerancePoints: 0, tolerance: tracker.holeSize.tolerance)
     }
 
     /// After the hole size stays constant for 3 frames, appearing state has ended.
-    private let constantHoleSize = ConstantTracker(tolerancePoints: 0, tolerance: .absolute(0))
+    private let constantHoleSize: ConstantTracker
     private var consecutiveFramesWithConstantHoleSize = 0
 
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
-        let tolerance = tracker.holeSize.tolerance // Use same tolerance as BarTracker
-        if constantHoleSize.isValue(bar.holeSize, validWithTolerance: tolerance, fallback: .invalid) {
+        if constantHoleSize.isValueValid(bar.holeSize, fallback: .invalid) {
             consecutiveFramesWithConstantHoleSize += 1
         } else {
             constantHoleSize.reset()
