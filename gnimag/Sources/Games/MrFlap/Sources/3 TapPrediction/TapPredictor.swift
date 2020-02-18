@@ -4,6 +4,7 @@
 //
 
 import GameKit
+import Geometry
 import Image
 import Tapping
 
@@ -30,6 +31,26 @@ class TapPredictor: TapPredictorBase {
         gameModel.player.linkPlayerJump(to: self)
     }
 
+    /// Calculate AnalysisHints for the given time, i.e. predict where the player will be located at the given (future) time.
+    func analysisHints(for time: Double) -> AnalysisHints? {
+        guard let actualTapTimes = scheduler.actualTapTimes(before: time) else { return nil }
+
+        guard
+            let model = gameModel,
+            let playerSize = model.player.size.average,
+            let jumping = JumpingProperties(player: model.player),
+            let player = PlayerProperties(player: model.player, jumping: jumping, performedTapTimes: actualTapTimes, currentTime: time) else { return nil }
+
+        // Convert predicted values to plain Player
+        let position = PolarCoordinates(
+            angle: CGFloat(player.currentPosition.x.value),
+            height: CGFloat(player.currentPosition.y)
+        )
+
+        let expectedPlayer = Player(coords: position, size: playerSize)
+        return AnalysisHints(expectedPlayer: expectedPlayer)
+    }
+
     /// Call after each successful game model collection to perform tap prediction.
     func predict() {
         predictionStep(predictionLogic: predictionLogic)
@@ -41,7 +62,9 @@ class TapPredictor: TapPredictorBase {
         guard let model = gameModel, let delay = scheduler.delay else { return nil }
 
         let currentTime = timeProvider.currentTime + delay
-        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: scheduler.performedTapTimes, currentTime: currentTime) else { return nil }
+        guard let actualTapTimes = scheduler.actualTapTimes(before: currentTime) else { return nil }
+
+        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: actualTapTimes, currentTime: currentTime) else { return nil }
 
         return sequence.asTapSequence(relativeTo: timeProvider.currentTime)
     }

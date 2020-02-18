@@ -27,9 +27,6 @@ public final class MrFlap {
     /// The shared playfield.
     private var playfield: Playfield!
 
-    // TODO: remove once using prediction for hints
-    private var lastPlayerCoords: PolarCoordinates?
-
     // The debug logger.
     private let debugLogger: DebugLogger
 
@@ -136,34 +133,27 @@ public final class MrFlap {
         let result = imageAnalyzer.analyze(image: image, hints: hints)
         debugLogger.currentFrame.hints.hints = hints
 
-        if case let .success(result) = result {
-            lastPlayerCoords = result.player.coords
-        }
+        // TODO: auf real device: das testen (i.e. ob delay-shift von performedTaps zu actualTaps korrekt ist)
+        /*if case let .success(result) = result {
+            print("h", hints.expectedPlayer)
+            print("r", result.player)
+        }*/
 
         return result
     }
 
     /// Calculate the hints for the current image.
     private func hintsForCurrentFrame(image: Image, time: Double) -> AnalysisHints {
-        guard let playerSize = gameModelCollector?.model.player.size.average, let playerCoords = lastPlayerCoords else {
-            debugLogger.currentFrame.hints.usingInitialHints = true
-            return initialHints(for: image)
-        }
-
-        let expectedPlayer = Player(
-            coords: playerCoords,
-            size: playerSize
-        )
-
-        return AnalysisHints(expectedPlayer: expectedPlayer)
+        tapPredictor.analysisHints(for: time) ?? initialHints(for: image)
     }
 
     /// Use approximated default values to create hints for the first image.
     private func initialHints(for image: Image) -> AnalysisHints {
-        let expectedPlayer = Player(
-            coords: PolarCoordinates(angle: .pi / 2, height: 0.2 * CGFloat(image.height)),
-            size: 0.25 * Double(image.width) // Upper bound
+        AnalysisHints(
+            expectedPlayer: Player(
+                coords: PolarCoordinates(angle: .pi / 2, height: 0.2 * CGFloat(image.height)),
+                size: 10% * Double(image.width) // Some upper bound
+            )
         )
-        return AnalysisHints(expectedPlayer: expectedPlayer)
     }
 }

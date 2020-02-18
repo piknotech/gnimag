@@ -25,10 +25,18 @@ public final class TapScheduler {
     }
 
     /// All taps which are currently scheduled (but not yet performed).
-    public private(set) var scheduledTaps = [Tap]()
+    private var scheduledTaps = [Tap]()
 
-    /// All (absolute) times where a tap has been performed at.
-    public private(set) var performedTapTimes = [Time]()
+    /// All (absolute) times where `tap` has been called at.
+    /// Attention: These are not the times where the taps have actually been performed/detected on the device. Therefore, use `actualTapTimes`.
+    private var rawPerformedTapTimes = [Time]()
+
+    /// All (absolute) times where a tap has been detected at on device-level. This matches the times where a jump is detected on ImageAnalysis level.
+    /// This is just `rawPerformedTapTimes` shifted by `delay`.
+    public func actualTapTimes(before bound: Time) -> [Time]? {
+        guard let delay = delay else { return nil }
+        return rawPerformedTapTimes.map { $0 + delay }.filter { $0 < bound }
+    }
 
     /// An event which is triggered each time a scheduled tap is actually performed.
     /// The time of the tap parameter is not necessarily exactly equal to the actual tap time (i.e. current time) – there could be small deviations (for example if the tap was scheduled for a time in the past).
@@ -85,7 +93,7 @@ public final class TapScheduler {
         delayTracker.tapPerformed(time: tapTime)
 
         // Update tap arrays and reference time
-        performedTapTimes.append(tapTime)
+        rawPerformedTapTimes.append(tapTime)
         scheduledTaps.removeAll { tap == $0 }
 
         tapPerformed.trigger(with: tap)
