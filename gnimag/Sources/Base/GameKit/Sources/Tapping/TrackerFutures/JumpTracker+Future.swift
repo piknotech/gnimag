@@ -44,12 +44,14 @@ public extension JumpTracker {
     }
 
     /// The jump that will be used as a starting point for calculations.
-    /// This is the latest jump segment having a supposedStartTime and a regression.
+    /// This is the latest jump segment having a supposedStartTime and a good enough regression.
     private func initialJumpStart() -> JumpStart? {
-        // Find latest segment having a supposedStartTime and a regression
-        let allSegments = [currentSegment!] + finalizedSegments.reversed()
-        guard let goodSegment = (allSegments.first { $0.supposedStartTime != nil && $0.tracker.regression != nil }) else { return nil }
+        // Find latest segment having a supposedStartTime and a good enough regression
+        let allSegments: [Segment] = [currentSegment!] + finalizedSegments.reversed()
+        let goodSegments = allSegments.lazy.filter(segmentMatchesTrackerTolerances(_:))
+        guard let goodSegment = goodSegments.first else { return nil }
 
+        // Good segment (as per `segmentMatchesTrackerTolerances`) has a regression and a start time
         let startTime = goodSegment.supposedStartTime!
         let startValue = goodSegment.tracker.regression!.at(startTime)
 
@@ -57,7 +59,7 @@ public extension JumpTracker {
     }
 
     /// Jump at the given time, generating a new JumpStart from the given JumpStart.
-    /// Or, simpler: Calculate where the given jump current is at the given time.
+    /// Or, simpler: Calculate where the given jump currently is at the given time.
     private func advance(jump: JumpStart, whenJumpingAt time: Time, parabola: Parabola) -> JumpStart {
         let timeDiff = time - jump.time
         let valueDiff = parabola.at(timeDiff)

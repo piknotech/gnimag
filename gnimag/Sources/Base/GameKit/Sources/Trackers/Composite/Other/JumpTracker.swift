@@ -160,4 +160,18 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         let guess = currentSegment.tracker.times.first!
         return QuadraticSolver.solve(currentJump, equals: idleHeight, solutionNearestToGuess: guess)
     }
+
+    // MARK: More
+
+    /// Verify whether the gravity and jump velocity values of a given segment match the tracker tolerances of the gravity and jump velocity trackers.
+    /// This also ensures that the segment has a supposedStartTime.
+    /// When returning false, the segment either has no parabola (yet), no start time, or the values are distorted.
+    internal func segmentMatchesTrackerTolerances(_ segment: Segment) -> Bool {
+        guard let parabola = segment.tracker.regression else { return false }
+        guard let jumpStart = segment.supposedStartTime else { return false }
+        let gravity = -2 * parabola.a
+        let jumpVelocity = parabola.derivative.at(jumpStart)
+
+        return gravityTracker.isValueValid(gravity) && jumpVelocityTracker.isValueValid(jumpVelocity)
+    }
 }
