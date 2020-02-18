@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 31.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -73,8 +73,8 @@ struct SolutionGenerator {
         minTaps = max(1, minTaps)
 
         // We choose a number of taps in the range [minTaps, minTaps + 1].
-        // In MrFlap, the optimal solution is always in this range – there are no cases where more taps are required to produce a betters solution.
-        if arc4random() < .max / 2 {
+        // In MrFlap, the optimal solution is always in this range – there are no cases where more taps are required to produce a better solution.
+        if RandomPoints.fiftyFifty() {
             return minTaps
         } else {
             return minTaps + 1

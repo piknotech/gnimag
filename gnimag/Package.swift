@@ -19,9 +19,6 @@ let package = Package(
 
         /// Beautiful charts for iOS/tvOS/OSX! The Apple side of the crossplatform MPAndroidChart.
         .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.4.0")),
-
-        /// Handy Swift features that didn't make it into the Swift standard library.
-        .package(url: "https://github.com/Flinesoft/HandySwift", .upToNextMajor(from: "3.1.0")),
     ],
     targets: [
         // BASE
@@ -103,7 +100,6 @@ let package = Package(
                 "Common",
                 "GameKit",
                 "Geometry",
-                "HandySwift",
                 "Image",
                 "ImageAnalysisKit",
                 "LoggingKit",

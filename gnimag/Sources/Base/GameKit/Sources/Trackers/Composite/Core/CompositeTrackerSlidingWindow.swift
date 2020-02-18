@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 08.10.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -9,7 +9,7 @@ import Common
 /// Once one data point matches the next segment, following data points are written into the CompositeTrackerSlidingWindow.
 /// Once enough data points are in the window, the decision is made (i.e. the segment is either advanced or not) and the appropriate data points are flushed and given to the respective (either old or new) tracker.
 internal class CompositeTrackerSlidingWindow<SegmentTrackerType: SimpleTrackerProtocol> {
-    private typealias DataPoint = (value: Double, time: Double, matching: Segment)
+    typealias DataPoint = (value: Double, time: Double, matching: Segment)
     
     enum Segment {
         case current

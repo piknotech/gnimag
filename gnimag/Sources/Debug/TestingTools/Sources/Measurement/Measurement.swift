@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 06.08.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -24,5 +24,22 @@ public enum Measurement {
         } else {
             Terminal.log(.warning, "There is no task named \"\(id)\"!")
         }
+    }
+
+    /// End all running measurements.
+    public static func endAll() {
+        let time = CACurrentMediaTime()
+
+        for (id, startTime) in runningMeasurements {
+            Terminal.log(.nice, "Task \"\(id)\" took \(1000 * (time - startTime)) ms!")
+        }
+
+        runningMeasurements.removeAll()
+    }
+
+    /// End all running measurements and begin a new onea with the given identifier.
+    public static func next(id: String) {
+        endAll()
+        runningMeasurements[id] = CACurrentMediaTime()
     }
 }

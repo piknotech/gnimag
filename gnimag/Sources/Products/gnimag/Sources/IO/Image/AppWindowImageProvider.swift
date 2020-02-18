@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 03.08.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -48,17 +48,15 @@ class AppWindowScreenProvider: ImageProvider {
     }
 
     /// The current time.
-    var time: Time {
-        CACurrentMediaTime()
-    }
+    lazy var timeProvider = TimeProvider(CACurrentMediaTime)
 
     /// Called each time the display link fires.
     private func displayLinkFire(_: CVDisplayLink, _: UnsafePointer<CVTimeStamp>, _: UnsafePointer<CVTimeStamp>, _: CVOptionFlags, _: UnsafeMutablePointer<CVOptionFlags>) -> CVReturn {
         // Get image and call block (on same thread)
-        let time = self.time // Get current time before copying the image
+        let time = timeProvider.currentTime // Get current time before copying the image
         let image = NativeImage(currentImage)
         newFrame.trigger(with: (image, time))
 
-        return 0
+        return kCVReturnSuccess
     }
 }

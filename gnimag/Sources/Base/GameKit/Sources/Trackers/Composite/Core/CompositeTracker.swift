@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 07.10.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -84,6 +84,11 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// The tolerance for all trackers (including segment trackers and guesses).
     public var tolerance: TrackerTolerance
+
+    /// When this is true, every data point which doesn't match the current segment will automatically be treated as belonging to the next segment.
+    /// This means, the normal process of guess creation and checking whether the data point matches the guess is avoided.
+    /// This has two implications: First, there are no invalid data points (i.e. you don't need to call `integrityCheck`), and second, there won't be made any guesses at all.
+    public var assumeNoInvalidDataPoints: Bool = false
 
     /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)
     private var allDataPoints = SimpleDataSet()
@@ -184,7 +189,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// Check if the data point matches the predicted next segment (using `mostRecentGuessesForNextSegment`).
     /// NOTE: This method calls `updateNextSegmentGuesses` to refresh the guesses before checking for a match.
+    /// Attention: If `assumeNoInvalidDataPoints` is true, this always returns true.
     private func nextSegmentMatches(value: Value, at time: Time) -> Bool {
+        if assumeNoInvalidDataPoints { return true } // Skip guess creation – all data points are valid
+
         updateNextSegmentGuesses(forNextDataPoint: (time: time, value: value))
         guard let guesses = mostRecentGuessesForNextSegment else { return false }
         return self.value(value, at: time, matchesGuesses: guesses)
@@ -200,11 +208,9 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         guard let timeA = currentSegment.tracker.times.last else { return }
         let timeB = window.decisionInitiator?.time ?? nextDataPoint.time // timeB is more recent than timeA
 
-        // Transform timeslots to match the custom guess range
-        let range = guessRange(for: abs(timeB - timeA), midpoint: (timeA + timeB) / 2)
-        let minTime = timeA + (timeB - timeA) * range.lower
-        let maxTime = timeA + (timeB - timeA) * range.upper // maxTime is more recent than minTime
-        let timeslots = minTime == maxTime ? [minTime] : [minTime, maxTime]
+        // Allow tracker to adapt the guess range
+        let range = adaptedGuessRange(for: SimpleRange(from: timeA, to: timeB))
+        let timeslots = range.isSinglePoint ? [range.lower] : [range.lower, range.upper]
 
         // Use either the regression or the guesses of the current segment
         var functions: [SegmentTrackerType.F]
@@ -218,7 +224,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
 
         mostRecentGuessesForNextSegment =
-            createGuesses(forFunctions: functions, andTimeslots: timeslots, mostRecentTime: maxTime)
+            createGuesses(forFunctions: functions, andTimeslots: timeslots, mostRecentTime: range.upper)
     }
 
     /// Create enclosing (min & max) guesses from the given parameters:
@@ -359,14 +365,12 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         fatalError("Override and implement this method.")
     }
 
-    /// Return the range that defines where the two guesses (min and max guess) should be made.
-    /// The interval is transformed so that [0, 1] maps to [timeA, timeB] where timeA is the second last time and timeB the most recent time.
-    /// You can, for example, return [0, 0] if you are sure that the segment certainly started at the second last data point. You can also return negative values – times will then be extended further in the past.
-    /// Important: The range must be valid, i.e. the max value must be greater than the min value.
-    /// Also, values above 1 do not make sense because they would represent a timepoint in the future.
-    /// `timeRange: timeB - timeA`; `timeRange > 0`.
-    open func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
-        SimpleRange<Time>(from: 0, to: 1)
+    /// Adapt the proposed guess range before it is used to create guess functions.
+    /// The proposed guess range is the range between the last and the current data point. You can adapt it to e.g. enlarge it or make it smaller.
+    /// You can, for example, return [from, from] if you are sure that the segment certainly started at the second last data point.
+    /// Do not change the direction/validity of the range! The direction is the direction of time data input; i.e., if the range is invalid, leave it invalid
+    open func adaptedGuessRange(for proposedGuessRange: SimpleRange<Time>) -> SimpleRange<Time> {
+        proposedGuessRange
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.

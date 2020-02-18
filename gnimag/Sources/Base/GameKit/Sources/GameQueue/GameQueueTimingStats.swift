@@ -1,18 +1,17 @@
 //
 //  Created by David Knothe on 30.11.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Foundation
 import Image
 
 public final class GameQueueTimingStats {
-    /// The image provider, for getting the current time.
-    private let imageProvider: ImageProvider
+    private let timeProvider: TimeProvider
 
     /// Default initializer.
-    init(imageProvider: ImageProvider) {
-        self.imageProvider = imageProvider
+    init(timeProvider: TimeProvider) {
+        self.timeProvider = timeProvider
     }
 
     /// The average total duration of a frame (1/framerate).
@@ -52,6 +51,7 @@ public final class GameQueueTimingStats {
         let frameDurationAverage = frameDuration.average ?? 0
         let imageCopyDurationAverage = imageCopyDuration.average ?? 0
         let analysisDurationAverage = analysisDuration.average ?? 0
+        let variance = (imageCopyDuration.variance ?? 0) + (analysisDuration.variance ?? 0) // Approximation
 
         let waiting = String(format: "%.1f%%", 100 * Double(waitingFrames) / Double(totalFrames))
         let dismissed = String(format: "%.1f%%", 100 * Double(dismissedFrames) / Double(totalFrames))
@@ -60,6 +60,7 @@ public final class GameQueueTimingStats {
         let timeslot = String(format: "%.1f ms", 1000 * frameDurationAverage)
 
         let processing = String(format: "%.1f ms", 1000 * (imageCopyDurationAverage + analysisDurationAverage))
+        let deviation = String(format: "%.1f ms", 1000 * sqrt(variance))
         let imageCopying = String(format: "%.1f ms", 1000 * imageCopyDurationAverage)
         let analysis = String(format: "%.1f ms", 1000 * analysisDurationAverage)
 
@@ -69,7 +70,7 @@ public final class GameQueueTimingStats {
             - totally dismissed: \(dismissed)
         • Avg. framerate: \(framerate)
             (which is a timeslot of \(timeslot))
-        • Avg. image processing duration: \(processing)
+        • Avg. image processing duration: \(processing); std-deviation: \(deviation)
             - image copying: \(imageCopying)
             - actual analysis: \(analysis)
         """
@@ -92,7 +93,7 @@ public final class GameQueueTimingStats {
         totalFrames += 1
 
         // Update average image copy duration
-        let time = imageProvider.time
+        let time = timeProvider.currentTime
         imageCopyDuration.add(value: time - frame.1)
 
         // Update average frame duration
@@ -104,7 +105,7 @@ public final class GameQueueTimingStats {
 
     /// Call when a frame was dropped.
     internal func frameDropped() {
-        guard !paused else { return } // TODO: last frame -> other paused validation
+        guard !paused else { return }
         dismissedFrames += 1
     }
 
@@ -117,12 +118,12 @@ public final class GameQueueTimingStats {
     /// Must be called in an alternating fashion with `currentFrameAnalysisEnded`, and always before `currentFrameAnalysisEnded`.
     internal func currentFrameAnalysisStarted() {
         guard !paused else { return }
-        currentFrameAnalysisBeginTime = imageProvider.time
+        currentFrameAnalysisBeginTime = timeProvider.currentTime
     }
 
     /// Must be called in an alternating fashion with `currentFrameAnalysisStarted`, and always after `currentFrameAnalysisStarted`.
     internal func currentFrameAnalysisEnded() {
         guard !paused, let beginTime = currentFrameAnalysisBeginTime else { return }
-        analysisDuration.add(value: imageProvider.time - beginTime)
+        analysisDuration.add(value: timeProvider.currentTime - beginTime)
     }
 }

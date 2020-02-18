@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 14.11.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -9,7 +9,7 @@ import Image
 import LoggingKit
 import TestingTools
 
-extension DebugLoggerFrame {
+extension DebugFrame {
     // MARK: - HasError And IsValidForLogging
     var hasError: Bool {
         hasImageAnalysisError || hasBarLocationError || hasIntegrityError
@@ -47,6 +47,7 @@ extension DebugLoggerFrame {
         case .none: return false
         case .alwaysText: return true
         case .onErrors, .onErrorsTextOnly: return hasError
+        case .onIntegrityErrors: return hasIntegrityError
         }
     }
 
@@ -60,44 +61,48 @@ extension DebugLoggerFrame {
     }
 
     // MARK: - Logging
-    /// The filename, consisting of the frame index and of the error state.
-    private var filenameForLogging: String {
+    /// Create and return a subdirectory for logging this frame's content.
+    func createSubdirectory(parameters: ParameterType) -> String? {
+        // Create folder name, consisting of frame index and type
         let prefix = String(format: "%06d", index)
+        var suffix: String
 
         switch (hasIntegrityError, hasImageAnalysisError, hasBarLocationError) {
-        case (true, _, _): return "\(prefix)_IntegrityError"
-        case (_, true, _): return "\(prefix)_AnalysisError"
-        case (_, _, true): return "\(prefix)_LocateBarError"
-        default: return "\(prefix)_Okay"
+        case (true, _, _): suffix = "_IntegrityError"
+        case (_, true, _): suffix = "_AnalysisError"
+        case (_, _, true): suffix = "_LocateBarError"
+        default: suffix = "_Okay"
+        }
+
+        let directory = parameters.location +/ (prefix + suffix)
+
+        // Try creating directory
+        do {
+            try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
+            return directory
+        } catch {
+            Terminal.log(.warning, "DebugLogger – subdirectory \"\(directory)\" couldn't be created!")
+            return nil
         }
     }
 
     /// Log the frame to the given directory.
     /// This method is called asynchronously, i.e. an undefined time after the frame was actually live.
     func log(with parameters: DebugParameters) {
+        guard let directory = createSubdirectory(parameters: parameters) else { return }
+
         // Log text
-        try? fullLoggingText.write(toFile: parameters.location +/ filenameForLogging, atomically: false, encoding: .utf8)
+        let textPath = directory +/ "Frame.txt"
+        try? fullLoggingText.write(toFile: textPath, atomically: false, encoding: .utf8)
 
         // Log images
         if hasError && !parameters.severity.noImages {
-            let prefix = String(format: "%06d", index)
-            let directory = parameters.location +/ prefix
-
-            createImagesSubdirectory(at: directory)
             logImageAnalysisImages(to: directory)
             logRelevantScatterPlots(to: directory)
         }
     }
 
     // MARK: Log Images
-    /// Create the subdirectory in which the images will be stored.
-    private func createImagesSubdirectory(at directory: String) {
-        do {
-            try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
-        } catch {
-            Terminal.log(.warning, "DebugLogger – subdirectory \"\(directory)\" couldn't be created!")
-        }
-    }
 
     /// Log all image analysis images.
     private func logImageAnalysisImages(to directory: String) {
@@ -218,12 +223,10 @@ extension DebugLoggerFrame {
             """
             –– Bar \(i + 1) –– (\(bar.integrityCheckSuccessful ? "okay" : "FAILURE"))
             • integer: \(bar.integrityCheckSuccessful)
-            • state: \(bar.state ??? "nil"), stateSwitch: \(bar.stateSwitch)
+            • state: \(bar.state ??? "nil")
             • angle: \(bar.angle ??? "nil")
             • width: \(bar.width ??? "nil")
-            \(bar.state == .some(.appearing) ?
-            "• appearingHoleSize: \(bar.appearingHoleSize ??? "nil")" :
-            "• holeSize: \(bar.holeSize ??? "nil")")
+            • holeSize: \(bar.holeSize ??? "nil")
             • yCenter: \(bar.yCenter ??? "nil")
             """
         }

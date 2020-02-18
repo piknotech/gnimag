@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// A tapper can tap on a static, unspecified location on the phone screen.

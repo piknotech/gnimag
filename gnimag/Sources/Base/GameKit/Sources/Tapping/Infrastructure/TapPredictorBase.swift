@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 25.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -9,7 +9,7 @@ import Tapping
 
 /// TapPredictorBase provides infrastructure for tap prediction, locking and sequence scheduling.
 open class TapPredictorBase {
-    public let imageProvider: ImageProvider
+    public let timeProvider: TimeProvider
     public let scheduler: TapScheduler
 
     /// States if the prediction lock is currently active.
@@ -22,9 +22,9 @@ open class TapPredictorBase {
     private var tapSequence: TapSequence?
 
     /// Default initializer.
-    public init(tapper: Tapper, imageProvider: ImageProvider, tapDelayTolerance: TrackerTolerance) {
-        self.imageProvider = imageProvider
-        scheduler = TapScheduler(tapper: tapper, imageProvider: imageProvider, tapDelayTolerance: tapDelayTolerance)
+    public init(tapper: Tapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
+        self.timeProvider = timeProvider
+        scheduler = TapScheduler(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: tapDelayTolerance)
 
         // Reassess lock each time a tap has been performed
         scheduler.tapPerformed.subscribe { tap in
@@ -66,7 +66,7 @@ open class TapPredictorBase {
         sequence.taps.forEach(scheduler.schedule(tap:))
 
         if let unlockTime = sequence.unlockTime {
-            scheduleUnlocking(in: unlockTime - imageProvider.time)
+            scheduleUnlocking(in: unlockTime - timeProvider.currentTime)
         }
     }
 

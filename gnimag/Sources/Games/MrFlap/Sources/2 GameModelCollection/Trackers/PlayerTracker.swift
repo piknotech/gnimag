@@ -1,13 +1,13 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
 import GameKit
 
-/// PlayerCourse bundles trackers for the player position which is defined by angle and height.
-final class PlayerCourse {
+/// PlayerTracker bundles trackers for the player position which is defined by angle and height.
+final class PlayerTracker {
     private let playfield: Playfield
 
     /// The angle and height trackers.
@@ -20,27 +20,37 @@ final class PlayerCourse {
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
-    private var debug: DebugLoggerFrame.GameModelCollection._Player { debugLogger.currentFrame.gameModelCollection.player }
+    private var debug: DebugFrame.GameModelCollection._Player { debugLogger.currentFrame.gameModelCollection.player }
 
     /// Default initializer.
     init(playfield: Playfield, initialPlayer: Player, debugLogger: DebugLogger) {
         self.playfield = playfield
         self.debugLogger = debugLogger
 
-        angle = AngularWrapper(LinearTracker(tolerance: .absolute(2% * .pi)))
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
         height = JumpTracker(
-            jumpTolerance: .absolute(0), // Will be live-updated lateron
+            jumpTolerance: Self.circularTolerance(dy: 1% * playfield.freeSpace, on: playfield),
             relativeValueRangeTolerance: 20%,
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
-            customGuessRange: SimpleRange<Double>(from: 0, to: 0),
             idleHeightBeforeInitialSegment: initialPlayer.height
         )
         size = ConstantTracker(tolerance: .relative(10%))
+
+        height.assumeNoInvalidDataPoints = true
+    }
+
+    /// Return a circular tolerance with the given dy value, such that `dx ≈ dy * factor`, assuming that the playfield's directions are equivalent (i.e. x-direction = y-direction)
+    /// This tolerance depends on the time <-> pixel-position conversion factor.
+    private static func circularTolerance(dy: Double, on playfield: Playfield, factor: Double = 100%) -> TrackerTolerance {
+        // Movement conversion from angle <-> pixel-position: [0, 2pi] <-> [0, 2pi*r]
+        let midRadius = (playfield.innerRadius + playfield.fullRadius) / 2
+        let dx = factor * dy / midRadius
+        return .absolute2D(dy: dy, dx: dx)
     }
 
     /// Use the player height tracker for tap detection.
-    /// Therefore, link the segment switch callbacks to the given TapDelayTracker.
-    func linkPlayerJump(to tapDelayTracker: TapDelayTracker) {
+    /// Therefore, link the segment switch callbacks to the given TapPredictor.
+    func linkPlayerJump(to predictor: TapPredictor) {
         // For tap delay tracking, the actual time (from imageProvider) is required.
         // Because player jump tracking is performed using the player's angle, it first has to be converted back to an (approximate) time value.
         func convertPlayerAngleToTime(playerAngle: Double) -> Double? {
@@ -51,14 +61,14 @@ final class PlayerCourse {
         // Link segment switch callback
         height.advancedToNextSegment += { angle in
             if let time = convertPlayerAngleToTime(playerAngle: angle) {
-                tapDelayTracker.tapDetected(at: time)
+                predictor.tapDetected(at: time)
             }
         }
 
         // Link segment startTime update callback
         height.updatedSupposedStartTimeForCurrentSegment += { angle in
             if let angle = angle, let time = convertPlayerAngleToTime(playerAngle: angle) {
-                tapDelayTracker.refineLastTapDetectionTime(with: time)
+                predictor.refineLastTapDetectionTime(with: time)
             }
         }
     }
@@ -69,8 +79,6 @@ final class PlayerCourse {
     func integrityCheck(with player: Player, at time: Double) -> Bool {
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
         debug.linearAngle = linearAngle
-
-        updateJumpTrackerTolerance()
 
         return angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
             size.isValueValid(player.size, &debug.size) &&
@@ -87,23 +95,6 @@ final class PlayerCourse {
 
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
         height.add(value: player.height, at: linearAngle) // Use angle instead of time to account for small lags (which are really dangerous for exact jump tracking)
-    }
-
-    /// Update the tolerance of the jump tracker so that dx ≈ 25% * dy.
-    /// This tolerance depends on the time <-> player-pixel-position conversion factor.
-    private func updateJumpTrackerTolerance() {
-        let dy = 1% * playfield.freeSpace
-
-        if let angularSpeed = angle.tracker.slope {
-            // Movement conversion: time -> angle -> pixel-position:
-            // t -> t * angularSpeed -> t * angularSpeed * r
-            let midRadius = (playfield.innerRadius + playfield.fullRadius / 2)
-            let dydxFactor = abs(angularSpeed) * midRadius
-            let dx = 25% * dy / dydxFactor
-            height.tolerance = .absolute2D(dy: dy, dx: dx)
-        } else {
-            height.tolerance = .absolute(dy)
-        }
     }
 
     /// Write information about the trackers into the current debug logger frame.

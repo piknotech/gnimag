@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 23.06.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -8,16 +8,16 @@ import Foundation
 import GameKit
 import TestingTools
 
-/// BarCourse bundles trackers for a single bar.
-final class BarCourse {
+/// BarTracker bundles trackers for a single bar.
+final class BarTracker {
     static var momventBoundCollector: BarMovementBoundCollector!
+
+    /// Orphanage detector to see whether the bar tracker should be removed from the game model.
+    let orphanage = BarTrackerOrphanageDetector()
 
     /// The state the bar is currently in.
     /// Only trackers with a "normal" state should be considered by prediction algorithms.
-    private(set) var state = State.appearing
-    enum State {
-        case appearing, normal
-    }
+    var state: BarTrackerState!
 
     // The angle and the center of the hole. yCenter is only used in state "normal".
     let angle: AngularWrapper<LinearTracker>
@@ -27,16 +27,12 @@ final class BarCourse {
     let width: ConstantTracker
     let holeSize: ConstantTracker
 
-    /// The hole size while the bar is appearing.
-    /// Only used during the appearing state (which is really short). Once the hole size stays constant, the bar has stopped appearing and the "holeSize" tracker is used.
-    let appearingHoleSize: LinearTracker
-
     /// The shared playfield.
     private let playfield: Playfield
 
     /// The debug logger and a shorthand form for the current debug frame.
-    private let debugLogger: DebugLogger
-    private var debug: DebugLoggerFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
+    let debugLogger: DebugLogger
+    var debug: DebugFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
 
     // Default initializer.
     init(playfield: Playfield, debugLogger: DebugLogger) {
@@ -46,9 +42,8 @@ final class BarCourse {
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
         width = ConstantTracker(tolerance: .relative(10%))
         holeSize = ConstantTracker(tolerance: .relative(5%))
-        appearingHoleSize = LinearTracker(tolerancePoints: 0, tolerance: .absolute(5% * playfield.freeSpace))
         yCenter = BasicLinearPingPongTracker(
-            tolerance: .absolute(0.5% * playfield.freeSpace),
+            tolerance: Self.circularTolerance(dy: 0.5% * playfield.freeSpace, on: playfield),
             slopeTolerance: .relative(40%),
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
@@ -56,31 +51,32 @@ final class BarCourse {
                 maxIntermediatePointsMatchingCurrentSegment: 1
             )
         )
+
+        state = BarTrackerStateAppearing(tracker: self)
+    }
+
+    /// Return a circular tolerance with the given dy value, such that `dx ≈ dy * factor`, assuming that the playfield's directions are equivalent (i.e. x-direction = y-direction)
+    /// This tolerance depends on the time <-> pixel-position conversion factor.
+    private static func circularTolerance(dy: Double, on playfield: Playfield, factor: Double = 100%) -> TrackerTolerance {
+        // Movement conversion from angle <-> pixel-position: [0, 2pi] <-> [0, 2pi*r]
+        let midRadius = (playfield.innerRadius + playfield.fullRadius) / 2
+        let dx = factor * dy / midRadius
+        return .absolute2D(dy: dy, dx: dx)
     }
 
     // MARK: Updating
 
     /// Check if all given values match the trackers.
-    /// NOTE: This changes the state from `.appearing` to `.normal` when necessary.
+    /// NOTE: This changes the state if necessary.
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
         guard width.isValueValid(bar.width, &debug.width) else { return false }
 
-        switch state {
-        case .appearing:
-            // If the appearing hole size does not match (but the angle and width did), the appearing state has ended; switch to normal state
-            if !appearingHoleSize.isDataPointValid(value: bar.holeSize, time: time, &debug.appearingHoleSize) {
-                print("state switch!")
-                debug.stateSwitch = true
-                state = .normal
-            }
-
-        case .normal:
-            return holeSize.isValueValid(bar.holeSize, &debug.holeSize) &&
-                yCenter.integrityCheck(with: bar.yCenter, at: time, &debug.yCenter)
+        // State-specific integrityCheck
+        // Extend lifetime as state may be changed (i.e. dereferenced) within its own integrityCheck
+        return withExtendedLifetime(state) {
+            state.integrityCheck(with: bar, at: time)
         }
-
-        return true
     }
 
     /// Update the trackers with the values from the given bar.
@@ -88,20 +84,16 @@ final class BarCourse {
     func update(with bar: Bar, at time: Double) {
         debug.integrityCheckSuccessful = true
 
+        orphanage.markBarAsValid()
+
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)
 
-        switch state {
-        case .appearing:
-            appearingHoleSize.add(value: bar.holeSize, at: time)
-
-        case .normal:
-            holeSize.add(value: bar.holeSize, at: time)
-            yCenter.add(value: bar.yCenter, at: time)
-        }
+        // State-specific update
+        state.update(with: bar, at: time)
 
         // Update shared movement bounds
-        BarCourse.momventBoundCollector.update(with: self)
+        BarTracker.momventBoundCollector.update(with: self)
     }
 
     /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.
@@ -115,14 +107,13 @@ final class BarCourse {
         debug.state = state
         debug.angle.from(tracker: angle)
         debug.width.from(tracker: width)
-        debug.appearingHoleSize.from(tracker: appearingHoleSize)
         debug.holeSize.from(tracker: holeSize)
         debug.yCenter.from(tracker: yCenter)
     }
 }
 
-extension BarCourse: Hashable {
-    static func == (lhs: BarCourse, rhs: BarCourse) -> Bool {
+extension BarTracker: Hashable {
+    static func == (lhs: BarTracker, rhs: BarTracker) -> Bool {
         return lhs === rhs
     }
 

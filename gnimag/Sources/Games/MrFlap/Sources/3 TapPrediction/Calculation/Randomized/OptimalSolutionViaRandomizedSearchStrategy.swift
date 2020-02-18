@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 28.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// This InteractionSolutionStrategy finds an optimal solution (respective to a rating method) by intelligently trying a large amount of random tap sequences and choosing the best one.
@@ -26,9 +26,9 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         var bestRating = bestSolution.map { verifier.rating(of: $0, requiredMinimum: 0) } ?? 0
 
         // Generate random solutions
-        // Consider: 250 solutions doesn't seem much, but: once a (good enough) solution is available, all generated solutions will just get better and better (because they have to obey minimum requirements to be able to beat the current best solution, therefore SolutionGenerator will generate only sensible solutions, designed to beat the currently best solution).
-        // Combined with the fact that the best solution from the last frame is used as a starting point, this leads to an immensely good final solution after (60fps * 250solutions/frame) = 15,000 solutions generated in e.g. 1 second.
-        let numTries = 250
+        // Consider: 500 solutions doesn't seem much, but: once a (good enough) solution is available, all generated solutions will just get better and better (because they have to obey minimum requirements to be able to beat the current best solution, therefore SolutionGenerator will generate only sensible solutions, designed to beat the currently best solution).
+        // Combined with the fact that the best solution from the last frame is used as a starting point, this leads to an immensely good final solution after (60fps * 500solutions/frame) = 30,000 solutions generated in e.g. 1 second.
+        let numTries = 500
 
         numTries.repeat {
             guard let solution = generator.randomSolution(minimumConsecutiveTapDistance: bestRating) else { return }

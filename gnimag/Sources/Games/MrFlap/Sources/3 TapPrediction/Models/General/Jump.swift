@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 23.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -42,7 +42,12 @@ struct Jump {
         var currentPoint = startPoint
 
         // Perform each jump
-        for distance in timeDistances + [timeUntilEnd] {
+        for i in 0 ... timeDistances.count {
+            // Performantly subscript `timeDistances + [timeUntilEnd]`
+            let distance = (i == timeDistances.count)
+                ? timeUntilEnd
+                : timeDistances[i]
+
             let jump = from(startPoint: currentPoint, duration: distance, jumping: jumping)
             result.append(jump)
             currentPoint = jump.endPoint

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 27.11.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// An interface that provides shared operations for different tracker info types.

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 03.08.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Cocoa
@@ -57,8 +57,8 @@ public final class ImageListProvider: ImageProvider {
     }
 
     /// The current time, which is defined by the current image index.
-    /// Attention: This is a synthetic, not an actual time value!
-    public var time: Time {
+    /// Attention: This is a synthetic, not an actual time value.
+    public lazy var timeProvider = TimeProvider {
         Double(self.i) / Double(self.framerate * self.speed)
     }
 
@@ -69,7 +69,7 @@ public final class ImageListProvider: ImageProvider {
         // Start timer
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / Double(framerate), repeats: true) { _ in
             self.i += self.speed // Next image
-            let time = self.time // Get current time before copying the image
+            let time = self.timeProvider.currentTime // Get current time before copying the image
             if let image = self.currentImage {
                 self.newFrame.trigger(with: (self.imageFromCGImage(image), time))
             }

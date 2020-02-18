@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 15.10.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -24,9 +24,9 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
     /// Can be negative if time direction is inverted.
     private var jumpVelocity: Value? { jumpVelocityTracker.average ?? jumpVelocityTracker.values.last }
 
-    /// The guess range for when a new jump started.
+    /// The relative guess range for when a new jump started. Must be regular.
     /// If you know that jumps will, for example, always exactly begin at the second last data point, return [0, 0].
-    private let customGuessRange: SimpleRange<Time>
+    private let customRelativeGuessRange: SimpleRange<Time>
 
     /// The constant height before the first segment started.
     /// For calculating an exact start point of the initial jump.
@@ -45,14 +45,14 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         jumpTolerance: TrackerTolerance,
         relativeValueRangeTolerance: Value,
         consecutiveNumberOfPointsRequiredToDetectJump: Int,
-        customGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1),
+        customRelativeGuessRange: SimpleRange<Time> = SimpleRange<Time>(from: 0, to: 1),
         idleHeightBeforeInitialSegment: Value? = nil
     ) {
         let tolerance = TrackerTolerance.relative(relativeValueRangeTolerance)
         gravityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
         jumpVelocityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
 
-        self.customGuessRange = customGuessRange
+        self.customRelativeGuessRange = customRelativeGuessRange
         self.idleHeightBeforeInitialSegment = idleHeightBeforeInitialSegment
 
         let characteristics = NextSegmentDecisionCharacteristics(
@@ -74,7 +74,7 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         // Calculate gravity, jump velocity and jump start
         let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump)
         let gravity = -2 * jump.a
-        let jumpVelocity = jump.derivative.at(jumpStart)
+        let jumpVelocity = jump′(jumpStart)
 
         gravityTracker.removePreliminaryValue()
         jumpVelocityTracker.removePreliminaryValue()
@@ -113,8 +113,12 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
     }
 
     /// Provide the custom guess range.
-    public override func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
-        customGuessRange
+    public override func adaptedGuessRange(for proposedGuessRange: SimpleRange<Time>) -> SimpleRange<Time> {
+        let offset = proposedGuessRange.lower, size = proposedGuessRange.size
+
+        let lower = offset + customRelativeGuessRange.lower * size
+        let upper = offset + customRelativeGuessRange.upper * size
+        return SimpleRange(from: lower, to: upper)
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.
@@ -155,5 +159,19 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         // Solve a*x^2 + b*x + c = idleHeight
         let guess = currentSegment.tracker.times.first!
         return QuadraticSolver.solve(currentJump, equals: idleHeight, solutionNearestToGuess: guess)
+    }
+
+    // MARK: More
+
+    /// Verify whether the gravity and jump velocity values of a given segment match the tracker tolerances of the gravity and jump velocity trackers.
+    /// This also ensures that the segment has a supposedStartTime.
+    /// When returning false, the segment either has no parabola (yet), no start time, or the values are distorted.
+    internal func segmentMatchesTrackerTolerances(_ segment: Segment) -> Bool {
+        guard let parabola = segment.tracker.regression else { return false }
+        guard let jumpStart = segment.supposedStartTime else { return false }
+        let gravity = -2 * parabola.a
+        let jumpVelocity = parabola′(jumpStart)
+
+        return gravityTracker.isValueValid(gravity) && jumpVelocityTracker.isValueValid(jumpVelocity)
     }
 }

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 07.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -117,7 +117,7 @@ public extension BasicLinearPingPongTracker {
             // Solve line(x) = upperBound (or lowerBound)
             let bound = (direction == .up) ? lowerBound : upperBound
 
-            if let startTime = LinearSolver.zero(of: line + (-bound)) {
+            if let startTime = LinearSolver.solve(line, equals: bound) {
                 goodSegment = lastSegment
                 supposedStartTime = startTime
             }

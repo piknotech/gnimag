@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 10.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -19,7 +19,7 @@ struct PlayerAngleConverter {
     private let angleToTime: LinearFunction
 
     /// Create a PlayerAngleConverter from the given player tracker.
-    init?(player: PlayerCourse) {
+    init?(player: PlayerTracker) {
         guard let angle = player.angle.tracker.regression else { return nil }
 
         timeToAngle = angle

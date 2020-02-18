@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 31.12.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -27,7 +27,7 @@ struct PlayfieldProperties {
     // MARK: Conversion
 
     /// Create PlayerProperties from the given playfield and player.
-    init?(playfield: Playfield, with player: PlayerCourse) {
+    init?(playfield: Playfield, with player: PlayerTracker) {
         guard let size = player.size.average else { return nil }
 
         lowerRadius = playfield.innerRadius + size / 2

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 09.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import GameKit
@@ -26,7 +26,7 @@ final class BarMovementBoundCollector {
     /// Provide guesses for a bar's lower and upper bound.
     /// If existing, values from the bar itself are used.
     /// If not, the shared bound value or the guess percentage are used as a fallback.
-    func guesses(for bar: BarCourse) -> (lowerBound: Double, upperBound: Double) {
+    func guesses(for bar: BarTracker) -> (lowerBound: Double, upperBound: Double) {
         // Case 1: Nothing to guess
         if let lower = bar.yCenter.lowerBound, let upper = bar.yCenter.upperBound {
             return (lower, upper)
@@ -52,7 +52,7 @@ final class BarMovementBoundCollector {
     }
 
     /// Update the shared bound value with values from the bar tracker.
-    func update(with bar: BarCourse) {
+    func update(with bar: BarTracker) {
         if let lowerBound = bar.yCenter.lowerBound {
             sharedBoundValueTracker.add(value: lowerBound)
         }

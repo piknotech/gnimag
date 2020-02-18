@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 07.08.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Cocoa
@@ -19,7 +19,7 @@ public final class ScatterPlot {
     }
 
     /// Create a scatter plot with the given data set.
-    /// The scatter plot is black/red (using the given colors) and is drawn on a white background.
+    /// The scatter plot is black/red (using the given colors) and is drawn on a transparent background.
     public init(
         dataPoints: [ScatterDataPoint],
         scatterCircleSize: CGFloat = 3,
@@ -38,7 +38,7 @@ public final class ScatterPlot {
         dataSet.setScatterShape(.circle)
         dataSet.scatterShapeSize = scatterCircleSize
         dataSet.drawValuesEnabled = false
-        dataSet.colors = dataPoints.map { $0.color.concreteColor.NSColor }
+        dataSet.colors = dataPoints.map(\.color.concreteColor.NSColor)
         let data = ScatterChartData(dataSet: dataSet)
 
         // Calculate view size depending on dataset size

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 01.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -39,8 +39,8 @@ struct JumpThroughNextBarCalculator {
 
     /// Find the next bar following the current player position (at `currentTime`).
     private func nextBar(model: GameModel, player: PlayerProperties, playfield: PlayfieldProperties, currentTime: Double) -> BarProperties? {
-        let bars = model.bars.compactMap { course in
-            BarProperties(bar: course, with: model.player, playfield: playfield, currentTime: currentTime)
+        let bars = model.bars.compactMap { tracker in
+            BarProperties(bar: tracker, with: model.player, playfield: playfield, currentTime: currentTime)
         }
 
         // Calculate directed distance from player to each bar

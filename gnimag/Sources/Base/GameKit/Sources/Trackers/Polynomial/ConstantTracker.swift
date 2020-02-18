@@ -1,7 +1,9 @@
 //
 //  Created by David Knothe on 09.04.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
+
+import Surge
 
 /// ConstantTracker is a PolyTracker providing simple access to the calculated average value.
 /// Because data points only consist of values here (time is irrelevant), ConstantTracker provides respective convenience methods.
@@ -16,12 +18,17 @@ public class ConstantTracker: PolyTracker {
 
     /// Convenience method to check for validity, ignoring the time component.
     public func isValueValid(_ value: Value, fallback: TrackerFallbackMethod = .valid) -> Bool {
-        return isDataPointValid(value: value, time: count, fallback: fallback)
+        isDataPointValid(value: value, time: count, fallback: fallback)
+    }
+
+    /// Convenience method to check for validity, with a given tolerance, ignoring the time component.
+    public func isValue(_ value: Value, validWithTolerance tolerance: TrackerTolerance, fallback: TrackerFallbackMethod = .valid) -> Bool {
+        isDataPoint(value: value, time: count, validWithTolerance: tolerance, fallback: fallback)
     }
 
     /// Convenience method, ignoring the time component.
-    public func add(value: Value) {
-        add(value: value, at: count)
+    public func add(value: Value, updateRegression: Bool = true) {
+        add(value: value, at: count, updateRegression: updateRegression)
         count += 1
     }
     
@@ -29,5 +36,10 @@ public class ConstantTracker: PolyTracker {
     /// Nil if not enough data points are available.
     public var average: Value? {
         regression?.a
+    }
+
+    /// The variance of the data points.
+    public override var variance: Value? {
+        average.map { Surge.variance(values, mean: $0) }
     }
 }

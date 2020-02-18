@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 27.07.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 public enum SimpleClustering {
@@ -49,7 +49,7 @@ public enum SimpleClustering {
     public struct Result<T: DistanceMeasurable> {
         public let clusters: [Cluster<T>] // The clusters, sorted by size.
         public var largestCluster: Cluster<T> { clusters.first! }
-        public var largestDiameter: Double? { clusters.compactMap { $0.diameter }.max() }
+        public var largestDiameter: Double? { clusters.compactMap(\.diameter).max() }
 
         /// Calculate and fill `diameter` for each cluster.
         /// Takes O(n^2) time.

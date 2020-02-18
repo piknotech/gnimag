@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 14.11.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import LoggingKit
@@ -16,13 +16,16 @@ public struct DebugParameters: DebugParameterType {
     public enum Severity {
         case none
 
-        /// Log text and images on errors – most useful severity for normal use.
+        /// Log text and images on errors.
         /// Error means either an image analysis error or a data integrity error.
         case onErrors
 
         /// Log text on errors.
         /// Error means either an image analysis error or a data integrity error.
         case onErrorsTextOnly
+
+        /// Log text and images, but only for integrity errors.
+        case onIntegrityErrors
 
         /// Always log text. Log text and images on errors.
         case alwaysText

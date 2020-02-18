@@ -20,7 +20,7 @@ The structure of most games is similar. A game consists of three parts: image an
 
   All in all, you update the game model and calculate physics and game-related parameters, but do not process them further.
 
-- **Tapping Prediction**: here, you take the game model and schedule future taps. You think about what sequence of taps you need to survive the current game situation, and schedule or reschedule the taps accordingly. Also, do you keep track of Time Delay? Oder woanders?
+- **Tapping Prediction**: here, you take the game model and schedule future taps. You think about what sequence of taps you need to survive the current game situation, and schedule or reschedule the taps accordingly. Therefore you can use `TapSchedulerBase`, which allows scheduling and executing tap sequences.
 
 Having these three independent components, you can finally create your public `Game` class. It requires `ImageProvider` and `Tapper` instances which will be provided by the user of the game library (for example `gnimag`).
 
@@ -65,7 +65,7 @@ Your game must of course make up for this delay. Anything your program sees is s
 
 This can, for example, be done using Trackers. If you feed your game model values in sensible Trackers, you get a useful time-value curve, which you can use to calculate the value for future times (for example `now + 0.3s`). You can convince yourself that it is necessary to use the combined delay, which is the sum of the input and output delay.
 
-There is a simple way to determine this delay: TODO.
+There is a simple way to determine this delay: Using existing tap prediction infrastructure, i.e. `TapPredictorBase`, you get both tap scheduling and tap delay tracking for free. Just call `predictor.tapDetected` each time a new tap is detected to determine the average delay.
 
 
 

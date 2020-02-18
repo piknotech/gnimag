@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 26.11.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -33,8 +33,8 @@ public struct QuadCurveScatterStrokable: ScatterStrokable {
         let y1 = parabola.at(x1), y3 = parabola.at(x3)
 
         // Find intersection point of the tangents at (x1, y1) and (x3, y3)
-        let deriv1 = parabola.derivative.at(x1)
-        let deriv3 = parabola.derivative.at(x3)
+        let deriv1 = parabola′(x1)
+        let deriv3 = parabola′(x3)
         let ray1 = Line(through: CGPoint(x: x1, y: y1), direction: CGPoint(x: 1, y: deriv1))
         let ray3 = Line(through: CGPoint(x: x3, y: y3), direction: CGPoint(x: 1, y: deriv3))
         let intersection = ray1.intersection(with: ray3)!

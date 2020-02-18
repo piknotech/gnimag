@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 07.08.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Foundation
@@ -57,7 +57,7 @@ public enum ScatterColor {
             return .white
 
         case .invalid, .emphasize:
-            return .lightBlue
+            return .blue
 
         case .custom(let color):
             return color

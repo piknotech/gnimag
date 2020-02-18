@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 28.10.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -17,8 +17,8 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     private let slopeTracker: PreliminaryTracker
 
     public var slope: Value? { slopeTracker.average.map(abs) }
-    public var lowerBound: Value? { lowerBoundTracker.average.map(abs) }
-    public var upperBound: Value? { upperBoundTracker.average.map(abs) }
+    public var lowerBound: Value? { lowerBoundTracker.average }
+    public var upperBound: Value? { upperBoundTracker.average }
 
     internal enum Direction {
         case up
@@ -35,7 +35,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The direction of the very first segment (with index 0).
     private var firstSegmentDirection: Direction?
 
-    /// The direction of any given segment.
+    /// The bound direction of any given segment.
     /// An "up" direction means that the values are approaching the upper bound, irregardless of the time direction.
     /// This means that, when time is inverted, the segment slope is negative, even though direction is "up".
     internal func direction(for index: Int) -> Direction? {
@@ -71,25 +71,20 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
             let isEvenSegment = currentSegment.index.isMultiple(of: 2)
             firstSegmentDirection = (approachingUpperBound == isEvenSegment) ? .up : .down
         }
-        let currentDirection = direction(for: currentSegment.index)
 
-        // 2.: Update slope tracker
-        // Add the positive slope to the tracker. Do NOT use abs(slope) because, for slopes near 0, this could distort the average slope value. This means, "positiveSlope" could also be negative if the data points are widely scattered.
-        let positiveSlope = (currentDirection == .up) ? +line.slope : -line.slope
-
-        // Update preliminary slope if valid
-        slopeTracker.updatePreliminaryValueIfValid(value: positiveSlope)
+        // 2.: Update slope tracker (with absolute slope value)
+        slopeTracker.updatePreliminaryValueIfValid(value: abs(line.slope))
 
         // 3.: Update lower or upper bound tracker
         guard
             let lastLine = finalizedSegments.last?.tracker.regression,
             let intersectionX = LinearSolver.zero(of: line - lastLine) else { return nil }
 
-        let intersectionY = line.at(intersectionX)
-
+        let currentDirection = direction(for: currentSegment.index)
         let relevantTracker = (currentDirection == .up) ? lowerBoundTracker : upperBoundTracker
 
         // Update preliminary bound if valid
+        let intersectionY = line.at(intersectionX)
         relevantTracker.updatePreliminaryValueIfValid(value: intersectionY)
 
         return intersectionX
@@ -112,21 +107,22 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// Make a guess for a segment beginning at (`time`, `value`).
     public override func guessForNextSegmentFunction(whenSplittingSegmentsAtTime time: Time, value: Value) -> LinearFunction? {
         guard
-            let direction = direction(for: currentSegment.index),
-            let positiveSlope = slopeTracker.average else { return nil }
+            let direction = direction(for: currentSegment.index + 1),
+            let timeDirection = monotonicityChecker.direction.intValue,
+            let absoluteSlope = slope else { return nil }
+
+        let slopeSign = Double(timeDirection) * (direction == .up ? +1 : -1)
 
         // Construct f = ax+b with f(time) = value
-        let slope = (direction == .up) ? -positiveSlope : +positiveSlope
+        let slope = slopeSign * absoluteSlope
         let intercept = value - slope * time
 
         return LinearFunction(slope: slope, intercept: intercept)
     }
 
-    /// Move the guess range back to compensate for a possibly too large tolerance (i.e. a very late segment switch detection).
-    public override func guessRange(for timeRange: Time, midpoint: Time) -> SimpleRange<Time> {
-        guard let slope = slopeTracker.average else {
-            return SimpleRange(from: 0, to: 0.5)
-        }
+    /// Extend the guess range to compensate for a possibly too small tolerance (i.e. a very late segment switch detection).
+    public override func adaptedGuessRange(for proposedGuessRange: SimpleRange<Time>) -> SimpleRange<Time> {
+        guard let slope = self.slope else { return proposedGuessRange }
 
         // The vertical tolerance at the critical point
         let verticalTolerance: Double
@@ -140,19 +136,18 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
             // Then, go downwards until hitting the actual regression line (going through (0, 0)).
             let x = dx * sqrt(pow(slope, 2) / (pow(dy/dx, 2) + pow(slope, 2)))
             let y = sqrt(pow(dy, 2) - pow(x * dy/dx, 2)) // (x, y) is the tangent point on the ellipse
-            verticalTolerance = y + abs(slope) * x
+            verticalTolerance = y + slope * x
 
         case let .relative(tolerance):
-            guard let f = currentSegment.tracker.regression else { return SimpleRange(from: 0, to: 0.5) }
-            verticalTolerance = abs(tolerance * f.at(midpoint))
+            guard let f = currentSegment.tracker.regression else { return proposedGuessRange }
+            let maxAbsoluteValue = max(abs(f.at(proposedGuessRange.lower)), abs(f.at(proposedGuessRange.upper)))
+            verticalTolerance = abs(tolerance * maxAbsoluteValue)
         }
-
-        // d: horizontal distance from tolerance line to actual line
-        let d = verticalTolerance / abs(slope)
-        let from = 0.5 - d / (2 * timeRange) // Go d/2 back in time, starting at 0.5 (midpoint between a and b)
-        let to = 0.5 // Range cannot start after the midpoint of a and b
-
-        return SimpleRange(from: from, to: to)
+        
+        // delta: horizontal distance from tolerance line to actual line
+        let delta = verticalTolerance / (2 * slope)
+        let timeDirectionSign = Double(monotonicityChecker.direction.intValue ?? 0)
+        return SimpleRange(from: proposedGuessRange.lower - timeDirectionSign * delta, to: proposedGuessRange.upper)
     }
 
     /// Return a ScatterStrokable which matches the function. For debugging.

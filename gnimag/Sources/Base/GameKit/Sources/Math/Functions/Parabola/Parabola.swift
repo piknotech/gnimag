@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 06.02.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// A polynomial of degree 2, defined by the equation f(x) = ax^2 + bx + c.
@@ -75,8 +75,8 @@ extension Parabola: ScalarFunctionArithmetic {
     @_transparent
     public func shiftedLeft(by amount: Double) -> Parabola {
         // Solve f(0) = self(amount), f'(0) = self'(amount); a stays same
-        let b = derivative.at(amount) // b = f'(0) = self'(amount)
-        let c = at(amount) // c = f(0) = self(amount)
+        let b = self′(amount) // b = f'(0) = self'(amount)
+        let c = self(amount) // c = f(0) = self(amount)
         return Parabola(a: a, b: b, c: c)
     }
 }

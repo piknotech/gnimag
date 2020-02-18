@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 31.07.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 // Taken from https://en.m.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
 
@@ -9,6 +9,7 @@ import Geometry
 
 public enum ConvexHull {
     /// Calculate the convex hull of a given set of points using Andrew's monotone chain convex hull algorithm.
+    /// The resulting polygon consists of the hull points, stored in a counterclockwise order.
     /// This runs in O(n log n) time.
     public static func from(_ points: [CGPoint]) -> Geometry.Polygon {
         guard points.count > 2 else { return Polygon(points: points) }
@@ -26,7 +27,7 @@ public enum ConvexHull {
             while lower.count >= 2 {
                 let a = lower[lower.count - 2]
                 let b = lower[lower.count - 1]
-                if (b - a).cross(point - a) > 0 { break } // TODO: check ob point am ende counterclockwise sind (weil coordinate system unten links beginnt!)
+                if (b - a).cross(point - a) > 0 { break }
                 lower.removeLast()
             }
             lower.append(point)

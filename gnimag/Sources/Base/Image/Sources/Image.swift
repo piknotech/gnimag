@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// Image describes an abstract image providing direct-pixel access.
@@ -26,7 +26,6 @@ open class Image {
     /// Get the color at a given pixel.
     /// (0, 0) is the lower left corner, (width-1, height-1) is the upper-right corner.
     /// Precondition: the pixel must be inside the image.
-    /// TODO: wird es geinlined obwohl es in einem anderen target ist? - whole-module-optiminzations?
     @inlinable @inline(__always)
     open func color(at pixel: Pixel) -> Color {
         fatalError("Image is an abstract class – please override this method.")

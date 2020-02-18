@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 07.10.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -32,6 +32,9 @@ public protocol SimpleTrackerProtocol: HasScatterDataSet {
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
     var regression: F? { get }
+
+    /// The variance of the data points.
+    var variance: Value? { get }
 
     /// Add a data point to the tracker. Update the regression function with the new data point, if desired.
     func add(value: Value, at time: Time, updateRegression: Bool)

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 12.01.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -49,7 +49,7 @@ final class JumpSequencePlot {
     /// Will create the scatter plot with the points from the (connected!) jumps, but not yet draw the jumps.
     private init(jumps: [Jump], extraDataPoints: [ScatterDataPoint] = [], player: PlayerProperties, playfield: PlayfieldProperties) {
         // Calculate data points
-        var dataPoints = jumps.map { $0.scatterStartPoint } + extraDataPoints
+        var dataPoints = jumps.map(\.scatterStartPoint) + extraDataPoints
         dataPoints.append(jumps.last!.scatterEndPoint)
 
         // Create ScatterPlot

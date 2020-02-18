@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 26.10.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 /// A Function type which conforms to ParameterizableFunction can be compressed into and read from an array of Double values.

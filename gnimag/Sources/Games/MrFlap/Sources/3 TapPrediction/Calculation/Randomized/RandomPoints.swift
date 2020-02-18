@@ -1,12 +1,14 @@
 //
 //  Created by David Knothe on 04.02.20.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
 import Foundation
 
 enum RandomPoints {
+    private static var xoshiro = Xoshiro()
+
     /// Returns an array of size `numPoints` containing evenly distributed points in the given range. The range must be regular.
     /// Additionally, the distance between each pair of points is at least `minimumDistance`.
     /// Returns nil if it is not possible to satisfy this condition.
@@ -32,7 +34,8 @@ enum RandomPoints {
         let firstPoint = random(in: firstPointRange)
 
         // Calculate remaining points on the reduced interval
-        var points = [firstPoint] + random(in: reducedRange, count: numPoints - 1)
+        var points = random(in: reducedRange, count: numPoints - 1)
+        points.insert(firstPoint, at: 0)
         spreadOut(points: &points, minimumDistance: minimumDistance)
         return points
     }
@@ -61,7 +64,11 @@ enum RandomPoints {
 
     /// Return a random point in the given range. The range must be regular.
     private static func random(in range: SimpleRange<Double>) -> Double {
-        let t = Double(arc4random()) / Double(UInt32.max)
-        return range.lower + t * range.size
+        Double.random(in: range.lower ... range.upper, using: &xoshiro)
+    }
+
+    /// Throw a coin.
+    static func fiftyFifty() -> Bool {
+        xoshiro.next() < .max / 2
     }
 }

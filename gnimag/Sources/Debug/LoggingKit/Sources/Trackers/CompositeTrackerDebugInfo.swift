@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 19.11.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import GameKit
@@ -42,7 +42,7 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerD
     public func fetchFunctionInfos() {
         allFunctions = tracker?.allDebugFunctionInfos
     }
-    
+
     public enum ValidityResult {
         case valid
         case invalid
@@ -69,7 +69,7 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerD
 
         // Plot tolerance region for last data point
         if includeToleranceRegionForLastDataPoint, let region = toleranceRegionInfo {
-            plot.stroke(region.strokable, with: region.color, alpha: 0.7, strokeWidth: 0.5, dash: region.dash.concreteDash)
+            plot.stroke(region.strokable, with: region.color, alpha: 0.75, strokeWidth: 1, dash: region.dash.concreteDash)
         }
         
         return plot
@@ -87,8 +87,8 @@ public extension CompositeTracker {
         debug.validityResult = result ? .valid : .invalid
 
         // Fill toleranceFunctionInfo
-        if let strokable = lastToleranceRegionScatterStrokable {
-            debug.toleranceRegionInfo = FunctionDebugInfo(function: nil, strokable: strokable, color: .emphasize, dash: .solid)
+        debug.toleranceRegionInfo = lastToleranceRegionScatterStrokable.map { strokable in
+            FunctionDebugInfo(function: nil, strokable: strokable, color: .emphasize, dash: .solid)
         }
 
         return result

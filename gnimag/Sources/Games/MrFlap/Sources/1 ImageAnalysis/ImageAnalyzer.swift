@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -24,7 +24,7 @@ class ImageAnalyzer {
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
-    private var debug: DebugLoggerFrame.ImageAnalysis { debugLogger.currentFrame.imageAnalysis }
+    private var debug: DebugFrame.ImageAnalysis { debugLogger.currentFrame.imageAnalysis }
 
     /// Default initializer.
     init(debugLogger: DebugLogger) {
@@ -128,19 +128,30 @@ class ImageAnalyzer {
         }
         debug.player.eyePosition = eye
 
-        // Find edge of player and calculate its OBB
+        // Edge detection
         let blue = coloring.theme.withTolerance(0.1)
         let limit = EdgeDetector.DetectionLimit.maxPixels(Int(6 * expectedPlayer.size)) // Normal is 4 * size
-        guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: expectedPlayer.coords.angle, limit: limit) else {
-            return nil & {debug.player.failure = .edgeTooLarge}
+
+        // Find player edge using 4 different starting angles; this avoids problems when the inside is not uniformly blue
+        var pointsOnEdge = [Pixel]()
+        for i in 0 ..< 4 {
+            let angle = expectedPlayer.coords.angle + CGFloat(i) * .pi / 2
+
+            guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: angle, limit: limit) else {
+                // If one edge detection exceeds the limit, the others will too
+                return nil & {debug.player.failure = .edgeTooLarge}
+            }
+
+            pointsOnEdge += edge
         }
-        let obb = SmallestOBB.containing(edge.map(CGPoint.init))
+
+        let obb = SmallestOBB.containing(pointsOnEdge.map(CGPoint.init))
         debug.player.obb = obb
 
         // Calculate player properties
         let coords = PolarCoordinates(position: obb.center, center: playfield.center)
-        let size = Double(obb.width + obb.height) / 2
-        return (Player(coords: coords, size: size), obb)
+        let (_, height) = reorientate(obb: obb, respectiveTo: playfield.center) // Ignore beak
+        return (Player(coords: coords, size: Double(height)), obb)
     }
 
     /// Find all bars.
@@ -155,8 +166,10 @@ class ImageAnalyzer {
         let circle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 5)
         var pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 64)
 
-        pixels.removeAll { pixel in // Remove pixels which do not belong to a bar
-            image.color(at: pixel).distance(to: coloring.theme) > 0.1
+        // Only keep pixels which belong to a bar
+        let blue = coloring.theme.withTolerance(0.1)
+        pixels.removeAll { pixel in
+            !blue.matches(image.color(at: pixel))
         }
 
         // Fully locate each bar based on one interior pixel
@@ -165,7 +178,7 @@ class ImageAnalyzer {
         return pixels.compactMap { pixel in
             guard (innerOBBs.none { $0.contains(pixel.CGPoint) }) else { return nil }
             guard let (bar, innerOBB) = locateBar(from: pixel, in: image, with: coloring) else { return nil }
-            innerOBBs.append(innerOBB)
+            innerOBBs.append(innerOBB.inset(by: (-2, -2))) // Bugfix: make OBB marginally larger
             return bar
         }
     }
@@ -176,11 +189,11 @@ class ImageAnalyzer {
         debug.bars.nextBarLocation()
         debug.bars.current.startPixel = pixel
 
-        let insideBar = coloring.theme.withTolerance(0.1)
+        let blue = coloring.theme.withTolerance(0.1)
         let limit = EdgeDetector.DetectionLimit.distance(to: pixel, maximum: playfield.freeSpace)
 
         // Find inner edge
-        guard let innerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: pixel, angle: 0, limit: limit) else {
+        guard let innerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: pixel, angle: 0, limit: limit) else {
             return nil & {debug.bars.current.failure = .innerEdge}
         }
         let innerOBB = SmallestOBB.containing(innerEdge.map(CGPoint.init))
@@ -190,7 +203,7 @@ class ImageAnalyzer {
         // Find outer edge
         let upPosition = PolarCoordinates.position(atAngle: angle1, height: CGFloat(playfield.fullRadius - 5), respectiveTo: playfield.center).nearestPixel
         debug.bars.current.upPosition = upPosition
-        guard let outerEdge = EdgeDetector.search(in: image, shapeColor: insideBar, from: upPosition, angle: 0, limit: limit) else {
+        guard let outerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: upPosition, angle: 0, limit: limit) else {
             return nil & {debug.bars.current.failure = .outerEdge}
         }
         let outerOBB = SmallestOBB.containing(outerEdge.map(CGPoint.init))
@@ -205,7 +218,7 @@ class ImageAnalyzer {
 
         let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
         let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
-        guard width1.isAlmostEqual(to: width2, tolerance: 2) else {
+        guard width1.isAlmostEqual(to: width2, tolerance: 3) else {
             return nil & {debug.bars.current.failure = .widthsDifferent(width1: width1, width2: width2)}
         }
         let width = Double(width1 + width2) / 2

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 31.12.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -32,7 +32,7 @@ struct BarProperties {
     // MARK: Conversion
 
     /// Create BarProperties from the given bar tracker.
-    init?(bar: BarCourse, with player: PlayerCourse, playfield: PlayfieldProperties, currentTime: Double) {
+    init?(bar: BarTracker, with player: PlayerTracker, playfield: PlayfieldProperties, currentTime: Double) {
         guard let converter = PlayerAngleConverter(player: player) else { return nil }
 
         guard
@@ -54,7 +54,7 @@ struct BarProperties {
         }
 
         // Check if yCenterMovementPortionsForTimeRange is non-nil
-        let guesses = BarCourse.momventBoundCollector.guesses(for: bar)
+        let guesses = BarTracker.momventBoundCollector.guesses(for: bar)
         guard bar.yCenter.segmentPortionsForFutureTimeRangeAvailable(guesses: guesses) else { return nil }
 
         // yCenterMovementPortionsForTimeRange implementation

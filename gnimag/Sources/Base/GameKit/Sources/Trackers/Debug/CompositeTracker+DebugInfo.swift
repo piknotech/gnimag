@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 27.11.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -12,7 +12,7 @@ public extension CompositeTracker {
     /// Attention: this is a possibly expensive operation.
     var allDebugFunctionInfos: [FunctionDebugInfo] {
         var result = [FunctionDebugInfo]()
-        var all = finalizedSegments + [currentSegment!]
+        let all = finalizedSegments + [currentSegment!]
 
         /// Convenience function to add a ScatterStrokable for a given function to the result.
         func add(_ function: SegmentTrackerType.F, with color: ScatterColor, dash: FunctionDebugInfo.DashType, from startTime: Time, to endTime: Time) {
@@ -62,7 +62,7 @@ public extension CompositeTracker {
     /// Does not include any guesses.
     var segmentwiseFullDebugFunctionInfos: [FunctionDebugInfo] {
         let all = finalizedSegments + [currentSegment!]
-        return all.flatMap { $0.tracker.allDebugFunctionInfos }
+        return all.flatMap(\.tracker.allDebugFunctionInfos)
     }
 
     /// The most distant value for time.

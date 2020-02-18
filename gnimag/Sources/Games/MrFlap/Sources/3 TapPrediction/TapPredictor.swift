@@ -1,9 +1,10 @@
 //
 //  Created by David Knothe on 26.12.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import GameKit
+import Geometry
 import Image
 import Tapping
 
@@ -16,8 +17,8 @@ class TapPredictor: TapPredictorBase {
     private let calculator = JumpThroughNextBarCalculator()
 
     /// Default initializer.
-    init(tapper: Tapper, imageProvider: ImageProvider) {
-        super.init(tapper: tapper, imageProvider: imageProvider, tapDelayTolerance: .absolute(10)) // ...?
+    init(tapper: Tapper, timeProvider: TimeProvider) {
+        super.init(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: .absolute(10)) // ...?
     }
 
     /// Set the game model. Only call this once.
@@ -26,8 +27,28 @@ class TapPredictor: TapPredictorBase {
         precondition(self.gameModel == nil)
         self.gameModel = gameModel
 
-        // Link player jump to tap delay tracker
-        gameModel.player.linkPlayerJump(to: scheduler.delayTracker)
+        // Link player jump for tap delay detection
+        gameModel.player.linkPlayerJump(to: self)
+    }
+
+    /// Calculate AnalysisHints for the given time, i.e. predict where the player will be located at the given (future) time.
+    func analysisHints(for time: Double) -> AnalysisHints? {
+        guard let actualTapTimes = scheduler.actualTapTimes(before: time) else { return nil }
+
+        guard
+            let model = gameModel,
+            let playerSize = model.player.size.average,
+            let jumping = JumpingProperties(player: model.player),
+            let player = PlayerProperties(player: model.player, jumping: jumping, performedTapTimes: actualTapTimes, currentTime: time) else { return nil }
+
+        // Convert predicted values to plain Player
+        let position = PolarCoordinates(
+            angle: CGFloat(player.currentPosition.x.value),
+            height: CGFloat(player.currentPosition.y)
+        )
+
+        let expectedPlayer = Player(coords: position, size: playerSize)
+        return AnalysisHints(expectedPlayer: expectedPlayer)
     }
 
     /// Call after each successful game model collection to perform tap prediction.
@@ -40,15 +61,17 @@ class TapPredictor: TapPredictorBase {
     private func predictionLogic() -> TapSequence? {
         guard let model = gameModel, let delay = scheduler.delay else { return nil }
 
-        let currentTime = imageProvider.time + delay
-        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: scheduler.performedTapTimes, currentTime: currentTime) else { return nil }
+        let currentTime = timeProvider.currentTime + delay
+        guard let actualTapTimes = scheduler.actualTapTimes(before: currentTime) else { return nil }
 
-        return sequence.asTapSequence(relativeTo: imageProvider.time)
+        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: actualTapTimes, currentTime: currentTime) else { return nil }
+
+        return sequence.asTapSequence(relativeTo: timeProvider.currentTime)
     }
 
     /// Check if a prediction lock should be applied.
     override func shouldLock(scheduledSequence: TapSequence) -> Bool {
         guard let time = scheduledSequence.nextTapTime else { return true } // When the sequence is empty, wait until the sequence unlocks (via unlockTime)
-        return (time - imageProvider.time) < 0.1
+        return (time - timeProvider.currentTime) < 0.1
     }
 }

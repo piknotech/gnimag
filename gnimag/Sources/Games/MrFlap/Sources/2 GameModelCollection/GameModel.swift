@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
 import Common
@@ -12,20 +12,20 @@ final class GameModel {
     let playfield: Playfield
 
     /// The tracked player object.
-    let player: PlayerCourse
+    let player: PlayerTracker
 
     /// All tracked bar objects.
-    var bars: [BarCourse]
+    var bars: [BarTracker]
 
     /// Default initializer.
     init(playfield: Playfield, initialPlayer: Player, mode: GameMode, debugLogger: DebugLogger) {
         self.playfield = playfield
-        self.player = PlayerCourse(playfield: playfield, initialPlayer: initialPlayer, debugLogger: debugLogger)
+        self.player = PlayerTracker(playfield: playfield, initialPlayer: initialPlayer, debugLogger: debugLogger)
         self.bars = []
 
         // Create shared bar movement bound collector
         let guess = guessPercentage(for: mode)
-        BarCourse.momventBoundCollector = BarMovementBoundCollector(playfield: playfield, guessPercentage: guess)
+        BarTracker.momventBoundCollector = BarMovementBoundCollector(playfield: playfield, guessPercentage: guess)
     }
 
     /// The guess percentage for the shared bar movement bound collector, depending on the game mode.
