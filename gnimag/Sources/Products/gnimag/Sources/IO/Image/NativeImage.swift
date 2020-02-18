@@ -15,9 +15,13 @@ final class NativeImage: Image, ConvertibleToCGImage {
     let data: CFData
     public let CGImage: CGImage
 
-    /// Number of bytes per row of the raw pixel
+    /// Number of bytes per row of the raw pixel.
     @usableFromInline
     let bytesPerRow: Int
+
+    /// Single buffer for performant color reading.
+    @usableFromInline
+    let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: 3)
 
     /// Default initializer.
     init(_ image: CGImage) {
@@ -34,8 +38,7 @@ final class NativeImage: Image, ConvertibleToCGImage {
     override func color(at pixel: Pixel) -> Color {
         // Read pixel data (using BGRA layout)
         let offset = bytesPerRow * (height - 1 - pixel.y) + 4 * pixel.x
-        
-        let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: 3)
+
         CFDataGetBytes(data, CFRangeMake(offset, 3), buf)
         return Color(Double(buf[0]) / 255, Double(buf[1]) / 255, Double(buf[2]) / 255)
     }

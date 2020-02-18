@@ -40,6 +40,8 @@ public final class CirclePath: PixelPath {
         self.startAngle = startAngle
         self.bounds = bounds
         self.pixelsOutsideBoundsMode = pixelsOutsideBounds
+
+        delta = 2 * .pi / CGFloat(numberOfPixels)
     }
 
     // MARK: PixelPath
@@ -71,7 +73,6 @@ public final class CirclePath: PixelPath {
     /// Return the next pixel on the circle.
     /// If the bounds are surpassed, return nil.
     private func nextOnCircle() -> Pixel? {
-        let delta = 2 * .pi / CGFloat(numberOfPixels)
         let angle = startAngle + CGFloat(currentStep) * delta
 
         let pixel = circle.point(at: angle).nearestPixel
@@ -79,6 +80,8 @@ public final class CirclePath: PixelPath {
 
         return bounds.contains(pixel) ? pixel : nil
     }
+
+    private let delta: CGFloat
 }
 
 // MARK: Equidistant Pixels
