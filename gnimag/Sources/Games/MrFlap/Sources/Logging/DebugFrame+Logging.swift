@@ -152,6 +152,11 @@ extension DebugFrame {
         if let plot = self.gameModelCollection.player.height.createScatterPlot() {
             plot.write(to: directory +/ "player_height.png")
         }
+
+        // Plot player angle
+        if let plot = self.gameModelCollection.player.angle.createScatterPlot() {
+            plot.write(to: directory +/ "player_angle.png")
+        }
     }
 
     // MARK: Log Texts

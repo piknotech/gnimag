@@ -129,10 +129,14 @@ final class DebugFrame: DebugFrameProtocol {
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
-                height.fetchFunctionInfos()
-                for tracker in [angle, size, height] as [TrackerDebugInfo] {
+                angle.fetchFunctionInfos()
+                for tracker in [angle, size] as [TrackerDebugInfo] {
                     tracker.fetchDataSet()
                 }
+
+                // Jump tracker: only fetch the most recent segments
+                height.fetchDataSet(numSegments: 25)
+                height.fetchFunctionInfos(type: .all, numSegments: 25)
             }
         }
 
@@ -158,7 +162,7 @@ final class DebugFrame: DebugFrameProtocol {
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
-                yCenter.fetchFunctionInfos()
+                yCenter.fetchFunctionInfos(type: .all)
                 for tracker in [yCenter, angle, width, holeSize] as [TrackerDebugInfo] {
                     tracker.fetchDataSet()
                 }

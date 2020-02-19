@@ -71,7 +71,12 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
 
     /// The sliding window where data points are forwarded to.
     /// The points are then received via delegate callbacks.
-    private let window: CompositeTrackerSlidingWindow<SegmentTrackerType>
+    internal let window: CompositeTrackerSlidingWindow<SegmentTrackerType>
+
+    /// All segments, i.e. all finalized segments and the current segment.
+    public var allSegments: [Segment] {
+        finalizedSegments + [currentSegment!]
+    }
 
     /// All segments prior to the current segments.
     public private(set) var finalizedSegments = [Segment]()
@@ -91,19 +96,18 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     public var assumeNoInvalidDataPoints: Bool = false
 
     /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)
-    private var allDataPoints = SimpleDataSet()
+    internal var allDataPoints = CompositeTrackerDataSet()
 
     /// The tolerance region info from the last data point, applied on the current tracker.
     /// Nil if the current tracker has no regression.
     public private(set) var lastToleranceRegionScatterStrokable: ScatterStrokable?
 
     /// The full dataset, containing all points:
-    ///  - Valid points that have been added to the tracker,
+    ///  - Valid points that have been added to the trackers,
     ///  - Invalid points that failed the `integrityCheck`,
     ///  - Points that are currently in the decision window and therefore probably belong to the next segment.
     public var dataSet: [ScatterDataPoint] {
-        allDataPoints.dataSet +
-        window.dataPoints.map { ScatterDataPoint(x: $0.time, y: $0.value, color: .inDecisionWindow) }
+        dataSet(forMostRecentSegments: .max)
     }
 
     /// An event that is triggered each time a segment switch is detected, for external observers.
@@ -147,7 +151,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         if nextSegmentMatches(value: value, at: time) { return true }
 
         // Value is invalid – still add to `allDataPoints` for plotting
-        allDataPoints.add(value: value, time: time, color: .invalid)
+        allDataPoints.add(value: value, time: time, segment: currentSegment.index, color: .invalid)
         return false
     }
 
@@ -275,10 +279,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         }
     }
 
-    /// Add one or multiple points to `allDataPoints` (just for plotting purposes).
+    /// Add one or multiple points to `allDataPoints` at the current segment.
     private func updateAllDataPoints(withSet newPoints: [DataPoint]) {
         for point in newPoints {
-            allDataPoints.add(value: point.value, time: point.time, color: currentSegment.colorForPlotting)
+            allDataPoints.add(value: point.value, time: point.time, segment: currentSegment.index, color: currentSegment.colorForPlotting)
         }
     }
 
@@ -295,7 +299,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     final func flushedDataPointsAvailableForCurrentTracker(dataPoints: [DataPoint]) {
         for point in dataPoints {
             currentSegment.tracker.add(value: point.value, at: point.time, updateRegression: false)
-            allDataPoints.add(value: point.value, time: point.time, color: currentSegment.colorForPlotting)
+            allDataPoints.add(value: point.value, time: point.time, segment: currentSegment.index, color: currentSegment.colorForPlotting)
         }
 
         // Update current segment

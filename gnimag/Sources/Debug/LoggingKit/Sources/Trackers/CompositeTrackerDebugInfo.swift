@@ -6,7 +6,7 @@
 import GameKit
 import TestingTools
 
-/// CompositeTrackerDebugInfo describes information about a CompositeTracker at a given frame.
+/// CompositeTrackerDebugInfo describes information about a CompositeTracker at one single given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.
 public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerDebugInfo, CustomStringConvertible {
     private(set) var tracker: CompositeTracker<T>?
@@ -33,14 +33,33 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerD
         segmentRegression = tracker.currentSegment.tracker.regression
     }
 
-    /// Get the data set from the data set provider and store it.
+    /// Get the data set (for all segments) from the tracker and store them.
     public func fetchDataSet() {
         allDataPoints = tracker?.dataSet
     }
 
-    /// Get function infos from the data set provider and store it.
-    public func fetchFunctionInfos() {
-        allFunctions = tracker?.allDebugFunctionInfos
+    /// Get the data set (for the most recent segments) from the tracker and store them.
+    public func fetchDataSet(numSegments: Int) {
+        allDataPoints = tracker?.dataSet(forMostRecentSegments: numSegments)
+    }
+
+    public enum FunctionInfoType {
+        /// All regressions and guesses.
+        case all
+
+        /// Debug infos from each segment, i.e. regressions and tolerance bounds.
+        /// No guesses.
+        case segmentwise
+    }
+
+    /// Get function infos (for the most recent segments) from the tracker and store them.
+    public func fetchFunctionInfos(type: FunctionInfoType, numSegments: Int = .max) {
+        switch type {
+        case .all:
+            allFunctions = tracker?.allDebugFunctionInfos(numSegments: numSegments)
+        case .segmentwise:
+            allFunctions = tracker?.segmentwiseFullDebugFunctionInfos(numSegments: numSegments)
+        }
     }
 
     public enum ValidityResult {

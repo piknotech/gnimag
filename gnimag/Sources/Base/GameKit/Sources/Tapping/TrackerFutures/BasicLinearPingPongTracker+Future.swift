@@ -100,8 +100,6 @@ public extension BasicLinearPingPongTracker {
 
     /// Create a starting point for the following calculations; i.e. find the last useful segment.
     private func startingPoint(lowerBound: Double, upperBound: Double) -> RequiredProperties.StartingPointForFutureCalculations? {
-        let allSegments = finalizedSegments + [currentSegment!]
-
         // Try finding a good segment with a start time
         var goodSegment: Segment?
         var supposedStartTime: Double?
