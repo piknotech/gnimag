@@ -40,14 +40,14 @@ final class BarTracker {
         self.debugLogger = debugLogger
 
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
-        width = ConstantTracker(tolerance: .relative(10%))
+        width = ConstantTracker(tolerance: .relative(20%))
         holeSize = ConstantTracker(tolerance: .relative(5%))
         yCenter = BasicLinearPingPongTracker(
-            tolerance: Self.circularTolerance(dy: 0.5% * playfield.freeSpace, on: playfield),
+            tolerance: Self.circularTolerance(dy: 0.75% * playfield.freeSpace, on: playfield),
             slopeTolerance: .relative(40%),
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
-                pointsMatchingNextSegment: 4,
+                pointsMatchingNextSegment: 6,
                 maxIntermediatePointsMatchingCurrentSegment: 1
             )
         )

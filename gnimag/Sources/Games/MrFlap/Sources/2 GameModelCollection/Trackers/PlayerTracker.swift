@@ -34,7 +34,7 @@ final class PlayerTracker {
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
             idleHeightBeforeInitialSegment: initialPlayer.height
         )
-        size = ConstantTracker(tolerance: .relative(10%))
+        size = ConstantTracker(tolerance: .relative(20%))
 
         height.assumeNoInvalidDataPoints = true
     }
@@ -80,8 +80,8 @@ final class PlayerTracker {
         let linearAngle = angle.linearify(player.angle, at: time) // Map angle from [0, 2pi) to R
         debug.linearAngle = linearAngle
 
-        return angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
-            size.isValueValid(player.size, &debug.size) &&
+        return size.isValueValid(player.size, &debug.size) &&
+            angle.isDataPointValid(value: player.angle, time: time, &debug.angle) &&
             height.integrityCheck(with: player.height, at: linearAngle, &debug.height)
     }
 

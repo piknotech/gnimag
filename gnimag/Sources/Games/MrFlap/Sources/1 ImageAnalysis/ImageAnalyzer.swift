@@ -136,19 +136,20 @@ class ImageAnalyzer {
         let limit = EdgeDetector.DetectionLimit.maxPixels(Int(8 * expectedPlayer.size)) // Normal is 4 * size
 
         // Find player edge using 4 different starting angles; this avoids problems when the inside is not uniformly blue
-        var pointsOnEdge = [Pixel]()
+        var edges = [[Pixel]]()
         for i in 0 ..< 4 {
             let angle = expectedPlayer.coords.angle + CGFloat(i) * .pi / 2
 
             guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: angle, limit: limit) else { continue }
-            pointsOnEdge += edge
+            edges.append(edge)
         }
 
-        if pointsOnEdge.isEmpty {
+        // 0 or 1 edges found: analysis error. 2 out of 4 edges are enough for a correctly detected player
+        if edges.count < 2 {
             return nil & {debug.player.failure = .edgeTooLarge}
         }
 
-        let obb = SmallestOBB.containing(pointsOnEdge.map(CGPoint.init))
+        let obb = SmallestOBB.containing(edges.flatMap(id).map(CGPoint.init))
         debug.player.obb = obb
 
         // Calculate player properties

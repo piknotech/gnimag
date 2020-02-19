@@ -24,6 +24,8 @@ public final class MrFlap {
     /// The queue where image analysis and game model collection is performed on.
     private var queue: GameQueue!
 
+    private var statsPrintingTimer: Timer!
+
     /// The shared playfield.
     private var playfield: Playfield!
 
@@ -50,6 +52,12 @@ public final class MrFlap {
         tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider)
 
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
+
+        statsPrintingTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+            Terminal.logNewline()
+            Terminal.log(.info, self.queue.timingStats.detailedDescription)
+            Terminal.logNewline()
+        }
     }
 
     /// Begin receiving images and play the game.
@@ -108,7 +116,7 @@ public final class MrFlap {
         if distance(between: result.player, and: initialPlayerPos) > 1 {
             state = .inGame
             tapPredictor.tapDetected(at: time)
-            gameModelCollector.accept(result: result, time: time) // TODO: remove?
+            gameModelCollector.accept(result: result, time: time)
         }
     }
 
