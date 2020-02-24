@@ -6,11 +6,16 @@
 import Common
 import Foundation
 
+struct Window {
+    let windowID: CGWindowID
+    let ownerPID: Int32
+}
+
 /// WindowHelper provides helper methods for both image input and tapping.
 enum WindowHelper {
     /// Get the window ID of a window of a given application.
     /// The app must be running and have a single on-screen window whose name contains the windowNameHint.
-    static func windowID(forApp appName: String, windowNameHint: String? = nil) -> CGWindowID {
+    static func window(forApp appName: String, windowNameHint: String? = nil) -> Window {
         let info = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as! [[String: Any]]
 
         let windows = info.filter {
@@ -29,12 +34,15 @@ enum WindowHelper {
         }
 
         let window = windows.first!
-        return window["kCGWindowNumber"] as! CGWindowID
+        return Window(
+            windowID: window["kCGWindowNumber"] as! CGWindowID,
+            ownerPID: window["kCGWindowOwnerPID"] as! Int32
+        )
     }
 
     /// Get the frame of a given window on the screen.
-    static func frameOfWindow(withID id: CGWindowID) -> CGRect {
-        let windowInfo = CGWindowListCopyWindowInfo(.optionIncludingWindow, id)! as NSArray
+    static func frame(of window: Window) -> CGRect {
+        let windowInfo = CGWindowListCopyWindowInfo(.optionIncludingWindow, window.windowID)! as NSArray
         let window = windowInfo[0] as! NSDictionary
         return CGRect(dictionaryRepresentation: window["kCGWindowBounds"] as! NSDictionary)!
     }

@@ -12,7 +12,7 @@ import QuartzCore
 /// The subscriber is notified in sync with the display update cycle.
 class AppWindowScreenProvider: ImageProvider {
     /// The window ID that corresponds to the desired window of the application.
-    private let windowID: CGWindowID
+    private let window: Window
 
     /// The display link that triggers periodical callbacks.
     private var displayLink: CVDisplayLink?
@@ -28,7 +28,7 @@ class AppWindowScreenProvider: ImageProvider {
     /// Start providing images immediately.
     /// Precondition: the given app is running and onscreen.
     init(appName: String, windowNameHint: String? = nil) {
-        windowID = WindowHelper.windowID(forApp: appName, windowNameHint: windowNameHint)
+        window = WindowHelper.window(forApp: appName, windowNameHint: windowNameHint)
 
         // Start display link
         CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &displayLink)
@@ -38,7 +38,7 @@ class AppWindowScreenProvider: ImageProvider {
 
     /// Capture the current window content.
     var currentImage: CGImage {
-        let image = CGWindowListCreateImage(.zero, .optionIncludingWindow, windowID, .boundsIgnoreFraming)!
+        let image = CGWindowListCreateImage(.zero, .optionIncludingWindow, window.windowID, .boundsIgnoreFraming)!
 
         if removeUpperWindowBorder {
             return image.cropping(to: CGRect(x: 0, y: topWindowBorder, width: image.width, height: image.height - topWindowBorder))!
