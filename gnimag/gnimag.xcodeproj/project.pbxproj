@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */; };
+		6306BDB12405298800C26C08 /* IdleStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306BDB02405298800C26C08 /* IdleStrategy.swift */; };
 		6306CDB823AA48DE00D9EB25 /* ToleranceRangeScatterStrokables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */; };
 		6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */; };
 		6311E0B523E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */; };
@@ -151,7 +152,6 @@
 		6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */; };
 		6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift */; };
 		6367D910238ED8DC00477AD9 /* Dash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90F238ED8DC00477AD9 /* Dash.swift */; };
-		636BCC1923BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */; };
 		636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1A23BF953B00A3BE26 /* Angle.swift */; };
 		636BCC1E23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */; };
 		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
@@ -212,6 +212,7 @@
 /* Begin PBXFileReference section */
 		6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerProtocol.swift; sourceTree = "<group>"; };
 		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
+		6306BDB02405298800C26C08 /* IdleStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleStrategy.swift; sourceTree = "<group>"; };
 		6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToleranceRangeScatterStrokables.swift; sourceTree = "<group>"; };
 		6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionSolutionStrategy.swift; sourceTree = "<group>"; };
 		6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequenceFromCurrentPosition.swift; sourceTree = "<group>"; };
@@ -381,7 +382,6 @@
 		6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompositeTracker+DebugInfos.swift"; sourceTree = "<group>"; };
 		6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDebugInfo.swift; sourceTree = "<group>"; };
 		6367D90F238ED8DC00477AD9 /* Dash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dash.swift; sourceTree = "<group>"; };
-		636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpThroughNextBarCalculator.swift; sourceTree = "<group>"; };
 		636BCC1A23BF953B00A3BE26 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicLinearPingPongTracker+Future.swift"; sourceTree = "<group>"; };
 		637595392331012C00ACA969 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
@@ -504,12 +504,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6306BDAE2405286400C26C08 /* 0 Bars */ = {
+			isa = PBXGroup;
+			children = (
+				6306BDB02405298800C26C08 /* IdleStrategy.swift */,
+			);
+			path = "0 Bars";
+			sourceTree = "<group>";
+		};
+		6306BDAF240528DA00C26C08 /* 1 Bar */ = {
+			isa = PBXGroup;
+			children = (
+				6311E0B323E0E5FE0080288D /* Randomized */,
+			);
+			path = "1 Bar";
+			sourceTree = "<group>";
+		};
 		6311E0B023E0E56A0080288D /* Calculation */ = {
 			isa = PBXGroup;
 			children = (
-				636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */,
 				6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */,
-				6311E0B323E0E5FE0080288D /* Randomized */,
+				6306BDAE2405286400C26C08 /* 0 Bars */,
+				6306BDAF240528DA00C26C08 /* 1 Bar */,
 			);
 			path = Calculation;
 			sourceTree = "<group>";
@@ -2106,6 +2122,7 @@
 				634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */,
 				6311E0B723E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift in Sources */,
 				631213F423257F4000C126B4 /* PlayerTracker.swift in Sources */,
+				6306BDB12405298800C26C08 /* IdleStrategy.swift in Sources */,
 				631213F923257F4000C126B4 /* Playfield.swift in Sources */,
 				63C7F6D223F58AD100187840 /* BarTracker+State.swift in Sources */,
 				6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */,
@@ -2116,7 +2133,6 @@
 				6345680323BB955700D32053 /* PlayerProperties.swift in Sources */,
 				6376A4F123C7BD4700ADF4C2 /* BarMovementBoundCollector.swift in Sources */,
 				6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */,
-				636BCC1923BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift in Sources */,
 				63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */,
 				63D8EC9423D8947D00121F2B /* CGRectScatterStrokable.swift in Sources */,
 				632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */,

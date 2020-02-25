@@ -3,7 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-/// InteractionSolutionStrategy "solves" a player-bar-interaction in such a way that it provides a tap sequence that allows the player from its current time and position to pass the bar without colliding.
+/// InteractionSolutionStrategy "solves" a PredictionFrame in such a way that it provides a tap sequence that allows the player from its current time and position to pass the relevant bar(s) without colliding.
 protocol InteractionSolutionStrategy {
     typealias Solution = JumpSequenceFromCurrentPosition
 
