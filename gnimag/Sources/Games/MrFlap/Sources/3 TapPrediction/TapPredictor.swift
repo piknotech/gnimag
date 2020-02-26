@@ -14,11 +14,20 @@ class TapPredictor: TapPredictorBase {
     /// The game model object which is continuously being updated by the game model collector.
     private var gameModel: GameModel?
 
-    /// The calculator performing the prediction calculation.
-    private let calculator = JumpThroughNextBarCalculator()
+    /// The strategies which are used to perform the prediction calculation.
+    private let strategies: Strategies
+    struct Strategies {
+        let idle: IdleStrategy
+        let singleBar: OptimalSolutionViaRandomizedSearchStrategy
+    }
 
     /// Default initializer.
     init(tapper: Tapper, timeProvider: TimeProvider) {
+        strategies = Strategies(
+            idle: IdleStrategy(relativeIdleHeight: 0.9, minimumJumpDistance: 0.2), // ...?
+            singleBar: OptimalSolutionViaRandomizedSearchStrategy()
+        )
+
         super.init(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: .absolute(10)) // ...?
     }
 
@@ -60,14 +69,25 @@ class TapPredictor: TapPredictorBase {
     /// Analyze the game model to schedule taps.
     /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
     private func predictionLogic() -> TapSequence? {
-        guard let model = gameModel, let delay = scheduler.delay else { return nil }
+        guard
+            let model = gameModel,
+            let currentTime = scheduler.delay.map(timeProvider.currentTime.advanced(by:)), // A + B
+            let actualTapTimes = scheduler.actualTapTimes(before: currentTime),
+            let frame = PredictionFrame.from(model: model, performedTapTimes: actualTapTimes, currentTime: currentTime, maxBars: 1) else { return nil }
 
-        let currentTime = timeProvider.currentTime + delay
-        guard let actualTapTimes = scheduler.actualTapTimes(before: currentTime) else { return nil }
+        // Choose and apply strategy
+        let strategy = self.strategy(for: frame)
+        return strategy.solution(for: frame).asTapSequence(relativeTo: timeProvider.currentTime)
+    }
 
-        guard let sequence = calculator.jumpSequenceThroughNextBar(model: model, performedTapTimes: actualTapTimes, currentTime: currentTime) else { return nil }
-
-        return sequence.asTapSequence(relativeTo: timeProvider.currentTime)
+    /// Choose the strategy to calculate the solution for a given frame.
+    private func strategy(for frame: PredictionFrame) -> InteractionSolutionStrategy {
+        return strategies.idle
+        print(frame.bars.count)
+        switch frame.bars.count {
+        case 0: return strategies.idle
+        default: return strategies.singleBar
+        }
     }
 
     /// Check if a prediction lock should be applied.

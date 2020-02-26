@@ -520,14 +520,14 @@
 			path = "1 Bar";
 			sourceTree = "<group>";
 		};
-		6311E0B023E0E56A0080288D /* Calculation */ = {
+		6311E0B023E0E56A0080288D /* Strategies */ = {
 			isa = PBXGroup;
 			children = (
 				6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */,
 				6306BDAE2405286400C26C08 /* 0 Bars */,
 				6306BDAF240528DA00C26C08 /* 1 Bar */,
 			);
-			path = Calculation;
+			path = Strategies;
 			sourceTree = "<group>";
 		};
 		6311E0B323E0E5FE0080288D /* Randomized */ = {
@@ -1209,7 +1209,7 @@
 				6318966923B4C8B4002FBD4F /* TapPredictor.swift */,
 				639C745323BB66A0005FD354 /* Models */,
 				632696B223D0CA45009FE1E0 /* Helpers */,
-				6311E0B023E0E56A0080288D /* Calculation */,
+				6311E0B023E0E56A0080288D /* Strategies */,
 				6316BDB223CB8CB90062100F /* Drawing */,
 			);
 			path = "3 TapPrediction";

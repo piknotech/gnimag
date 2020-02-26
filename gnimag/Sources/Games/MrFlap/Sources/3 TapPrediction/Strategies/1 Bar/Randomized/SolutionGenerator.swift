@@ -9,10 +9,12 @@ import GameKit
 
 /// SolutionGenerator generates a set of possible solutions to a given interaction.
 /// These solutions can be required to meet certain requirements, e.g. a minimum distance between consecutive taps etc.
+/// Currently, this class only considers the first bar in the frame.
 struct SolutionGenerator {
     typealias Solution = InteractionSolutionStrategy.Solution
 
     let frame: PredictionFrame
+    var interaction: PlayerBarInteraction { frame.bars.first! }
 
     /// The minimum number of taps that is required to complete the interaction.
     /// As this does not change, it is calculated once.
@@ -33,7 +35,7 @@ struct SolutionGenerator {
     /// Generate a random solution meeting the requirements.
     /// Returns nil if it is not possible to solve the interaction or to meet the requirements.
     func randomSolution(minimumConsecutiveTapDistance: Double) -> Solution? {
-        let T = frame.interaction.holeMovement.intersectionsWithBoundsCurves.right.xRange.upper
+        let T = interaction.holeMovement.intersectionsWithBoundsCurves.right.xRange.upper
         guard var taps = randomNumberOfTaps else { return nil }
 
         // Calculate tap range
@@ -84,7 +86,7 @@ struct SolutionGenerator {
     /// A value where it is not possible to complete the interaction (i.e. pass the bar) with less taps.
     /// This is a required value for the number of taps; not necessarily a sufficient one.
     private static func calculateMinimumNumberOfTaps(for frame: PredictionFrame) -> Int? {
-        let player = frame.player, jumping = frame.jumping, interaction = frame.interaction
+        let player = frame.player, jumping = frame.jumping, interaction = frame.bars.first!
 
         // Calculate distance for the lower right point of the hole (respective to the current jump start of the player)
         let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right

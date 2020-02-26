@@ -116,15 +116,16 @@ public final class MrFlap {
         if distance(between: result.player, and: initialPlayerPos) > 1 {
             state = .inGame
             tapPredictor.tapDetected(at: time)
-            gameModelCollector.accept(result: result, time: time)
+            _ = gameModelCollector.accept(result: result, time: time)
         }
     }
 
     /// Normal update method while in-game.
     private func gameplayUpdate(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image, time: time) else { return }
-        gameModelCollector.accept(result: result, time: time)
-        tapPredictor.predict()
+        if gameModelCollector.accept(result: result, time: time) {
+            tapPredictor.predict()
+        }
     }
 
     /// Calculate the pixel distance between two players.

@@ -4,6 +4,7 @@
 //
 
 /// This InteractionSolutionStrategy finds an optimal solution (respective to a rating method) by intelligently trying a large amount of random tap sequences and choosing the best one.
+/// Currently, this class only considers the first bar in the frame.
 class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
     /// The solution that was found during the previous call to `solution(for:on:)`.
     /// This is used as a starting point for the next calculation.
