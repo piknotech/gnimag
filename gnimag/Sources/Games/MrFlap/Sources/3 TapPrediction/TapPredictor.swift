@@ -24,7 +24,7 @@ class TapPredictor: TapPredictorBase {
     /// Default initializer.
     init(tapper: Tapper, timeProvider: TimeProvider) {
         strategies = Strategies(
-            idle: IdleStrategy(relativeIdleHeight: 0.9, minimumJumpDistance: 0.2), // ...?
+            idle: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2), // ...?
             singleBar: OptimalSolutionViaRandomizedSearchStrategy()
         )
 
@@ -61,14 +61,9 @@ class TapPredictor: TapPredictorBase {
         return AnalysisHints(expectedPlayer: expectedPlayer)
     }
 
-    /// Call after each successful game model collection to perform tap prediction.
-    func predict() {
-        predictionStep(predictionLogic: predictionLogic)
-    }
-
     /// Analyze the game model to schedule taps.
     /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
-    private func predictionLogic() -> TapSequence? {
+    override func predictionLogic() -> TapSequence? {
         guard
             let model = gameModel,
             let currentTime = scheduler.delay.map(timeProvider.currentTime.advanced(by:)), // A + B

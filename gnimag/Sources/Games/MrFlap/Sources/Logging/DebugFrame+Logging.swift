@@ -46,6 +46,7 @@ extension DebugFrame {
         switch parameters.severity {
         case .none: return false
         case .always, .alwaysText: return true
+        case .every(let num): return index.isMultiple(of: num)
         case .onErrors, .onErrorsTextOnly: return hasError
         case .onIntegrityErrors: return hasIntegrityError
         }
@@ -96,7 +97,7 @@ extension DebugFrame {
         try? fullLoggingText.write(toFile: textPath, atomically: false, encoding: .utf8)
 
         // Log images
-        if parameters.severity == .always || (hasError && !parameters.severity.noImages) {
+        if parameters.severity.alwaysImages || (!parameters.severity.noImages && hasError) {
             logImageAnalysisImages(to: directory)
             logRelevantScatterPlots(to: directory)
         }

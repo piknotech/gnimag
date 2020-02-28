@@ -29,7 +29,7 @@ final class PlayerTracker {
 
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
         height = JumpTracker(
-            jumpTolerance: Self.circularTolerance(dy: 1% * playfield.freeSpace, on: playfield),
+            jumpTolerance: Self.circularTolerance(dy: 2% * playfield.freeSpace, on: playfield),
             relativeValueRangeTolerance: 20%,
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
             idleHeightBeforeInitialSegment: initialPlayer.height

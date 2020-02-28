@@ -67,12 +67,11 @@
 		631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AD23257A2F00C126B4 /* ImageListProvider.swift */; };
 		631213C923257EB600C126B4 /* NoopTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213BE23257EB600C126B4 /* NoopTapper.swift */; };
 		631213CA23257EB600C126B4 /* WindowTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213BF23257EB600C126B4 /* WindowTapper.swift */; };
-		631213CB23257EB600C126B4 /* MouseRobot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C023257EB600C126B4 /* MouseRobot.swift */; };
+		631213CB23257EB600C126B4 /* MouseControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C023257EB600C126B4 /* MouseControl.swift */; };
 		631213CC23257EB600C126B4 /* WindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C123257EB600C126B4 /* WindowHelper.swift */; };
 		631213CD23257EB600C126B4 /* NativeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C323257EB600C126B4 /* NativeImage.swift */; };
 		631213CE23257EB600C126B4 /* AppWindowImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C423257EB600C126B4 /* AppWindowImageProvider.swift */; };
 		631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C623257EB600C126B4 /* Scrcpy.swift */; };
-		631213D023257EB600C126B4 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
 		631213DA23257EF600C126B4 /* MrFlap.h in Headers */ = {isa = PBXBuildFile; fileRef = 631213D823257EF600C126B4 /* MrFlap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631213F223257F4000C126B4 /* MrFlap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213E223257F4000C126B4 /* MrFlap.swift */; };
 		631213F323257F4000C126B4 /* BarTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213E523257F4000C126B4 /* BarTracker.swift */; };
@@ -143,6 +142,7 @@
 		634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */; };
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
 		63521E9523D7511F002706C0 /* BisectionSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63521E9423D7511F002706C0 /* BisectionSolver.swift */; };
+		6354CECA2409467600A4C3B8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
 		635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635962E223DF3ECC00FE4EDF /* Tap.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
@@ -302,7 +302,7 @@
 		631213BA23257EB600C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		631213BE23257EB600C126B4 /* NoopTapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoopTapper.swift; sourceTree = "<group>"; };
 		631213BF23257EB600C126B4 /* WindowTapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowTapper.swift; sourceTree = "<group>"; };
-		631213C023257EB600C126B4 /* MouseRobot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseRobot.swift; sourceTree = "<group>"; };
+		631213C023257EB600C126B4 /* MouseControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseControl.swift; sourceTree = "<group>"; };
 		631213C123257EB600C126B4 /* WindowHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowHelper.swift; sourceTree = "<group>"; };
 		631213C323257EB600C126B4 /* NativeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeImage.swift; sourceTree = "<group>"; };
 		631213C423257EB600C126B4 /* AppWindowImageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppWindowImageProvider.swift; sourceTree = "<group>"; };
@@ -1039,7 +1039,7 @@
 			children = (
 				631213BE23257EB600C126B4 /* NoopTapper.swift */,
 				631213BF23257EB600C126B4 /* WindowTapper.swift */,
-				631213C023257EB600C126B4 /* MouseRobot.swift */,
+				631213C023257EB600C126B4 /* MouseControl.swift */,
 			);
 			path = Tapping;
 			sourceTree = "<group>";
@@ -1937,11 +1937,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				631213CC23257EB600C126B4 /* WindowHelper.swift in Sources */,
-				631213D023257EB600C126B4 /* main.swift in Sources */,
 				631213CD23257EB600C126B4 /* NativeImage.swift in Sources */,
+				6354CECA2409467600A4C3B8 /* main.swift in Sources */,
 				631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */,
 				631213CA23257EB600C126B4 /* WindowTapper.swift in Sources */,
-				631213CB23257EB600C126B4 /* MouseRobot.swift in Sources */,
+				631213CB23257EB600C126B4 /* MouseControl.swift in Sources */,
 				631213CE23257EB600C126B4 /* AppWindowImageProvider.swift in Sources */,
 				631213C923257EB600C126B4 /* NoopTapper.swift in Sources */,
 			);

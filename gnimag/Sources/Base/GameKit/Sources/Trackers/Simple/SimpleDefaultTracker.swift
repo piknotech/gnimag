@@ -107,7 +107,7 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
             return abs(f.at(time) - value) <= tolerance
 
         case let .relative(tolerance):
-            return abs(f.at(time) - value) <= f.at(time) * tolerance
+            return abs(f.at(time) - value) <= abs(f.at(time)) * tolerance
 
         case let .absolute2D(dy: dy, dx: dx):
             return validityCheckWithCircularTolerance(value: value, time: time, dx: dx, dy: dy, f: f)
