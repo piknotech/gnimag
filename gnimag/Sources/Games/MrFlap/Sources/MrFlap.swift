@@ -24,6 +24,8 @@ public final class MrFlap {
     /// The queue where image analysis and game model collection is performed on.
     private var queue: GameQueue!
 
+    private var statsPrintingTimer: Timer!
+
     /// The shared playfield.
     private var playfield: Playfield!
 
@@ -50,6 +52,12 @@ public final class MrFlap {
         tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider)
 
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
+
+        statsPrintingTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+            Terminal.logNewline()
+            Terminal.log(.info, self.queue.timingStats.detailedDescription)
+            Terminal.logNewline()
+        }
     }
 
     /// Begin receiving images and play the game.
@@ -86,6 +94,7 @@ public final class MrFlap {
     /// Analyze the first image to find the playfield. Then tap the screen to start the game.
     private func startGame(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image, time: time) else {
+            debugLogger.logSynchronously()
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 
@@ -107,15 +116,16 @@ public final class MrFlap {
         if distance(between: result.player, and: initialPlayerPos) > 1 {
             state = .inGame
             tapPredictor.tapDetected(at: time)
-            gameModelCollector.accept(result: result, time: time) // TODO: remove?
+            _ = gameModelCollector.accept(result: result, time: time)
         }
     }
 
     /// Normal update method while in-game.
     private func gameplayUpdate(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image, time: time) else { return }
-        gameModelCollector.accept(result: result, time: time)
-        tapPredictor.predict()
+        if gameModelCollector.accept(result: result, time: time) {
+            tapPredictor.predict()
+        }
     }
 
     /// Calculate the pixel distance between two players.
@@ -134,18 +144,27 @@ public final class MrFlap {
         debugLogger.currentFrame.hints.hints = hints
 
         // TODO: auf real device: das testen (i.e. ob delay-shift von performedTaps zu actualTaps korrekt ist)
-        /*if case let .success(result) = result {
-            print("h", hints.expectedPlayer)
-            print("r", result.player)
-        }*/
+        if case let .success(result) = result {
+            //print("h", hints.expectedPlayer)
+            //print("r", result.player)
+            lastPos = result.player.coords
+        }
 
         return result
     }
 
     /// Calculate the hints for the current image.
     private func hintsForCurrentFrame(image: Image, time: Double) -> AnalysisHints {
-        tapPredictor.analysisHints(for: time) ?? initialHints(for: image)
+        //tapPredictor.analysisHints(for: time) ?? initialHints(for: image) (TODO)
+        if let pos = lastPos {
+            return AnalysisHints(expectedPlayer: Player(coords: pos, size: 20))
+        } else {
+            return initialHints(for: image)
+        }
     }
+
+    // TODO: remove
+    var lastPos: PolarCoordinates?
 
     /// Use approximated default values to create hints for the first image.
     private func initialHints(for image: Image) -> AnalysisHints {

@@ -7,15 +7,18 @@ import Common
 import Foundation
 import GameKit
 
+/// SolutionVerifier assigns a rating to solutions for a given frame.
+/// Currently, this class only considers the first bar in the frame.
 struct SolutionVerifier {
     typealias Solution = InteractionSolutionStrategy.Solution
 
     let frame: PredictionFrame
+    var interaction: PlayerBarInteraction { frame.bars.first! }
 
     /// Checks if the given solution fulfills a precondition. If not, the solution can immediately be discarded because it will probably not solve the interaction (and would receive a rating of 0).
     /// The precondition is a simple check whether the player passes through the left and right hole bounds.
     func precondition(forValidSolution solution: Solution) -> Bool {
-        let player = frame.player, jumping = frame.jumping, interaction = frame.interaction
+        let player = frame.player, jumping = frame.jumping
 
         // Left side. Approximate via center (just requiring 1 instead of 2 height calculations)
         let leftSide = interaction.holeMovement.intersectionsWithBoundsCurves.left
@@ -74,8 +77,8 @@ struct SolutionVerifier {
     /// The rating respective the vertical distance to the bar hole.
     /// Inside [0, 1].
     private func verticalHoleRating(for jumps: [Jump]) -> Double {
-        let desiredValue = 30% * frame.interaction.holeMovement.holeSize
-        let distance = frame.interaction.holeMovement.distance(to: jumps)
+        let desiredValue = 30% * interaction.holeMovement.holeSize
+        let distance = interaction.holeMovement.distance(to: jumps)
         return min(1, distance / desiredValue)
     }
 
@@ -83,7 +86,7 @@ struct SolutionVerifier {
     /// Inside [0, 1].
     private func horizontalHoleRating(for jumps: [Jump]) -> Double {
         let desiredValue = 25% * frame.jumping.horizontalJumpLength
-        let distance = frame.interaction.holeMovement.intersectionsWithBoundsCurves.distance(to: jumps)
+        let distance = interaction.holeMovement.intersectionsWithBoundsCurves.distance(to: jumps)
         return min(1, distance / desiredValue)
     }
 

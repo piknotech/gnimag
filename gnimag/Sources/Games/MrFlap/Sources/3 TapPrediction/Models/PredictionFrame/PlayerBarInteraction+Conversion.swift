@@ -18,10 +18,10 @@ extension PlayerBarInteraction {
         timeUntilHittingCenter = distanceToCenter / totalSpeed
 
         // Calculate remaining properties
-        widths = PlayerBarInteraction.timeWidths(bar: bar, playfield: playfield, totalSpeed: totalSpeed)
+        widths = Self.timeWidths(bar: bar, playfield: playfield, totalSpeed: totalSpeed)
         fullInteractionRange = SimpleRange(around: timeUntilHittingCenter, diameter: widths.full)
-        boundsCurves = PlayerBarInteraction.boundsCurves(bar: bar, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, totalSpeed: totalSpeed)
-        holeMovement = PlayerBarInteraction.holeMovement(bar: bar, currentTime: currentTime, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, curves: boundsCurves)
+        boundsCurves = Self.boundsCurves(bar: bar, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, totalSpeed: totalSpeed)
+        holeMovement = Self.holeMovement(bar: bar, currentTime: currentTime, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, curves: boundsCurves)
     }
 
     /// Calculate the widths of the bar.

@@ -9,11 +9,8 @@ final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugFrame> {
     /// One-time setup: create the logging directory.
     override func setup() {
         switch parameters.severity {
-        case .alwaysText, .onErrors, .onErrorsTextOnly, .onIntegrityErrors:
-            createCleanDirectory()
-
-        case .none:
-            break
+        case .none: break
+        default: createCleanDirectory()
         }
     }
 }

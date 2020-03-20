@@ -30,9 +30,26 @@ public struct DebugParameters: DebugParameterType {
         /// Always log text. Log text and images on errors.
         case alwaysText
 
+        /// Always log text and images.
+        case always
+
+        /// Log every x frames with text and images; do not log errors explicitly.
+        case every(Int)
+
         /// True if logging of images is disabled.
         var noImages: Bool {
-            return [.none, .onErrorsTextOnly].contains(self)
+            switch self {
+            case .none, .onErrorsTextOnly: return true
+            default: return false
+            }
+        }
+
+        /// True if images are logged always, independent of whether an error has occurred or not.
+        var alwaysImages: Bool {
+            switch self {
+            case .always, .every: return true
+            default: return false
+            }
         }
     }
 

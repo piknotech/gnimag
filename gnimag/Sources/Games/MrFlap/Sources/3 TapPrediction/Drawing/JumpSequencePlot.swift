@@ -18,7 +18,7 @@ final class JumpSequencePlot {
     /// Draw both the jump sequence and the player-bar interaction.
     convenience init(frame: PredictionFrame, solution: JumpSequenceFromCurrentPosition) {
         self.init(sequence: solution, player: frame.player, playfield: frame.playfield, jumping: frame.jumping)
-        draw(interaction: frame.interaction)
+        frame.bars.forEach(draw(interaction:))
     }
     
     /// Create a JumpSequencePlot from a jump sequence starting at a specific (player-independent) position (where the current time corresponds to 0).

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */; };
+		6306BDB12405298800C26C08 /* IdleStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306BDB02405298800C26C08 /* IdleStrategy.swift */; };
 		6306CDB823AA48DE00D9EB25 /* ToleranceRangeScatterStrokables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */; };
 		6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */; };
 		6311E0B523E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */; };
@@ -66,12 +67,11 @@
 		631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AD23257A2F00C126B4 /* ImageListProvider.swift */; };
 		631213C923257EB600C126B4 /* NoopTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213BE23257EB600C126B4 /* NoopTapper.swift */; };
 		631213CA23257EB600C126B4 /* WindowTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213BF23257EB600C126B4 /* WindowTapper.swift */; };
-		631213CB23257EB600C126B4 /* MouseRobot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C023257EB600C126B4 /* MouseRobot.swift */; };
+		631213CB23257EB600C126B4 /* MouseControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C023257EB600C126B4 /* MouseControl.swift */; };
 		631213CC23257EB600C126B4 /* WindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C123257EB600C126B4 /* WindowHelper.swift */; };
 		631213CD23257EB600C126B4 /* NativeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C323257EB600C126B4 /* NativeImage.swift */; };
 		631213CE23257EB600C126B4 /* AppWindowImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C423257EB600C126B4 /* AppWindowImageProvider.swift */; };
 		631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C623257EB600C126B4 /* Scrcpy.swift */; };
-		631213D023257EB600C126B4 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
 		631213DA23257EF600C126B4 /* MrFlap.h in Headers */ = {isa = PBXBuildFile; fileRef = 631213D823257EF600C126B4 /* MrFlap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631213F223257F4000C126B4 /* MrFlap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213E223257F4000C126B4 /* MrFlap.swift */; };
 		631213F323257F4000C126B4 /* BarTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213E523257F4000C126B4 /* BarTracker.swift */; };
@@ -142,6 +142,7 @@
 		634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */; };
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
 		63521E9523D7511F002706C0 /* BisectionSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63521E9423D7511F002706C0 /* BisectionSolver.swift */; };
+		6354CECA2409467600A4C3B8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
 		635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635962E223DF3ECC00FE4EDF /* Tap.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
@@ -149,9 +150,8 @@
 		6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */; };
 		6367D906238EAE7200477AD9 /* Array+RemoveAtIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */; };
 		6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */; };
-		6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift */; };
+		6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift */; };
 		6367D910238ED8DC00477AD9 /* Dash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90F238ED8DC00477AD9 /* Dash.swift */; };
-		636BCC1923BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */; };
 		636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1A23BF953B00A3BE26 /* Angle.swift */; };
 		636BCC1E23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */; };
 		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
@@ -171,6 +171,7 @@
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
+		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
 		63B62B2423DC8D06009B07DF /* Array+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B62B2323DC8D06009B07DF /* Array+Scan.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
@@ -183,6 +184,7 @@
 		63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9523D89C5D00121F2B /* Point+Position.swift */; };
 		63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9A23D9FFEE00121F2B /* Jump.swift */; };
 		63E5A06E23FC1D360082E910 /* TimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06D23FC1D350082E910 /* TimeProvider.swift */; };
+		63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
 		63F01934238B3CA000E380CB /* FunctionDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */; };
 		63F3CC1C234B36D000AA8228 /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F3CC1B234B36D000AA8228 /* Function.swift */; };
@@ -210,6 +212,7 @@
 /* Begin PBXFileReference section */
 		6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerProtocol.swift; sourceTree = "<group>"; };
 		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
+		6306BDB02405298800C26C08 /* IdleStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleStrategy.swift; sourceTree = "<group>"; };
 		6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToleranceRangeScatterStrokables.swift; sourceTree = "<group>"; };
 		6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionSolutionStrategy.swift; sourceTree = "<group>"; };
 		6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequenceFromCurrentPosition.swift; sourceTree = "<group>"; };
@@ -299,7 +302,7 @@
 		631213BA23257EB600C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		631213BE23257EB600C126B4 /* NoopTapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoopTapper.swift; sourceTree = "<group>"; };
 		631213BF23257EB600C126B4 /* WindowTapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowTapper.swift; sourceTree = "<group>"; };
-		631213C023257EB600C126B4 /* MouseRobot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseRobot.swift; sourceTree = "<group>"; };
+		631213C023257EB600C126B4 /* MouseControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseControl.swift; sourceTree = "<group>"; };
 		631213C123257EB600C126B4 /* WindowHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowHelper.swift; sourceTree = "<group>"; };
 		631213C323257EB600C126B4 /* NativeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeImage.swift; sourceTree = "<group>"; };
 		631213C423257EB600C126B4 /* AppWindowImageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppWindowImageProvider.swift; sourceTree = "<group>"; };
@@ -376,10 +379,9 @@
 		6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryFunctionScatterStrokable.swift; sourceTree = "<group>"; };
 		6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+RemoveAtIndices.swift"; sourceTree = "<group>"; };
 		6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SimpleTracker+DebugInfos.swift"; sourceTree = "<group>"; };
-		6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompositeTracker+DebugInfo.swift"; sourceTree = "<group>"; };
+		6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompositeTracker+DebugInfos.swift"; sourceTree = "<group>"; };
 		6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDebugInfo.swift; sourceTree = "<group>"; };
 		6367D90F238ED8DC00477AD9 /* Dash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dash.swift; sourceTree = "<group>"; };
-		636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpThroughNextBarCalculator.swift; sourceTree = "<group>"; };
 		636BCC1A23BF953B00A3BE26 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicLinearPingPongTracker+Future.swift"; sourceTree = "<group>"; };
 		637595392331012C00ACA969 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		639C745423BB66DF005FD354 /* JumpingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingProperties.swift; sourceTree = "<group>"; };
 		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
+		63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDataSet.swift; sourceTree = "<group>"; };
 		63B62B2323DC8D06009B07DF /* Array+Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Scan.swift"; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+CartesianProduct.swift"; sourceTree = "<group>"; };
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
@@ -414,6 +417,7 @@
 		63D8EC9523D89C5D00121F2B /* Point+Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+Position.swift"; sourceTree = "<group>"; };
 		63D8EC9A23D9FFEE00121F2B /* Jump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jump.swift; sourceTree = "<group>"; };
 		63E5A06D23FC1D350082E910 /* TimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeProvider.swift; sourceTree = "<group>"; };
+		63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+PixelFormat.swift"; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
 		63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionDebugInfo.swift; sourceTree = "<group>"; };
 		63F3CC1B234B36D000AA8228 /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
@@ -500,14 +504,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6311E0B023E0E56A0080288D /* Calculation */ = {
+		6306BDAE2405286400C26C08 /* 0 Bars */ = {
 			isa = PBXGroup;
 			children = (
-				636BCC1823BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift */,
-				6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */,
+				6306BDB02405298800C26C08 /* IdleStrategy.swift */,
+			);
+			path = "0 Bars";
+			sourceTree = "<group>";
+		};
+		6306BDAF240528DA00C26C08 /* 1 Bar */ = {
+			isa = PBXGroup;
+			children = (
 				6311E0B323E0E5FE0080288D /* Randomized */,
 			);
-			path = Calculation;
+			path = "1 Bar";
+			sourceTree = "<group>";
+		};
+		6311E0B023E0E56A0080288D /* Strategies */ = {
+			isa = PBXGroup;
+			children = (
+				6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */,
+				6306BDAE2405286400C26C08 /* 0 Bars */,
+				6306BDAF240528DA00C26C08 /* 1 Bar */,
+			);
+			path = Strategies;
 			sourceTree = "<group>";
 		};
 		6311E0B323E0E5FE0080288D /* Randomized */ = {
@@ -1019,7 +1039,7 @@
 			children = (
 				631213BE23257EB600C126B4 /* NoopTapper.swift */,
 				631213BF23257EB600C126B4 /* WindowTapper.swift */,
-				631213C023257EB600C126B4 /* MouseRobot.swift */,
+				631213C023257EB600C126B4 /* MouseControl.swift */,
 			);
 			path = Tapping;
 			sourceTree = "<group>";
@@ -1164,6 +1184,7 @@
 				63351A5B234DD11700E42762 /* Array+DropWhile.swift */,
 				6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */,
 				63B62B2323DC8D06009B07DF /* Array+Scan.swift */,
+				63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */,
 				6323F11023EB2C7200182D13 /* Int+TimesMake.swift */,
 				6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */,
 				6312133A2325785000C126B4 /* Sequence+Extensions.swift */,
@@ -1188,7 +1209,7 @@
 				6318966923B4C8B4002FBD4F /* TapPredictor.swift */,
 				639C745323BB66A0005FD354 /* Models */,
 				632696B223D0CA45009FE1E0 /* Helpers */,
-				6311E0B023E0E56A0080288D /* Calculation */,
+				6311E0B023E0E56A0080288D /* Strategies */,
 				6316BDB223CB8CB90062100F /* Drawing */,
 			);
 			path = "3 TapPrediction";
@@ -1447,9 +1468,10 @@
 		63F0192F23885B7600E380CB /* Debug */ = {
 			isa = PBXGroup;
 			children = (
+				63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */,
 				63F01933238B3CA000E380CB /* FunctionDebugInfo.swift */,
 				6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */,
-				6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift */,
+				6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift */,
 				6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */,
 			);
 			path = Debug;
@@ -1780,6 +1802,7 @@
 				TargetAttributes = {
 					631212AC23253DC700C126B4 = {
 						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1140;
 					};
 					631212B923253DE300C126B4 = {
 						CreatedOnToolsVersion = 11.0;
@@ -1914,11 +1937,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				631213CC23257EB600C126B4 /* WindowHelper.swift in Sources */,
-				631213D023257EB600C126B4 /* main.swift in Sources */,
 				631213CD23257EB600C126B4 /* NativeImage.swift in Sources */,
+				6354CECA2409467600A4C3B8 /* main.swift in Sources */,
 				631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */,
 				631213CA23257EB600C126B4 /* WindowTapper.swift in Sources */,
-				631213CB23257EB600C126B4 /* MouseRobot.swift in Sources */,
+				631213CB23257EB600C126B4 /* MouseControl.swift in Sources */,
 				631213CE23257EB600C126B4 /* AppWindowImageProvider.swift in Sources */,
 				631213C923257EB600C126B4 /* NoopTapper.swift in Sources */,
 			);
@@ -1956,6 +1979,7 @@
 				6312143B232669B900C126B4 /* AsyncTools.swift in Sources */,
 				63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */,
 				6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */,
+				63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */,
 				631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */,
 				636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */,
 				6377C86023DC76D40084772F /* Timing.swift in Sources */,
@@ -2015,7 +2039,7 @@
 				6316BDA923CA49FB0062100F /* JumpTracker+Future.swift in Sources */,
 				63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
-				6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfo.swift in Sources */,
+				6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift in Sources */,
 				63876E662356093500132A21 /* JumpTracker.swift in Sources */,
 				6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */,
 				6312138C2325793C00C126B4 /* SimpleDefaultTracker.swift in Sources */,
@@ -2038,6 +2062,7 @@
 				63440B4223B388B30091A012 /* TapDelayTracker.swift in Sources */,
 				6377C85E23DC746B0084772F /* TapSequence.swift in Sources */,
 				637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */,
+				63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */,
 				6334C73223674AD200BEF218 /* ContinuousPingPongTracker.swift in Sources */,
 				637B56A923CF2AEC007E51B0 /* MultiScatterStrokable.swift in Sources */,
 				63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */,
@@ -2097,6 +2122,7 @@
 				634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */,
 				6311E0B723E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift in Sources */,
 				631213F423257F4000C126B4 /* PlayerTracker.swift in Sources */,
+				6306BDB12405298800C26C08 /* IdleStrategy.swift in Sources */,
 				631213F923257F4000C126B4 /* Playfield.swift in Sources */,
 				63C7F6D223F58AD100187840 /* BarTracker+State.swift in Sources */,
 				6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */,
@@ -2107,7 +2133,6 @@
 				6345680323BB955700D32053 /* PlayerProperties.swift in Sources */,
 				6376A4F123C7BD4700ADF4C2 /* BarMovementBoundCollector.swift in Sources */,
 				6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */,
-				636BCC1923BD4FB800A3BE26 /* JumpThroughNextBarCalculator.swift in Sources */,
 				63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */,
 				63D8EC9423D8947D00121F2B /* CGRectScatterStrokable.swift in Sources */,
 				632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */,
@@ -2269,7 +2294,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = TD9G758WXJ;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -2335,7 +2360,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = TD9G758WXJ;
-				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = "";

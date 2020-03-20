@@ -7,12 +7,22 @@ import Common
 import TestingTools
 
 public extension CompositeTracker {
-    /// Create information about all regression functions.
+    /// Return the dataSet from the most recent `numSegments` segments.
+    /// This includes:
+    /// - Valid points that have been added to the trackers,
+    /// - Invalid points that failed the `integrityCheck`,
+    /// - Points that are currently in the decision window and therefore probably belong to the next segment.
+    func dataSet(forMostRecentSegments numSegments: Int) -> [ScatterDataPoint] {
+        let firstSegment = allSegments.count - numSegments
+        return allDataPoints.dataPoints(forSegmentIndicesInRange: firstSegment...) +
+        window.dataPoints.map { ScatterDataPoint(x: $0.time, y: $0.value, color: .inDecisionWindow) }
+    }
+
+    /// Create information about the regression functions from the most recent `numSegments` segments.
     /// This includes guesses and creates a very clear picture.
-    /// Attention: this is a possibly expensive operation.
-    var allDebugFunctionInfos: [FunctionDebugInfo] {
+    func allDebugFunctionInfos(numSegments: Int = .max) -> [FunctionDebugInfo] {
         var result = [FunctionDebugInfo]()
-        let all = finalizedSegments + [currentSegment!]
+        let segments = Array(allSegments.suffix(numSegments))
 
         /// Convenience function to add a ScatterStrokable for a given function to the result.
         func add(_ function: SegmentTrackerType.F, with color: ScatterColor, dash: FunctionDebugInfo.DashType, from startTime: Time, to endTime: Time) {
@@ -22,9 +32,9 @@ public extension CompositeTracker {
         }
 
         // Add ScatterStrokables for each segment
-        for (i, segment) in all.enumerated() {
+        for (i, segment) in segments.enumerated() {
             let startTime = segment.supposedStartTime ?? -timeInfinity
-            let endTime = ((i < all.count - 1) ? all[i+1].supposedStartTime : nil) ?? timeInfinity
+            let endTime = ((i < segments.count - 1) ? segments[i+1].supposedStartTime : nil) ?? timeInfinity
             let color = segment.colorForPlotting
 
             // Regression function
@@ -58,11 +68,10 @@ public extension CompositeTracker {
         return result
     }
 
-    /// Information about the regressions and tolerance bound functions of all segments.
+    /// Information about the regressions and tolerance bound functions from the last `numSegments` segments.
     /// Does not include any guesses.
-    var segmentwiseFullDebugFunctionInfos: [FunctionDebugInfo] {
-        let all = finalizedSegments + [currentSegment!]
-        return all.flatMap(\.tracker.allDebugFunctionInfos)
+    func segmentwiseFullDebugFunctionInfos(numSegments: Int = .max) -> [FunctionDebugInfo] {
+        return allSegments.suffix(numSegments).flatMap(\.tracker.allDebugFunctionInfos)
     }
 
     /// The most distant value for time.

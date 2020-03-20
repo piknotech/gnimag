@@ -45,7 +45,8 @@ extension DebugFrame {
     func isValidForLogging(with parameters: DebugParameters) -> Bool {
         switch parameters.severity {
         case .none: return false
-        case .alwaysText: return true
+        case .always, .alwaysText: return true
+        case .every(let num): return index.isMultiple(of: num)
         case .onErrors, .onErrorsTextOnly: return hasError
         case .onIntegrityErrors: return hasIntegrityError
         }
@@ -96,7 +97,7 @@ extension DebugFrame {
         try? fullLoggingText.write(toFile: textPath, atomically: false, encoding: .utf8)
 
         // Log images
-        if hasError && !parameters.severity.noImages {
+        if parameters.severity.alwaysImages || (!parameters.severity.noImages && hasError) {
             logImageAnalysisImages(to: directory)
             logRelevantScatterPlots(to: directory)
         }
@@ -152,6 +153,11 @@ extension DebugFrame {
         if let plot = self.gameModelCollection.player.height.createScatterPlot() {
             plot.write(to: directory +/ "player_height.png")
         }
+
+        // Plot player angle
+        if let plot = self.gameModelCollection.player.angle.createScatterPlot() {
+            plot.write(to: directory +/ "player_angle.png")
+        }
     }
 
     // MARK: Log Texts
@@ -166,7 +172,6 @@ extension DebugFrame {
     private var logTextForHints: String {
         """
         ––––– IMAGE ANALYSIS HINTS –––––
-        • Using Initial Hints: \(hints.usingInitialHints)
         • Hints: \(hints.hints ??? "nil")
         """
     }

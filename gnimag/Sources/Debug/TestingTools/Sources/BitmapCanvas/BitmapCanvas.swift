@@ -37,19 +37,9 @@ public final class BitmapCanvas {
     }
 
     /// Create a canvas directly from the given CGImage.
-    public init(CGImage: CGImage) {
-        let rgba = 4
-        context = CGContext(
-            data: nil,
-            width: CGImage.width,
-            height: CGImage.height,
-            bitsPerComponent: 8,
-            bytesPerRow: CGImage.width * rgba,
-            space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGImage.bitmapInfo.rawValue
-        )!
+    public convenience init(CGImage: CGImage) {
+        self.init(width: CGImage.width, height: CGImage.height)
 
-        // Draw image onto context
         context.draw(CGImage, in: CGRect(x: 0, y: 0, width: CGImage.width, height: CGImage.height))
     }
 

@@ -26,7 +26,8 @@ class GameModelCollector {
 
     /// Use the AnalysisResult to update the game model.
     /// Before actually updating the game model, the integrity of the result is checked.
-    func accept(result: AnalysisResult, time: Double) {
+    /// Returns true if the game model has been updated; else, nothing of the data was integer.
+    func accept(result: AnalysisResult, time: Double) -> Bool {
         debugLogger.currentFrame.gameModelCollection.wasPerformed = true
         defer { model.player.performDebugLogging() }
 
@@ -35,7 +36,7 @@ class GameModelCollector {
             model.player.update(with: result.player, at: time)
         } else {
             // When the player is not integer, bar tracking cannot proceed correctly
-            return
+            return false
         }
 
         // Update bars
@@ -43,5 +44,7 @@ class GameModelCollector {
         let playerAngle = model.player.angle.linearify(result.player.angle, at: time) // Map angle from [0, 2pi) to R
 
         barUpdater.matchAndUpdate(bars: result.bars, time: playerAngle, debugLogger: debugLogger)
+
+        return true
     }
 }

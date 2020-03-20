@@ -40,6 +40,6 @@ final class NativeImage: Image, ConvertibleToCGImage {
         let offset = bytesPerRow * (height - 1 - pixel.y) + 4 * pixel.x
 
         CFDataGetBytes(data, CFRangeMake(offset, 3), buf)
-        return Color(Double(buf[0]) / 255, Double(buf[1]) / 255, Double(buf[2]) / 255)
+        return Color(Double(buf[2]) / 255, Double(buf[1]) / 255, Double(buf[0]) / 255)
     }
 }

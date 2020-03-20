@@ -26,6 +26,9 @@ class ImageAnalyzer {
     private let debugLogger: DebugLogger
     private var debug: DebugFrame.ImageAnalysis { debugLogger.currentFrame.imageAnalysis }
 
+    /// The tolerance for all ColorMatch operations.
+    private let tolerance = 20%
+
     /// Default initializer.
     init(debugLogger: DebugLogger) {
         self.debugLogger = debugLogger
@@ -100,12 +103,12 @@ class ImageAnalyzer {
         let screenCenter = Pixel(image.width / 2, image.height / 2)
 
         // Find inner circle with the following sequence: [blue, white, blue, white]
-        let innerSequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary])
+        let innerSequence = ColorMatchSequence(tolerance: tolerance, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary])
         guard let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence) else { return nil }
         let innerCircle = SmallestCircle.containing(innerContour.map(CGPoint.init))
 
         // Find outer circle with the following sequence: [blue, white, blue, white, blue]
-        let outerSequence = ColorMatchSequence(tolerance: 0.1, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary, coloring.theme])
+        let outerSequence = ColorMatchSequence(tolerance: tolerance, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary, coloring.theme])
         guard let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence) else { return nil }
         let outerCircle = SmallestCircle.containing(outerContour.map(CGPoint.init))
 
@@ -123,29 +126,30 @@ class ImageAnalyzer {
 
         // Find eye or wing pixel via its unique color
         let path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
-        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(0.1), on: path) else {
+        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(tolerance), on: path) else {
             return nil & {debug.player.failure = .eyeNotFound}
         }
         debug.player.eyePosition = eye
 
         // Edge detection
-        let blue = coloring.theme.withTolerance(0.1)
-        let limit = EdgeDetector.DetectionLimit.maxPixels(Int(6 * expectedPlayer.size)) // Normal is 4 * size
+        let blue = coloring.theme.withTolerance(tolerance)
+        let limit = EdgeDetector.DetectionLimit.maxPixels(Int(8 * expectedPlayer.size)) // Normal is 4 * size
 
         // Find player edge using 4 different starting angles; this avoids problems when the inside is not uniformly blue
-        var pointsOnEdge = [Pixel]()
+        var edges = [[Pixel]]()
         for i in 0 ..< 4 {
             let angle = expectedPlayer.coords.angle + CGFloat(i) * .pi / 2
 
-            guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: angle, limit: limit) else {
-                // If one edge detection exceeds the limit, the others will too
-                return nil & {debug.player.failure = .edgeTooLarge}
-            }
-
-            pointsOnEdge += edge
+            guard let edge = EdgeDetector.search(in: image, shapeColor: blue, from: eye, angle: angle, limit: limit) else { continue }
+            edges.append(edge)
         }
 
-        let obb = SmallestOBB.containing(pointsOnEdge.map(CGPoint.init))
+        // 0 or 1 edges found: analysis error. 2 out of 4 edges are enough for a correctly detected player
+        if edges.count < 2 {
+            return nil & {debug.player.failure = .edgeTooLarge}
+        }
+
+        let obb = SmallestOBB.containing(edges.flatMap(id).map(CGPoint.init))
         debug.player.obb = obb
 
         // Calculate player properties
@@ -167,7 +171,7 @@ class ImageAnalyzer {
         var pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 64)
 
         // Only keep pixels which belong to a bar
-        let blue = coloring.theme.withTolerance(0.1)
+        let blue = coloring.theme.withTolerance(tolerance)
         pixels.removeAll { pixel in
             !blue.matches(image.color(at: pixel))
         }
@@ -189,7 +193,7 @@ class ImageAnalyzer {
         debug.bars.nextBarLocation()
         debug.bars.current.startPixel = pixel
 
-        let blue = coloring.theme.withTolerance(0.1)
+        let blue = coloring.theme.withTolerance(tolerance)
         let limit = EdgeDetector.DetectionLimit.distance(to: pixel, maximum: playfield.freeSpace)
 
         // Find inner edge

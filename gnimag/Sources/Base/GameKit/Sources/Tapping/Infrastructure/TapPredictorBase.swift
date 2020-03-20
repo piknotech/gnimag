@@ -43,7 +43,7 @@ open class TapPredictorBase {
     /// Call to perform a prediction step.
     /// When the lock is inactive, the predictionLogic will be executed, and its result will be scheduled. The sequence must only contain tap values in the future!
     /// When predictionLogic returns nil, the current sequence is performed further (and not updated).
-    public func predictionStep(predictionLogic: () -> TapSequence?) {
+    public func predict() {
         if lockIsActive { return }
 
         // Perform prediction logic
@@ -51,6 +51,11 @@ open class TapPredictorBase {
             reschedule(sequence: sequence)
             reassessLock()
         }
+    }
+
+    /// Override to create a predicted tap sequence for the current frame.
+    open func predictionLogic() -> TapSequence? {
+        nil
     }
 
     /// Reschedule a tap sequence, including its completion time for locking reassessment.

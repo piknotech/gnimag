@@ -46,4 +46,16 @@ open class DebugLogger<Parameters, Frame: DebugFrameProtocol> where Frame.Parame
 
         currentFrame = Frame(index: currentFrame.index + 1)
     }
+
+    /// Log the current frame to disk, if required, synchronously, and advance to the next frame.
+    /// Only call when `advance` would be to slow, e.g. if the program will immediately be terminated after this call.
+    public func logSynchronously() {
+        // Log frame, synchronously, if relevant
+        if currentFrame.isValidForLogging(with: parameters) {
+            currentFrame.prepareSynchronously(with: parameters)
+            currentFrame.log(with: self.parameters)
+        }
+
+        currentFrame = Frame(index: currentFrame.index + 1)
+    }
 }

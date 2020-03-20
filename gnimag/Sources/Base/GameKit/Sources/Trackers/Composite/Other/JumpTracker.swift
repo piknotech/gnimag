@@ -97,7 +97,7 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
 
     /// Create a parabola tracker for the next jump segment.
     public override func trackerForNextSegment() -> ParabolaTracker {
-        ParabolaTracker(tolerance: tolerance)
+        ParabolaTracker(tolerancePoints: 3, tolerance: tolerance)
     }
 
     /// Make a guess for a jump beginning at (`time`, `value`).

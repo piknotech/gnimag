@@ -4,10 +4,8 @@
 //
 
 /// An interface that provides shared operations for different tracker info types.
+/// This is useful for grouping different TrackerDebugInfos into an array and calling shared operations on all of them.
 public protocol TrackerDebugInfo {
     /// Get the data set from the data set provider and store it.
     func fetchDataSet()
-
-    /// Get function infos from the data set provider and store it.
-    func fetchFunctionInfos()
 }

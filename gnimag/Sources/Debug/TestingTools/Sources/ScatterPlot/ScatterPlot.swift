@@ -52,7 +52,7 @@ public final class ScatterPlot {
 
         view = ScatterChartView(frame: CGRect(origin: .zero, size: size))
         view.canDrawConcurrently = true
-        view.data = data
+        if !dataSet.isEmpty { view.data = data }
         view.legend.enabled = false
 
         // Specify exact window (the default margin is too large)
@@ -104,7 +104,7 @@ public final class ScatterPlot {
     /// The drawing area of the plot, in data point space.
     public var dataContentRect: CGRect {
          // Avoid returning an empty or invalid rect
-        if view.data!.entryCount == 0 {
+        if view.isEmpty() {
             return CGRect(x: -1, y: -1, width: 2, height: 2)
         } else {
             return CGRect(x: view.xAxis.axisMinimum, y: view.leftAxis.axisMinimum, width: view.xAxis.axisRange, height: view.leftAxis.axisRange)

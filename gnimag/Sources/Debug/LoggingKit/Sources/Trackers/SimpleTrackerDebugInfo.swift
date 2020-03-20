@@ -7,7 +7,7 @@ import Common
 import GameKit
 import TestingTools
 
-/// SimpleTrackerDebugInfo describes information about a SimpleTracker at a given frame.
+/// SimpleTrackerDebugInfo describes information about a SimpleTracker at one single given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.
 public final class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: TrackerDebugInfo, CustomStringConvertible {
     public private(set) var tracker: Tracker?
@@ -30,12 +30,12 @@ public final class SimpleTrackerDebugInfo<Tracker: SimpleTrackerProtocol>: Track
         regression = tracker.regression
     }
 
-    /// Get the data set from the data set provider and store it.
+    /// Get the data set from the tracker and store them.
     public func fetchDataSet() {
         allDataPoints = tracker?.dataSet
     }
 
-    /// Get function infos from the data set provider and store it.
+    /// Get function infos from the tracker and store them.
     public func fetchFunctionInfos() {
         allFunctions = tracker?.allDebugFunctionInfos
     }
