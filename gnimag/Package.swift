@@ -95,6 +95,21 @@ let package = Package(
 
         // GAMES
         .target(
+            name: "identiti",
+            dependencies: [
+                "Common",
+                "GameKit",
+                "Geometry",
+                "Image",
+                "ImageAnalysisKit",
+                "LoggingKit",
+                "Tapping",
+                "TestingTools",
+            ],
+            path: "Sources/Games/identiti"
+        ),
+
+        .target(
             name: "MrFlap",
             dependencies: [
                 "Common",
@@ -115,6 +130,7 @@ let package = Package(
             dependencies: [
                 "Common",
                 "Geometry",
+                "identiti",
                 "Image",
                 "ImageAnalysisKit",
                 "LoggingKit",

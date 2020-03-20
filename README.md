@@ -42,3 +42,4 @@ Fully implemented:
 In progress:
 
 - [MrFlap](gnimag/Sources/Games/MrFlap) ([App Store Link](https://apps.apple.com/at/app/mr-flap/id822206495); sadly no longer in the Play Store – APK available [here](https://apkpure.com/de/mr-flap/com.mrflap))
+- [identiti](gnimag/Sources/Games/identiti) ([App Store Link](https://apps.apple.com/de/app/identiti/id909914922); [Play Store Link](https://play.google.com/store/apps/details?id=de.chipsapps.ca.identiti))

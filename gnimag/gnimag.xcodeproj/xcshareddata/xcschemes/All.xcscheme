@@ -140,6 +140,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "63B40BC924250C72007A86E9"
+               BuildableName = "identiti.framework"
+               BlueprintName = "identiti"
+               ReferencedContainer = "container:gnimag.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "631212AC23253DC700C126B4"
                BuildableName = "gnimag"
                BlueprintName = "gnimag"
