@@ -834,8 +834,8 @@
 		6312132A2325785000C126B4 /* SmallestEnclosingShapes */ = {
 			isa = PBXGroup;
 			children = (
-				6312132B2325785000C126B4 /* SmallestAABB.swift */,
 				6312132C2325785000C126B4 /* ConvexHull.swift */,
+				6312132B2325785000C126B4 /* SmallestAABB.swift */,
 				6312132D2325785000C126B4 /* SmallestCircle.swift */,
 				6312132E2325785000C126B4 /* SmallestOBB.swift */,
 			);

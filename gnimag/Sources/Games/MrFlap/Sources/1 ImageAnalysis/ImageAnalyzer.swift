@@ -105,12 +105,12 @@ class ImageAnalyzer {
         // Find inner circle with the following sequence: [blue, white, blue, white]
         let innerSequence = ColorMatchSequence(tolerance: tolerance, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary])
         guard let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence) else { return nil }
-        let innerCircle = SmallestCircle.containing(innerContour.map(CGPoint.init))
+        let innerCircle = SmallestCircle.containing(innerContour)
 
         // Find outer circle with the following sequence: [blue, white, blue, white, blue]
         let outerSequence = ColorMatchSequence(tolerance: tolerance, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary, coloring.theme])
         guard let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence) else { return nil }
-        let outerCircle = SmallestCircle.containing(outerContour.map(CGPoint.init))
+        let outerCircle = SmallestCircle.containing(outerContour)
 
         // Centers should be (nearly) identical
         guard innerCircle.center.distance(to: outerCircle.center) < 1 else { return nil }
@@ -149,7 +149,7 @@ class ImageAnalyzer {
             return nil & {debug.player.failure = .edgeTooLarge}
         }
 
-        let obb = SmallestOBB.containing(edges.flatMap(id).map(CGPoint.init))
+        let obb = SmallestOBB.containing(edges.flatMap(id))
         debug.player.obb = obb
 
         // Calculate player properties
@@ -200,7 +200,7 @@ class ImageAnalyzer {
         guard let innerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: pixel, angle: .east, limit: limit) else {
             return nil & {debug.bars.current.failure = .innerEdge}
         }
-        let innerOBB = SmallestOBB.containing(innerEdge.map(CGPoint.init))
+        let innerOBB = SmallestOBB.containing(innerEdge)
         let angle1 = PolarCoordinates.angle(for: innerOBB.center, respectiveTo: playfield.center)
         debug.bars.current.innerOBB = innerOBB
 
@@ -210,7 +210,7 @@ class ImageAnalyzer {
         guard let outerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: upPosition, angle: .east, limit: limit) else {
             return nil & {debug.bars.current.failure = .outerEdge}
         }
-        let outerOBB = SmallestOBB.containing(outerEdge.map(CGPoint.init))
+        let outerOBB = SmallestOBB.containing(outerEdge)
         debug.bars.current.outerOBB = outerOBB
         
         // Integrity checks, reorientate OBBs

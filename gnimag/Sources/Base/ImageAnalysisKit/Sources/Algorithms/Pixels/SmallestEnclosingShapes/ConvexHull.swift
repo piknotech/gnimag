@@ -6,8 +6,16 @@
 
 import Foundation
 import Geometry
+import Image
 
 public enum ConvexHull {
+    /// Calculate the convex hull of a given set of pixels using Andrew's monotone chain convex hull algorithm.
+    /// The resulting polygon consists of the hull points, stored in a counterclockwise order.
+    /// This runs in O(n log n) time.
+    public static func from(_ pixels: [Pixel]) -> Geometry.Polygon {
+        from(pixels.map(CGPoint.init))
+    }
+
     /// Calculate the convex hull of a given set of points using Andrew's monotone chain convex hull algorithm.
     /// The resulting polygon consists of the hull points, stored in a counterclockwise order.
     /// This runs in O(n log n) time.

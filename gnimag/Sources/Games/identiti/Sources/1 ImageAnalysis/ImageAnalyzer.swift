@@ -9,8 +9,6 @@ import Geometry
 import Image
 import ImageAnalysisKit
 
-import TestingTools
-
 /// ImageAnalyzer extracts equation strings from images.
 class ImageAnalyzer {
     /// States whether the ImageAnalyzer has been initialized by `initializeWithFirstImage`.
@@ -88,7 +86,7 @@ class ImageAnalyzer {
             guard foreground.matches(image.color(at: pixel)) else { continue }
             guard let edge = EdgeDetector.search(in: image, shapeColor: foreground, from: pixel, angle: .south, limit: .maxPixels(Int(2.5 * (box.width + box.height)))) else { continue }
 
-            var aabb = SmallestAABB.containing(edge.map(CGPoint.init))
+            var aabb = SmallestAABB.containing(edge)
             removeCorners(from: &aabb, foreground: foreground, in: image)
 
             // Check if detected box is valid; then, crop image to this box
@@ -118,13 +116,13 @@ class ImageAnalyzer {
         let leftPath = StraightPath(start: Pixel(inset, inset), angle: .northeast, bounds: image.bounds)
         guard let leftPixel = image.findFirstPixel(matching: !background, on: leftPath),
             let leftEdge = EdgeDetector.search(in: image, shapeColor: !background, from: leftPixel, angle: .north) else { return nil }
-        let leftCircle = SmallestCircle.containing(leftEdge.map(CGPoint.init))
+        let leftCircle = SmallestCircle.containing(leftEdge)
 
         // Right button
         let rightPath = StraightPath(start: Pixel(image.width - 1 - inset, inset), angle: .northwest, bounds: image.bounds)
         guard let rightPixel = image.findFirstPixel(matching: !background, on: rightPath),
             let rightEdge = EdgeDetector.search(in: image, shapeColor: !background, from: rightPixel, angle: .north) else { return nil }
-        let rightCircle = SmallestCircle.containing(rightEdge.map(CGPoint.init))
+        let rightCircle = SmallestCircle.containing(rightEdge)
 
         // Validate layout
         guard leftCircle.radius.isAlmostEqual(to: rightCircle.radius, tolerance: 2),
@@ -149,10 +147,10 @@ class ImageAnalyzer {
         guard let lowerEdge = EdgeDetector.search(in: image, shapeColor: foreground, from: insideLowerBox, angle: .north),
             let upperEdge = EdgeDetector.search(in: image, shapeColor: foreground, from: insideUpperBox, angle: .north) else { return nil }
 
-        var lowerAABB = SmallestAABB.containing(lowerEdge.map(CGPoint.init))
+        var lowerAABB = SmallestAABB.containing(lowerEdge)
         removeCorners(from: &lowerAABB, foreground: foreground, in: image)
 
-        var upperAABB = SmallestAABB.containing(upperEdge.map(CGPoint.init))
+        var upperAABB = SmallestAABB.containing(upperEdge)
         removeCorners(from: &upperAABB, foreground: foreground, in: image)
 
         // Validate layout
