@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 import Geometry
 import Image
 import ImageAnalysisKit
@@ -34,7 +35,8 @@ class ImageAnalyzer {
     /// Returns false if the screen layout couldn't be detected.
     func initializeWithFirstImage(_ image: Image) -> Bool {
         precondition(!isInitialized)
-
+        let image = image.inset(by: (5, 5)) // Remove possible edge artifacts
+        
         // Find background color
         let background = backgroundColor(of: image)
 

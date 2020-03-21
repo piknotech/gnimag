@@ -3,6 +3,8 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Foundation
+
 /// Bounds describe the bounds of a rectangular region on an image.
 /// Bounds are LLO, meaning that the origin (minX, minY) is in the lower-left corner.
 public struct Bounds {
@@ -14,6 +16,11 @@ public struct Bounds {
     /// One of the center pixels.
     public var center: Pixel {
         Pixel(minX + width / 2, minY + height / 2)
+    }
+
+    /// These Bounds as a CGRect instance.
+    public var CGRect: CGRect {
+        Foundation.CGRect(x: minX, y: minY, width: width, height: height)
     }
 
     /// Default initializer.
@@ -36,12 +43,23 @@ public struct Bounds {
 
     /// Inset the bounds by the given amount on each side.
     /// Providing a negative amount will make the bounds larger.
-    public func inset(by: (dx: Int, dy: Int)) -> Bounds {
+    public func inset(by inset: (dx: Int, dy: Int)) -> Bounds {
         return Bounds(
-            minX: minX + by.dx,
-            minY: minY + by.dy,
-            width: width - 2 * by.dx,
-            height: height - 2 * by.dy
+            minX: minX + inset.dx,
+            minY: minY + inset.dy,
+            width: width - 2 * inset.dx,
+            height: height - 2 * inset.dy
         )
+    }
+
+    /// Intersect two bounds rectangles.
+    public func intersection(with other: Bounds) -> Bounds {
+        let intersection = CGRect.intersection(other.CGRect)
+
+        if intersection.isNull {
+            return Bounds(minX: 0, minY: 0, width: 0, height: 0)
+        } else {
+            return Bounds(minX: Int(intersection.minX), minY: Int(intersection.minY), width: Int(intersection.width), height: Int(intersection.height))
+        }
     }
 }

@@ -59,7 +59,6 @@
 		631213AF23257A2F00C126B4 /* Color+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A223257A2F00C126B4 /* Color+Conversion.swift */; };
 		631213B023257A2F00C126B4 /* BitmapCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A323257A2F00C126B4 /* BitmapCanvas.swift */; };
 		631213B123257A2F00C126B4 /* Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A523257A2F00C126B4 /* Measurement.swift */; };
-		631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */; };
 		631213B323257A2F00C126B4 /* ScatterPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A823257A2F00C126B4 /* ScatterPlot.swift */; };
 		631213B423257A2F00C126B4 /* ScatterDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213A923257A2F00C126B4 /* ScatterDataSet.swift */; };
 		631213B523257A2F00C126B4 /* CGImage+WriteToFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */; };
@@ -188,6 +187,7 @@
 		63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9523D89C5D00121F2B /* Point+Position.swift */; };
 		63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9A23D9FFEE00121F2B /* Jump.swift */; };
 		63DF005724261DC1001D81B3 /* ScreenLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF005624261DC1001D81B3 /* ScreenLayout.swift */; };
+		63DF005A2426398D001D81B3 /* CroppedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF005824263747001D81B3 /* CroppedImage.swift */; };
 		63E5A06E23FC1D360082E910 /* TimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06D23FC1D350082E910 /* TimeProvider.swift */; };
 		63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
@@ -297,7 +297,6 @@
 		631213A223257A2F00C126B4 /* Color+Conversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Conversion.swift"; sourceTree = "<group>"; };
 		631213A323257A2F00C126B4 /* BitmapCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitmapCanvas.swift; sourceTree = "<group>"; };
 		631213A523257A2F00C126B4 /* Measurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Measurement.swift; sourceTree = "<group>"; };
-		631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvertibleToCGImage.swift; sourceTree = "<group>"; };
 		631213A823257A2F00C126B4 /* ScatterPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScatterPlot.swift; sourceTree = "<group>"; };
 		631213A923257A2F00C126B4 /* ScatterDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScatterDataSet.swift; sourceTree = "<group>"; };
 		631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImage+WriteToFile.swift"; sourceTree = "<group>"; };
@@ -429,6 +428,7 @@
 		63D8EC9523D89C5D00121F2B /* Point+Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+Position.swift"; sourceTree = "<group>"; };
 		63D8EC9A23D9FFEE00121F2B /* Jump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jump.swift; sourceTree = "<group>"; };
 		63DF005624261DC1001D81B3 /* ScreenLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayout.swift; sourceTree = "<group>"; };
+		63DF005824263747001D81B3 /* CroppedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CroppedImage.swift; sourceTree = "<group>"; };
 		63E5A06D23FC1D350082E910 /* TimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeProvider.swift; sourceTree = "<group>"; };
 		63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+PixelFormat.swift"; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
@@ -986,7 +986,6 @@
 		631213A023257A2F00C126B4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				631213A623257A2F00C126B4 /* ConvertibleToCGImage.swift */,
 				631213AA23257A2F00C126B4 /* CGImage+WriteToFile.swift */,
 				631213A123257A2F00C126B4 /* BitmapCanvas */,
 				631213A423257A2F00C126B4 /* Measurement */,
@@ -1362,6 +1361,7 @@
 			children = (
 				6375953E233A53D900ACA969 /* ShapeErasedImage.swift */,
 				63759540233A63CB00ACA969 /* ShapeErasureType.swift */,
+				63DF005824263747001D81B3 /* CroppedImage.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -2118,6 +2118,7 @@
 				631213522325785000C126B4 /* SmallestCircle.swift in Sources */,
 				6312135B2325785000C126B4 /* Pixel+CGPointConversion.swift in Sources */,
 				6312134C2325785000C126B4 /* RayShooter.swift in Sources */,
+				63DF005A2426398D001D81B3 /* CroppedImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2184,7 +2185,6 @@
 				63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */,
 				634AD01B2327E78C00D87BAB /* Drawing Shapes+Lines.swift in Sources */,
 				631213AF23257A2F00C126B4 /* Color+Conversion.swift in Sources */,
-				631213B223257A2F00C126B4 /* ConvertibleToCGImage.swift in Sources */,
 				631213B423257A2F00C126B4 /* ScatterDataSet.swift in Sources */,
 				631213B123257A2F00C126B4 /* Measurement.swift in Sources */,
 				634AD0192327D75200D87BAB /* Strokable+Fillable.swift in Sources */,

@@ -9,11 +9,13 @@ import TestingTools
 
 /// NativeImage is an Image effectively wrapping a CGImage using bitmap data.
 /// Currently, the wrapped CGImage must have a BGRA pixel layout.
-final class NativeImage: Image, ConvertibleToCGImage {
+final class NativeImage: Image {
     /// The raw pixel data and CGImage.
     @usableFromInline
     let data: CFData
-    public let CGImage: CGImage
+
+    private let _cgImage: CGImage
+    public override var CGImage: CGImage { _cgImage }
 
     /// Number of bytes per row of the raw pixel.
     @usableFromInline
@@ -28,7 +30,7 @@ final class NativeImage: Image, ConvertibleToCGImage {
         // Get raw pixel data
         data = image.dataProvider!.data!
         bytesPerRow = image.bytesPerRow
-        CGImage = image
+        _cgImage = image
 
         super.init(width: image.width, height: image.height)
     }

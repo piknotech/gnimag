@@ -28,12 +28,15 @@ public final class ImageListCreator {
     }
 
     /// Listen for images produced by the ImageProvider and save each image to the specified directory.
-    /// Attention: The produced images MUST be ConvertibleToCGImage.
+    /// Attention: The produced images MUST have attached CGImages.
     public func link(to provider: ImageProvider) {
         provider.newFrame += { (image, _) in
             if self.i > self.maxImages { return }
 
-            let cgImage = (image as! ConvertibleToCGImage).CGImage
+            guard let cgImage = image.CGImage else {
+                return Terminal.log(.error, "ImageListCreator – incoming image doesn't have a CGImage and therefore cannot be written to disk.")
+            }
+
             let path = self.directoryPath +/ "\(self.i).png"
             cgImage.write(to: path)
             self.i += 1

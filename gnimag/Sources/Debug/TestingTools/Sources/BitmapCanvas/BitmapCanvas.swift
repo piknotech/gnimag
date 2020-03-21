@@ -30,9 +30,9 @@ public final class BitmapCanvas {
     }
 
     /// Create a canvas directly from the given Image.
-    /// The image MUST be ConvertibleToCGImage.
-    public convenience init(image: Image) {
-        let CGImage = (image as! ConvertibleToCGImage).CGImage
+    /// Returns nil if the image doesn't have a backing CGImage.
+    public convenience init!(image: Image) {
+        guard let CGImage = image.CGImage else { return nil }
         self.init(CGImage: CGImage)
     }
 

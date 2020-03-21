@@ -32,8 +32,8 @@ public struct OBB {
 
     /// Inset the OBB by the given amount on each side.
     /// Providing a negative amount will make the OBB larger.
-    public func inset(by: (dx: CGFloat, dy: CGFloat)) -> OBB {
-        OBB(aabb: aabb.inset(by: by), rotation: rotation)
+    public func inset(by inset: (dx: CGFloat, dy: CGFloat)) -> OBB {
+        OBB(aabb: aabb.inset(by: inset), rotation: rotation)
     }
 }
 

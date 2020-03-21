@@ -3,6 +3,8 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Foundation
+
 /// Image describes an abstract image providing direct-pixel access.
 /// Override this class to provide an implementation.
 open class Image {
@@ -29,5 +31,11 @@ open class Image {
     @inlinable @inline(__always)
     open func color(at pixel: Pixel) -> Color {
         fatalError("Image is an abstract class – please override this method.")
+    }
+
+    /// Images may or may not be backed (or can be converted to) CGImage instances.
+    /// Return a matching CGImage, if available.
+    open var CGImage: CGImage? {
+        fatalError("Image is an abstract class – please override this property getter.")
     }
 }

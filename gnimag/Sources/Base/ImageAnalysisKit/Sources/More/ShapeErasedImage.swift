@@ -37,25 +37,17 @@ public final class ShapeErasedImage: Image {
 
     /// Return the color of the original image, or return the erased color iff the pixel is inside the shape.
     @inlinable @inline(__always)
-    override public func color(at pixel: Pixel) -> Color {
+    public override func color(at pixel: Pixel) -> Color {
         if (shapes.any { $0.contains(pixel) }) {
             return color
         } else {
             return image.color(at: pixel)
         }
     }
-}
 
-public extension Color {
-    /// A color which will not match any other normal color (given that tolerance is in [0,1]).
-    /// When being drawn (e.g. with BitmapCanvas), this color will be drawn as a black-white checkerboard pattern.
-    static let erase = Color(-999, -999, -999)
-}
-
-/// ShapeErasedImage is ConvertibleToCGImage iff the original image is also ConvertibleToCGImage.
-extension ShapeErasedImage: ConvertibleToCGImage {
-    public var CGImage: CGImage {
-        let canvas = BitmapCanvas(image: image)
+    /// Convert the image into a CGImage by drawing all shapes, pixel by pixel, onto the image.
+    public override var CGImage: CGImage? {
+        guard let canvas = BitmapCanvas(image: image) else { return nil }
 
         for shape in shapes {
             draw(shape: shape, onto: canvas, with: color, imageBounds: bounds)
@@ -84,4 +76,14 @@ extension ShapeErasedImage: ConvertibleToCGImage {
             }
         }
     }
+
 }
+
+public extension Color {
+    /// A color which will not match any other normal color (given that tolerance is in [0,1]).
+    /// When being drawn (e.g. with BitmapCanvas), this color will be drawn as a black-white checkerboard pattern.
+    static let erase = Color(-999, -999, -999)
+}
+
+extension ShapeErasedImage {
+    }
