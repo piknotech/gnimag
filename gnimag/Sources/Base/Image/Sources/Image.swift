@@ -8,15 +8,13 @@ import Foundation
 /// Image describes an abstract image providing direct-pixel access.
 /// Override this class to provide an implementation.
 open class Image {
-    public let width: Int
-    public let height: Int
+    public var width: Int { bounds.width }
+    public var height: Int { bounds.height }
     public let bounds: Bounds
 
     /// Default initializer.
     public init(width: Int, height: Int) {
-        self.width = width
-        self.height = height
-        self.bounds = Bounds(minX: 0, minY: 0, width: width, height: height)
+        bounds = Bounds(minX: 0, minY: 0, width: width, height: height)
     }
 
     /// Convenience method to check if a given pixel is inside the image.

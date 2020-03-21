@@ -30,6 +30,16 @@ public struct Bounds {
         self.width = width
         self.height = height
     }
+
+    /// Initialize Bounds from a CGRect.
+    /// The four corners are approximated to their respective nearest pixels.
+    public init(rect: CGRect) {
+        let minX = Int(round(rect.minX))
+        let minY = Int(round(rect.minY))
+        let maxX = Int(round(rect.maxX))
+        let maxY = Int(round(rect.maxY))
+        self.init(minX: minX, minY: minY, width: maxX - minX, height: maxY - minY)
+    }
     
     /// Check if a pixel is inside the bounds.
     /// minX and minY are inide the bounds, whereas minX + width and minY + height are outside the bounds.

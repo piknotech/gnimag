@@ -37,7 +37,11 @@ public final class CroppedImage: Image {
 
     /// Crop the original CGImage (if existing) to the specified crop rectangle.
     public override var CGImage: CGImage? {
-        image.CGImage?.cropping(to: cropRectangle.CGRect)
+        // Convert rectange to ULO coordinate system
+        var rectangle = cropRectangle.CGRect
+        rectangle.origin.y = CGFloat(image.height) - rectangle.maxY
+
+        return image.CGImage?.cropping(to: rectangle)
     }
 }
 
