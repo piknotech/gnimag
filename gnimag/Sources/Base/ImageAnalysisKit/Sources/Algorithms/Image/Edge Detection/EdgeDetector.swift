@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import Image
 
@@ -22,7 +23,7 @@ public enum EdgeDetector {
         shapeColor: ColorMatch,
         from startingPixel: Pixel,
         inverse: Bool = false,
-        angle: CGFloat,
+        angle: Angle,
         searchSpeed: Int = 1,
         limit: DetectionLimit = .none
     ) -> [Pixel]? {
@@ -37,7 +38,7 @@ public enum EdgeDetector {
 
     /// Walk (using angle) until hitting a pixel that has NOT the required shape color (or hitting the image wall). Then we have found the beginning of the edge.
     /// Return (point inside the shape, point outside the shape), or nil if it was not found.
-    private static func findPointOnTheEdge(image: Image, shapeColor: ColorMatch, from pixel: Pixel, inverse: Bool, angle: CGFloat) -> (inside: Pixel, outside: Pixel)? {
+    private static func findPointOnTheEdge(image: Image, shapeColor: ColorMatch, from pixel: Pixel, inverse: Bool, angle: Angle) -> (inside: Pixel, outside: Pixel)? {
         // Walk at the given angle until:
         // First, finding a pixel inside the shape (this can already be the starting pixel) and then:
         // Finding a pixel outside the shape. This pixel is not on the edge, but the previous one is.

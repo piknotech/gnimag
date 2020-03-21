@@ -86,7 +86,7 @@ class ImageAnalyzer {
 
         for pixel in pixels {
             guard foreground.matches(image.color(at: pixel)) else { continue }
-            guard let edge = EdgeDetector.search(in: image, shapeColor: foreground, from: pixel, angle: -0.5 * .pi, limit: .maxPixels(Int(2.5 * (box.width + box.height)))) else { continue }
+            guard let edge = EdgeDetector.search(in: image, shapeColor: foreground, from: pixel, angle: .south, limit: .maxPixels(Int(2.5 * (box.width + box.height)))) else { continue }
 
             var aabb = SmallestAABB.containing(edge.map(CGPoint.init))
             removeCorners(from: &aabb, foreground: foreground, in: image)
@@ -115,15 +115,15 @@ class ImageAnalyzer {
         let inset = 5 // Remove possible edge artifacts
 
         // Left button
-        let leftPath = StraightPath(start: Pixel(inset, inset), angle: 0.25 * .pi, bounds: image.bounds)
+        let leftPath = StraightPath(start: Pixel(inset, inset), angle: .northeast, bounds: image.bounds)
         guard let leftPixel = image.findFirstPixel(matching: !background, on: leftPath),
-            let leftEdge = EdgeDetector.search(in: image, shapeColor: !background, from: leftPixel, angle: .pi / 2) else { return nil }
+            let leftEdge = EdgeDetector.search(in: image, shapeColor: !background, from: leftPixel, angle: .north) else { return nil }
         let leftCircle = SmallestCircle.containing(leftEdge.map(CGPoint.init))
 
         // Right button
-        let rightPath = StraightPath(start: Pixel(image.width - 1 - inset, inset), angle: 0.75 * .pi, bounds: image.bounds)
+        let rightPath = StraightPath(start: Pixel(image.width - 1 - inset, inset), angle: .northwest, bounds: image.bounds)
         guard let rightPixel = image.findFirstPixel(matching: !background, on: rightPath),
-            let rightEdge = EdgeDetector.search(in: image, shapeColor: !background, from: rightPixel, angle: .pi / 2) else { return nil }
+            let rightEdge = EdgeDetector.search(in: image, shapeColor: !background, from: rightPixel, angle: .north) else { return nil }
         let rightCircle = SmallestCircle.containing(rightEdge.map(CGPoint.init))
 
         // Validate layout
@@ -138,7 +138,7 @@ class ImageAnalyzer {
     private func findEquationBoxes(in image: Image, with leftButton: Circle, foreground: ColorMatch, background: ColorMatch) -> (upper: AABB, lower: AABB)? {
         // Use the upper-left corner from the left button to start walking upwards
         let point = leftButton.point(at: 0.75 * .pi).nearestPixel + Delta(-3, 3)
-        let path = StraightPath(start: point, angle: .pi / 2, bounds: image.bounds)
+        let path = StraightPath(start: point, angle: .north, bounds: image.bounds)
 
         // Find pixels inside lower and upper box
         guard let insideLowerBox = image.findFirstPixel(matching: foreground, on: path) else { return nil }
@@ -146,8 +146,8 @@ class ImageAnalyzer {
         guard let insideUpperBox = image.findFirstPixel(matching: foreground, on: path) else { return nil }
 
         // Find bounding boxes
-        guard let lowerEdge = EdgeDetector.search(in: image, shapeColor: foreground, from: insideLowerBox, angle: .pi / 2),
-            let upperEdge = EdgeDetector.search(in: image, shapeColor: foreground, from: insideUpperBox, angle: .pi / 2) else { return nil }
+        guard let lowerEdge = EdgeDetector.search(in: image, shapeColor: foreground, from: insideLowerBox, angle: .north),
+            let upperEdge = EdgeDetector.search(in: image, shapeColor: foreground, from: insideUpperBox, angle: .north) else { return nil }
 
         var lowerAABB = SmallestAABB.containing(lowerEdge.map(CGPoint.init))
         removeCorners(from: &lowerAABB, foreground: foreground, in: image)
@@ -166,7 +166,7 @@ class ImageAnalyzer {
     /// Cut an AABB (left and right) in such a way that the rounded corners are removed, i.e. that anything inside the AABBs has foreground color.
     private func removeCorners(from aabb: inout AABB, foreground: ColorMatch, in image: Image) {
         let lowerLeft = aabb.rect.origin.nearestPixel
-        let path = StraightPath(start: lowerLeft, angle: 0.25 * .pi, bounds: image.bounds) // 45° (NE)
+        let path = StraightPath(start: lowerLeft, angle: .northeast, bounds: image.bounds) // 45° (NE)
         guard let inside = image.findFirstPixel(matching: foreground, on: path) else { return }
 
         let distance = CGFloat(inside.distance(to: lowerLeft)) / (sqrt(2) - 1) // Exactly remove corners
