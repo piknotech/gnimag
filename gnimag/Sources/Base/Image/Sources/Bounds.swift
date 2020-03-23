@@ -32,13 +32,10 @@ public struct Bounds {
     }
 
     /// Initialize Bounds from a CGRect.
-    /// The four corners are approximated to their respective nearest pixels.
+    /// If the rect is non-integral, Bounds will contain the rect.
     public init(rect: CGRect) {
-        let minX = Int(round(rect.minX))
-        let minY = Int(round(rect.minY))
-        let maxX = Int(round(rect.maxX))
-        let maxY = Int(round(rect.maxY))
-        self.init(minX: minX, minY: minY, width: maxX - minX, height: maxY - minY)
+        let rect = rect.integral
+        self.init(minX: Int(rect.minX), minY: Int(rect.minY), width: Int(rect.width), height: Int(rect.height))
     }
     
     /// Check if a pixel is inside the bounds.
