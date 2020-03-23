@@ -15,13 +15,13 @@ internal struct OCRComponent {
 
     /// All pixels the component consists of.
     /// The pixel locations are relative to the original image, i.e. all pixels are inside `region`.
-    let pixels: Set<Pixel>
+    let pixels: [Pixel]
 
     /// Combine this component with another one.
     func combine(with other: OCRComponent) -> OCRComponent {
         OCRComponent(
             region: Bounds(rect: region.CGRect.union(other.region.CGRect)),
-            pixels: pixels.union(other.pixels)
+            pixels: pixels + other.pixels
         )
     }
 }
