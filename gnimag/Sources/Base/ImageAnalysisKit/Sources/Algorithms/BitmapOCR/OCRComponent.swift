@@ -72,7 +72,7 @@ internal struct OCRComponent {
 
     /// Convert the bitmap to a black-and-white CGImage.
     /// White means the pixel is inside the bitmap.
-    private var CGImage: CGImage {
+    var CGImage: CGImage {
         let gray = 1 // Could also RGBA etc.
         var rawData = [UInt8](repeating: 0, count: gray * region.width * region.height)
 

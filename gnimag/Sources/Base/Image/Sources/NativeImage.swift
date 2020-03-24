@@ -4,12 +4,10 @@
 //
 
 import Foundation
-import Image
-import TestingTools
 
 /// NativeImage is an Image effectively wrapping a CGImage using bitmap data.
 /// Currently, the wrapped CGImage must have a BGRA pixel layout.
-final class NativeImage: Image {
+public final class NativeImage: Image {
     /// The raw pixel data and CGImage.
     @usableFromInline
     let data: CFData
@@ -26,7 +24,7 @@ final class NativeImage: Image {
     let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: 3)
 
     /// Default initializer.
-    init(_ image: CGImage) {
+    public init(_ image: CGImage) {
         // Get raw pixel data
         data = image.dataProvider!.data!
         bytesPerRow = image.bytesPerRow
@@ -37,7 +35,7 @@ final class NativeImage: Image {
 
     /// Get the color value at the given pixel.
     @inlinable @inline(__always)
-    override func color(at pixel: Pixel) -> Color {
+    public override func color(at pixel: Pixel) -> Color {
         // Read pixel data (using BGRA layout)
         let offset = bytesPerRow * (height - 1 - pixel.y) + 4 * pixel.x
 
