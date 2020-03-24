@@ -94,10 +94,7 @@ internal enum ConnectedComponents {
 
         // Convert pixel arrays to OCRComponents
         return components.values.map { pixels in
-            OCRComponent(
-                region: Bounds(rect: SmallestAABB.containing(pixels).rect),
-                pixels: pixels
-            )
+            OCRComponent(pixels: pixels)
         }
     }
 

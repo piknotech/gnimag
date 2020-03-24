@@ -10,6 +10,7 @@
 		63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */; };
 		6306BDB12405298800C26C08 /* IdleStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306BDB02405298800C26C08 /* IdleStrategy.swift */; };
 		6306CDB823AA48DE00D9EB25 /* ToleranceRangeScatterStrokables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */; };
+		63073E60242AA2A4002C4593 /* GrayscaleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E5F242AA2A4002C4593 /* GrayscaleImage.swift */; };
 		6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */; };
 		6311E0B523E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */; };
 		6311E0B723E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */; };
@@ -224,6 +225,7 @@
 		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		6306BDB02405298800C26C08 /* IdleStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleStrategy.swift; sourceTree = "<group>"; };
 		6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToleranceRangeScatterStrokables.swift; sourceTree = "<group>"; };
+		63073E5F242AA2A4002C4593 /* GrayscaleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayscaleImage.swift; sourceTree = "<group>"; };
 		6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionSolutionStrategy.swift; sourceTree = "<group>"; };
 		6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequenceFromCurrentPosition.swift; sourceTree = "<group>"; };
 		6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptimalSolutionViaRandomizedSearchStrategy.swift; sourceTree = "<group>"; };
@@ -1544,6 +1546,7 @@
 				63DF00602427E390001D81B3 /* BitmapOCRCreator.swift */,
 				63CB1E102428E94B006B7782 /* ConnectedComponents.swift */,
 				63CB1E122428EFBF006B7782 /* OCRComponent.swift */,
+				63073E5F242AA2A4002C4593 /* GrayscaleImage.swift */,
 			);
 			path = BitmapOCR;
 			sourceTree = "<group>";
@@ -2121,6 +2124,7 @@
 				631213502325785000C126B4 /* SmallestAABB.swift in Sources */,
 				6312134B2325785000C126B4 /* FindSinglePixel.swift in Sources */,
 				63759541233A63CC00ACA969 /* ShapeErasureType.swift in Sources */,
+				63073E60242AA2A4002C4593 /* GrayscaleImage.swift in Sources */,
 				631213662325785000C126B4 /* ColorMatch.swift in Sources */,
 				631213642325785000C126B4 /* ExpandingCirclePath.swift in Sources */,
 				631213622325785000C126B4 /* LimitedPath.swift in Sources */,
