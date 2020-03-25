@@ -21,7 +21,7 @@ public final class identiti {
 
     /// The current/latest exercise.
     /// Because images are analysed each frame, currentExercise is stored and compared with newly analyzed images until a different exercise is detected.
-    private var currentExercise: RawExercise?
+    private var currentExercise: Exercise?
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: Tapper) {

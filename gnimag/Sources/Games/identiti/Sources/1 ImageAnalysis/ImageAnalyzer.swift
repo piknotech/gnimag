@@ -66,7 +66,7 @@ class ImageAnalyzer {
 
     /// Analyze an image; return the exercise.
     /// Returns nil if there are no equations found in the image.
-    func analyze(image: Image) -> RawExercise? {
+    func analyze(image: Image) -> Exercise? {
         guard let upperImage = content(of: screen.upperEquationBox, in: image),
             let lowerImage = content(of: screen.lowerEquationBox, in: image) else { return nil }
 
@@ -75,7 +75,7 @@ class ImageAnalyzer {
         guard let upperEquation = ocr.recognize(image: upperImage, textColor: textColor),
             let lowerEquation = ocr.recognize(image: lowerImage, textColor: textColor) else { return nil }
 
-        return RawExercise(
+        return Exercise(
             upperEquationString: upperEquation.joined(),
             lowerEquationString: lowerEquation.joined()
         )

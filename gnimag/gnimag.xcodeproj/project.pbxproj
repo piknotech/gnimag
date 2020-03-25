@@ -174,7 +174,7 @@
 		636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1A23BF953B00A3BE26 /* Angle.swift */; };
 		636BCC1E23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */; };
 		63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63758AE82425369700D0F060 /* ImageAnalyzer.swift */; };
-		63758AEB242536AA00D0F060 /* RawExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63758AEA242536AA00D0F060 /* RawExercise.swift */; };
+		63758AEB242536AA00D0F060 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63758AEA242536AA00D0F060 /* Exercise.swift */; };
 		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
 		6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */; };
 		6375953F233A53D900ACA969 /* ShapeErasedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953E233A53D900ACA969 /* ShapeErasedImage.swift */; };
@@ -438,7 +438,7 @@
 		636BCC1A23BF953B00A3BE26 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicLinearPingPongTracker+Future.swift"; sourceTree = "<group>"; };
 		63758AE82425369700D0F060 /* ImageAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnalyzer.swift; sourceTree = "<group>"; };
-		63758AEA242536AA00D0F060 /* RawExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawExercise.swift; sourceTree = "<group>"; };
+		63758AEA242536AA00D0F060 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		637595392331012C00ACA969 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+IsAlmostEqual.swift"; sourceTree = "<group>"; };
 		6375953E233A53D900ACA969 /* ShapeErasedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeErasedImage.swift; sourceTree = "<group>"; };
@@ -1450,7 +1450,7 @@
 			isa = PBXGroup;
 			children = (
 				63758AE82425369700D0F060 /* ImageAnalyzer.swift */,
-				63758AEA242536AA00D0F060 /* RawExercise.swift */,
+				63758AEA242536AA00D0F060 /* Exercise.swift */,
 				63DF005624261DC1001D81B3 /* ScreenLayout.swift */,
 			);
 			path = "1 ImageAnalysis";
@@ -2408,7 +2408,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B40BD624251140007A86E9 /* identiti.swift in Sources */,
-				63758AEB242536AA00D0F060 /* RawExercise.swift in Sources */,
+				63758AEB242536AA00D0F060 /* Exercise.swift in Sources */,
 				63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */,
 				63DF005724261DC1001D81B3 /* ScreenLayout.swift in Sources */,
 			);
