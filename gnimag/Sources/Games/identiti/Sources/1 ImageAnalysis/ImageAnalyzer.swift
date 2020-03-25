@@ -18,7 +18,7 @@ class ImageAnalyzer {
     private var coloring: Coloring!
 
     /// The OCR instance.
-    private lazy var ocr = BitmapOCR(location: Bundle(for: Self.self).bundlePath +/ "Versions/A/Resources")
+    private lazy var ocr = BitmapOCR(location: NSHomeDirectory() +/ "Library/Application Support/gnimag/identiti/OCR")
 
     /// Coloring describes color properties of the game.
     struct Coloring {
@@ -46,7 +46,7 @@ class ImageAnalyzer {
 
         // Use "=" button to detect foreground color ("=" sign is transparent in the middle)
         let foreground = image.color(at: buttons.right.center.nearestPixel)
-        let foregroundMatch = ColorMatch.color(foreground, tolerance: 0.1)
+        let foregroundMatch = ColorMatch.color(foreground, tolerance: 0.05)
 
         // Find equation boxes
         guard let boxes = findEquationBoxes(in: image, with: buttons.left, foreground: foregroundMatch, background: backgroundMatch) else { return false }
@@ -83,7 +83,7 @@ class ImageAnalyzer {
 
     /// Check whether the specified box is fully on-screen and, if this is the case, return an image containing the box's content.
     private func content(of box: AABB, in image: Image) -> Image? {
-        let foreground = ColorMatch.color(coloring.foreground, tolerance: 0.1)
+        let foreground = ColorMatch.color(coloring.foreground, tolerance: 0.05)
 
         // Check for two starting pixels whether they are contained in the box.
         // This allows to detect the box while it is still animating and not yet on its exact final position.

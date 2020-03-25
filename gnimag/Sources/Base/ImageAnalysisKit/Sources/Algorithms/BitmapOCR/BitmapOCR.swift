@@ -88,6 +88,9 @@ public final class BitmapOCR {
         }
 
         let pngFiles = contents.filter { $0.pathExtension == "png" }
+        if pngFiles.isEmpty {
+            exit(withMessage: "BitmapOCR – There are no PNG files!")
+        }
 
         let imagesAndNames = pngFiles.compactMap { url -> (CGImage, String) in
             let filename = url.deletingPathExtension().lastPathComponent
