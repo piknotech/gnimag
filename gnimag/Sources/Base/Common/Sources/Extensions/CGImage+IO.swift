@@ -21,8 +21,8 @@ extension CGImage {
     }
 
     /// Read a CGImage from a PNG file.
-    public static func from(pngFile: String) -> CGImage? {
-        guard let data = NSData(contentsOfFile: pngFile),
+    public static func from(path: String) -> CGImage? {
+        guard let data = NSData(contentsOfFile: path),
             let dataProvider = CGDataProvider(data: data) else { return nil }
         return CGImage(pngDataProviderSource: dataProvider, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
     }

@@ -38,9 +38,16 @@ internal enum ConnectedComponents {
     }
 
     /// Extract connected components from an image. Then, combine components using a combine decision function.
+    /// The components are sorted left-to-right.
     static func `in`(_ image: Image, color: ColorMatch, connectivity: ConnectivityType, combineComponents: (OCRComponent, OCRComponent) -> Bool) -> [OCRComponent] {
         var components = connectedComponents(from: image, color: color, connectivity: connectivity)
         combine(components: &components, using: combineComponents)
+
+        // Sort left-to-right
+        components.sort { a, b in
+            a.region.xRange.center < b.region.xRange.center
+        }
+
         return components
     }
 

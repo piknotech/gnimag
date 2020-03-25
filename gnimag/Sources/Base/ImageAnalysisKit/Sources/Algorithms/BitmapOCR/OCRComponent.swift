@@ -37,38 +37,7 @@ internal struct OCRComponent {
         pixels.map { $0 - Delta(region.minX, region.minY) }
     }
 
-    // MARK: Conversion to Image
-
-    /// Possibilities for how to scale and align a component to a size with a different aspect ratio.
-    enum ScaleMode {
-        case aspectFitCenter
-    }
-
-    /// Scale the component to the given size.
-    /// The resulting image is NOT black-white, but may contain shades of gray because of the interpolation process.
-    func scale(toWidth width: Int, height: Int, mode: ScaleMode) -> GrayscaleImage {
-        let image = CGImage
-
-        let gray = 1
-        let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * gray, space: CGColorSpaceCreateDeviceGray(), bitmapInfo: 0)!
-        context.interpolationQuality = .none // TODO: or .low?
-
-        context.setFillColor(.black)
-        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
-
-        // Scale image according to mode
-        switch mode {
-        case .aspectFitCenter:
-            let ratio = min(Double(width) / Double(image.width), Double(height) / Double(image.height))
-            let center = CGPoint(x: Double(width) / 2, y: Double(height) / 2)
-            let size = CGSize(width: Double(image.width) * ratio, height: Double(image.height) * ratio)
-            let origin = CGPoint(x: center.x - size.width / 2, y: center.y - size.height / 2)
-            let rect = CGRect(origin: origin, size: size)
-            context.draw(image, in: rect)
-        }
-
-        return GrayscaleImage(context.makeImage()!)
-    }
+    // MARK: CGImage
 
     /// Convert the bitmap to a black-and-white CGImage.
     /// White means the pixel is inside the bitmap.
@@ -84,7 +53,7 @@ internal struct OCRComponent {
         return CGImage(from: rawData)
     }
 
-    /// Convert a raw RGBA pixel array into a CGImage.
+    /// Convert a raw grayscale pixel array into a grayscale CGImage.
     private func CGImage(from rawData: [UInt8]) -> CGImage {
         let gray = 1
         return Foundation.CGImage(

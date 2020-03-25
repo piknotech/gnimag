@@ -16,6 +16,7 @@ public final class BitmapOCRCreator {
     /// Default initializer.
     public init(outputDirectory: String) {
         self.outputDirectory = outputDirectory
+        try! FileManager.default.createDirectory(atPath: outputDirectory, withIntermediateDirectories: true)
     }
 
     /// Extract all components from an image and save them in the directory.
@@ -29,21 +30,10 @@ public final class BitmapOCRCreator {
     }
 
     /// Extract all components from an image and save them in the directory.
-    /// The components are sorted top-down, left-to-right and named by the expected characters. expectedCharacters contains the character names, separated by spaces.
+    /// The components are sorted left-to-right and named by the expected characters. expectedCharacters contains the character names, separated by spaces.
     public func addComponents(from image: Image, textColor: ColorMatch, expectedCharacters: String) {
-        var components = ConnectedComponents.in(image, color: textColor, connectivity: .eight, combineComponents: ComponentCombinationStrategy.verticalOverlay(requiredOverlap: 0.5))
-
-        // Sort by center point
-        components.sort { a, b in
-            // If one of the center points in contained vertically in the other's range, they are vertically on the same level. Then, sort by left-to-right
-            let aRange = a.region.yRange, bRange = b.region.yRange
-            if aRange.contains(bRange.center) || bRange.contains(aRange.center) {
-                return a.region.xRange.center < b.region.xRange.center // Left-to-right
-            } else {
-                return aRange.center > bRange.center // Top-to-bottom (attention: flipped because of LLO)
-            }
-        }
-
+        let components = ConnectedComponents.in(image, color: textColor, connectivity: .eight, combineComponents: ComponentCombinationStrategy.verticalOverlay(requiredOverlap: 0.5))
+        
         var characters = expectedCharacters.split(separator: " ")
 
         // Pad missing component names with "unmatched_component", if necessary

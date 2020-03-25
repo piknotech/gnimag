@@ -30,3 +30,57 @@ internal extension Bounds {
         SimpleRange(from: Double(minY), to: Double(minY + height))
     }
 }
+
+internal extension CGImage {
+    /// Possibilities for how to scale and align an image to a size with a different aspect ratio.
+    enum ScaleMode {
+        case aspectFitCenter
+    }
+
+    /// Scale the image to the given size and return a GrayscaleImage.
+    func scaled(toWidth scaledWidth: Int, height scaledHeight: Int, mode: ScaleMode) -> GrayscaleImage {
+        let gray = 1
+        let context = CGContext(
+            data: nil,
+            width: scaledWidth,
+            height: scaledHeight,
+            bitsPerComponent: 8,
+            bytesPerRow: scaledWidth * gray,
+            space: CGColorSpaceCreateDeviceGray(),
+            bitmapInfo: 0
+        )!
+
+        context.interpolationQuality = .none
+
+        context.setFillColor(.black)
+        context.fill(CGRect(x: 0, y: 0, width: context.width, height: context.height))
+
+        // Scale image according to mode
+        switch mode {
+        case .aspectFitCenter:
+            let ratio = min(Double(context.width) / Double(width), Double(context.height) / Double(height))
+            let center = CGPoint(x: Double(context.width) / 2, y: Double(context.height) / 2)
+            let size = CGSize(width: Double(width) * ratio, height: Double(height) * ratio)
+            let origin = CGPoint(x: center.x - size.width / 2, y: center.y - size.height / 2)
+            let rect = CGRect(origin: origin, size: size)
+            context.draw(self, in: rect)
+        }
+
+        return GrayscaleImage(context.makeImage()!)
+    }
+}
+
+internal extension Image {
+    /// The measure of pixel-wise identicality, i.e. the number of pixels which are exactly same (i.e. have exactly the same color) divided by the total number of pixels.
+    /// Especially useful for black-white images (because pixels will often be exactly identical there).
+    /// The images must have the same size.
+    func identicality(to other: Image) -> Double {
+        var equalPixels = 0
+        for x in 0 ..< width {
+            for y in 0 ..< height {
+                if color(at: Pixel(x, y)) == other.color(at: Pixel(x, y)) { equalPixels += 1 }
+            }
+        }
+        return Double(equalPixels) / Double(width * height)
+    }
+}
