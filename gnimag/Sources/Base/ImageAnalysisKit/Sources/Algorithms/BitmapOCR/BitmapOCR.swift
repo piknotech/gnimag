@@ -64,7 +64,7 @@ public final class BitmapOCR {
         // Compare to every image with a similar aspect ratio
         var possibleMatches = [(Dataset.Character, Double)]()
         for character in dataset.characters {
-            if !(0.8 ... 1.2).contains(character.aspectRatio / originalAspectRatio) { continue }
+            if !ratiosAreSimilar(character.aspectRatio, originalAspectRatio) { continue }
 
             // Pixel-by-pixel compare
             let identicality = scaledImage.identicality(to: character.image)
@@ -75,6 +75,14 @@ public final class BitmapOCR {
 
         // Return best match
         return possibleMatches.sorted { $0.1 > $1.1 }.first?.0.string
+    }
+
+    /// Check whether two ratios approximately have the same magnitude.
+    /// The larger the ratios, the more deviation is allowed.
+    private func ratiosAreSimilar(_ ratio1: Double, _ ratio2: Double) -> Bool {
+        let largestMagnitude = max(ratio1, 1 / ratio1, ratio2, 1 / ratio2) // >= 1
+        let deviation = 1.2 + 0.1 * sqrt(largestMagnitude) // Function values: [1: 1.3, 4: 1.4, 9: 1.5]
+        return (1/deviation ... deviation).contains(ratio1 / ratio2)
     }
 
     // MARK: Reading OCR Dataset
