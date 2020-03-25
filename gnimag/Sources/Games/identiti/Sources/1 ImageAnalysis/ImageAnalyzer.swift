@@ -17,6 +17,9 @@ class ImageAnalyzer {
     private var screen: ScreenLayout!
     private var coloring: Coloring!
 
+    /// The OCR instance.
+    private lazy var ocr = BitmapOCR(location: Bundle(for: Self.self).bundlePath +/ "Versions/A/Resources")
+
     /// Coloring describes color properties of the game.
     struct Coloring {
         let textColor = Color.white
@@ -64,11 +67,18 @@ class ImageAnalyzer {
     /// Analyze an image; return the exercise.
     /// Returns nil if there are no equations found in the image.
     func analyze(image: Image) -> RawExercise? {
-        guard let lowerImage = content(of: screen.lowerEquationBox, in: image),
-            let upperImage = content(of: screen.upperEquationBox, in: image) else { return nil }
+        guard let upperImage = content(of: screen.upperEquationBox, in: image),
+            let lowerImage = content(of: screen.lowerEquationBox, in: image) else { return nil }
 
-        // TODO: Perform OCR
-        return RawExercise(upperEquationString: "", lowerEquationString: "")
+        // Perform OCR
+        let textColor = coloring.textColor.withTolerance(0.2)
+        guard let upperEquation = ocr.recognize(image: upperImage, textColor: textColor),
+            let lowerEquation = ocr.recognize(image: lowerImage, textColor: textColor) else { return nil }
+
+        return RawExercise(
+            upperEquationString: upperEquation.joined(),
+            lowerEquationString: lowerEquation.joined()
+        )
     }
 
     /// Check whether the specified box is fully on-screen and, if this is the case, return an image containing the box's content.
@@ -132,7 +142,7 @@ class ImageAnalyzer {
     }
 
     /// Find the locations of the equation boxes.
-    /// The AABBs are cut (left and right) in such a way that the rounded corners are removed, i.e. that anything inside the AABBs has foreground color.
+    /// The AABBs are cut in such a way that the rounded corners are removed, i.e. that anything inside the AABBs has foreground color.
     private func findEquationBoxes(in image: Image, with leftButton: Circle, foreground: ColorMatch, background: ColorMatch) -> (upper: AABB, lower: AABB)? {
         // Use the upper-left corner from the left button to start walking upwards
         let point = leftButton.point(at: 0.75 * .pi).nearestPixel + Delta(-3, 3)
@@ -161,14 +171,14 @@ class ImageAnalyzer {
         return (upper: upperAABB, lower: lowerAABB)
     }
 
-    /// Cut an AABB (left and right) in such a way that the rounded corners are removed, i.e. that anything inside the AABBs has foreground color.
+    /// Cut an AABB in such a way that the rounded corners are removed, i.e. that anything inside the AABBs has foreground color.
     private func removeCorners(from aabb: inout AABB, foreground: ColorMatch, in image: Image) {
         let lowerLeft = aabb.rect.origin.nearestPixel
-        let path = StraightPath(start: lowerLeft, angle: .northeast, bounds: image.bounds) // 45° (NE)
+        let path = StraightPath(start: lowerLeft, angle: .northeast, bounds: image.bounds)
         guard let inside = image.findFirstPixel(matching: foreground, on: path) else { return }
 
-        let distance = CGFloat(inside.distance(to: lowerLeft)) / (sqrt(2) - 1) // Exactly remove corners
-        aabb = aabb.inset(by: (distance, 0))
+        let distance = CGFloat(inside.distance(to: lowerLeft))
+        aabb = aabb.inset(by: (distance, distance))
         aabb = aabb.inset(by: (2, 2)) // Additional safety inset
     }
 }

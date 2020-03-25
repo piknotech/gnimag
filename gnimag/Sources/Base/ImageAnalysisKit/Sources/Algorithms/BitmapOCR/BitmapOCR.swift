@@ -34,9 +34,9 @@ public final class BitmapOCR {
     }
 
     /// Default initializer.
-    public init(location: String) {
+    public init(location: String, configFileDirectory: String? = nil) {
         self.location = location
-        config = OCRConfig.from(file: location +/ "ocr.json")
+        config = OCRConfig.from(file: (configFileDirectory ?? location) +/ "ocr.json")
         dataset = Self.readDataset(from: location, using: config)
     }
 
