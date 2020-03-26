@@ -147,6 +147,9 @@
 		635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635962E223DF3ECC00FE4EDF /* Tap.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		63672C15242B5CC6008FCDFC /* OCRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C14242B5CC6008FCDFC /* OCRConfig.swift */; };
+		63672C58242C0352008FCDFC /* Exercise+Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C57242C0352008FCDFC /* Exercise+Result.swift */; };
+		63672C5A242C057D008FCDFC /* EquationParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C59242C057D008FCDFC /* EquationParser.swift */; };
+		63672C5C242C0588008FCDFC /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C5B242C0588008FCDFC /* Tokenizer.swift */; };
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
 		6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D901238D666400477AD9 /* LinearScatterStrokable.swift */; };
 		6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */; };
@@ -174,6 +177,7 @@
 		637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB4E2392BBD30067BBCC /* GameQueue.swift */; };
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
+		639B78CA242CDB84009674E8 /* ArrayScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78C9242CDB84009674E8 /* ArrayScanner.swift */; };
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
 		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
 		63B40BCE24250C72007A86E9 /* identiti.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B40BCC24250C72007A86E9 /* identiti.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -410,6 +414,9 @@
 		63672C2B242B9DC2008FCDFC /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
 		63672C2C242B9DC2008FCDFC /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		63672C2D242B9DC2008FCDFC /* 0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 0.png; sourceTree = "<group>"; };
+		63672C57242C0352008FCDFC /* Exercise+Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exercise+Result.swift"; sourceTree = "<group>"; };
+		63672C59242C057D008FCDFC /* EquationParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquationParser.swift; sourceTree = "<group>"; };
+		63672C5B242C0588008FCDFC /* Tokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
 		6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadCurveScatterStrokable.swift; sourceTree = "<group>"; };
 		6367D901238D666400477AD9 /* LinearScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearScatterStrokable.swift; sourceTree = "<group>"; };
 		6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryFunctionScatterStrokable.swift; sourceTree = "<group>"; };
@@ -440,6 +447,7 @@
 		637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameQueueTimingStats.swift; sourceTree = "<group>"; };
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
+		639B78C9242CDB84009674E8 /* ArrayScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayScanner.swift; sourceTree = "<group>"; };
 		639C745423BB66DF005FD354 /* JumpingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingProperties.swift; sourceTree = "<group>"; };
 		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
 		63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDataSet.swift; sourceTree = "<group>"; };
@@ -1420,6 +1428,25 @@
 			path = original_images;
 			sourceTree = "<group>";
 		};
+		63672C55242C02B9008FCDFC /* 2 ExerciseSolving */ = {
+			isa = PBXGroup;
+			children = (
+				63672C57242C0352008FCDFC /* Exercise+Result.swift */,
+				63672C56242C0327008FCDFC /* EquationParser */,
+			);
+			path = "2 ExerciseSolving";
+			sourceTree = "<group>";
+		};
+		63672C56242C0327008FCDFC /* EquationParser */ = {
+			isa = PBXGroup;
+			children = (
+				63672C59242C057D008FCDFC /* EquationParser.swift */,
+				639B78C9242CDB84009674E8 /* ArrayScanner.swift */,
+				63672C5B242C0588008FCDFC /* Tokenizer.swift */,
+			);
+			path = EquationParser;
+			sourceTree = "<group>";
+		};
 		636BCC1C23C4DA3F00A3BE26 /* TrackerFutures */ = {
 			isa = PBXGroup;
 			children = (
@@ -1560,6 +1587,7 @@
 			children = (
 				63B40BD524251140007A86E9 /* identiti.swift */,
 				63758AE72425367200D0F060 /* 1 ImageAnalysis */,
+				63672C55242C02B9008FCDFC /* 2 ExerciseSolving */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -2396,7 +2424,11 @@
 			files = (
 				63B40BD624251140007A86E9 /* identiti.swift in Sources */,
 				63758AEB242536AA00D0F060 /* Exercise.swift in Sources */,
+				63672C5A242C057D008FCDFC /* EquationParser.swift in Sources */,
+				63672C5C242C0588008FCDFC /* Tokenizer.swift in Sources */,
 				63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */,
+				63672C58242C0352008FCDFC /* Exercise+Result.swift in Sources */,
+				639B78CA242CDB84009674E8 /* ArrayScanner.swift in Sources */,
 				63DF005724261DC1001D81B3 /* ScreenLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
