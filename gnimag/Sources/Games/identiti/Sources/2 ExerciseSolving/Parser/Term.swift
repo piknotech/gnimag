@@ -5,13 +5,13 @@
 
 import Common
 
-struct Equation {
+struct Term {
     let string: String
 
-    /// Parse and evaluate the equation and return the result.
-    /// Return nil if the equation is ill-formed.
+    /// Parse and evaluate the term and return the result.
+    /// Return nil if the term is ill-formed.
     func evaluate() -> Int? {
-        guard let tokens = Tokenizer.tokenize(equation: string) else {
+        guard let tokens = Tokenizer.tokenize(term: string) else {
             Terminal.log(.error, "Couldn't tokenize expression \(string)!")
             return nil
         }

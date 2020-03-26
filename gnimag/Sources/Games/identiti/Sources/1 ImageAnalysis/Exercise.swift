@@ -7,12 +7,12 @@ import Foundation
 
 /// The result that ImageAnalyzer will yield for each successfully analyzed image.
 struct Exercise: Equatable {
-    let upperEquationString: String
-    let lowerEquationString: String
+    let upperTerm: String
+    let lowerTerm: String
 
     /// Compare two `Exercise`s for exact equality.
     static func ==(lhs: Exercise, rhs: Exercise) -> Bool {
-        lhs.upperEquationString == rhs.upperEquationString &&
-        lhs.lowerEquationString == rhs.lowerEquationString
+        lhs.upperTerm == rhs.upperTerm &&
+        lhs.lowerTerm == rhs.lowerTerm
     }
 }

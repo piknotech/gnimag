@@ -8,9 +8,9 @@ import Geometry
 /// The exact layout of elements on the screen.
 /// Useful for both image analysis and tapping.
 struct ScreenLayout {
-    let upperEquationBox: AABB
-    let lowerEquationBox: AABB
+    let upperTermBox: AABB
+    let lowerTermBox: AABB
 
-    let trueButton: Circle
-    let falseButton: Circle
+    let equalButton: Circle
+    let notEqualButton: Circle
 }

@@ -5,11 +5,11 @@
 
 import Foundation
 
-/// Tokenizer splits an equation string into tokens, i.e. numbers and operators.
+/// Tokenizer splits a string into tokens, i.e. numbers and operators.
 enum Tokenizer {
-    /// Tokenize the equation string. Return nil when an unallowed character is encountered.
-    static func tokenize(equation: String) -> [Token]? {
-        var scanner = ArrayScanner(array: Array(equation)) // Split equation into unicode characters
+    /// Tokenize the term. Return nil when an unallowed character is encountered.
+    static func tokenize(term: String) -> [Token]? {
+        var scanner = ArrayScanner(array: Array(term)) // Split term into unicode characters
         var result = [Token]()
 
         while let character = scanner.next() {

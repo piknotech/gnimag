@@ -9,7 +9,7 @@ import Geometry
 import Image
 import ImageAnalysisKit
 
-/// ImageAnalyzer extracts equation strings from images.
+/// ImageAnalyzer extracts term strings from images.
 class ImageAnalyzer {
     /// States whether the ImageAnalyzer has been initialized by `initializeWithFirstImage`.
     var isInitialized = false
@@ -48,16 +48,16 @@ class ImageAnalyzer {
         let foreground = image.color(at: buttons.right.center.nearestPixel)
         let foregroundMatch = ColorMatch.color(foreground, tolerance: 0.05)
 
-        // Find equation boxes
-        guard let boxes = findEquationBoxes(in: image, with: buttons.left, foreground: foregroundMatch, background: backgroundMatch) else { return false }
+        // Find term boxes
+        guard let boxes = findTermBoxes(in: image, with: buttons.left, foreground: foregroundMatch, background: backgroundMatch) else { return false }
 
         // Finalize
         coloring = Coloring(background: background, foreground: foreground)
         screen = ScreenLayout(
-            upperEquationBox: boxes.upper,
-            lowerEquationBox: boxes.lower,
-            trueButton: buttons.right,
-            falseButton: buttons.left
+            upperTermBox: boxes.upper,
+            lowerTermBox: boxes.lower,
+            equalButton: buttons.right,
+            notEqualButton: buttons.left
         )
         isInitialized = true
 
@@ -65,19 +65,19 @@ class ImageAnalyzer {
     }
 
     /// Analyze an image; return the exercise.
-    /// Returns nil if there are no equations found in the image.
+    /// Returns nil if there are no terms found in the image.
     func analyze(image: Image) -> Exercise? {
-        guard let upperImage = content(of: screen.upperEquationBox, in: image),
-            let lowerImage = content(of: screen.lowerEquationBox, in: image) else { return nil }
+        guard let upperImage = content(of: screen.upperTermBox, in: image),
+            let lowerImage = content(of: screen.lowerTermBox, in: image) else { return nil }
 
         // Perform OCR
         let textColor = coloring.textColor.withTolerance(0.2)
-        guard let upperEquation = ocr.recognize(image: upperImage, textColor: textColor),
-            let lowerEquation = ocr.recognize(image: lowerImage, textColor: textColor) else { return nil }
+        guard let upperTerm = ocr.recognize(image: upperImage, textColor: textColor),
+            let lowerTerm = ocr.recognize(image: lowerImage, textColor: textColor) else { return nil }
 
         return Exercise(
-            upperEquationString: upperEquation.joined(),
-            lowerEquationString: lowerEquation.joined()
+            upperTerm: upperTerm.joined(),
+            lowerTerm: lowerTerm.joined()
         )
     }
 
@@ -141,9 +141,9 @@ class ImageAnalyzer {
         return (left: leftCircle, right: rightCircle)
     }
 
-    /// Find the locations of the equation boxes.
+    /// Find the locations of the term boxes.
     /// The AABBs are cut in such a way that the rounded corners are removed, i.e. that anything inside the AABBs has foreground color.
-    private func findEquationBoxes(in image: Image, with leftButton: Circle, foreground: ColorMatch, background: ColorMatch) -> (upper: AABB, lower: AABB)? {
+    private func findTermBoxes(in image: Image, with leftButton: Circle, foreground: ColorMatch, background: ColorMatch) -> (upper: AABB, lower: AABB)? {
         // Use the upper-left corner from the left button to start walking upwards
         let point = leftButton.point(at: 0.75 * .pi).nearestPixel + Delta(-3, 3)
         let path = StraightPath(start: point, angle: .north, bounds: image.bounds)

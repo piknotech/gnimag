@@ -10,10 +10,10 @@ extension Exercise {
     }
 
     /// Parse the exercise and return the result.
-    /// Return nil if one of the equations couldn't be parsed.
+    /// Return nil if one of the term couldn't be parsed.
     var result: Result? {
-        let upper = Equation(string: upperEquationString)
-        let lower = Equation(string: lowerEquationString)
+        let upper = Term(string: upperTerm)
+        let lower = Term(string: lowerTerm)
 
         guard let upperValue = upper.evaluate(), let lowerValue = lower.evaluate() else { return nil }
         return upperValue == lowerValue ? .equal : .notEqual
