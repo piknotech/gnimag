@@ -24,11 +24,11 @@ class ImageAnalyzer {
     struct Coloring {
         let textColor = Color.white
         
-        /// The central color of the background gradient.
-        let background: Color
+        /// The background gradient.
+        let background: ColorMatch
 
         /// The color of buttons and boxes.
-        let foreground: Color
+        let foreground: ColorMatch
     }
 
     /// Initialize the ImageAnalyzer by detecting the ScreenLayout using the first image.
@@ -37,19 +37,18 @@ class ImageAnalyzer {
     func initializeWithFirstImage(_ image: Image) -> Bool {
         precondition(!isInitialized)
 
-        // Find background color
-        let background = backgroundColor(of: image)
-        let backgroundMatch = ColorMatch.color(background, tolerance: 0.1)
+        // Find background color gradient
+        let background = backgroundColorGradient(of: image)
 
         // Find buttons
-        guard let buttons = findButtons(in: image, background: backgroundMatch) else { return false }
+        guard let buttons = findButtons(in: image, background: background) else { return false }
 
         // Use "=" button to detect foreground color ("=" sign is transparent in the middle)
-        let foreground = image.color(at: buttons.right.center.nearestPixel)
-        let foregroundMatch = ColorMatch.color(foreground, tolerance: 0.05)
+        let foregroundColor = image.color(at: buttons.right.center.nearestPixel)
+        let foreground = ColorMatch.color(foregroundColor, tolerance: 0.05)
 
         // Find term boxes
-        guard let boxes = findTermBoxes(in: image, with: buttons.left, foreground: foregroundMatch, background: backgroundMatch) else { return false }
+        guard let boxes = findTermBoxes(in: image, with: buttons.left, foreground: foreground, background: background) else { return false }
 
         // Finalize
         coloring = Coloring(background: background, foreground: foreground)
@@ -84,8 +83,6 @@ class ImageAnalyzer {
 
     /// Check whether the specified box is fully on-screen and, if this is the case, return an image containing the box's content.
     private func content(of box: AABB, in image: Image) -> Image? {
-        let foreground = ColorMatch.color(coloring.foreground, tolerance: 0.05)
-
         // Check for two starting pixels whether they are contained in the box.
         // This allows to detect the box while it is still animating and not yet on its exact final position.
         let pixels = [
@@ -94,11 +91,11 @@ class ImageAnalyzer {
         ]
 
         for pixel in pixels {
-            guard foreground.matches(image.color(at: pixel)) else { continue }
-            guard let edge = EdgeDetector.search(in: image, shapeColor: foreground, from: pixel, angle: .south, limit: .maxPixels(Int(2.5 * (box.width + box.height)))) else { continue }
+            guard coloring.foreground.matches(image.color(at: pixel)) else { continue }
+            guard let edge = EdgeDetector.search(in: image, shapeColor: coloring.foreground, from: pixel, angle: .south, limit: .maxPixels(Int(2.5 * (box.width + box.height)))) else { continue }
 
             var aabb = SmallestAABB.containing(edge)
-            removeCorners(from: &aabb, foreground: foreground, in: image)
+            removeCorners(from: &aabb, foreground: coloring.foreground, in: image)
 
             // Check if detected box is valid; then, crop image to this box
             // (Corner removal can yield somewhat varying results -> high tolerance for width)
@@ -114,9 +111,10 @@ class ImageAnalyzer {
     // MARK: Helper Methods for Initialization
 
     /// The central color of the background gradient.
-    private func backgroundColor(of image: Image) -> Color {
-        let center = Pixel(5, image.height / 2)
-        return image.color(at: center)
+    private func backgroundColorGradient(of image: Image) -> ColorMatch {
+        let lower = Pixel(5, 10)
+        let upper = Pixel(5, image.height - 50)
+        return .gradient(from: image.color(at: lower), to: image.color(at: upper), tolerance: 0.05)
     }
 
     /// Find the locations of the true and false buttons.

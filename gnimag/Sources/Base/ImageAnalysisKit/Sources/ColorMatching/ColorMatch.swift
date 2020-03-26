@@ -9,6 +9,7 @@ import Image
 public indirect enum ColorMatch {
     case block((Color) -> Bool)
     case color(Color, tolerance: Double)
+    case gradient(from: Color, to: Color, tolerance: Double)
     case not(ColorMatch)
 
     /// Return true iff the given color matches the rule.
@@ -20,6 +21,9 @@ public indirect enum ColorMatch {
 
         case let .color(allowed, tolerance):
             return color.distance(to: allowed) <= tolerance
+
+        case let .gradient(start, end, tolerance):
+            return GradientColorMatching.distance(from: color, to: (start, end)) <= tolerance
 
         case let .not(other):
             return !other.matches(color)

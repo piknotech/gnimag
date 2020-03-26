@@ -88,6 +88,24 @@ public final class BitmapCanvas {
         return canvas
     }
 
+    /// Create a new bitmap canvas where all pixels that fulfill a given block have one color, and the others have another color.
+    public static func createByFillingAllPixelsMatching(_ block: (Color) -> Bool, in image: Image, with fillColor: Color, others background: Color = .black) -> BitmapCanvas {
+        let canvas = BitmapCanvas(width: image.width, height: image.height)
+        canvas.background(background)
+
+        // Fill pixel for pixel
+        for x in 0 ..< image.width {
+            for y in 0 ..< image.height {
+                let pixel = Pixel(x, y)
+                if block(image.color(at: Pixel(x, y))) {
+                    canvas.fill(pixel, with: fillColor)
+                }
+            }
+        }
+
+        return canvas
+    }
+
     /// Return a new canvas which contains the contents of the cut rectangle.
     public func cut(to bounds: Bounds) -> BitmapCanvas {
         let new = BitmapCanvas(width: bounds.width, height: bounds.height)
