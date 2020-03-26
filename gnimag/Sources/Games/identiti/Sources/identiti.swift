@@ -51,7 +51,8 @@ public final class identiti {
 
         // Analyze and process image
         guard let exercise = imageAnalyzer.analyze(image: image), exercise != currentExercise else { return }
-        print(exercise)
         currentExercise = exercise
+
+        print(exercise.result)
     }
 }

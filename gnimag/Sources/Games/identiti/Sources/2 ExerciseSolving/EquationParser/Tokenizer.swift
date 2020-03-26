@@ -7,6 +7,7 @@ import Foundation
 
 /// Tokenizer splits an equation string into tokens, i.e. numbers and operators.
 enum Tokenizer {
+    /// Tokenize the equation string. Return nil when an unallowed character is encountered.
     static func tokenize(equation: String) -> [Token]? {
         var scanner = ArrayScanner(array: Array(equation)) // Split equation into unicode characters
         var result = [Token]()
@@ -50,7 +51,7 @@ enum Token {
 
     /// States whether the given character is a valid operator.
     static func isOperatorSymbol(_ character: Character) -> Bool {
-        "+-×÷()".contains(character)
+        "+-*/()".contains(character)
     }
 
     /// States whether the given character is a digit.
@@ -65,9 +66,9 @@ enum Token {
             self = .plus
         case "-":
             self = .minus
-        case "×":
+        case "*":
             self = .times
-        case "÷":
+        case "/":
             self = .divide
         case "(":
             self = .leftParen
