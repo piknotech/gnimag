@@ -6,7 +6,10 @@
 import Tapping
 
 /// A Tapper which does nothing.
-class NoopTapper: Tapper {
+class NoopTapper: Tapper, ArbitraryLocationTapper {
     func tap() {
+    }
+
+    func tap(at point: CGPoint) {
     }
 }

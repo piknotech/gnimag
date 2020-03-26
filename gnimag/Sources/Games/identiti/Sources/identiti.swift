@@ -11,11 +11,9 @@ import Tapping
 
 /// Each instance of identiti can play a single game of identiti.
 public final class identiti {
-    private let imageProvider: ImageProvider
-    private let tapper: Tapper
-
     private let imageAnalyzer: ImageAnalyzer
-    
+    private let buttonTapper: ButtonTapper
+
     /// The queue where image analysis is performed on.
     private var queue: GameQueue!
 
@@ -24,11 +22,9 @@ public final class identiti {
     private var currentExercise: Exercise?
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: Tapper) {
-        self.imageProvider = imageProvider
-        self.tapper = tapper
-
+    public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper) {
         imageAnalyzer = ImageAnalyzer()
+        buttonTapper = ButtonTapper(underlyingTapper: tapper)
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
     }
 
@@ -41,18 +37,32 @@ public final class identiti {
 
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
-        // Initialize imageAnalyzer on first image
-        if !imageAnalyzer.isInitialized {
-            let success = imageAnalyzer.initializeWithFirstImage(image)
-            if !success {
-                exit(withMessage: "First image could not be analyzed! Aborting.")
-            }
-        }
+        performFirstImageSetupIfRequired(with: image)
 
         // Analyze and process image
         guard let exercise = imageAnalyzer.analyze(image: image), exercise != currentExercise else { return }
         currentExercise = exercise
 
-        print(exercise.result)
+        // Tap on correct location
+        guard let result = exercise.result else {
+            Terminal.log(.error, "No result for exercise \(exercise)!")
+            return
+        }
+
+        buttonTapper.performTap(for: result)
+    }
+
+    /// Initialize the imageAnalyzer and buttonTapper on the very first image.
+    /// Does nothing if imageAnalyzer is already initialized.
+    private func performFirstImageSetupIfRequired(with image: Image) {
+        guard !imageAnalyzer.isInitialized else { return }
+
+        let success = imageAnalyzer.initializeWithFirstImage(image)
+        if !success {
+            exit(withMessage: "First image could not be analyzed! Aborting.")
+        }
+
+        // Share screen layout with buttonTapper
+        buttonTapper.screen = imageAnalyzer.screen
     }
 }

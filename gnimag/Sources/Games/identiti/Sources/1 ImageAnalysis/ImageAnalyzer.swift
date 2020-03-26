@@ -14,7 +14,7 @@ class ImageAnalyzer {
     /// States whether the ImageAnalyzer has been initialized by `initializeWithFirstImage`.
     var isInitialized = false
 
-    private var screen: ScreenLayout!
+    private(set) var screen: ScreenLayout!
     private var coloring: Coloring!
 
     /// The OCR instance.
@@ -57,7 +57,8 @@ class ImageAnalyzer {
             upperTermBox: boxes.upper,
             lowerTermBox: boxes.lower,
             equalButton: buttons.right,
-            notEqualButton: buttons.left
+            notEqualButton: buttons.left,
+            size: CGSize(width: image.width, height: image.height)
         )
         isInitialized = true
 

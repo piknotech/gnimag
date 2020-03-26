@@ -6,8 +6,8 @@
 import Cocoa
 import Tapping
 
-/// An implementation of Tapper that clicks on the center of an arbitrary macOS application.
-class WindowTapper: Tapper {
+/// An implementation of Tapper and ArbitraryLocationTapper that clicks on the window of an arbitrary macOS application.
+class WindowTapper {
     /// The ID that corresponds to the desired window of the application.
     private let window: Window
 
@@ -34,11 +34,26 @@ class WindowTapper: Tapper {
         let center = CGPoint(x: frame.midX, y: frame.midY)
         MouseControl.move(to: center)
     }
+}
 
+extension WindowTapper: Tapper {
     /// Tap on the center of the window.
     func tap() {
         let frame = WindowHelper.frame(of: window)
         let center = CGPoint(x: frame.midX, y: frame.midY)
         MouseControl.click(at: center)
+    }
+}
+
+extension WindowTapper: ArbitraryLocationTapper {
+    /// Tap on the given relative location (LLO) on the window.
+    func tap(at point: CGPoint) {
+        let frame = WindowHelper.frame(of: window)
+
+        let x = frame.origin.x + point.x * frame.width
+        let y = frame.origin.y + frame.height * (1-point.y) // LLO
+
+        let point = CGPoint(x: x, y: y)
+        MouseControl.click(at: point)
     }
 }
