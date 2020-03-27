@@ -68,20 +68,27 @@ public final class BitmapOCR {
 
             // Pixel-by-pixel compare
             let identicality = scaledImage.identicality(to: character.image)
-            if identicality > 85% {
-                possibleMatches.append((character, identicality))
-            }
+            possibleMatches.append((character, identicality))
         }
 
-        // Return best match
-        return possibleMatches.sorted { $0.1 > $1.1 }.first?.0.string
+        // Find best match
+        guard let best = (possibleMatches.max { $0.1 < $1.1 }) else {
+            Terminal.log(.warning, "BitmapOCR – character with aspect ratio \(originalAspectRatio) doesn't match any character in the dataset!")
+            return nil
+        }
+
+        if best.1 < 0.8 {
+            Terminal.log(.warning, "BitmapOCR – character match with \"\(best.0.string)\" only has a confidence of \(best.1)!")
+        }
+
+        return best.0.string
     }
 
     /// Check whether two ratios approximately have the same magnitude.
     /// The larger the ratios, the more deviation is allowed.
     private func ratiosAreSimilar(_ ratio1: Double, _ ratio2: Double) -> Bool {
         let largestMagnitude = max(ratio1, 1 / ratio1, ratio2, 1 / ratio2) // >= 1
-        let deviation = 1.2 + 0.1 * sqrt(largestMagnitude) // Function values: [1: 1.3, 4: 1.4, 9: 1.5]
+        let deviation = 1.3 + 0.2 * sqrt(largestMagnitude) // Function values: [1: 1.5, 4: 1.7, 9: 1.9]
         return (1/deviation ... deviation).contains(ratio1 / ratio2)
     }
 

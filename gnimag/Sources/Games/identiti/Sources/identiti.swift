@@ -17,13 +17,19 @@ public final class identiti {
     /// The queue where image analysis is performed on.
     private var queue: GameQueue!
 
+    /// The type of OS on which the game is played.
+    public enum OSType {
+        case android
+        case iOS
+    }
+
     /// The current/latest exercise.
     /// Because images are analysed each frame, currentExercise is stored and compared with newly analyzed images until a different exercise is detected.
     private var currentExercise: Exercise?
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper) {
-        imageAnalyzer = ImageAnalyzer()
+    public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, os: OSType) {
+        imageAnalyzer = ImageAnalyzer(os: os)
         buttonTapper = ButtonTapper(underlyingTapper: tapper)
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
     }

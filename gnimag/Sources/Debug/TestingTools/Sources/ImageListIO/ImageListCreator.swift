@@ -13,15 +13,21 @@ public final class ImageListCreator {
     /// The directory path.
     private let directoryPath: String
 
-    /// The next image to create (1-based).
-    private var i = 1
+    /// The image counter.
+    private var i = 0
+    private let skipRate: Int
+
+    private var nextImage: Int {
+        i / skipRate + 1
+    }
 
     /// The maximum number of images to write.
     private let maxImages: Int
 
     /// Default initializer.
-    public init(directoryPath: String, maxImages: Int = Int.max) {
+    public init(directoryPath: String, every skipRate: Int = 1, maxImages: Int = Int.max) {
         self.directoryPath = directoryPath
+        self.skipRate = skipRate
         self.maxImages = maxImages
 
         try! FileManager.default.createDirectory(atPath: directoryPath, withIntermediateDirectories: true)
@@ -31,13 +37,14 @@ public final class ImageListCreator {
     /// Attention: The produced images MUST have attached CGImages.
     public func link(to provider: ImageProvider) {
         provider.newFrame += { (image, _) in
-            if self.i > self.maxImages { return }
+            if self.nextImage > self.maxImages { return }
+            if !self.i.isMultiple(of: self.skipRate) { self.i += 1; return } // Only save every `skipRate`th image
 
             guard let cgImage = image.CGImage else {
                 return Terminal.log(.error, "ImageListCreator – incoming image doesn't have a CGImage and therefore cannot be written to disk.")
             }
 
-            let path = self.directoryPath +/ "\(self.i).png"
+            let path = self.directoryPath +/ "\(self.nextImage).png"
             cgImage.write(to: path)
             self.i += 1
         }
