@@ -17,21 +17,31 @@ public final class identiti {
     /// The queue where image analysis is performed on.
     private var queue: GameQueue!
 
+    /// The stream of exercises which are analyzed each frame.
+    /// `exerciseStream` triggers an event when an exercise leaves the screen and when a new exercise comes in.
+    private var exerciseStream = ValueStreamDamper<Exercise>(
+        numberOfConsecutiveValues: 3,
+        numberOfConsecutiveNilValues: 2
+    )
+
     /// The type of OS on which the game is played.
     public enum OSType {
         case android
         case iOS
     }
 
-    /// The current/latest exercise.
-    /// Because images are analysed each frame, currentExercise is stored and compared with newly analyzed images until a different exercise is detected.
-    private var currentExercise: Exercise?
-
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, os: OSType) {
         imageAnalyzer = ImageAnalyzer(os: os)
         buttonTapper = ButtonTapper(underlyingTapper: tapper)
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
+
+        // Subscrube to exerciseStream event
+        exerciseStream.newValue += { exercise in
+            if let exercise = exercise { // If exercise is nil, the current exercise left the screen; not interesting
+                self.newExerciseDetected(exercise: exercise)
+            }
+        }
     }
 
     /// Begin receiving images and play the game.
@@ -45,28 +55,9 @@ public final class identiti {
     private func update(image: Image, time: Double) {
         performFirstImageSetupIfRequired(with: image)
 
-        // Get exercise from image; compare with currentExercise
-        guard let exercise = imageAnalyzer.analyze(image: image) else {
-            currentExercise = nil // Switching between exercise; wait for next exercise
-            return
-        }
-
-        if exercise == currentExercise { // Still in current exercise, nothing tbd
-            return
-        }
-
-        // New exercise detected
-        currentExercise = exercise
-
-        print(exercise)
-        
-        // Tap on correct location
-        guard let result = exercise.result else {
-            Terminal.log(.error, "No result for exercise \(exercise)!")
-            return
-        }
-
-        buttonTapper.performTap(for: result)
+        // Get exercise from image; write into stream
+        let exercise = imageAnalyzer.analyze(image: image)
+        exerciseStream.add(value: exercise)
     }
 
     /// Initialize the imageAnalyzer and buttonTapper on the very first image.
@@ -82,4 +73,15 @@ public final class identiti {
         // Share screen layout with buttonTapper
         buttonTapper.screen = imageAnalyzer.screen
     }
+
+    /// Called from the exerciseStream when it detects a new exercise.
+       private func newExerciseDetected(exercise: Exercise) {
+           // Tap on correct location
+           guard let result = exercise.result else {
+               Terminal.log(.error, "No result for exercise \(exercise)!")
+               return
+           }
+
+           buttonTapper.performTap(for: result)
+       }
 }
