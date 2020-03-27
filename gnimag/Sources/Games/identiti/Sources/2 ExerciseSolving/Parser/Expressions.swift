@@ -6,15 +6,11 @@
 /// An expression which evaluates to an integer value.
 protocol Expression {
     /// Evaluate the expression and return the result.
-    var value: Int { get }
+    var value: RationalNumber { get }
 }
 
 struct Number: Expression {
-    let value: Int
-
-    var description: String {
-        "\(value)"
-    }
+    let value: RationalNumber
 }
 
 struct Operation: Expression {
@@ -30,7 +26,7 @@ struct Operation: Expression {
     let right: Expression
 
     /// Evaluate the expression and return the result.
-    var value: Int {
+    var value: RationalNumber {
         switch type {
         case .plus:
             return left.value + right.value
@@ -41,9 +37,5 @@ struct Operation: Expression {
         case .divide:
             return left.value / right.value
         }
-    }
-
-    var description: String {
-        "(\(left)) \(type) (\(right))"
     }
 }

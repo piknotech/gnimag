@@ -95,7 +95,7 @@ struct Parser {
         switch tokens.peakNext() {
         case let .number(value):
             tokens.next()
-            return Number(value: value)
+            return Number(value: RationalNumber(num: value, denom: 1))
 
         case .leftParen:
             tokens.next()

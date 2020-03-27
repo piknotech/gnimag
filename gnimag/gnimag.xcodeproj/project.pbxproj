@@ -145,6 +145,7 @@
 		63521E9523D7511F002706C0 /* BisectionSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63521E9423D7511F002706C0 /* BisectionSolver.swift */; };
 		6354CECA2409467600A4C3B8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
 		6358C624242D6EB900DF41CE /* GradientColorMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C623242D6EB900DF41CE /* GradientColorMatching.swift */; };
+		6358C626242DE52500DF41CE /* RationalNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C625242DE52500DF41CE /* RationalNumber.swift */; };
 		635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635962E223DF3ECC00FE4EDF /* Tap.swift */; };
 		635CF20E242CF23300DEFDBE /* ButtonTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20D242CF23300DEFDBE /* ButtonTapper.swift */; };
 		635CF210242CF28000DEFDBE /* ArbitraryLocationTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */; };
@@ -396,6 +397,7 @@
 		634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
 		63521E9423D7511F002706C0 /* BisectionSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BisectionSolver.swift; sourceTree = "<group>"; };
 		6358C623242D6EB900DF41CE /* GradientColorMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorMatching.swift; sourceTree = "<group>"; };
+		6358C625242DE52500DF41CE /* RationalNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RationalNumber.swift; sourceTree = "<group>"; };
 		635962E223DF3ECC00FE4EDF /* Tap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tap.swift; sourceTree = "<group>"; };
 		635CF20D242CF23300DEFDBE /* ButtonTapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTapper.swift; sourceTree = "<group>"; };
 		635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryLocationTapper.swift; sourceTree = "<group>"; };
@@ -1461,6 +1463,7 @@
 			isa = PBXGroup;
 			children = (
 				63672C59242C057D008FCDFC /* Term.swift */,
+				6358C625242DE52500DF41CE /* RationalNumber.swift */,
 				639B78C9242CDB84009674E8 /* ArrayScanner.swift */,
 				63672C5B242C0588008FCDFC /* Tokenizer.swift */,
 				639B78CB242CDCB6009674E8 /* Parser.swift */,
@@ -2449,6 +2452,7 @@
 			files = (
 				63B40BD624251140007A86E9 /* identiti.swift in Sources */,
 				63758AEB242536AA00D0F060 /* Exercise.swift in Sources */,
+				6358C626242DE52500DF41CE /* RationalNumber.swift in Sources */,
 				63672C5A242C057D008FCDFC /* Term.swift in Sources */,
 				63672C5C242C0588008FCDFC /* Tokenizer.swift in Sources */,
 				63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */,
