@@ -100,7 +100,7 @@ class ImageAnalyzer {
             // Check if detected box is valid; then, crop image to this box
             // (Corner removal can yield somewhat varying results -> high tolerance for width)
             if aabb.width.isAlmostEqual(to: box.width, tolerance: 15) &&
-                aabb.height.isAlmostEqual(to: box.height, tolerance: 2) {
+                aabb.height.isAlmostEqual(to: box.height, tolerance: 5) {
                 return image.cropped(to: Bounds(rect: aabb.rect))
             }
         }

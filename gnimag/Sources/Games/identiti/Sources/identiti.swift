@@ -39,10 +39,21 @@ public final class identiti {
     private func update(image: Image, time: Double) {
         performFirstImageSetupIfRequired(with: image)
 
-        // Analyze and process image
-        guard let exercise = imageAnalyzer.analyze(image: image), exercise != currentExercise else { return }
+        // Get exercise from image; compare with currentExercise
+        guard let exercise = imageAnalyzer.analyze(image: image) else {
+            currentExercise = nil // Switching between exercise; wait for next exercise
+            return
+        }
+
+        if exercise == currentExercise { // Still in current exercise, nothing tbd
+            return
+        }
+
+        // New exercise detected
         currentExercise = exercise
 
+        print(exercise)
+        
         // Tap on correct location
         guard let result = exercise.result else {
             Terminal.log(.error, "No result for exercise \(exercise)!")

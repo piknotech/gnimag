@@ -8,20 +8,22 @@ import Image
 
 /// GrayscaleImage is an Image effectively wrapping a CGImage using bitmap data.
 /// The wrapped CGImage must be a grayscale image, i.e. have one byte per pixel.
+/// When initializing a GrayscaleImage, the whole pixel bitmap is read and stored for fast pixel-by-pixel-access.
 internal class GrayscaleImage: Image {
-    /// The raw pixel data and CGImage.
-    let data: CFData
+    /// The raw pixel data.
+    @usableFromInline
+    private(set) var data: [UInt8]
 
     private let _cgImage: CGImage
     public override var CGImage: CGImage { _cgImage }
 
-    /// Single buffer for performant color reading.
-    let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: 1)
-
     /// Default initializer.
     init(_ image: CGImage) {
         // Get raw pixel data
-        data = image.dataProvider!.data!
+        let cfData = image.dataProvider!.data!
+        data = [UInt8](repeating: 0, count: CFDataGetLength(cfData))
+        CFDataGetBytes(cfData, CFRangeMake(0, CFDataGetLength(cfData)), &data)
+
         _cgImage = image
 
         super.init(width: image.width, height: image.height)
@@ -32,9 +34,7 @@ internal class GrayscaleImage: Image {
     override func color(at pixel: Pixel) -> Color {
         // Read pixel value
         let offset = width * (height - 1 - pixel.y) + pixel.x
-        CFDataGetBytes(data, CFRangeMake(offset, 1), buf)
-        
-        let gray = Double(buf[0]) / 255
+        let gray = Double(data[offset]) / 255
         return Color(gray, gray, gray)
     }
 }
