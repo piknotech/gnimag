@@ -41,7 +41,6 @@ struct ValueStreamDamper<T: Equatable> {
     /// This will trigger the value change event if required.
     mutating func add(value: T?) {
         if value == currentValue { // Same value, nothing TBD
-            if consecutiveNewValues != 0 { print("DELETE FROM \(newValueInQuestion) TO \(value)") }
             consecutiveNewValues = 0
             newValueInQuestion = .none
             return

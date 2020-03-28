@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Foundation
 import Tapping
 
 /// A Tapper which does nothing.

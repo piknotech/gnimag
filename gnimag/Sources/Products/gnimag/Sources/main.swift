@@ -8,8 +8,8 @@ import identiti
 import Geometry
 import Tapping
 
-let provider = AppWindowScreenProvider(appName: "AirServer", windowNameHint: "iPhone")
-//let provider = ImageListProvider(directoryPath: "/Users/David/Desktop/L", framerate: 30)
+//let provider = AppWindowScreenProvider(appName: "AirServer", windowNameHint: "iPhone")
+//let provider = ImageListProvider(directoryPath: "/Users/David/Desktop/ /identiti/Test-iOS", framerate: 30)
 
 struct TTapper: ArbitraryLocationTapper {
     func tap(at point: CGPoint) {
@@ -21,7 +21,7 @@ struct TTapper: ArbitraryLocationTapper {
     }
 }
 
-let id = identiti(imageProvider: provider, tapper: TTapper(), os: .iOS)
+let id = identiti(imageProvider: Scrcpy.imageProvider, tapper: Scrcpy.tapper, os: .android)
 Timing.perform(after: 1) {
     id.play()
 }
