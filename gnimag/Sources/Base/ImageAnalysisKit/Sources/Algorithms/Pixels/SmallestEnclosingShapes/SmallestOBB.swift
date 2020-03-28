@@ -5,6 +5,7 @@
 
 import Foundation
 import Geometry
+import Image
 
 public enum SmallestOBB {
     /// Properties of an OBB that can be minimized when calculating the smallest (respective to this property) OBB.
@@ -12,6 +13,12 @@ public enum SmallestOBB {
         case area
         case perimeter
         case diameter
+    }
+
+    /// Calculate the smallest OBB that contains a given (non-empty) set of pixels.
+    /// This runs in O(n log n + nh) time where h is the number of points on the convex hull.
+    public static func containing(_ pixels: [Pixel], minimizing minimizingProperty: MinimizingProperty = .area) -> OBB {
+        containing(pixels.map(CGPoint.init), minimizing: minimizingProperty)
     }
 
     /// Calculate the smallest OBB that contains a given (non-empty) set of points.

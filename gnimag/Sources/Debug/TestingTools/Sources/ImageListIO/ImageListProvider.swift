@@ -31,7 +31,7 @@ public final class ImageListProvider: ImageProvider {
 
     /// Default initializer.
     /// Start providing images immediately.
-    public init(directoryPath: String, framerate: Int, startingAt: Int = 1, speed: Int = 1, imageFromCGImage: @escaping (CGImage) -> Image) {
+    public init(directoryPath: String, framerate: Int, startingAt: Int = 1, speed: Int = 1, imageFromCGImage: @escaping (CGImage) -> Image = NativeImage.init) {
         self.directoryPath = directoryPath
         self.framerate = framerate
         self.imageFromCGImage = imageFromCGImage

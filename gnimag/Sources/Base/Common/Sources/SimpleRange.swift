@@ -85,7 +85,7 @@ public struct SimpleRange<Bound: FloatingPoint> {
     }
 
     /// Intersect this range with another range.
-    /// Returns an empty range if there is no intersection of if one of the ranges is empty.
+    /// Returns an empty range if there is no intersection or if one of the ranges is empty.
     /// Use `.open` as the neutral element.
     @_transparent
     public func intersection(with other: SimpleRange<Bound>) -> SimpleRange<Bound> {

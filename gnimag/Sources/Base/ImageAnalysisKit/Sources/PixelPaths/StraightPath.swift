@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import Image
 
@@ -27,9 +28,11 @@ public final class StraightPath: PixelPath {
     private let cosAngle: CGFloat
 
     /// Default initializer.
-    public init(start: Pixel, angle: CGFloat, bounds: Bounds, speed: CGFloat = 1) {
+    public init(start: Pixel, angle: Angle, bounds: Bounds, speed: CGFloat = 1) {
+        self.angle = CGFloat(angle.value)
+        let angle = self.angle
+
         self.start = start
-        self.angle = angle
         self.bounds = bounds
 
         current = start.CGPoint
@@ -49,7 +52,7 @@ public final class StraightPath: PixelPath {
         let dy = CGFloat(through.y - start.y)
         let dx = CGFloat(through.x - start.x)
         let angle = atan2(dy, dx)
-        self.init(start: start, angle: angle, bounds: bounds, speed: speed)
+        self.init(start: start, angle: Angle(angle), bounds: bounds, speed: speed)
     }
 
     // MARK: PixelPath

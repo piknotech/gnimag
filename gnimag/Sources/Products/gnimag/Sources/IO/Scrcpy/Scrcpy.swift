@@ -18,7 +18,7 @@ enum Scrcpy {
 
     /// Create a new Tapper that taps on the scrcpy application window.
     /// scrcpy must be running and streaming.
-    static var tapper: Tapper {
+    static var tapper: Tapper & ArbitraryLocationTapper {
         WindowTapper(appName: "scrcpy")
     }
 }

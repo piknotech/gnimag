@@ -12,6 +12,7 @@ SOURCES = $(wildcard $(srcdir)/**/*.swift)
 .DEFAULT_GOAL = install
 
 gnimag: $(SOURCES)
+	@./CopyResources.sh
 	@swift build \
 		-c release \
 		-Xswiftc "-whole-module-optimization" \
@@ -24,7 +25,9 @@ install: gnimag
 	@install "$(BUILDDIR)/release/gnimag" "$(bindir)"
 
 uninstall:
+	@./CopyResources.sh clean
 	@rm -rf "$(bindir)/gnimag"
 
 clean:
+	@./CopyResources.sh clean
 	@rm -rf $(BUILDDIR)

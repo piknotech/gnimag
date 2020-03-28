@@ -72,7 +72,7 @@ class TapPredictor: TapPredictorBase {
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
-        return strategy.solution(for: frame).asTapSequence(relativeTo: timeProvider.currentTime)
+        return strategy.solution(for: frame)?.asTapSequence(relativeTo: timeProvider.currentTime)
     }
 
     /// Choose the strategy to calculate the solution for a given frame.

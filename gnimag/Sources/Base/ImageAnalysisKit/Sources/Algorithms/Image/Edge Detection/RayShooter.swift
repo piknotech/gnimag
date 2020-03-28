@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import Image
 
@@ -44,7 +45,7 @@ public enum RayShooter {
         for i in 0 ..< numRays {
             // Construct StraightPath in correct direction
             let angle = 2 * .pi * CGFloat(i) / CGFloat(numRays)
-            let path = StraightPath(start: detectionCenter, angle: angle, bounds: image.bounds, speed: CGFloat(raySpeed))
+            let path = StraightPath(start: detectionCenter, angle: Angle(angle), bounds: image.bounds, speed: CGFloat(raySpeed))
 
             // Run through the path until the ColorMatchSequence is fulfilled
             let result = image.follow(path: path, untilFulfillingSequence: colorSequence)

@@ -21,9 +21,8 @@ public final class MrFlap {
     private var gameModelCollector: GameModelCollector!
     private let tapPredictor: TapPredictor
 
-    /// The queue where image analysis and game model collection is performed on.
+    /// The queue where all steps are performed on.
     private var queue: GameQueue!
-
     private var statsPrintingTimer: Timer!
 
     /// The shared playfield.

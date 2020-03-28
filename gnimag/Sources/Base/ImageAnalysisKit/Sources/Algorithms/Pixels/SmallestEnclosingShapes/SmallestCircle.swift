@@ -6,8 +6,15 @@
 
 import Foundation
 import Geometry
+import Image
 
 public enum SmallestCircle {
+    /// Calculate the smallest circle that contains a given (non-empty) set of pixels.
+    /// This runs in expected O(n) time.
+    public static func containing(_ pixels: [Pixel]) -> Circle {
+        containing(pixels.map(CGPoint.init))
+    }
+
     /// Calculate the smallest circle that contains a given (non-empty) set of points.
     /// This runs in expected O(n) time.
     public static func containing(_ points: [CGPoint]) -> Circle {
