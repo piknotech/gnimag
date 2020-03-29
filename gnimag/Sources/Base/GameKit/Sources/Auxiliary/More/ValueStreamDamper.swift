@@ -8,9 +8,9 @@ import Common
 /// Consider a value stream where a value change triggers an action, but value changes only happen every few frames at most (i.e. in the meantime the same value is sent each frame).
 /// ValueStreamDamper can be used to dismiss erroneous values in the value stream, i.e. values that erroneously appear only for a single frame and do not actually belong into the stream (which would trigger erroneous actions to be performed).
 /// ValueStreamDamper requires a new value to be received at least 3 (e.g.) times in a row before triggering the value change action; values which appear just once or twice are dismissed.
-struct ValueStreamDamper<T: Equatable> {
+public struct ValueStreamDamper<T: Equatable> {
     /// The event which is triggered when a valid (i.e. non-erroneous) value change was detected.
-    let newValue = Event<T?>()
+    public let newValue = Event<T?>()
 
     /// The number of times the same value has to be received in a row for a successful value change.
     private let numberOfConsecutiveValues: Int
@@ -32,14 +32,14 @@ struct ValueStreamDamper<T: Equatable> {
     private var consecutiveNewValues = 0
 
     /// Default initializer.
-    init(numberOfConsecutiveValues: Int, numberOfConsecutiveNilValues: Int? = nil) {
+    public init(numberOfConsecutiveValues: Int, numberOfConsecutiveNilValues: Int? = nil) {
         self.numberOfConsecutiveValues = numberOfConsecutiveValues
         self.numberOfConsecutiveNilValues = numberOfConsecutiveNilValues ?? numberOfConsecutiveValues
     }
 
     /// Add a value to the value stream.
     /// This will trigger the value change event if required.
-    mutating func add(value: T?) {
+    public mutating func add(value: T?) {
         if value == currentValue { // Same value, nothing TBD
             consecutiveNewValues = 0
             newValueInQuestion = .none

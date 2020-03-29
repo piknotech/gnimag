@@ -18,7 +18,7 @@ public final class identiti {
     private var queue: GameQueue!
 
     /// The stream of exercises which are analyzed each frame.
-    /// `exerciseStream` triggers an event when an exercise leaves the screen and when a new exercise comes in.
+    /// `exerciseStream` triggers an event when an exercise leaves the screen or when a new exercise comes in.
     private var exerciseStream = ValueStreamDamper<Exercise>(
         numberOfConsecutiveValues: 3,
         numberOfConsecutiveNilValues: 2
