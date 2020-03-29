@@ -75,13 +75,13 @@ public final class identiti {
     }
 
     /// Called from the exerciseStream when it detects a new exercise.
-       private func newExerciseDetected(exercise: Exercise) {
-           // Tap on correct location
-           guard let result = exercise.result else {
-               Terminal.log(.error, "No result for exercise \(exercise)!")
-               return
-           }
+    private func newExerciseDetected(exercise: Exercise) {
+        // Tap on correct location
+        guard let result = exercise.result else {
+            Terminal.log(.error, "No result for exercise \(exercise)!")
+            return
+        }
 
-           buttonTapper.performTap(for: result)
-       }
+        buttonTapper.performTap(for: result)
+    }
 }

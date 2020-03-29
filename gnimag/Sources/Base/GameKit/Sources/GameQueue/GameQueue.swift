@@ -43,7 +43,6 @@ public final class GameQueue {
     }
 
     /// Stop receiving images.
-    /// Attention: this removes all subscribers from the image provider.
     public func stop() {
         imageProvider.newFrame.unsubscribe(self)
     }
