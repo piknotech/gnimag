@@ -26,8 +26,11 @@ struct BoardLayout {
 
     /// The center of the cell at the given (x/y) position (0-based).
     func center(ofCell cell: (x: Int, y: Int)) -> CGPoint {
-        let x = Double(2 * cell.x + 1) / Double(2 * size)
-        let y = Double(2 * cell.y + 1) / Double(2 * size)
-        return CGPoint(x: x, y: y)
+        let x = CGFloat(2 * cell.x + 1) / CGFloat(2 * size)
+        let y = CGFloat(2 * cell.y + 1) / CGFloat(2 * size)
+        return CGPoint(
+            x: aabb.rect.origin.x + x * aabb.width,
+            y: aabb.rect.origin.y + y * aabb.height
+        )
     }
 }

@@ -3,12 +3,15 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import GameKit
 import Image
 import ImageAnalysisKit
 
 /// FlowFreeSingleGame plays one single level of Flow Free.
 public class FlowFreeSingleLevel {
+    private let imageAnalyzer: ImageAnalyzer
+
     /// The queue where image analysis is performed on.
     private var queue: GameQueue!
 
@@ -18,8 +21,17 @@ public class FlowFreeSingleLevel {
 
     /// Default initializer.
     public init(imageProvider: ImageProvider) {
+        imageAnalyzer = ImageAnalyzer()
+
         let wrappedProvider = OnOffImageProvider(wrapping: imageProvider)
         queue = GameQueue(imageProvider: wrappedProvider, synchronousFrameCallback: update)
+
+        // Level detection callback
+        levelStream.newValue += { level in
+            if let level = level {
+                self.newLevelDetected(level: level)
+            }
+        }
     }
 
     /// Begin receiving images and play the game.
@@ -30,5 +42,12 @@ public class FlowFreeSingleLevel {
 
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
+        guard let level = imageAnalyzer.analyze(image: image) else { return }
+        levelStream.add(value: level)
+    }
+
+    /// Called from the levelStream when it detects a new level.
+    private func newLevelDetected(level: Level) {
+        print(level)
     }
 }

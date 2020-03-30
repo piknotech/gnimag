@@ -5,7 +5,7 @@
 
 public enum SimpleClustering {
     /// Defines a cluster of objects.
-    public class Cluster<T: DistanceMeasurable> {
+    public class Cluster<T: DistanceMeasurable>: CustomStringConvertible {
         public private(set) var objects: [T]
 
         /// The number of objects in the cluster.
@@ -41,6 +41,10 @@ public enum SimpleClustering {
                 let maxDistance = remaining.map(first.distance(to:)).max() ?? 0
                 diameter = max(diameter!, maxDistance)
             }
+        }
+
+        public var description: String {
+            "Cluster(size: \(size), diameter: \(String(describing: diameter)), any: \(any))"
         }
     }
 
