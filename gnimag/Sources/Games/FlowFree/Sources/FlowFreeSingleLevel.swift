@@ -7,24 +7,28 @@ import Common
 import GameKit
 import Image
 import ImageAnalysisKit
+import Tapping
 
 /// FlowFreeSingleGame plays one single level of Flow Free.
 public class FlowFreeSingleLevel {
     private let imageAnalyzer: ImageAnalyzer
+    private let pathTracer: PathTracer
 
     /// The queue where image analysis is performed on.
     private var queue: GameQueue!
+    private let onOffImageProvider: OnOffImageProvider
 
     /// The stream of incoming levels.
     /// This is used to filter out image analysis errors: instead of immediately solving and playing the first incoming image, we require 3 consecutive frames to yield the same level. This precludes single-frame image errors.
     private var levelStream = ValueStreamDamper<Level>(numberOfConsecutiveValues: 3)
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider) {
+    public init(imageProvider: ImageProvider, straightLineMover: StraightLineMover) {
         imageAnalyzer = ImageAnalyzer()
+        pathTracer = PathTracer(underlyingDrawer: straightLineMover)
 
-        let wrappedProvider = OnOffImageProvider(wrapping: imageProvider)
-        queue = GameQueue(imageProvider: wrappedProvider, synchronousFrameCallback: update)
+        onOffImageProvider = OnOffImageProvider(wrapping: imageProvider)
+        queue = GameQueue(imageProvider: onOffImageProvider, synchronousFrameCallback: update)
 
         // Level detection callback
         levelStream.newValue += { level in
@@ -43,11 +47,20 @@ public class FlowFreeSingleLevel {
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
         guard let level = imageAnalyzer.analyze(image: image) else { return }
+        pathTracer.screen = imageAnalyzer.screen
+
         levelStream.add(value: level)
     }
 
     /// Called from the levelStream when it detects a new level.
     private func newLevelDetected(level: Level) {
-        print(level)
+        onOffImageProvider.pause() // Discard incoming image until level is solved & drawn
+
+        // If solution can't be found, exit (because user probably has to install python etc.)
+        guard let solution = level.solution else {
+            exit(withMessage: "pyflowsolver couldn't be executed or couldn't find a solution. This may be an image analysis error. Detected level: \(level)")
+        }
+
+        pathTracer.draw(solution: solution, to: level)
     }
 }

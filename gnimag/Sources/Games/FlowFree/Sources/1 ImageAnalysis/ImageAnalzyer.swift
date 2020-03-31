@@ -29,8 +29,9 @@ class ImageAnalyzer {
     /// Find the level in an image using the existing board layout.
     private func findLevel(in image: Image) -> Level? {
         let elements = (Array(0 ..< screen.board.size) × Array(0 ..< screen.board.size)).map { (x, y) -> PositionAndColor in
-            let center = screen.board.center(ofCell: (x, y)).nearestPixel
-            return PositionAndColor(position: Position(x: x, y: y), color: image.color(at: center))
+            let cell = Position(x: x, y: y)
+            let center = screen.board.center(ofCell: cell).nearestPixel
+            return PositionAndColor(position: cell, color: image.color(at: center))
         }
 
         let result = SimpleClustering.from(elements, maxDistance: 0.1)

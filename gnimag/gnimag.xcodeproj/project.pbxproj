@@ -219,6 +219,8 @@
 		63DF005C24269111001D81B3 /* Angle+Directions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF005B24269111001D81B3 /* Angle+Directions.swift */; };
 		63DF005F24269816001D81B3 /* BitmapOCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF005E24269816001D81B3 /* BitmapOCR.swift */; };
 		63DF00612427E391001D81B3 /* BitmapOCRCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF00602427E390001D81B3 /* BitmapOCRCreator.swift */; };
+		63E16AA72433E16F005E67ED /* StraightLineMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AA62433E16F005E67ED /* StraightLineMover.swift */; };
+		63E16AA92433E4BF005E67ED /* PathTracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AA82433E4BF005E67ED /* PathTracer.swift */; };
 		63E5A06E23FC1D360082E910 /* TimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06D23FC1D350082E910 /* TimeProvider.swift */; };
 		63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
@@ -536,6 +538,8 @@
 		63DF005B24269111001D81B3 /* Angle+Directions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Angle+Directions.swift"; sourceTree = "<group>"; };
 		63DF005E24269816001D81B3 /* BitmapOCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitmapOCR.swift; sourceTree = "<group>"; };
 		63DF00602427E390001D81B3 /* BitmapOCRCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitmapOCRCreator.swift; sourceTree = "<group>"; };
+		63E16AA62433E16F005E67ED /* StraightLineMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StraightLineMover.swift; sourceTree = "<group>"; };
+		63E16AA82433E4BF005E67ED /* PathTracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTracer.swift; sourceTree = "<group>"; };
 		63E5A06D23FC1D350082E910 /* TimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeProvider.swift; sourceTree = "<group>"; };
 		63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+PixelFormat.swift"; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
@@ -665,6 +669,7 @@
 				630682D22430CEB400C5B28E /* FlowFreeSingleLevel.swift */,
 				630682DA2430F57C00C5B28E /* 1 ImageAnalysis */,
 				63179AC52433380300DA492E /* 2 LevelSolving */,
+				63E16AA52433E10F005E67ED /* 3 PathTracing */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -922,6 +927,7 @@
 			children = (
 				631212EA232574E500C126B4 /* Tapper.swift */,
 				635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */,
+				63E16AA62433E16F005E67ED /* StraightLineMover.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1852,6 +1858,14 @@
 			path = BitmapOCR;
 			sourceTree = "<group>";
 		};
+		63E16AA52433E10F005E67ED /* 3 PathTracing */ = {
+			isa = PBXGroup;
+			children = (
+				63E16AA82433E4BF005E67ED /* PathTracer.swift */,
+			);
+			path = "3 PathTracing";
+			sourceTree = "<group>";
+		};
 		63F0192F23885B7600E380CB /* Debug */ = {
 			isa = PBXGroup;
 			children = (
@@ -2425,6 +2439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63179AD124339B8200DA492E /* Level+BestPathTracingOrder.swift in Sources */,
+				63E16AA92433E4BF005E67ED /* PathTracer.swift in Sources */,
 				630682DE2430F59900C5B28E /* Level.swift in Sources */,
 				630682DC2430F59000C5B28E /* ScreenLayout.swift in Sources */,
 				63179ACB243338A000DA492E /* PyFlowSolver.swift in Sources */,
@@ -2466,6 +2481,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63E16AA72433E16F005E67ED /* StraightLineMover.swift in Sources */,
 				631212EC232574E600C126B4 /* Tapper.swift in Sources */,
 				635CF210242CF28000DEFDBE /* ArbitraryLocationTapper.swift in Sources */,
 			);
