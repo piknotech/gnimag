@@ -7,8 +7,6 @@ import Common
 import Foundation
 import SwiftShell
 
-import TestingTools
-
 /// A wrapper around the pyflowsolver script.
 enum PyFlowSolver {
     private static let scriptLocation = NSHomeDirectory() +/ "Library/Application Support/gnimag/FlowFree/pyflowsolver.py"
@@ -17,10 +15,7 @@ enum PyFlowSolver {
     /// When an error occurs (i.e. python is not installed), it is logged to the console.
     static func solve(level: Level) -> Solution? {
         let input = PyFlowConverter.convertInput(level: level)
-
-        Measurement.begin(id: "pyflowsolver")
-        let output = main.run("python", [scriptLocation, input])
-        Measurement.end(id: "pyflowsolver")
+        let output = main.run("/usr/bin/python", [scriptLocation, input])
 
         if !output.succeeded {
             Terminal.log(.error, "Error (exit code \(output.exitcode)) while executing pyflowsolver script: \(output.stderror)")
@@ -92,7 +87,7 @@ private enum PyFlowConverter {
         let paths = (0 ..< level.colors.count).compactMap(findPath(forColorIndex:))
         if paths.count != level.colors.count { return nil }
 
-        return Solution(paths: paths, level: level)
+        return Solution(paths: paths)
     }
 
     /// Find the vertices for the path from `start` to `end`, where `previous` is the position directly before `start` in the path.

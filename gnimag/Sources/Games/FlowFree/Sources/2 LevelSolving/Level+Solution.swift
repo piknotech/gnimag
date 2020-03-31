@@ -12,3 +12,18 @@ extension Level {
         PyFlowSolver.solve(level: self)
     }
 }
+
+/// The solution of a level.
+struct Solution {
+    struct Path {
+        let start: Position
+        let end: Position
+
+        /// The vertices of the path, i.e. the points where the direction changes.
+        let vertices: [Position]
+    }
+
+    /// The paths for each color.
+    /// Each path belongs to a color – the paths are in the same order as `level.colors` (and therefore has the same size).
+    let paths: [Path]
+}
