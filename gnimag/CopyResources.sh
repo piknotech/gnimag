@@ -14,3 +14,6 @@ fi
 # Copy resources
 mkdir -p "$gnimag"/identiti
 cp -R Sources/Games/identiti/Resources/OCR "$gnimag"/identiti
+
+mkdir -p "$gnimag"/FlowFree
+cp Sources/Games/FlowFree/Scripts/pyflowsolver.py "$gnimag"/FlowFree

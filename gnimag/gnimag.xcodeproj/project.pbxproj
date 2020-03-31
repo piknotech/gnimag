@@ -111,6 +111,10 @@
 		6316BDA723C91BD10062100F /* LinearFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA623C91BD10062100F /* LinearFunction.swift */; };
 		6316BDA923CA49FB0062100F /* JumpTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA823CA49FB0062100F /* JumpTracker+Future.swift */; };
 		6316BDB523CB8D430062100F /* JumpSequencePlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */; };
+		63179AC92433388A00DA492E /* Solution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AC82433388A00DA492E /* Solution.swift */; };
+		63179ACB243338A000DA492E /* PyFlowSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179ACA243338A000DA492E /* PyFlowSolver.swift */; };
+		63179ACC243387E900DA492E /* Level+Solution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AC62433385D00DA492E /* Level+Solution.swift */; };
+		63179ACF2433895700DA492E /* SwiftShell in Frameworks */ = {isa = PBXBuildFile; productRef = 63179ACE2433895700DA492E /* SwiftShell */; };
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
 		631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631BE25723EF53EE008DDEE1 /* CwlRandom.swift */; };
@@ -400,6 +404,9 @@
 		6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequencePlot.swift; sourceTree = "<group>"; };
 		63179AC32433313D00DA492E /* pyflowsolver.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pyflowsolver.py; sourceTree = "<group>"; };
 		63179AC42433313D00DA492E /* Acknowledgements.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Acknowledgements.md; sourceTree = "<group>"; };
+		63179AC62433385D00DA492E /* Level+Solution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Level+Solution.swift"; sourceTree = "<group>"; };
+		63179AC82433388A00DA492E /* Solution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solution.swift; sourceTree = "<group>"; };
+		63179ACA243338A000DA492E /* PyFlowSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PyFlowSolver.swift; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
 		631BE25723EF53EE008DDEE1 /* CwlRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CwlRandom.swift; sourceTree = "<group>"; };
@@ -544,6 +551,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63179ACF2433895700DA492E /* SwiftShell in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,6 +662,7 @@
 			children = (
 				630682D22430CEB400C5B28E /* FlowFreeSingleLevel.swift */,
 				630682DA2430F57C00C5B28E /* 1 ImageAnalysis */,
+				63179AC52433380300DA492E /* 2 LevelSolving */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1451,6 +1460,16 @@
 			path = Scripts;
 			sourceTree = "<group>";
 		};
+		63179AC52433380300DA492E /* 2 LevelSolving */ = {
+			isa = PBXGroup;
+			children = (
+				63179AC62433385D00DA492E /* Level+Solution.swift */,
+				63179ACA243338A000DA492E /* PyFlowSolver.swift */,
+				63179AC82433388A00DA492E /* Solution.swift */,
+			);
+			path = "2 LevelSolving";
+			sourceTree = "<group>";
+		};
 		6318966823B4C896002FBD4F /* 3 TapPrediction */ = {
 			isa = PBXGroup;
 			children = (
@@ -1999,6 +2018,9 @@
 			dependencies = (
 			);
 			name = FlowFree;
+			packageProductDependencies = (
+				63179ACE2433895700DA492E /* SwiftShell */,
+			);
 			productName = FlowFree;
 			productReference = 630682C82430CE4C00C5B28E /* FlowFree.framework */;
 			productType = "com.apple.product-type.framework";
@@ -2272,6 +2294,7 @@
 			packageReferences = (
 				634AF71E23E84879005FE241 /* XCRemoteSwiftPackageReference "Charts" */,
 				634AF72123E848C3005FE241 /* XCRemoteSwiftPackageReference "Surge" */,
+				63179ACD2433895700DA492E /* XCRemoteSwiftPackageReference "SwiftShell" */,
 			);
 			productRefGroup = 631212AE23253DC700C126B4 /* Products */;
 			projectDirPath = "";
@@ -2398,8 +2421,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63179AC92433388A00DA492E /* Solution.swift in Sources */,
 				630682DE2430F59900C5B28E /* Level.swift in Sources */,
 				630682DC2430F59000C5B28E /* ScreenLayout.swift in Sources */,
+				63179ACB243338A000DA492E /* PyFlowSolver.swift in Sources */,
+				63179ACC243387E900DA492E /* Level+Solution.swift in Sources */,
 				630682D32430CEB400C5B28E /* FlowFreeSingleLevel.swift in Sources */,
 				630682E02430FB3800C5B28E /* ImageAnalzyer.swift in Sources */,
 			);
@@ -4585,6 +4611,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		63179ACD2433895700DA492E /* XCRemoteSwiftPackageReference "SwiftShell" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kareman/SwiftShell";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
 		634AF71E23E84879005FE241 /* XCRemoteSwiftPackageReference "Charts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/danielgindi/Charts";
@@ -4604,6 +4638,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		63179ACE2433895700DA492E /* SwiftShell */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63179ACD2433895700DA492E /* XCRemoteSwiftPackageReference "SwiftShell" */;
+			productName = SwiftShell;
+		};
 		634AF71F23E84879005FE241 /* Charts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 634AF71E23E84879005FE241 /* XCRemoteSwiftPackageReference "Charts" */;

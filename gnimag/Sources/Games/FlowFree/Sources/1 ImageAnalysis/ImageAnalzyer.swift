@@ -30,7 +30,7 @@ class ImageAnalyzer {
     private func findLevel(in image: Image) -> Level? {
         let elements = (Array(0 ..< screen.board.size) × Array(0 ..< screen.board.size)).map { (x, y) -> PositionAndColor in
             let center = screen.board.center(ofCell: (x, y)).nearestPixel
-            return PositionAndColor(position: (x, y), color: image.color(at: center))
+            return PositionAndColor(position: Position(x: x, y: y), color: image.color(at: center))
         }
 
         let result = SimpleClustering.from(elements, maxDistance: 0.1)
@@ -45,7 +45,7 @@ class ImageAnalyzer {
         let levelColors = clusters.dropLast().map { cluster -> Level.Color in
             let start = cluster.objects[0].position
             let end = cluster.objects[1].position
-            return (start: start, end: end)
+            return Level.Color(start: start, end: end)
         }
 
         return Level(colors: levelColors, boardSize: screen.board.size)
@@ -112,7 +112,7 @@ class ImageAnalyzer {
 
 /// Helper struct for level-color clustering.
 struct PositionAndColor: DistanceMeasurable {
-    let position: Level.Position
+    let position: Position
     let color: Color
 
     func distance(to other: PositionAndColor) -> Double {

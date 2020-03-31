@@ -6,10 +6,23 @@
 import Foundation
 import Geometry
 
+/// A position on the board, between 0 and size-1.
+/// (0, 0) is lower-left; (size-1, size-1) is upper-right.
+struct Position: Equatable {
+    let x: Int
+    let y: Int
+
+    static func ==(lhs: Position, rhs: Position) -> Bool {
+        lhs.x == rhs.x && lhs.y == rhs.y
+    }
+}
+
 /// A flow-free level.
 struct Level {
-    typealias Position = (x: Int, y: Int)
-    typealias Color = (start: Position, end: Position)
+    struct Color {
+        let start: Position
+        let end: Position
+    }
 
     /// The array of colors, each of which has a start and an end position.
     let colors: [Color]
