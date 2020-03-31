@@ -54,15 +54,6 @@ ANSI_RESET = '\033[0m'
 
 ANSI_CELL_FORMAT = '\033[30;{}m'
 
-DIR_LOOKUP = {
-    LR: '─',
-    TB: '│',
-    TL: '┘',
-    TR: '└',
-    BL: '┐',
-    BR: '┌'
-    }
-
 RESULT_STRINGS = dict(s='successful',
                       f='failed',
                       u='unsolvable')
@@ -212,13 +203,7 @@ indices.
             print 'color {} has start but no end!'.format(char)
             return None, None
 
-    # print info
-    if not options.quiet:
-        print 'read {}x{} puzzle with {} colors from {}'.format(
-            size, size, len(colors), filename)
-        print
-
-    puzzle, colors = repair_colors(puzzle, colors)
+    # puzzle, colors = repair_colors(puzzle, colors)
     return puzzle, colors
 
 ######################################################################
@@ -402,19 +387,6 @@ possibly negated.
     clauses = color_clauses + dir_clauses
 
     reduce_time = (datetime.now() - start).total_seconds()
-
-    if not options.quiet:
-        print 'generated {:,} clauses over {:,} color variables'.format(
-            len(color_clauses), num_color_vars, grouping=True)
-
-        print 'generated {:,} dir clauses over {:,} dir variables'.format(
-            len(dir_clauses), num_dir_vars)
-
-        print 'total {:,} clauses over {:,} variables'.format(
-            len(clauses), num_vars)
-
-        print 'reduced to SAT in {:.3f} seconds'.format(reduce_time)
-        print
 
     return color_var, dir_vars, num_vars, clauses, reduce_time
 
@@ -615,7 +587,7 @@ def show_solution(options, colors, decoded):
                 else:
                     display_char = color_char
             else:
-                display_char = DIR_LOOKUP[dir_type]
+                display_char = color_char
 
             if do_color:
 
@@ -675,106 +647,13 @@ needed.
 
     solve_time = (datetime.now() - start).total_seconds()
 
-    if not options.quiet:
-        if options.display_cycles:
-            for cycle_decoded in all_decoded[:-1]:
-                print 'intermediate solution with cycles:'
-                print
-                show_solution(options, colors, cycle_decoded)
-                print
-
-        if decoded is None:
-            print 'solver returned {} after {:,} cycle '\
-                'repairs and {:.3f} seconds'.format(
-                    str(sol), repairs, solve_time)
-
-        else:
-            print 'obtained solution after {:,} cycle repairs '\
-                'and {:.3f} seconds:'.format(
-                    repairs, solve_time)
-            print
-            show_solution(options, colors, decoded)
-            print
+    if decoded is None:
+        exit(1)
+    else:
+        show_solution(options, colors, decoded)
+        exit(0)
 
     return sol, decoded, repairs, solve_time
-
-######################################################################
-
-def print_summary(options, stats):
-
-    '''Print out stats for all solutions.'''
-
-    max_width = max(len(f) for f in options.filenames)
-
-    solution_types = stats.keys()
-
-    all_stats = defaultdict(float)
-
-    for result_char in solution_types:
-        for k in stats[result_char]:
-            all_stats[k] += stats[result_char][k]
-
-    if all_stats['count'] > 1:
-
-        if not options.quiet:
-
-            print '\n'+('*'*70)+'\n'
-
-            for result_char in solution_types:
-
-                print '{:d} {:s} searches took:\n'\
-                    '  {:,.3f} sec. to reduce '\
-                    '(with {:,d} variables and {:,d} clauses)\n'\
-                    '  {:,.3f} sec. to solve (with {:d} repairs)\n'\
-                    '  {:,.3f} sec. total\n'.format(
-                        stats[result_char]['count'], result_char,
-                        stats[result_char]['reduce_time'],
-                        stats[result_char]['num_vars'],
-                        stats[result_char]['num_clauses'],
-                        stats[result_char]['solve_time'],
-                        stats[result_char]['repairs'],
-                        stats[result_char]['total_time'])
-
-            if len(solution_types) > 1:
-
-                print 'overall, {:d} searches took:\n'\
-                    '  {:,.3f} sec. to reduce '\
-                    '(with {:,d} variables and {:,d} clauses)\n'\
-                    '  {:,.3f} sec. to solve (with {:d} repairs)\n'\
-                    '  {:,.3f} sec. total\n'.format(
-                        int(all_stats['count']),
-                        all_stats['reduce_time'],
-                        int(all_stats['num_vars']),
-                        int(all_stats['num_clauses']),
-                        all_stats['solve_time'],
-                        int(all_stats['repairs']),
-                        all_stats['total_time'])
-
-        else:
-
-            print
-
-            for result_char in solution_types:
-
-                print '{:s}{:3d} total {:s} {:9,d} {:9,d} {:12,.3f} '\
-                    '{:3d} {:12,.3f} {:12,.3f}'.format(
-                        ' '*(max_width-9), stats[result_char]['count'],
-                        result_char,
-                        stats[result_char]['num_vars'],
-                        stats[result_char]['num_clauses'],
-                        stats[result_char]['reduce_time'],
-                        stats[result_char]['repairs'],
-                        stats[result_char]['solve_time'],
-                        stats[result_char]['total_time'])
-
-            if len(solution_types) > 1:
-
-                print '{:s}{:3d} overall {:9,d} {:9,d} {:12,.3f} '\
-                    '{:3d} {:12,.3f} {:12,.3f}'.format(
-                        ' '*(max_width-9), int(all_stats['count']),
-                        int(all_stats['num_vars']), int(all_stats['num_clauses']),
-                        all_stats['reduce_time'], int(all_stats['repairs']),
-                        all_stats['solve_time'], all_stats['total_time'])
 
 ######################################################################
 
@@ -782,17 +661,13 @@ def pyflow_solver_main():
 
     '''Main loop if module run as script.'''
 
-    color_capable = (sys.platform != 'win32' and os.isatty(1))
+    color_capable = False
 
     parser = ArgumentParser(
         description='Solve Flow Free puzzles via reduction to SAT')
 
     parser.add_argument('filenames', metavar='PUZZLE', nargs='+',
                         help='puzzle file to load')
-
-    parser.add_argument('-q', dest='quiet', default=False,
-                        action='store_true',
-                        help='quiet mode (reduce output)')
 
     parser.add_argument('-c', dest='display_cycles', default=False,
                         action='store_true',
@@ -812,19 +687,16 @@ def pyflow_solver_main():
 
     for filename in options.filenames:
 
-        if not options.quiet and puzzle_count:
-            print '\n'+('*'*70)+'\n'
-
         # open file
         try:
             with open(filename, 'r') as infile:
                 puzzle, colors = parse_puzzle(options, infile, filename)
         except IOError:
             print '{}: error opening file'.format(filename)
-            continue
+            exit(1)
 
         if colors is None:
-            continue
+            exit(1)
 
         puzzle_count += 1
 
@@ -833,43 +705,6 @@ def pyflow_solver_main():
 
         sol, _, repairs, solve_time = solve_sat(options, puzzle, colors,
                                                 color_var, dir_vars, clauses)
-
-        total_time = reduce_time + solve_time
-
-        if isinstance(sol, list):
-            result_char = 's'
-        elif str(sol) == 'UNSAT':
-            result_char = 'u'
-        else:
-            result_char = 'f'
-
-        cur_stats = dict(repairs=repairs,
-                         reduce_time=reduce_time,
-                         solve_time=solve_time,
-                         total_time=total_time,
-                         num_vars=num_vars,
-                         num_clauses=len(clauses),
-                         count=1)
-
-        if not stats.has_key(result_char):
-            stats[result_char] = cur_stats
-        else:
-            for key in cur_stats.keys():
-                stats[result_char][key] += cur_stats[key]
-
-        if not options.quiet:
-            print 'finished in total of {:.3f} seconds'.format(
-                total_time)
-        else:
-
-            print '{:>{}s} {} {:9,d} {:9,d} {:12,.3f} '\
-                '{:3d} {:12,.3f} {:12,.3f}'.format(
-                    filename, max_width, result_char,
-                    num_vars, len(clauses), reduce_time,
-                    repairs, solve_time, total_time)
-
-
-    print_summary(options, stats)
 
 
 ######################################################################
