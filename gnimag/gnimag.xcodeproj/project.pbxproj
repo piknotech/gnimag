@@ -398,6 +398,8 @@
 		6316BDA623C91BD10062100F /* LinearFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearFunction.swift; sourceTree = "<group>"; };
 		6316BDA823CA49FB0062100F /* JumpTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JumpTracker+Future.swift"; sourceTree = "<group>"; };
 		6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequencePlot.swift; sourceTree = "<group>"; };
+		63179AC32433313D00DA492E /* pyflowsolver.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pyflowsolver.py; sourceTree = "<group>"; };
+		63179AC42433313D00DA492E /* Acknowledgements.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Acknowledgements.md; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
 		631BE25723EF53EE008DDEE1 /* CwlRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CwlRandom.swift; sourceTree = "<group>"; };
@@ -631,6 +633,7 @@
 			isa = PBXGroup;
 			children = (
 				630682D42430E56600C5B28E /* README.md */,
+				63179AC22433313D00DA492E /* Scripts */,
 				630682D12430CEA300C5B28E /* Sources */,
 				630682D02430CE9100C5B28E /* SupportingFiles */,
 			);
@@ -1437,6 +1440,15 @@
 				63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */,
 			);
 			path = Drawing;
+			sourceTree = "<group>";
+		};
+		63179AC22433313D00DA492E /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				63179AC42433313D00DA492E /* Acknowledgements.md */,
+				63179AC32433313D00DA492E /* pyflowsolver.py */,
+			);
+			path = Scripts;
 			sourceTree = "<group>";
 		};
 		6318966823B4C896002FBD4F /* 3 TapPrediction */ = {
