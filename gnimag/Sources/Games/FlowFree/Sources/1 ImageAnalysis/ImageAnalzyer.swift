@@ -60,7 +60,7 @@ class ImageAnalyzer {
         }
 
         // Find board AABB
-        let boardMargin = color.withTolerance(0.1)
+        let boardMargin = color.withTolerance(0.2)
         guard let edge = EdgeDetector.search(in: image, shapeColor: boardMargin, from: start, angle: .north) else { return nil }
         let aabb = SmallestAABB.containing(edge)
 
