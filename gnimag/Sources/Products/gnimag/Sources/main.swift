@@ -9,10 +9,7 @@ import FlowFree
 import Geometry
 import Tapping
 
-//let provider = AppWindowScreenProvider(appName: "AirServer", windowNameHint: "iPhone")
-let provider = ImageListProvider(directoryPath: "/Users/David/Desktop/ /Flow-Free", framerate: 30)
-
-let flow = FlowFreeSingleLevel(imageProvider: provider)
+let flow = FlowFreeTimeTrial(imageProvider: Scrcpy.imageProvider, dragger: Scrcpy.dragger)
 flow.play()
 
 RunLoop.main.run()

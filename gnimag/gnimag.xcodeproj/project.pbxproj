@@ -21,7 +21,6 @@
 		63073E62242AAB8E002C4593 /* CGImage+IO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E61242AAB8E002C4593 /* CGImage+IO.swift */; };
 		63073E63242AAD27002C4593 /* NativeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C323257EB600C126B4 /* NativeImage.swift */; };
 		63073E65242AB7B0002C4593 /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E64242AB7B0002C4593 /* Tools.swift */; };
-		630873F0242E3FFA000ECE47 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
 		6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */; };
 		6311E0B523E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */; };
 		6311E0B723E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */; };
@@ -195,6 +194,8 @@
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
 		63997EE92434959C005473A0 /* Promise+Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EE82434959C005473A0 /* Promise+Await.swift */; };
+		63997EEB2434A1AD005473A0 /* FlowFreeTimeTrial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */; };
+		63997EED2434A290005473A0 /* FlowFreeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEC2434A290005473A0 /* FlowFreeBase.swift */; };
 		639B78CA242CDB84009674E8 /* ArrayScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78C9242CDB84009674E8 /* ArrayScanner.swift */; };
 		639B78CC242CDCB6009674E8 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CB242CDCB6009674E8 /* Parser.swift */; };
 		639B78CE242CDD9C009674E8 /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CD242CDD9C009674E8 /* Expressions.swift */; };
@@ -513,6 +514,8 @@
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		63997EE82434959C005473A0 /* Promise+Await.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Await.swift"; sourceTree = "<group>"; };
+		63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowFreeTimeTrial.swift; sourceTree = "<group>"; };
+		63997EEC2434A290005473A0 /* FlowFreeBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowFreeBase.swift; sourceTree = "<group>"; };
 		639B78C9242CDB84009674E8 /* ArrayScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayScanner.swift; sourceTree = "<group>"; };
 		639B78CB242CDCB6009674E8 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		639B78CD242CDD9C009674E8 /* Expressions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expressions.swift; sourceTree = "<group>"; };
@@ -672,7 +675,9 @@
 		630682D12430CEA300C5B28E /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				63997EEC2434A290005473A0 /* FlowFreeBase.swift */,
 				630682D22430CEB400C5B28E /* FlowFreeSingleLevel.swift */,
+				63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */,
 				630682DA2430F57C00C5B28E /* 1 ImageAnalysis */,
 				63179AC52433380300DA492E /* 2 LevelSolving */,
 				63E16AA52433E10F005E67ED /* 3 PathTracing */,
@@ -2448,6 +2453,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				63179AD124339B8200DA492E /* Level+BestPathTracingOrder.swift in Sources */,
+				63997EEB2434A1AD005473A0 /* FlowFreeTimeTrial.swift in Sources */,
+				63997EED2434A290005473A0 /* FlowFreeBase.swift in Sources */,
 				63E16AA92433E4BF005E67ED /* PathTracer.swift in Sources */,
 				630682DE2430F59900C5B28E /* Level.swift in Sources */,
 				630682DC2430F59000C5B28E /* ScreenLayout.swift in Sources */,
@@ -2733,7 +2740,6 @@
 			files = (
 				63FABDC6239186DB0088FD77 /* DebugLogger.swift in Sources */,
 				63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */,
-				630873F0242E3FFA000ECE47 /* main.swift in Sources */,
 				63FABDC12391811F0088FD77 /* DebugFrameProtocol.swift in Sources */,
 				63FABDC3239181640088FD77 /* TrackerDebugInfo.swift in Sources */,
 				63FABDBE23917F6C0088FD77 /* DebugParameterType.swift in Sources */,

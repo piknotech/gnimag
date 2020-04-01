@@ -5,11 +5,11 @@
 
 import Common
 
-/// FlowFreeSingleLevel plays one single level of Flow Free.
-public class FlowFreeSingleLevel: FlowFreeBase {
+/// FlowFreeTimeTrial plays the time trial mode of Flow Free.
+public class FlowFreeTimeTrial: FlowFreeBase {
     /// Called from the levelStream when it detects a new level.
     override func newLevelDetected(level: Level) {
-        onOffImageProvider.pause() // Stop receiving images
+        onOffImageProvider.pause() // Pause receiving images until the solution was drawn
 
         // If solution can't be found, exit (because user probably has to install python etc.)
         guard let solution = level.solution else {
@@ -17,6 +17,8 @@ public class FlowFreeSingleLevel: FlowFreeBase {
         }
 
         pathTracer.draw(solution: solution, to: level)
-        exit(0)
+
+        // Continue receiving images
+        onOffImageProvider.continue()
     }
 }
