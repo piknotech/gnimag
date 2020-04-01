@@ -16,9 +16,11 @@ class WindowDragger: WindowOperatorBase, Dragger {
     private var mouseDown = false
 
     /// Tap down at the current location.
+    /// Attention: this is synchronous, i.e. blocks until the tap was performed.
     func down() -> Promise<Void> {
         mouseDown = true
         MouseControl.tap(at: currentPosition)
+        usleep(100_000) // Helpful in conjunction with drag actions
         return .success()
     }
 
@@ -29,12 +31,13 @@ class WindowDragger: WindowOperatorBase, Dragger {
     }
 
     /// Move or drag to the given location.
+    /// Attention: this is synchronous, i.e. blocks until the drag was performed.
     func move(to point: CGPoint) -> Promise<Void> {
         let destination = convert(fromRelativeLocation: point)
         defer { currentPosition = destination }
 
         if mouseDown {
-            return MouseControl.drag(from: currentPosition, to: destination)
+            return MouseControl.realisticDrag(from: currentPosition, to: destination)
         } else {
             MouseControl.move(to: destination)
             return .success()

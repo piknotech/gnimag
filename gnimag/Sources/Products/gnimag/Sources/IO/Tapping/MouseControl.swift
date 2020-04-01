@@ -4,6 +4,7 @@
 //
 
 import Common
+import Geometry
 import Foundation
 
 /// MouseControl can perform mouse actions on the screen.
@@ -36,22 +37,34 @@ enum MouseControl {
 
     /// Perform a drag action, i.e. move from start to end with a clicked mouse.
     /// Do not perform a tap nor a release. This must be done additionally.
-    /// As this action is not instantaneous, return a promise which is fulfilled when the drag has finished. This promise never fails.
-    static func drag(from start: CGPoint, to end: CGPoint) -> Promise<Void> {
-        let promise = Promise<Void>()
-
+    /// Attention: this is synchronous, i.e. blocks until the drag was performed.
+    static func realisticDrag(from start: CGPoint, to end: CGPoint) -> Promise<Void> {
         let dragStart = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: start, mouseButton: .left)!
         dragStart.post(tap: .cghidEventTap)
 
-        Timing.perform(after: 0.1) {
-            let dragEnd = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: end, mouseButton: .left)!
-            dragEnd.post(tap: .cghidEventTap)
+        let length = start.distance(to: end)
 
-            Timing.perform(after: 0) {
-                promise.finished(with: .result(()))
-            }
+        // Movement parameters
+        // Attention: if dragging doesn't work reliable on your system, you may have to adapt these parameters.
+        var stepLength: CGFloat = 50
+        var stepDuration: CGFloat = 0.06
+
+        // Adjust stepLength and stepDuration if number of steps in non-integer
+        let fractionalSteps = length / stepLength
+        stepLength *= fractionalSteps / ceil(fractionalSteps)
+        stepDuration *= fractionalSteps / ceil(fractionalSteps)
+        let numSteps = Int(ceil(fractionalSteps))
+
+        for i in 1 ... numSteps {
+            usleep(UInt32(1_000_000 * stepDuration))
+            let progress = CGFloat(i) / CGFloat(numSteps)
+            let location = start + progress * (end - start)
+
+            // Send drag event
+            let drag = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: location, mouseButton: .left)!
+            drag.post(tap: .cghidEventTap)
         }
 
-        return promise
+        return .success()
     }
 }
