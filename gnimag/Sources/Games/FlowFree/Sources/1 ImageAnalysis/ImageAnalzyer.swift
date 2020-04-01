@@ -20,7 +20,7 @@ class ImageAnalyzer {
         // Find board & screen layout if required
         if screen == nil {
             guard let board = findBoard(in: image) else { return nil }
-            screen = ScreenLayout(board: board, screenSize: CGSize(width: image.width, height: image.height))
+            screen = ScreenLayout(board: board, size: CGSize(width: image.width, height: image.height))
         }
 
         return findLevel(in: image)
@@ -29,9 +29,9 @@ class ImageAnalyzer {
     /// Find the level in an image using the existing board layout.
     private func findLevel(in image: Image) -> Level? {
         let elements = (Array(0 ..< screen.board.size) × Array(0 ..< screen.board.size)).map { (x, y) -> PositionAndColor in
-            let cell = Position(x: x, y: y)
-            let center = screen.board.center(ofCell: cell).nearestPixel
-            return PositionAndColor(position: cell, color: image.color(at: center))
+            let position = Position(x: x, y: y)
+            let center = screen.board.center(ofCellAt: position).nearestPixel
+            return PositionAndColor(position: position, color: image.color(at: center))
         }
 
         let result = SimpleClustering.from(elements, maxDistance: 0.1)

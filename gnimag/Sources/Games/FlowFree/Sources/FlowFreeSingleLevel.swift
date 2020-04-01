@@ -23,9 +23,9 @@ public class FlowFreeSingleLevel {
     private var levelStream = ValueStreamDamper<Level>(numberOfConsecutiveValues: 3)
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, straightLineMover: StraightLineMover) {
+    public init(imageProvider: ImageProvider, dragger: Dragger) {
         imageAnalyzer = ImageAnalyzer()
-        pathTracer = PathTracer(underlyingDrawer: straightLineMover)
+        pathTracer = PathTracer(underlyingDragger: dragger)
 
         onOffImageProvider = OnOffImageProvider(wrapping: imageProvider)
         queue = GameQueue(imageProvider: onOffImageProvider, synchronousFrameCallback: update)

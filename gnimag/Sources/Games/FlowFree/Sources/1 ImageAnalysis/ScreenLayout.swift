@@ -14,7 +14,7 @@ struct ScreenLayout {
 
     /// The total size of the screen.
     /// Important: The size of the screen must not change throughout the game.
-    let screenSize: CGSize
+    let size: CGSize
 }
 
 /// The on-screen layout of the board.
@@ -25,7 +25,7 @@ struct BoardLayout {
     let size: Int
 
     /// The center of the cell at the given (x/y) position (0-based).
-    func center(ofCell cell: Position) -> CGPoint {
+    func center(ofCellAt cell: Position) -> CGPoint {
         let x = CGFloat(2 * cell.x + 1) / CGFloat(2 * size)
         let y = CGFloat(2 * cell.y + 1) / CGFloat(2 * size)
         return CGPoint(

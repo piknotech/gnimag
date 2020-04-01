@@ -21,6 +21,11 @@ struct Solution {
 
         /// The vertices of the path, i.e. the points where the direction changes.
         let vertices: [Position]
+
+        /// Return the reversed path, going from `end` to `start`.
+        var reversed: Path {
+            Path(start: end, end: start, vertices: vertices.reversed())
+        }
     }
 
     /// The paths for each color.
