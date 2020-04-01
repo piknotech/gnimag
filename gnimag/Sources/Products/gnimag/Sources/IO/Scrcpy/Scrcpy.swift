@@ -21,4 +21,10 @@ enum Scrcpy {
     static var tapper: Tapper & ArbitraryLocationTapper {
         WindowTapper(appName: "scrcpy")
     }
+
+    /// Create a new Dragger that moves on the scrcpy application window.
+    /// scrcpy must be running and streaming.
+    static var dragger: Dragger {
+        WindowDragger(appName: "scrcpy")
+    }
 }
