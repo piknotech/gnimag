@@ -9,6 +9,29 @@ import Tapping
 
 /// An implementation of Dragger that performs move and drag actions on the window of an arbitrary macOS application.
 class WindowDragger: WindowOperatorBase, Dragger {
+    /// The dragging configuration. You can change it from outside.
+    var configuration = Configuration(
+        draggingType: .realistic(stepLength: 150, stepDuration: 0.06),
+        delayAfterTap: 0.1
+    )
+
+    struct Configuration {
+        enum DraggingType {
+            /// Sends drag events to multiple points on the way (which all have the same distance), and delays between them.
+            case realistic(stepLength: CGFloat, stepDuration: CGFloat)
+
+            /// Sends drag events only to the start and end location, and delays between and after them.
+            case instantaneous(delayBeforeDrag: Double, delayAfterDrag: Double)
+        }
+
+        /// The way the macOS mouse is dragged.
+        /// Small delays are required for macOS to correctly send and process consecutive dragging events.
+        let draggingType: DraggingType
+
+        /// The delay after a tap (without a release) action.
+        let delayAfterTap: Double
+    }
+
     /// The current position of the cursor, in absolute coordinates.
     private var currentPosition: CGPoint!
 
@@ -20,7 +43,7 @@ class WindowDragger: WindowOperatorBase, Dragger {
     func down() -> Promise<Void> {
         mouseDown = true
         MouseControl.tap(at: currentPosition)
-        usleep(100_000) // Helpful in conjunction with drag actions
+        usleep(UInt32(1e6 * configuration.delayAfterTap))
         return .success()
     }
 
@@ -37,10 +60,19 @@ class WindowDragger: WindowOperatorBase, Dragger {
         defer { currentPosition = destination }
 
         if mouseDown {
-            return MouseControl.realisticDrag(from: currentPosition, to: destination)
+            // Perform drag
+            switch configuration.draggingType {
+            case let .instantaneous(delayBeforeDrag: delayBeforeDrag, delayAfterDrag: delayAfterDrag):
+                MouseControl.instantaneousDrag(from: currentPosition, to: destination, delayBeforeDrag: delayBeforeDrag, delayAfterDrag: delayAfterDrag)
+
+            case let .realistic(stepLength: stepLength, stepDuration: stepDuration):
+                MouseControl.realisticDrag(from: currentPosition, to: destination, stepLength: stepLength, stepDuration: stepDuration)
+            }
         } else {
+            // Move the mouse
             MouseControl.move(to: destination)
-            return .success()
         }
+
+        return .success()
     }
 }

@@ -1307,10 +1307,10 @@
 			isa = PBXGroup;
 			children = (
 				631213BE23257EB600C126B4 /* NoopTapper.swift */,
-				631213C023257EB600C126B4 /* MouseControl.swift */,
 				63E16AAC24348968005E67ED /* WindowOperatorBase.swift */,
 				631213BF23257EB600C126B4 /* WindowTapper.swift */,
 				63E16AAA24348400005E67ED /* WindowDragger.swift */,
+				631213C023257EB600C126B4 /* MouseControl.swift */,
 			);
 			path = Tapping;
 			sourceTree = "<group>";

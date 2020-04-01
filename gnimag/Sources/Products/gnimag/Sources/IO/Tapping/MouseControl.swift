@@ -37,26 +37,21 @@ enum MouseControl {
 
     /// Perform a drag action, i.e. move from start to end with a clicked mouse.
     /// Do not perform a tap nor a release. This must be done additionally.
+    /// Realistic means: send drag events to multiple points on the way (which all have the same distance), and delay between them.
     /// Attention: this is synchronous, i.e. blocks until the drag was performed.
-    static func realisticDrag(from start: CGPoint, to end: CGPoint) -> Promise<Void> {
+    static func realisticDrag(from start: CGPoint, to end: CGPoint, stepLength: CGFloat, stepDuration: CGFloat) {
         let dragStart = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: start, mouseButton: .left)!
         dragStart.post(tap: .cghidEventTap)
 
         let length = start.distance(to: end)
 
-        // Movement parameters
-        // Attention: if dragging doesn't work reliable on your system, you may have to adapt these parameters.
-        var stepLength: CGFloat = 50
-        var stepDuration: CGFloat = 0.06
-
-        // Adjust stepLength and stepDuration if number of steps in non-integer
+        // Adjust stepDuration if number of steps in non-integer
         let fractionalSteps = length / stepLength
-        stepLength *= fractionalSteps / ceil(fractionalSteps)
-        stepDuration *= fractionalSteps / ceil(fractionalSteps)
+        let stepDuration = stepDuration * fractionalSteps / ceil(fractionalSteps)
         let numSteps = Int(ceil(fractionalSteps))
 
         for i in 1 ... numSteps {
-            usleep(UInt32(1_000_000 * stepDuration))
+            usleep(UInt32(1e6 * stepDuration))
             let progress = CGFloat(i) / CGFloat(numSteps)
             let location = start + progress * (end - start)
 
@@ -64,7 +59,21 @@ enum MouseControl {
             let drag = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: location, mouseButton: .left)!
             drag.post(tap: .cghidEventTap)
         }
+    }
 
-        return .success()
+    /// Perform a drag action, i.e. move from start to end with a clicked mouse.
+    /// Do not perform a tap nor a release. This must be done additionally.
+    /// Instantaneous means: send drag events only to the start and end location, and delay between and after them.
+    /// Attention: this is synchronous, i.e. blocks until the drag was performed.
+    static func instantaneousDrag(from start: CGPoint, to end: CGPoint, delayBeforeDrag: Double, delayAfterDrag: Double) {
+        let dragStart = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: start, mouseButton: .left)!
+        dragStart.post(tap: .cghidEventTap)
+
+        usleep(UInt32(1e6 * delayBeforeDrag))
+
+        let dragEnd = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDragged, mouseCursorPosition: end, mouseButton: .left)!
+        dragEnd.post(tap: .cghidEventTap)
+
+        usleep(UInt32(1e6 * delayAfterDrag))
     }
 }
