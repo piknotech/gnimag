@@ -17,6 +17,7 @@ public class FlowFreeTimeTrial: FlowFreeBase {
         }
 
         pathTracer.draw(solution: solution, to: level)
+        pathTracer.center()
 
         // Continue receiving images
         Timing.perform(after: 0.25) {

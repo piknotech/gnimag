@@ -38,6 +38,13 @@ class PathTracer {
         }
     }
 
+    /// Position the pointing device at the center of the board.
+    /// Do NOT wait for completion.
+    func center() {
+        let center = relativeScreenLocation(for: screen.board.aabb.center)
+        _ = underlyingDragger.move(to: center)
+    }
+
     /// Synchronously draw a single path onto the screen.
     /// Returns when drawing has finished.
     private func draw(path: Solution.Path) {
@@ -55,11 +62,16 @@ class PathTracer {
         underlyingDragger.up()
     }
 
-    /// Get the relative screen location (for StraightLineMover) from a position on the board.
+    /// Get the relative screen location from a position on the board.
     private func relativeScreenLocation(for position: Position) -> CGPoint {
         let absolute = screen.board.center(ofCellAt: position)
-        let x = absolute.x / screen.size.width
-        let y = absolute.y / screen.size.height
+        return relativeScreenLocation(for: absolute)
+    }
+
+    /// Get the relative screen location from a CGPoint.
+    private func relativeScreenLocation(for point: CGPoint) -> CGPoint {
+        let x = point.x / screen.size.width
+        let y = point.y / screen.size.height
         return CGPoint(x: x, y: y)
     }
 }
