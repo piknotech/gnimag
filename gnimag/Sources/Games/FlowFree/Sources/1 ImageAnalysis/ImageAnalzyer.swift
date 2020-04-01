@@ -11,19 +11,42 @@ import ImageAnalysisKit
 
 /// ImageAnalyzer extracts levels from images.
 class ImageAnalyzer {
+    /// States whether the ImageAnalyzer has been initialized by `initializeWithFirstImage`.
+    var isInitialized = false
+    
     /// The ScreenLayout which is available after the first successful `analyze` call.
     private(set) var screen: ScreenLayout!
+
+    /// Initialize the ImageAnalyzer by detecting the ScreenLayout (including the board) using the first image.
+    /// This does not yet analyze the first image; therefore, call `analyze(image:)`.
+    /// Returns false if the screen layout couldn't be detected.
+    func initialize(with image: Image) -> Bool {
+        precondition(!isInitialized)
+
+        // Simply find the board; it will not change throughout the game
+        guard let board = findBoard(in: image) else { return false }
+
+        screen = ScreenLayout(board: board, size: CGSize(width: image.width, height: image.height))
+        isInitialized = true
+
+        return true
+    }
 
     /// Analyze an image; return the level.
     /// Returns nil if no board or valid level is found in the image.
     func analyze(image: Image) -> Level? {
-        // Find board & screen layout if required
-        if screen == nil {
-            guard let board = findBoard(in: image) else { return nil }
-            screen = ScreenLayout(board: board, size: CGSize(width: image.width, height: image.height))
-        }
-
+        if !validateBoard(in: image) { return nil }
         return findLevel(in: image)
+    }
+
+    /// Check whether the given image contains a valid board, i.e. the board is at the correct position.
+    private func validateBoard(in image: Image) -> Bool {
+        guard let board = findBoard(in: image) else { return false }
+
+        if board.size != screen.board.size { return false }
+        if board.aabb.center.distance(to: screen.board.aabb.center) > 5 { return false }
+        if !board.aabb.width.isAlmostEqual(to: screen.board.aabb.width, tolerance: 3) { return false }
+        return true
     }
 
     /// Find the level in an image using the existing board layout.
@@ -53,10 +76,10 @@ class ImageAnalyzer {
     }
 
     /// Find the board inside the given image.
-    private func findBoard(in image: Image) -> BoardLayout? {
+    private func findBoard(in image: Image, verbose: Bool = false) -> BoardLayout? {
         // Find point on the edge of the board
         guard let (start, color) = findBoardMargin(in: image) else {
-            Terminal.log(.error, "Couldn't find board margin!")
+            if verbose { Terminal.log(.error, "Couldn't find board margin!") }
             return nil
         }
 
@@ -67,13 +90,13 @@ class ImageAnalyzer {
 
         // Check dimension match
         guard aabb.width.isAlmostEqual(to: aabb.height, tolerance: 3) else {
-            Terminal.log(.error, "Board dimensions mismatch (\(aabb))")
+            if verbose { Terminal.log(.error, "Board dimensions mismatch (\(aabb))") }
             return nil
         }
 
         // Find board size
         guard let size = findBoardSize(in: image, for: aabb, boardMarginColor: boardMargin) else {
-            Terminal.log(.error, "Couldn't determine board size!")
+            if verbose { Terminal.log(.error, "Couldn't determine board size!") }
             return nil
         }
 

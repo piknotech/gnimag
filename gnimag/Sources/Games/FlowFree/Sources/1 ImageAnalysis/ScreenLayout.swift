@@ -10,6 +10,7 @@ import Geometry
 /// Useful for both image analysis and tapping.
 struct ScreenLayout {
     /// The on-screen layout of the board.
+    /// The board will not change throughout the game (i.e. it remains the same size).
     let board: BoardLayout
 
     /// The total size of the screen.

@@ -19,8 +19,8 @@ public class FlowFreeBase {
     let onOffImageProvider: OnOffImageProvider
 
     /// The stream of incoming levels.
-    /// This is used to filter out image analysis errors: instead of immediately solving and playing the first incoming image, we require 3 consecutive frames to yield the same level. This precludes single-frame image errors.
-    private var levelStream = ValueStreamDamper<Level>(numberOfConsecutiveValues: 3)
+    /// This is used to filter out image analysis errors: instead of immediately solving and playing the first incoming image, we require 2 consecutive frames to yield the same level. This precludes single-frame image errors.
+    private var levelStream = ValueStreamDamper<Level>(numberOfConsecutiveValues: 2)
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, dragger: Dragger) {
@@ -46,10 +46,25 @@ public class FlowFreeBase {
 
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
-        guard let level = imageAnalyzer.analyze(image: image) else { return }
+        guard performFirstImageSetupIfRequired(with: image) else { return }
+
+        let level = imageAnalyzer.analyze(image: image)
+        levelStream.add(value: level) // Also add nil-levels -> allows to (manually) repeat a level
+    }
+
+    /// Initialize the imageAnalyzer and pathTracer on the very first image.
+    /// Does nothing if imageAnalyzer is already initialized.
+    /// Return false if the imageAnalyzer couldn't be initialized.
+    private func performFirstImageSetupIfRequired(with image: Image) -> Bool {
+        guard !imageAnalyzer.isInitialized else { return true }
+
+        let success = imageAnalyzer.initialize(with: image)
+        if !success { return false } // Do not exit, just return false; initialization will be retried each frame
+
+        // Share screen layout with pathTracer
         pathTracer.screen = imageAnalyzer.screen
 
-        levelStream.add(value: level)
+        return true
     }
 
     /// Called from the levelStream when it detects a new level.

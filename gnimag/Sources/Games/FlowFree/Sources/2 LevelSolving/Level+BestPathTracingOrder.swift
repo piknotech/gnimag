@@ -16,7 +16,7 @@ extension Level {
 
     /// Calculate the best order in which to successively trace the paths. Best means that the total traveled distance (between consecutive colors, i.e. from color1.end to color2.start etc.) is minimized.
     /// The result is an array of color indices describing the optimal color ordering.
-    /// Notice: the best path does not depend on the actual solution, but only on the level.
+    /// Notice: the best path does not depend on the actual solution but only on the level.
     var bestPathTracingOrder: [PathBegin] {
         // Greedy algorithm: try starting at each of the 2 * colors.count valid positions
         let possibleStartStates = (Array(0 ..< colors.count) × [true, false]).map { (colorIndex, isColorStart) -> (State, PathBegin) in

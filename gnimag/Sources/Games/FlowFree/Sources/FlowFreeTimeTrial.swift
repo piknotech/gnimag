@@ -19,6 +19,8 @@ public class FlowFreeTimeTrial: FlowFreeBase {
         pathTracer.draw(solution: solution, to: level)
 
         // Continue receiving images
-        onOffImageProvider.continue()
+        Timing.perform(after: 0.25) {
+            self.onOffImageProvider.continue()
+        }
     }
 }
