@@ -32,7 +32,7 @@ public class FlowFreeBase {
 
         // Level detection callback
         levelStream.newValue += { level in
-            if let level = level, level.colors.count > 0 {
+            if let level = level, level.targets.count > 0 {
                 self.newLevelDetected(level: level)
             }
         }

@@ -14,7 +14,7 @@ public class FlowFreeSingleLevel: FlowFreeBase {
 
         // If solution can't be found, exit (because user probably has to install python etc.)
         guard let solution = level.solution else {
-            exit(withMessage: "Couldn't solve level: \(level)") // TODO: pretty-print
+            exit(withMessage: "Couldn't solve level:\n\(Board(level: level))")
         }
 
         pathTracer.draw(solution: solution, to: level)

@@ -7,8 +7,6 @@ import Common
 import FlowFreeC
 import Foundation
 
-import TestingTools
-
 /// A wrapper around the pyflowsolver script.
 enum PyFlowSolver {
     private static let scriptLocation = NSHomeDirectory() +/ "Library/Application Support/gnimag/FlowFree/pyflowsolver.py"
@@ -16,19 +14,21 @@ enum PyFlowSolver {
     /// Try solving a level (synchronously!) using the pyflowsolver script.
     /// When an error occurs (i.e. python is not installed), it is logged to the console.
     static func solve(level: Level) -> Solution? {
-        let input = FlowSolverConverter.convertInput(level: level, for: .py)
+        let input = Board(level: level).stringify(separator: "#")
         let cmd = "/usr/bin/python \"\(scriptLocation)\" \(input)"
 
-        Measurement.begin(id: "py")
-        let output = String(cString: execute_cmd(cmd))
-        Measurement.end(id: "py")
+        guard let cOutput = execute_cmd(cmd) else {
+            Terminal.log(.error, "pyflowsolver couldn't be executed.")
+            return nil
+        }
+        let output = String(cString: cOutput)
 
         // Convert output to solution
-        guard let result = FlowSolverConverter.convertOutput(string: output, for: level) else {
+        guard let board = Board(output), let solution = Solution(board: board, level: level) else {
             Terminal.log(.error, "pyflowsolver didn't run successfully. Output:\n\(output)")
             return nil
         }
 
-        return result
+        return solution
     }
 }

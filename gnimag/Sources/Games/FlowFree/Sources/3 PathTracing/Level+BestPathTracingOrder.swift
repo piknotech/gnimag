@@ -6,6 +6,7 @@
 import Common
 import Foundation
 
+/*
 extension Level {
     struct PathBegin {
         /// The index of the color, respective to `self.colors`.
@@ -85,3 +86,4 @@ extension Level {
         let position: Position
     }
 }
+*/

@@ -52,7 +52,7 @@ class ImageAnalyzer {
     /// Find the level in an image using the existing board layout.
     private func findLevel(in image: Image) -> Level? {
         let elements = (Array(0 ..< screen.board.size) × Array(0 ..< screen.board.size)).map { (x, y) -> PositionAndColor in
-            let position = Position(x: x, y: y)
+            let position = Position(x, y)
             let center = screen.board.center(ofCellAt: position).nearestPixel
             return PositionAndColor(position: position, color: image.color(at: center))
         }
@@ -66,13 +66,16 @@ class ImageAnalyzer {
             return nil
         }
 
-        let levelColors = clusters.dropLast().map { cluster -> Level.Color in
+        // Create Level
+        var remainingLetters = GameColor.allLetters
+        let targets = clusters.dropLast().map { cluster -> Level.Target in
             let start = cluster.objects[0].position
             let end = cluster.objects[1].position
-            return Level.Color(start: start, end: end)
+            let color = GameColor(letter: remainingLetters.removeFirst())
+            return Level.Target(color: color, point1: start, point2: end)
         }
 
-        return Level(colors: levelColors, boardSize: screen.board.size)
+        return Level(targets: targets, boardSize: screen.board.size)
     }
 
     /// Find the board inside the given image.

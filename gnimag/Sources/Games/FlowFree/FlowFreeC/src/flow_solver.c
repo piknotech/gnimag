@@ -999,17 +999,6 @@ int game_next_move_color(const game_info_t* info,
 
     }
 
-    /*
-    if (best_free == 1 && worst_free == 4) {
-      game_print(info, state);
-      printf("color %s has %d free",
-             color_name_str(info, best_color), best_free);
-      printf(" and %s has %d free\n",
-             color_name_str(info, worst_color), worst_free);
-      exit(0);
-    }
-    */
-
     assert(best_color < info->num_colors);
     return best_color;
     
@@ -1875,12 +1864,6 @@ int game_check_chokepoint(const game_info_t* info,
   game_state_t state_copy = *state;
 
   for (int i=0; i<n; ++i) {
-    /*
-    game_print(info, &state_copy);
-    printf("trying to move step %d/%d %s\n", i+1, n+1,
-           color_cell_str(info, cell_create(TYPE_PATH, color, dir)));
-    assert( state_copy.cells[pos_offset_pos(info, state_copy.pos[color], dir)] == 0 );
-    */
     game_make_move(info, &state_copy, color, dir, 1);
   }
 

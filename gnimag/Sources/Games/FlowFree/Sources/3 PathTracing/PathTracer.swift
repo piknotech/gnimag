@@ -24,7 +24,7 @@ class PathTracer {
     /// Synchronously draw the solution to a level onto the screen.
     /// Returns when drawing has finished.
     func draw(solution: Solution, to level: Level) {
-        let order = level.bestPathTracingOrder
+        /*let order = level.bestPathTracingOrder
 
         for pathBegin in order {
             var path = solution.paths[pathBegin.colorIndex]
@@ -35,7 +35,7 @@ class PathTracer {
             }
 
             draw(path: path)
-        }
+        }*/
     }
 
     /// Position the pointing device at the center of the board.
@@ -49,12 +49,12 @@ class PathTracer {
     /// Returns when drawing has finished.
     private func draw(path: Solution.Path) {
         // Begin at start
-        let start = relativeScreenLocation(for: path.start)
+        let start = relativeScreenLocation(for: path.cells[0])
         await & underlyingDragger.move(to: start)
         await & underlyingDragger.down()
 
         // Perform drag sequence
-        for vertex in path.vertices + [path.end] {
+        for vertex in path.cells[1...] {
             let point = relativeScreenLocation(for: vertex)
             await & underlyingDragger.move(to: point)
         }
