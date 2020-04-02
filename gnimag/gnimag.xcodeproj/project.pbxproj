@@ -1510,7 +1510,6 @@
 		63179AC52433380300DA492E /* 2 LevelSolving */ = {
 			isa = PBXGroup;
 			children = (
-				63179AD024339B8200DA492E /* Level+BestPathTracingOrder.swift */,
 				63179AC62433385D00DA492E /* Level+Solution.swift */,
 				63179ACA243338A000DA492E /* PyFlowSolver.swift */,
 				637494BC24361C3600D724F7 /* CFlowSolver.swift */,
@@ -1931,6 +1930,7 @@
 		63E16AA52433E10F005E67ED /* 3 PathTracing */ = {
 			isa = PBXGroup;
 			children = (
+				63179AD024339B8200DA492E /* Level+BestPathTracingOrder.swift */,
 				63E16AA82433E4BF005E67ED /* PathTracer.swift */,
 			);
 			path = "3 PathTracing";

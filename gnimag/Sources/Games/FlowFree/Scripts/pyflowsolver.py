@@ -151,7 +151,7 @@ def repair_colors(puzzle, colors):
 
 ######################################################################
 
-def parse_puzzle(options, file_or_str, filename='input'):
+def parse_puzzle(options, board, filename='input'):
 
     '''Convert the given string or file object into a square array of
 strings. Also return a dictionary which maps input characters to color
@@ -159,10 +159,7 @@ indices.
 
     '''
 
-    if not isinstance(file_or_str, str):
-        file_or_str = file_or_str.read()
-
-    puzzle = file_or_str.splitlines()
+    puzzle = board.split('#')
 
     # assume size based on length of first line
     size = len(puzzle[0])
@@ -685,15 +682,10 @@ def pyflow_solver_main():
 
     stats = dict()
 
-    for filename in options.filenames:
+    for board in options.filenames:
 
-        # open file
-        try:
-            with open(filename, 'r') as infile:
-                puzzle, colors = parse_puzzle(options, infile, filename)
-        except IOError:
-            print '{}: error opening file'.format(filename)
-            exit(1)
+        # parse board
+        puzzle, colors = parse_puzzle(options, board)
 
         if colors is None:
             exit(1)

@@ -110,9 +110,9 @@ class ImageAnalyzer {
         let leftCenter = Pixel(0, image.height / 2)
         let rightCenter = Pixel(image.width - 1, image.height / 2)
 
-        // Walk max. 3 pixels inwards from left or right as the board immediately starts at the image margin
-        let fromLeft = StraightPath(start: leftCenter, angle: .east, bounds: image.bounds).limited(by: 3)
-        let fromRight = StraightPath(start: rightCenter, angle: .west, bounds: image.bounds).limited(by: 3)
+        // Walk max. 4 pixels inwards from left or right as the board immediately starts at the image margin
+        let fromLeft = StraightPath(start: leftCenter, angle: .east, bounds: image.bounds).limited(by: 4)
+        let fromRight = StraightPath(start: rightCenter, angle: .west, bounds: image.bounds).limited(by: 4)
 
         guard let pixel = image.findFirstPixel(matching: !background, on: fromLeft) ?? image.findFirstPixel(matching: !background, on: fromRight) else {
             return nil

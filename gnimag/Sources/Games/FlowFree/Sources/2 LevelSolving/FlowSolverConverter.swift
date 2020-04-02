@@ -10,9 +10,13 @@ enum FlowSolverConverter {
     static let background: Character = "."
     static let colors: [Character] = Array("ABCDEFGHIJKLMNOP")
 
-    /// Convert the level to the correct input format for pyflowsolver.
-    /// This includes storing the board to a (temporary) file. Return the location of the file.
-    static func convertInput(level: Level) -> String {
+    enum InputType {
+        case c
+        case py
+    }
+
+    /// Convert the level to the correct input format, i.e. converting colors to letters, and with a custom separator.
+    static func convertInput(level: Level, for type: InputType) -> String {
         // The board is indexed via [y][x]
         var board = [[String]](repeating: [String](repeating: String(background), count: level.boardSize), count: level.boardSize)
 
@@ -22,15 +26,17 @@ enum FlowSolverConverter {
             }
         }
 
-        // Write board to temporary file
-        let boardString = board.map { $0.joined() }.joined(separator: "\n")
-        let file = NSTemporaryDirectory() +/ UUID().uuidString
-        try! boardString.write(toFile: file, atomically: true, encoding: .utf8)
+        // Convert board to string
+        switch type {
+        case .c:
+            return board.map { $0.joined() }.joined(separator: "\n") + "\n"
 
-        return file
+        case .py:
+            return board.map { $0.joined() }.joined(separator: "#")
+        }
     }
 
-    /// Convert the solution string from pyflowsolver to a Solution.
+    /// Convert the solution string to a Solution.
     static func convertOutput(string: String, for level: Level) -> Solution? {
         // Convert string to board array cotaining the color indices
         let board = string.split(separator: "\n").map { line -> [Int] in

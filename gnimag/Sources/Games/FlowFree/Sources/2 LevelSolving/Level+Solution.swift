@@ -9,7 +9,11 @@ extension Level {
     /// Try solving a level (synchronously!) using the pyflowsolver script.
     /// When an error occurs (i.e. python is not installed), it is logged to the console.
     var solution: Solution? {
-        PyFlowSolver.solve(level: self)
+        if boardSize <= 12 {
+            return CFlowSolver.solve(level: self) ?? PyFlowSolver.solve(level: self)
+        } else {
+            return PyFlowSolver.solve(level: self)
+        }
     }
 }
 

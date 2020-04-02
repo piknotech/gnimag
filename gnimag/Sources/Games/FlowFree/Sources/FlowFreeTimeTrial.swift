@@ -13,7 +13,7 @@ public class FlowFreeTimeTrial: FlowFreeBase {
 
         // If solution can't be found, exit (because user probably has to install python etc.)
         guard let solution = level.solution else {
-            exit(withMessage: "pyflowsolver couldn't be executed or couldn't find a solution. This may be an image analysis error. Detected level: \(level)")
+            exit(withMessage: "Couldn't solve level: \(level)") // TODO: pretty-print
         }
 
         pathTracer.draw(solution: solution, to: level)
