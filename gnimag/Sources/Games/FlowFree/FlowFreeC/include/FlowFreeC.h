@@ -14,3 +14,4 @@ FOUNDATION_EXPORT const unsigned char FlowFreeCVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <FlowFreeC/PublicHeader.h>
 
 #import "execute_cmd.h"
+#import "flow_solver.h"
