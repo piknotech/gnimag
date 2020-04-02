@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 
 /// FlowFreeSingleLevel plays one single level of Flow Free.
 public class FlowFreeSingleLevel: FlowFreeBase {
@@ -13,7 +14,7 @@ public class FlowFreeSingleLevel: FlowFreeBase {
 
         // If solution can't be found, exit (because user probably has to install python etc.)
         guard let solution = level.solution else {
-            exit(withMessage: "pyflowsolver couldn't be executed or couldn't find a solution. This may be an image analysis error. Detected level: \(level)")
+            exit(withMessage: "pyflowsolver couldn't be executed or couldn't find a solution. This may also be an image analysis error. Detected level: \(level)")
         }
 
         pathTracer.draw(solution: solution, to: level)

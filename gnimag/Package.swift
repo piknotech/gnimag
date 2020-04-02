@@ -31,9 +31,6 @@ let package = Package(
 
         /// Beautiful charts for iOS/tvOS/OSX! The Apple side of the crossplatform MPAndroidChart.
         .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.4.0")),
-
-        /// A Swift framework for shell scripting.
-        .package(url: "https://github.com/kareman/SwiftShell", .upToNextMajor(from: "5.0.1")),
     ],
     targets: [
         // BASE
@@ -112,9 +109,16 @@ let package = Package(
         .target(
             name: "FlowFree",
             dependencies: allLibraries + [
-                "SwiftShell"
+                "FlowFreeC"
             ],
-            path: "Sources/Games/FlowFree"
+            path: "Sources/Games/FlowFree",
+            exclude: ["FlowFreeC"]
+        ),
+
+        // C code used in FlowFree. Must be in a separate target due to swift build limitations
+        .target(
+            name: "FlowFreeC",
+            path: "Sources/Games/FlowFree/FlowFreeC"
         ),
 
         .target(

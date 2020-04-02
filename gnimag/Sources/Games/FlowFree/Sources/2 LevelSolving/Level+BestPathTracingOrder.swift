@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 
 extension Level {
     struct PathBegin {

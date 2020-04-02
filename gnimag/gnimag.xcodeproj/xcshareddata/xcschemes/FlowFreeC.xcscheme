@@ -20,20 +20,6 @@
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "630682C72430CE4C00C5B28E"
-               BuildableName = "FlowFree.framework"
-               BlueprintName = "FlowFree"
-               ReferencedContainer = "container:gnimag.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -64,9 +50,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "630682C72430CE4C00C5B28E"
-            BuildableName = "FlowFree.framework"
-            BlueprintName = "FlowFree"
+            BlueprintIdentifier = "637494A52435ECE600D724F7"
+            BuildableName = "FlowFreeC.framework"
+            BlueprintName = "FlowFreeC"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

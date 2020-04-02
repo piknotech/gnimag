@@ -4,8 +4,8 @@
 //
 
 import Common
+import FlowFreeC
 import Foundation
-import SwiftShell
 
 /// A wrapper around the pyflowsolver script.
 enum PyFlowSolver {
@@ -15,19 +15,19 @@ enum PyFlowSolver {
     /// When an error occurs (i.e. python is not installed), it is logged to the console.
     static func solve(level: Level) -> Solution? {
         let input = PyFlowConverter.convertInput(level: level)
-        let output = main.run("/usr/bin/python", [scriptLocation, input])
+        let cmd = "/usr/bin/python \"\(scriptLocation)\" \(input)"
 
-        if !output.succeeded {
-            Terminal.log(.error, "Error (exit code \(output.exitcode)) while executing pyflowsolver script: \(output.stderror)")
-            return nil
-        }
+        return cmd.withCString {
+            let output = String(cString: execute_cmd($0))
 
-        guard let result = PyFlowConverter.convertOutput(string: output.stdout, for: level) else {
-            Terminal.log(.error, "Couldn't convert pyflowsolver output to level:\n\(output.stdout)")
-            return nil
+            // Convert output to solution
+            guard let result = PyFlowConverter.convertOutput(string: output, for: level) else {
+                Terminal.log(.error, "pyflowsolver didn't run successfully. Output:\n\(output)")
+                return nil
+            }
+
+            return result
         }
-        
-        return result
     }
 }
 
