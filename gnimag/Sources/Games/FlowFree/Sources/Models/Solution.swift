@@ -5,33 +5,23 @@
 
 /// A level's solution.
 struct Solution {
-    /// The solution consists of paths, each of which corresponding to a level's target.
+    let paths: [Path]
+
+    /// The solution consists of paths, each of them corresponding to a level's target.
     struct Path {
+        let color: GameColor
+
         /// The cells the path consists of, in this order.
-        /// These also contain the `begin` and `end` positions.
         let cells: [Position]
-
-        /// The first cell in the path.
-        var begin: Position { cells.first! }
-
-        /// The last cell in the path.
-        var end: Position { cells.last! }
-
-        /// Return the reversed path.
-        var reversed: Path {
-            Path(cells: cells.reversed())
-        }
     }
 
-    /// The paths, indexed by their color.
-    let paths: [GameColor: Path]
 
     // MARK: Conversion from Board
 
     /// Convert a solved Board into a Solution object which matches the given level.
     /// Fails if the Board is not a valid solution to the given level.
     init?(board: Board, level: Level) {
-        var paths = [GameColor: Path]()
+        var paths = [Path]()
 
         // Read solution for each target
         for target in level.targets {
@@ -39,7 +29,7 @@ struct Solution {
             if board[target.point1] != target.color || board[target.point2] != target.color { return nil }
 
             if let path = Self.path(from: target.point1, to: target.point2, in: board) {
-                paths[target.color] = Path(cells: path)
+                paths.append(Path(color: target.color, cells: path))
             } else {
                 return nil // Target has no solution
             }

@@ -12,6 +12,7 @@ struct SolutionExecution {
         let color: GameColor
 
         /// The cells the execution consists of, in this order.
+        /// These also contain the `begin` and `end` positions.
         /// This is a subset of the cells of the original solution's path. Cells can be omitted to optimize drawing performance.
         /// Also, the direction of the path may be reversed.
         let cells: [Position]
@@ -21,10 +22,27 @@ struct SolutionExecution {
 
         /// The last cell in the path.
         var end: Position { cells.last! }
+
+        /// Return the reversed path.
+        var reversed: PathExecution {
+            PathExecution(color: color, cells: cells.reversed())
+        }
     }
 
     /// The paths, ordered by their execution order.
     let pathExecutions: [PathExecution]
+
+    /// Create a SolutionExecution from the given array of PathExecutions.
+    init(pathExecutions: [PathExecution]) {
+        self.pathExecutions = pathExecutions
+    }
+
+    /// Create a SolutionExecution from a solution by executing the solution's paths in an arbitrary order.
+    init(solution: Solution) {
+        pathExecutions = solution.paths.map { path in
+            PathExecution(color: path.color, cells: path.cells)
+        }
+    }
 
     /// The total length of the in-air path, i.e. the segments between consecutive PathExecutions.
     var inAirLength: Double {

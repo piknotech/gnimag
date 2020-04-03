@@ -4,26 +4,21 @@
 //
 
 import Common
-import Foundation
 
-extension Solution {
-    private typealias PathExecution = SolutionExecution.PathExecution
-
-    /// Find a set of good (not necessarily very best) execution orders. Execution order means that only the order and direction of paths are altered; not the paths itself (i.e. no cells are removed from individual paths).
+extension SolutionExecution {
+    /// Find a set of good (not necessarily very best) execution orders. Execution order means that only the order and direction of paths are altered; not the paths themselves (i.e. no cells are removed from individual paths).
     /// These execution orders try to minimize the total in-air length of the tapping device when drawing the paths in this order and in these directions.
     /// These orders are obtained via a greedy algorithm.
     /// Attention: Not necessarily all of these execution orders are good. Check `inAirLength` to see the respective in-air-lengths of the returned execution paths.
     func goodExecutionOrders() -> [SolutionExecution] {
-        let pairs = Array(paths.dropLast(0)) // Convert dictionary to key-value-pairs
-        let allStartPositions: [(color: GameColor, position: Position, initialPath: PathExecution)] = (pairs × [true, false]).map { pair, begin in
-            let color = pair.key, path = pair.value
+        let allStartPositions: [(color: GameColor, position: Position, initialPath: PathExecution)] = (pathExecutions × [true, false]).map { path, begin in
             let outgoingPosition = begin ? path.begin : path.end
-            let initialExecution = PathExecution(color: color, cells: (begin ? path.reversed.cells : path.cells))
-            return (color, outgoingPosition, initialExecution)
+            let initialExecution = begin ? path.reversed : path
+            return (path.color, outgoingPosition, initialExecution)
         }
 
         // Create best path from each of the starting positions
-        let allColors = Array(paths.keys)
+        let allColors = pathExecutions.map { $0.color }
         return allStartPositions.map { color, position, initialExecution -> SolutionExecution in
             let state = State(remainingColors: allColors.removing(color), inAirLength: 0, outgoingPosition: position)
             return SolutionExecution(pathExecutions: [initialExecution] + bestOrder(for: state))
@@ -35,9 +30,14 @@ extension Solution {
         // Trivial case
         if state.remainingColors.isEmpty { return [] }
 
+        // Dictionary lookup replacement
+        let pathForColor: (GameColor) -> PathExecution = { color in
+            self.pathExecutions.first { $0.color == color }!
+        }
+
         // Find nearest neighbor
         let neighbors: [(color: GameColor, position: Position)] = (state.remainingColors × [true, false]).map { color, begin in
-            let startPosition = begin ? paths[color]!.begin : paths[color]!.end
+            let startPosition = begin ? pathForColor(color).begin : pathForColor(color).end
             return (color, startPosition)
         }
 
@@ -48,7 +48,7 @@ extension Solution {
         }!
 
         // Reverse path if required and determine nextOutgoingPosition
-        var path = paths[nearestNeighbor.color]!
+        var path = pathForColor(nearestNeighbor.color)
         let isReversed = nearestNeighbor.position == path.end
         if isReversed { path = path.reversed } // Now, path.begin == nearestNeighbor.position
 

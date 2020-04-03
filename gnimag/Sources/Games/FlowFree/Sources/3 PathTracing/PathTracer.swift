@@ -32,9 +32,10 @@ class PathTracer {
     /// Thereby, optimize the drawing of the solution, i.e. convert the solution into an optimal SolutionExecution for best drawing performance.
     /// Returns when drawing has finished.
     func draw(solution: Solution) {
-        let executions = solution.goodExecutionOrders()
+        let trivialExecution = SolutionExecution(solution: solution)
+        let goodOrders = trivialExecution.goodExecutionOrders()
 
-        for order in executions {
+        for order in goodOrders {
             print(order.inAirLength)
         }
     }

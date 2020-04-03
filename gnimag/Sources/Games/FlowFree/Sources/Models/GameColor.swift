@@ -3,8 +3,6 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-import Foundation
-
 /// GameColor describes a color on the field.
 /// Thereby, two GameColor instances are equal if they are represented by the same letter.
 struct GameColor {

@@ -112,7 +112,7 @@
 		6316BDB523CB8D430062100F /* JumpSequencePlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */; };
 		63179ACB243338A000DA492E /* PyFlowSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179ACA243338A000DA492E /* PyFlowSolver.swift */; };
 		63179ACC243387E900DA492E /* Level+Solution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AC62433385D00DA492E /* Level+Solution.swift */; };
-		63179AD124339B8200DA492E /* Solution+GoodExecutionOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AD024339B8200DA492E /* Solution+GoodExecutionOrders.swift */; };
+		63179AD124339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AD024339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift */; };
 		63179AD72433C42A00DA492E /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AD42433BFC200DA492E /* Promise.swift */; };
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
@@ -423,7 +423,7 @@
 		63179AC42433313D00DA492E /* Acknowledgements.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Acknowledgements.md; sourceTree = "<group>"; };
 		63179AC62433385D00DA492E /* Level+Solution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Level+Solution.swift"; sourceTree = "<group>"; };
 		63179ACA243338A000DA492E /* PyFlowSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PyFlowSolver.swift; sourceTree = "<group>"; };
-		63179AD024339B8200DA492E /* Solution+GoodExecutionOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Solution+GoodExecutionOrders.swift"; sourceTree = "<group>"; };
+		63179AD024339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolutionExecution+GoodExecutionOrders.swift"; sourceTree = "<group>"; };
 		63179AD42433BFC200DA492E /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
@@ -1951,7 +1951,7 @@
 			isa = PBXGroup;
 			children = (
 				63E16AA82433E4BF005E67ED /* PathTracer.swift */,
-				63179AD024339B8200DA492E /* Solution+GoodExecutionOrders.swift */,
+				63179AD024339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift */,
 			);
 			path = "3 PathTracing";
 			sourceTree = "<group>";
@@ -2566,7 +2566,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				637494C424363B7800D724F7 /* Position.swift in Sources */,
-				63179AD124339B8200DA492E /* Solution+GoodExecutionOrders.swift in Sources */,
+				63179AD124339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift in Sources */,
 				637494C624363B8800D724F7 /* Board.swift in Sources */,
 				637494CC2436855A00D724F7 /* SolutionExecution.swift in Sources */,
 				63997EEB2434A1AD005473A0 /* FlowFreeTimeTrial.swift in Sources */,

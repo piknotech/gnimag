@@ -4,7 +4,6 @@
 //
 
 import Common
-import Foundation
 
 /// Board represents the game board at an arbitrary state.
 /// This means, each cell can either be empty or filled with a color.

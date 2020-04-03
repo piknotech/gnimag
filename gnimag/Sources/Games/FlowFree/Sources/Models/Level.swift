@@ -3,9 +3,6 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-import Foundation
-import Geometry
-
 /// Full description of an (unsolved) Flow Free level.
 struct Level {
     /// The level consists of targets, for each of which a connection has to be found.
