@@ -21,23 +21,6 @@ class PathTracer {
         self.underlyingDragger = underlyingDragger
     }
 
-    /// Synchronously draw the solution to a level onto the screen.
-    /// Returns when drawing has finished.
-    func draw(solution: Solution, to level: Level) {
-        /*let order = level.bestPathTracingOrder
-
-        for pathBegin in order {
-            var path = solution.paths[pathBegin.colorIndex]
-
-            // Reverse path if required
-            if !pathBegin.isColorStart {
-                path = path.reversed
-            }
-
-            draw(path: path)
-        }*/
-    }
-
     /// Position the pointing device at the center of the board.
     /// Do NOT wait for completion.
     func center() {
@@ -45,9 +28,26 @@ class PathTracer {
         _ = underlyingDragger.move(to: center)
     }
 
-    /// Synchronously draw a single path onto the screen.
+    /// Synchronously draw a Solution onto the screen.
+    /// Thereby, optimize the drawing of the solution, i.e. convert the solution into an optimal SolutionExecution for best drawing performance.
     /// Returns when drawing has finished.
-    private func draw(path: Solution.Path) {
+    func draw(solution: Solution) {
+        let executions = solution.goodExecutionOrders()
+
+        for order in executions {
+            print(order.inAirLength)
+        }
+    }
+
+    /// Synchronously draw a SolutionExecution onto the screen.
+    /// Returns when drawing has finished.
+    private func execute(_ execution: SolutionExecution) {
+        execution.pathExecutions.forEach(draw(path:))
+    }
+
+    /// Synchronously draw a single PathExecution onto the screen.
+    /// Returns when drawing has finished.
+    private func draw(path: SolutionExecution.PathExecution) {
         // Begin at start
         let start = relativeScreenLocation(for: path.cells[0])
         await & underlyingDragger.move(to: start)

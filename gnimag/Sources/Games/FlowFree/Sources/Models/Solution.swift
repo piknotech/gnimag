@@ -3,14 +3,24 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-import Foundation
-
 /// A level's solution.
 struct Solution {
-    /// The solution consists of path, each of which corresponding to a level's target.
+    /// The solution consists of paths, each of which corresponding to a level's target.
     struct Path {
         /// The cells the path consists of, in this order.
+        /// These also contain the `begin` and `end` positions.
         let cells: [Position]
+
+        /// The first cell in the path.
+        var begin: Position { cells.first! }
+
+        /// The last cell in the path.
+        var end: Position { cells.last! }
+
+        /// Return the reversed path.
+        var reversed: Path {
+            Path(cells: cells.reversed())
+        }
     }
 
     /// The paths, indexed by their color.
