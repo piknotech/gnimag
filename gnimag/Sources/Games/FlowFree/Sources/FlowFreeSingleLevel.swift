@@ -17,7 +17,7 @@ public class FlowFreeSingleLevel: FlowFreeBase {
             exit(withMessage: "Couldn't solve level:\n\(Board(level: level))")
         }
 
-        pathTracer.draw(solution: solution)
+        pathTracer.draw(solution: solution, for: level)
         exit(0)
     }
 }

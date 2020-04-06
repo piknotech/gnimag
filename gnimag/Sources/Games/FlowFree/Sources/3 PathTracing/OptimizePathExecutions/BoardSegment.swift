@@ -35,8 +35,8 @@ struct BoardSegment {
         let direction = end - start
         origin = start
 
-        width = abs(direction.dx)
-        height = abs(direction.dy)
+        width = abs(direction.dx) + 1
+        height = abs(direction.dy) + 1
         xyFlipped = width > height
 
         xDirection = direction.dx.signum()

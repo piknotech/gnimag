@@ -15,7 +15,6 @@ struct Solution {
         let cells: [Position]
     }
 
-
     // MARK: Conversion from Board
 
     /// Convert a solved Board into a Solution object which matches the given level.

@@ -16,7 +16,7 @@ public class FlowFreeTimeTrial: FlowFreeBase {
             exit(withMessage: "Couldn't solve level:\n\(Board(level: level))")
         }
 
-        pathTracer.draw(solution: solution)
+        pathTracer.draw(solution: solution, for: level)
         pathTracer.center()
 
         // Continue receiving images

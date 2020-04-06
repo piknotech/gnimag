@@ -31,12 +31,12 @@ class PathTracer {
     /// Synchronously draw a Solution onto the screen.
     /// Thereby, optimize the drawing of the solution, i.e. convert the solution into an optimal SolutionExecution for best drawing performance.
     /// Returns when drawing has finished.
-    func draw(solution: Solution) {
+    func draw(solution: Solution, for level: Level) {
         let trivialExecution = SolutionExecution(solution: solution)
         let goodOrders = trivialExecution.goodExecutionOrders()
 
         let optimized = goodOrders.map {
-            $0.optimizePathExecutions().removeStraightLines()
+            $0.optimizePathExecutions(level: level).removeStraightLines()
         }
 
         // Find best SolutionExecution, depending both on in-air and on-screen length

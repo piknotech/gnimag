@@ -52,7 +52,7 @@ struct Board: LosslessStringConvertible {
 
     /// Create a board from a color string. Thereby, the string represents a 2D-board, each color represented by a letter, and each row separated by a newline. A "." means empty cell.
     init?(_ description: String) {
-        let rowStrings = description.split(separator: "\n").map(String.init)
+        let rowStrings = Array(description.split(separator: "\n").map(String.init).reversed()) // Flip board in y-direction
         let size = rowStrings.count
         guard (rowStrings.allSatisfy { $0.length == size }) else { return nil }
 
@@ -88,7 +88,7 @@ struct Board: LosslessStringConvertible {
             row.map(cellToString).joined()
         }
 
-        let allRowStrings = board.map(rowToString)
+        let allRowStrings = board.map(rowToString).reversed() // Flip in y-direction to make board human readable (i.e. (0,0) is lower-left)
         return allRowStrings.joined(separator: separator)
     }
 
