@@ -8,6 +8,7 @@ import Foundation
 
 enum TemplateCell {
     case color
+    case otherColor
     case otherColorTarget
     case empty
     case dontCare
@@ -18,6 +19,8 @@ enum TemplateCell {
         switch self {
         case .color:
             return color == mainColor
+        case .otherColor:
+            return color != nil && color != mainColor
         case .otherColorTarget:
             return /* color != nil && color != mainColor && */ isTarget
         case .empty:
@@ -34,7 +37,7 @@ enum TemplateCell {
 ///
 /// A ShortcutTemplate always follows the following rules:
 ///  - The start of the path is at (0, 0) (lower-left) and the end is at (w-1, h-1) (upper-right).
-///  - The board is higher as it is wide (or has equal width and height).
+///  - The board is wider as it is high (or has equal width and height).
 /// When comparing a board segment to a ShortcutTemplate, it must be rotated and flipped to obtain the same properties.
 struct ShortcutTemplate {
     /// The 2D template board array, which is indexed via `board[y][x]`.

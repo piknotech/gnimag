@@ -9,7 +9,7 @@ import ImageAnalysisKit
 /// BoardSegment is a rectangular section of a board, possibly flipped and rotated by a multiple of 90°.
 /// A BoardSegment is always constructed in such that way (i.e. flipped and rotated) that it has the properties that are required by ShortcutTemplate:
 ///  - The start of the path is at (0, 0) (lower-left) and the end is at (w-1, h-1) (upper-right).
-///  - The segment is higher as it is wide (or has equal width and height).
+///  - The segment is wider as it is high (or has equal width and height).
 struct BoardSegment {
     /// The original board.
     private let board: Board
@@ -28,16 +28,18 @@ struct BoardSegment {
     let width: Int
     let height: Int
 
-    /// Create a BoardSegment containing a path from a start to an end position. Thereby, it is constructed so that `start` is at (0, 0) and `end` is at (w-1, h-1). Also, the segment is higher as it is wide (or has equal width and height).
+    /// Create a BoardSegment containing a path from a start to an end position. Thereby, it is constructed so that `start` is at (0, 0) and `end` is at (w-1, h-1). Also, the segment is wider as it is high (or has equal width and height).
     init(from start: Position, to end: Position, in board: Board) {
         self.board = board
 
         let direction = end - start
         origin = start
 
-        width = abs(direction.dx) + 1
-        height = abs(direction.dy) + 1
-        xyFlipped = width > height
+        let w = abs(direction.dx) + 1
+        let h = abs(direction.dy) + 1
+        xyFlipped = h > w
+        width = xyFlipped ? h : w
+        height = xyFlipped ? w : h
 
         xDirection = direction.dx.signum()
         yDirection = direction.dy.signum()

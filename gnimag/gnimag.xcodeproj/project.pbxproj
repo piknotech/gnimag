@@ -215,6 +215,7 @@
 		639B78CC242CDCB6009674E8 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CB242CDCB6009674E8 /* Parser.swift */; };
 		639B78CE242CDD9C009674E8 /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CD242CDD9C009674E8 /* Expressions.swift */; };
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
+		63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */; };
 		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
 		63B40BCE24250C72007A86E9 /* identiti.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B40BCC24250C72007A86E9 /* identiti.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B40BD624251140007A86E9 /* identiti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B40BD524251140007A86E9 /* identiti.swift */; };
@@ -555,6 +556,7 @@
 		639B78CD242CDD9C009674E8 /* Expressions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expressions.swift; sourceTree = "<group>"; };
 		639C745423BB66DF005FD354 /* JumpingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingProperties.swift; sourceTree = "<group>"; };
 		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
+		63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AllShortcuts+String.swift"; sourceTree = "<group>"; };
 		63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDataSet.swift; sourceTree = "<group>"; };
 		63B40BCA24250C72007A86E9 /* identiti.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = identiti.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B40BCC24250C72007A86E9 /* identiti.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = identiti.h; sourceTree = "<group>"; };
@@ -1720,9 +1722,10 @@
 			isa = PBXGroup;
 			children = (
 				63717D3C2437A47400CAA754 /* SolutionExecution+OptimizePathExecutions.swift */,
-				63717D412439D56A00CAA754 /* ShortcutTemplate.swift */,
 				63717D432439D58E00CAA754 /* BoardSegment.swift */,
+				63717D412439D56A00CAA754 /* ShortcutTemplate.swift */,
 				63717D452439D59C00CAA754 /* AllShortcuts.swift */,
+				63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */,
 			);
 			path = OptimizePathExecutions;
 			sourceTree = "<group>";
@@ -2602,6 +2605,7 @@
 				630682DE2430F59900C5B28E /* Level.swift in Sources */,
 				637494C224363B3E00D724F7 /* Solution.swift in Sources */,
 				63717D442439D58E00CAA754 /* BoardSegment.swift in Sources */,
+				63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */,
 				630682DC2430F59000C5B28E /* ScreenLayout.swift in Sources */,
 				63179ACB243338A000DA492E /* PyFlowSolver.swift in Sources */,
 				63179ACC243387E900DA492E /* Level+Solution.swift in Sources */,

@@ -50,4 +50,13 @@ struct SolutionExecution {
             path.end.distance(to: next.begin)
         }.reduce(0, +)
     }
+
+    /// The summarized total length of the individual PathExecutions.
+    var pathLength: Double {
+        pathExecutions.map { path in
+            zip(path.cells, path.cells.dropFirst()).map { cell, next in
+                cell.distance(to: next)
+            }.reduce(0, +)
+        }.reduce(0, +)
+    }
 }

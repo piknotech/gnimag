@@ -13,12 +13,10 @@ extension SolutionExecution {
 
         let result = pathExecutions.map { path -> PathExecution in
             for cell in path.cells { currentBoard[cell] = path.color } // Update board
-            print()
-            let a = optimize(path: path, level: level, currentBoard: currentBoard)
-            print("Optimized \(path) to \(a) in\n\(currentBoard)")
-            return a
+            return optimize(path: path, level: level, currentBoard: currentBoard)
         }
 
+        print("before: \(pathLength), after: \(SolutionExecution(pathExecutions: result).pathLength)")
         return SolutionExecution(pathExecutions: result)
     }
 
@@ -58,8 +56,9 @@ extension SolutionExecution {
 
         // Create BoardSegment and compare to all known ShortcutTemplates
         let segment = BoardSegment(from: start, to: end, in: board)
-
-        return diagonalShortcut.matches(segment: segment, color: color, level: level)
+        return Shortcuts.all.any {
+            $0.matches(segment: segment, color: color, level: level)
+        }
     }
 
     /// Contract the path so that positions i and j remain unchanged, and everything between is removed.
