@@ -18,7 +18,7 @@ extension SolutionExecution {
         }
 
         // Create best path from each of the starting positions
-        let allColors = pathExecutions.map { $0.color }
+        let allColors = pathExecutions.map(\.color)
         return allStartPositions.map { color, position, initialExecution -> SolutionExecution in
             let state = State(remainingColors: allColors.removing(color), inAirLength: 0, outgoingPosition: position)
             return SolutionExecution(pathExecutions: [initialExecution] + bestOrder(for: state))

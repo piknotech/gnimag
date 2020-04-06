@@ -35,9 +35,16 @@ class PathTracer {
         let trivialExecution = SolutionExecution(solution: solution)
         let goodOrders = trivialExecution.goodExecutionOrders()
 
-        for order in goodOrders {
-            print(order.inAirLength)
+        let optimized = goodOrders.map {
+            $0.optimizePathExecutions().removeStraightLines()
         }
+
+        // Find best SolutionExecution, depending both on in-air and on-screen length
+        let best = optimized.min {
+            $0.inAirLength < $1.inAirLength
+        }!
+
+        execute(best)
     }
 
     /// Synchronously draw a SolutionExecution onto the screen.

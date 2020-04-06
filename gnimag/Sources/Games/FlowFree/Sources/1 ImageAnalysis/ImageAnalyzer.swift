@@ -68,11 +68,11 @@ class ImageAnalyzer {
 
         // Create Level
         var remainingLetters = GameColor.allLetters
-        let targets = clusters.dropLast().map { cluster -> Level.Target in
+        let targets = clusters.dropLast().reduce(into: [GameColor: Level.Target]()) { targets, cluster in
             let start = cluster.objects[0].position
             let end = cluster.objects[1].position
             let color = GameColor(letter: remainingLetters.removeFirst())
-            return Level.Target(color: color, point1: start, point2: end)
+            targets[color] = Level.Target(color: color, point1: start, point2: end)
         }
 
         return Level(targets: targets, boardSize: screen.board.size)

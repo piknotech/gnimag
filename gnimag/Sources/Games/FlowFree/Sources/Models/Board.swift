@@ -24,9 +24,9 @@ struct Board: LosslessStringConvertible {
     init(level: Level) {
         self.init(size: level.boardSize)
 
-        for target in level.targets {
+        for (color, target) in level.targets {
             for point in [target.point1, target.point2] {
-                self[point] = target.color
+                self[point] = color
             }
         }
     }
@@ -35,6 +35,12 @@ struct Board: LosslessStringConvertible {
     subscript(position: Position) -> GameColor? {
         get { board[position.y][position.x] }
         set { board[position.y][position.x] = newValue }
+    }
+
+    /// Determine whether the cell at the given position is a target cell of a level.
+    func isTargetCell(at position: Position, level: Level) -> Bool {
+        guard let color = self[position], let target = level.targets[color] else { return false }
+        return position == target.point1 || position == target.point2
     }
 
     // MARK: String Conversion

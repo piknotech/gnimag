@@ -12,8 +12,8 @@ struct Level {
         let point2: Position
     }
 
-    /// All targets.
-    let targets: [Target]
+    /// All targets, indexed by their color.
+    let targets: [GameColor: Target]
 
     /// The number of boxes per row or per column.
     let boardSize: Int
@@ -27,8 +27,8 @@ extension Level: Equatable {
         if lhs.targets.count != rhs.targets.count { return false }
 
         // Match each lhs-color to an rhs-color
-        for target1 in lhs.targets {
-            let hasMatch = rhs.targets.any { target2 in
+        for target1 in lhs.targets.values {
+            let hasMatch = rhs.targets.values.any { target2 in
                 targetsAreSimilar(target1, target2)
             }
             if !hasMatch { return false }

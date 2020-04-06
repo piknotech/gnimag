@@ -24,12 +24,12 @@ struct Solution {
         var paths = [Path]()
 
         // Read solution for each target
-        for target in level.targets {
+        for (color, target) in level.targets {
             // Verify that level matches board
-            if board[target.point1] != target.color || board[target.point2] != target.color { return nil }
+            if board[target.point1] != color || board[target.point2] != color { return nil }
 
             if let path = Self.path(from: target.point1, to: target.point2, in: board) {
-                paths.append(Path(color: target.color, cells: path))
+                paths.append(Path(color: color, cells: path))
             } else {
                 return nil // Target has no solution
             }
