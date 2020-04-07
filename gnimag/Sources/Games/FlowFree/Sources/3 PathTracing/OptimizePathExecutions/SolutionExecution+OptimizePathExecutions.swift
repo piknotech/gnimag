@@ -16,7 +16,6 @@ extension SolutionExecution {
             return optimize(path: path, level: level, currentBoard: currentBoard)
         }
 
-        print("before: \(pathLength), after: \(SolutionExecution(pathExecutions: result).pathLength)")
         return SolutionExecution(pathExecutions: result)
     }
 

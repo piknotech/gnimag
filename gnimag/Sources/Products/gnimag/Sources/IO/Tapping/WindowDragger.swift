@@ -11,7 +11,7 @@ import Tapping
 class WindowDragger: WindowOperatorBase, Dragger {
     /// The dragging configuration. You can change it from outside.
     var configuration = Configuration(
-        draggingType: .realistic(stepLength: 150, stepDuration: 0.06),
+        draggingType: .realistic(stepLength: 190, stepDuration: 0.06),
         delayAfterTap: 0.1
     )
 

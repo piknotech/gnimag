@@ -26,11 +26,12 @@ private extension TemplateCell {
 
 enum Shortcuts {
     /// All possible shortcuts.
-    static let all = parse(from: allShortcuts) // TODO: index by size -> avoid comparing to all
+    static let all = parse(from: allShortcuts)
 
     /// Parse a collection of ShortcutTemplates, which is illustrated by a string as demonstrated above.
     private static func parse(from string: String) -> [ShortcutTemplate] {
-        let boardStrings = string.components(separatedBy: "\n\n")
+        var boardStrings = string.components(separatedBy: "\n\n")
+        boardStrings.removeAll { $0.starts(with: "//") } // Remove commented boards
 
         return boardStrings.map {
             guard let result = parse(board: $0) else {
