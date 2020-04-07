@@ -25,9 +25,7 @@ See [here](gnimag/Sources/Games) for how a game is built and how you can easily 
 
 ### How do I install and run gnimag on my Mac?
 
-Call `make install` to build and install gnimag. You need [Accio](https://github.com/JamitLabs/Accio) for dependency resolution.
-
-After `make install`, use `gnimag` to start gnimag.
+Call `make install` to build and install gnimag. After gnimag was successfully built, call `gnimag` to start gnimag.
 
 ### What about iPhones?
 
@@ -42,4 +40,7 @@ Fully implemented:
 
 In progress:
 
-- [MrFlap](gnimag/Sources/Games/MrFlap) ([App Store Link](https://apps.apple.com/at/app/mr-flap/id822206495); sadly no longer in the Play Store – APK available [here](https://apkpure.com/de/mr-flap/com.mrflap))
+- [Freaking Math](gnimag/Sources/Games/FreakingMath) ([App Store Link](https://apps.apple.com/us/app/freaking-math/id846439108); [Play Store Link](https://play.google.com/store/apps/details?id=com.bangdev.freakingmath))
+
+- [MrFlap](gnimag/Sources/Games/MrFlap) ([App Store Link](https://apps.apple.com/at/app/mr-flap/id822206495); [APK Link](https://apkpure.com/de/mr-flap/com.mrflap))
+
