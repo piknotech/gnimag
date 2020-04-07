@@ -19,8 +19,7 @@ public class FlowFreeBase {
     let onOffImageProvider: OnOffImageProvider
 
     /// The stream of incoming levels.
-    /// This is used to filter out image analysis errors: instead of immediately solving and playing the first incoming image, we require 2 consecutive frames to yield the same level. This precludes single-frame image errors.
-    private var levelStream = ValueStreamDamper<Level>(numberOfConsecutiveValues: 2)
+    private var levelStream = ValueStreamDamper<Level>(numberOfConsecutiveValues: 1)
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, dragger: Dragger) {

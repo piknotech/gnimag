@@ -25,6 +25,7 @@ struct Solution {
         // Read solution for each target
         for (color, target) in level.targets {
             // Verify that level matches board
+            if !board.contains(target.point1) || !board.contains(target.point2) { return nil }
             if board[target.point1] != color || board[target.point2] != color { return nil }
 
             if let path = Self.path(from: target.point1, to: target.point2, in: board) {

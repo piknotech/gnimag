@@ -43,6 +43,11 @@ struct Board: LosslessStringConvertible {
         return position == target.point1 || position == target.point2
     }
 
+    /// Check whether a position is contained on the board.
+    func contains(_ position: Position) -> Bool {
+        position.x >= 0 && position.x < size && position.y >= 0 && position.y < size
+    }
+
     // MARK: String Conversion
     // Example of a half-filled board:
     // AB.C
@@ -96,9 +101,6 @@ struct Board: LosslessStringConvertible {
     /// The content of the cells is not considered.
     func neighbors(of cell: Position) -> [Position] {
         let candidates = [Position(cell.x+1, cell.y), Position(cell.x-1, cell.y), Position(cell.x, cell.y+1), Position(cell.x, cell.y-1)]
-
-        return candidates.filter { pos in
-            pos.x >= 0 && pos.x < size && pos.y >= 0 && pos.y < size
-        }
+        return candidates.filter(contains(_:))
     }
 }
