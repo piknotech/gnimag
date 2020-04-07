@@ -17,6 +17,7 @@ gnimag: $(SOURCES)
 		-c release \
 		-Xswiftc "-whole-module-optimization" \
 		-Xswiftc "-Ounchecked" \
+		-Xswiftc "-suppress-warnings" \
 		--disable-sandbox \
 		--build-path "$(BUILDDIR)"
 

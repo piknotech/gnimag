@@ -5,6 +5,18 @@ import PackageDescription
 // It is not required during development inside Xcode.
 // When adding or updating a (local) module, or a (remote) dependency, update this Package.swift accordingly to keep `make` intact.
 
+/// All non-game libraries, i.e. base + debug libraries.
+let allLibraries: [Target.Dependency] = [
+    "Common",
+    "GameKit",
+    "Geometry",
+    "Image",
+    "ImageAnalysisKit",
+    "LoggingKit",
+    "Tapping",
+    "TestingTools"
+]
+
 let package = Package(
     name: "gnimag",
     platforms: [
@@ -95,48 +107,39 @@ let package = Package(
 
         // GAMES
         .target(
-            name: "identiti",
-            dependencies: [
-                "Common",
-                "GameKit",
-                "Geometry",
-                "Image",
-                "ImageAnalysisKit",
-                "LoggingKit",
-                "Tapping",
-                "TestingTools",
+            name: "FlowFree",
+            dependencies: allLibraries + [
+                "FlowFreeC"
             ],
+            path: "Sources/Games/FlowFree",
+            exclude: ["FlowFreeC"]
+        ),
+
+        // C code used in FlowFree. Must be in a separate target due to swift build limitations
+        .target(
+            name: "FlowFreeC",
+            path: "Sources/Games/FlowFree/FlowFreeC"
+        ),
+
+        .target(
+            name: "identiti",
+            dependencies: allLibraries,
             path: "Sources/Games/identiti"
         ),
 
         .target(
             name: "MrFlap",
-            dependencies: [
-                "Common",
-                "GameKit",
-                "Geometry",
-                "Image",
-                "ImageAnalysisKit",
-                "LoggingKit",
-                "Tapping",
-                "TestingTools",
-            ],
+            dependencies: allLibraries,
             path: "Sources/Games/MrFlap"
         ),
 
         // PRODUCTS
         .target(
             name: "gnimag",
-            dependencies: [
-                "Common",
-                "Geometry",
+            dependencies: allLibraries + [
+                "FlowFree",
                 "identiti",
-                "Image",
-                "ImageAnalysisKit",
-                "LoggingKit",
-                "MrFlap",
-                "Tapping",
-                "TestingTools",
+                "MrFlap"
             ],
             path: "Sources/Products/gnimag"
         ),

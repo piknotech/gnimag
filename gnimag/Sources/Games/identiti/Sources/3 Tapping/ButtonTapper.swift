@@ -9,14 +9,14 @@ import Tapping
 
 /// ButtonTapper uses the screen layout to tap on the relevant (equal/notEqual) buttons.
 class ButtonTapper {
+    private let underlyingTapper: ArbitraryLocationTapper
+
     /// The screen layout. Before using ButtonTapper, this must be set from outside.
     var screen: ScreenLayout!
 
-    private let underylingTapper: ArbitraryLocationTapper
-
     /// Default initializer.
     init(underlyingTapper: ArbitraryLocationTapper) {
-        self.underylingTapper = underlyingTapper
+        self.underlyingTapper = underlyingTapper
     }
 
     /// Tap on the correct button for a given exercise result.
@@ -24,11 +24,11 @@ class ButtonTapper {
         switch result {
         case .equal:
             let location = relativeTappingLocation(for: screen.equalButton)
-            underylingTapper.tap(at: location)
+            underlyingTapper.tap(at: location)
 
         case .notEqual:
             let location = relativeTappingLocation(for: screen.notEqualButton)
-            underylingTapper.tap(at: location)
+            underlyingTapper.tap(at: location)
         }
     }
 

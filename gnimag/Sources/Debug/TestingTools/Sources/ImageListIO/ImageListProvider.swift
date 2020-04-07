@@ -38,7 +38,7 @@ public final class ImageListProvider: ImageProvider {
         self.speed = speed
         i = startingAt - speed
 
-        `continue`()
+        beginProviding()
     }
 
     /// Return the current image (image number `i`) in the directory.
@@ -63,7 +63,7 @@ public final class ImageListProvider: ImageProvider {
     }
 
     /// Start or continue providing images.
-    public func `continue`() {
+    private func beginProviding() {
         guard timer == nil else { return }
 
         // Start timer
@@ -74,11 +74,5 @@ public final class ImageListProvider: ImageProvider {
                 self.newFrame.trigger(with: (self.imageFromCGImage(image), time))
             }
         }
-    }
-
-    /// Pause providing images.
-    public func pause() {
-        timer?.invalidate()
-        timer = nil
     }
 }

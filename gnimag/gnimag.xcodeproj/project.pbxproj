@@ -8,14 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */; };
+		630682CC2430CE4D00C5B28E /* FlowFree.h in Headers */ = {isa = PBXBuildFile; fileRef = 630682CA2430CE4D00C5B28E /* FlowFree.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		630682D32430CEB400C5B28E /* FlowFreeSingleLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682D22430CEB400C5B28E /* FlowFreeSingleLevel.swift */; };
+		630682D72430EE8000C5B28E /* OnOffImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682D52430EE7D00C5B28E /* OnOffImageProvider.swift */; };
+		630682D92430F13600C5B28E /* ValueStreamDamper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630873F3242E6633000ECE47 /* ValueStreamDamper.swift */; };
+		630682DC2430F59000C5B28E /* ScreenLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682DB2430F59000C5B28E /* ScreenLayout.swift */; };
+		630682DE2430F59900C5B28E /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682DD2430F59900C5B28E /* Level.swift */; };
+		630682E02430FB3800C5B28E /* ImageAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682DF2430FB3800C5B28E /* ImageAnalyzer.swift */; };
 		6306BDB12405298800C26C08 /* IdleStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306BDB02405298800C26C08 /* IdleStrategy.swift */; };
 		6306CDB823AA48DE00D9EB25 /* ToleranceRangeScatterStrokables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */; };
 		63073E60242AA2A4002C4593 /* GrayscaleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E5F242AA2A4002C4593 /* GrayscaleImage.swift */; };
 		63073E62242AAB8E002C4593 /* CGImage+IO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E61242AAB8E002C4593 /* CGImage+IO.swift */; };
 		63073E63242AAD27002C4593 /* NativeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C323257EB600C126B4 /* NativeImage.swift */; };
 		63073E65242AB7B0002C4593 /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E64242AB7B0002C4593 /* Tools.swift */; };
-		630873F0242E3FFA000ECE47 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
-		630873F4242E6633000ECE47 /* ValueStreamDamper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630873F3242E6633000ECE47 /* ValueStreamDamper.swift */; };
 		6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */; };
 		6311E0B523E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */; };
 		6311E0B723E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */; };
@@ -105,6 +110,10 @@
 		6316BDA723C91BD10062100F /* LinearFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA623C91BD10062100F /* LinearFunction.swift */; };
 		6316BDA923CA49FB0062100F /* JumpTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA823CA49FB0062100F /* JumpTracker+Future.swift */; };
 		6316BDB523CB8D430062100F /* JumpSequencePlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */; };
+		63179ACB243338A000DA492E /* PyFlowSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179ACA243338A000DA492E /* PyFlowSolver.swift */; };
+		63179ACC243387E900DA492E /* Level+Solution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AC62433385D00DA492E /* Level+Solution.swift */; };
+		63179AD124339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AD024339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift */; };
+		63179AD72433C42A00DA492E /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63179AD42433BFC200DA492E /* Promise.swift */; };
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
 		631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631BE25723EF53EE008DDEE1 /* CwlRandom.swift */; };
@@ -122,7 +131,7 @@
 		6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */; };
 		63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A52234BA2B700E42762 /* CompositeTracker.swift */; };
 		63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */; };
-		63351A5D234DD11E00E42762 /* Array+DropWhile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5B234DD11700E42762 /* Array+DropWhile.swift */; };
+		63351A5D234DD11E00E42762 /* Array+RemovingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5B234DD11700E42762 /* Array+RemovingRelated.swift */; };
 		63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5E234DE23E00E42762 /* SimpleDataSet.swift */; };
 		633E4EE123E9CEAD00B389FA /* RandomPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E4EE023E9CEAD00B389FA /* RandomPoints.swift */; };
 		63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */; };
@@ -159,12 +168,28 @@
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
 		6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D901238D666400477AD9 /* LinearScatterStrokable.swift */; };
 		6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */; };
-		6367D906238EAE7200477AD9 /* Array+RemoveAtIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */; };
 		6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */; };
 		6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift */; };
 		6367D910238ED8DC00477AD9 /* Dash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D90F238ED8DC00477AD9 /* Dash.swift */; };
 		636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1A23BF953B00A3BE26 /* Angle.swift */; };
 		636BCC1E23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */; };
+		63717D3D2437A47400CAA754 /* SolutionExecution+OptimizePathExecutions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63717D3C2437A47400CAA754 /* SolutionExecution+OptimizePathExecutions.swift */; };
+		63717D3F2438AEBA00CAA754 /* SolutionExecution+RemoveStraightLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63717D3E2438AEBA00CAA754 /* SolutionExecution+RemoveStraightLines.swift */; };
+		63717D422439D56A00CAA754 /* ShortcutTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63717D412439D56A00CAA754 /* ShortcutTemplate.swift */; };
+		63717D442439D58E00CAA754 /* BoardSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63717D432439D58E00CAA754 /* BoardSegment.swift */; };
+		63717D462439D59C00CAA754 /* AllShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63717D452439D59C00CAA754 /* AllShortcuts.swift */; };
+		637494AA2435ECE600D724F7 /* FlowFreeC.h in Headers */ = {isa = PBXBuildFile; fileRef = 637494A82435ECE600D724F7 /* FlowFreeC.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		637494B32435F42100D724F7 /* execute_cmd.c in Sources */ = {isa = PBXBuildFile; fileRef = 637494B12435F42100D724F7 /* execute_cmd.c */; };
+		637494B42435F42100D724F7 /* execute_cmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 637494B22435F42100D724F7 /* execute_cmd.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		637494B92436076B00D724F7 /* flow_solver.c in Sources */ = {isa = PBXBuildFile; fileRef = 637494B82436076B00D724F7 /* flow_solver.c */; };
+		637494BB2436133700D724F7 /* flow_solver.h in Headers */ = {isa = PBXBuildFile; fileRef = 637494BA2436133300D724F7 /* flow_solver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		637494BD24361C3600D724F7 /* CFlowSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494BC24361C3600D724F7 /* CFlowSolver.swift */; };
+		637494C224363B3E00D724F7 /* Solution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494C124363B3E00D724F7 /* Solution.swift */; };
+		637494C424363B7800D724F7 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494C324363B7800D724F7 /* Position.swift */; };
+		637494C624363B8800D724F7 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494C524363B8800D724F7 /* Board.swift */; };
+		637494C824363BC600D724F7 /* GameColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494C724363BC600D724F7 /* GameColor.swift */; };
+		637494CA24366A1700D724F7 /* String+Subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494C924366A1700D724F7 /* String+Subscript.swift */; };
+		637494CC2436855A00D724F7 /* SolutionExecution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494CB2436855A00D724F7 /* SolutionExecution.swift */; };
 		63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63758AE82425369700D0F060 /* ImageAnalyzer.swift */; };
 		63758AEB242536AA00D0F060 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63758AEA242536AA00D0F060 /* Exercise.swift */; };
 		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
@@ -183,10 +208,14 @@
 		637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB4E2392BBD30067BBCC /* GameQueue.swift */; };
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
+		63997EE92434959C005473A0 /* Promise+Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EE82434959C005473A0 /* Promise+Await.swift */; };
+		63997EEB2434A1AD005473A0 /* FlowFreeTimeTrial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */; };
+		63997EED2434A290005473A0 /* FlowFreeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEC2434A290005473A0 /* FlowFreeBase.swift */; };
 		639B78CA242CDB84009674E8 /* ArrayScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78C9242CDB84009674E8 /* ArrayScanner.swift */; };
 		639B78CC242CDCB6009674E8 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CB242CDCB6009674E8 /* Parser.swift */; };
 		639B78CE242CDD9C009674E8 /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CD242CDD9C009674E8 /* Expressions.swift */; };
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
+		63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */; };
 		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
 		63B40BCE24250C72007A86E9 /* identiti.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B40BCC24250C72007A86E9 /* identiti.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B40BD624251140007A86E9 /* identiti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B40BD524251140007A86E9 /* identiti.swift */; };
@@ -208,6 +237,10 @@
 		63DF005C24269111001D81B3 /* Angle+Directions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF005B24269111001D81B3 /* Angle+Directions.swift */; };
 		63DF005F24269816001D81B3 /* BitmapOCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF005E24269816001D81B3 /* BitmapOCR.swift */; };
 		63DF00612427E391001D81B3 /* BitmapOCRCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF00602427E390001D81B3 /* BitmapOCRCreator.swift */; };
+		63E16AA72433E16F005E67ED /* Dragger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AA62433E16F005E67ED /* Dragger.swift */; };
+		63E16AA92433E4BF005E67ED /* PathTracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AA82433E4BF005E67ED /* PathTracer.swift */; };
+		63E16AAB24348400005E67ED /* WindowDragger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AAA24348400005E67ED /* WindowDragger.swift */; };
+		63E16AAD24348968005E67ED /* WindowOperatorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AAC24348968005E67ED /* WindowOperatorBase.swift */; };
 		63E5A06E23FC1D360082E910 /* TimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06D23FC1D350082E910 /* TimeProvider.swift */; };
 		63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
@@ -237,6 +270,15 @@
 /* Begin PBXFileReference section */
 		6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerProtocol.swift; sourceTree = "<group>"; };
 		63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDebugInfo.swift; sourceTree = "<group>"; };
+		630682C82430CE4C00C5B28E /* FlowFree.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlowFree.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		630682CA2430CE4D00C5B28E /* FlowFree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlowFree.h; sourceTree = "<group>"; };
+		630682CB2430CE4D00C5B28E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		630682D22430CEB400C5B28E /* FlowFreeSingleLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowFreeSingleLevel.swift; sourceTree = "<group>"; };
+		630682D42430E56600C5B28E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		630682D52430EE7D00C5B28E /* OnOffImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnOffImageProvider.swift; sourceTree = "<group>"; };
+		630682DB2430F59000C5B28E /* ScreenLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayout.swift; sourceTree = "<group>"; };
+		630682DD2430F59900C5B28E /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		630682DF2430FB3800C5B28E /* ImageAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnalyzer.swift; sourceTree = "<group>"; };
 		6306BDB02405298800C26C08 /* IdleStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleStrategy.swift; sourceTree = "<group>"; };
 		6306CDB523A93DCF00D9EB25 /* ToleranceRangeScatterStrokables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToleranceRangeScatterStrokables.swift; sourceTree = "<group>"; };
 		63073E5F242AA2A4002C4593 /* GrayscaleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrayscaleImage.swift; sourceTree = "<group>"; };
@@ -383,6 +425,12 @@
 		6316BDA623C91BD10062100F /* LinearFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearFunction.swift; sourceTree = "<group>"; };
 		6316BDA823CA49FB0062100F /* JumpTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JumpTracker+Future.swift"; sourceTree = "<group>"; };
 		6316BDB323CB8CD60062100F /* JumpSequencePlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequencePlot.swift; sourceTree = "<group>"; };
+		63179AC32433313D00DA492E /* pyflowsolver.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = pyflowsolver.py; sourceTree = "<group>"; };
+		63179AC42433313D00DA492E /* Acknowledgements.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Acknowledgements.md; sourceTree = "<group>"; };
+		63179AC62433385D00DA492E /* Level+Solution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Level+Solution.swift"; sourceTree = "<group>"; };
+		63179ACA243338A000DA492E /* PyFlowSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PyFlowSolver.swift; sourceTree = "<group>"; };
+		63179AD024339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolutionExecution+GoodExecutionOrders.swift"; sourceTree = "<group>"; };
+		63179AD42433BFC200DA492E /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
 		631BE25723EF53EE008DDEE1 /* CwlRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CwlRandom.swift; sourceTree = "<group>"; };
@@ -400,7 +448,7 @@
 		6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicLinearPingPongTracker.swift; sourceTree = "<group>"; };
 		63351A52234BA2B700E42762 /* CompositeTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTracker.swift; sourceTree = "<group>"; };
 		63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerSlidingWindow.swift; sourceTree = "<group>"; };
-		63351A5B234DD11700E42762 /* Array+DropWhile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+DropWhile.swift"; sourceTree = "<group>"; };
+		63351A5B234DD11700E42762 /* Array+RemovingRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+RemovingRelated.swift"; sourceTree = "<group>"; };
 		63351A5E234DE23E00E42762 /* SimpleDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDataSet.swift; sourceTree = "<group>"; };
 		633E4EE023E9CEAD00B389FA /* RandomPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomPoints.swift; sourceTree = "<group>"; };
 		63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyFunctionToleranceChecker.swift; sourceTree = "<group>"; };
@@ -454,13 +502,32 @@
 		6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadCurveScatterStrokable.swift; sourceTree = "<group>"; };
 		6367D901238D666400477AD9 /* LinearScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearScatterStrokable.swift; sourceTree = "<group>"; };
 		6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryFunctionScatterStrokable.swift; sourceTree = "<group>"; };
-		6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+RemoveAtIndices.swift"; sourceTree = "<group>"; };
 		6367D907238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SimpleTracker+DebugInfos.swift"; sourceTree = "<group>"; };
 		6367D909238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompositeTracker+DebugInfos.swift"; sourceTree = "<group>"; };
 		6367D90D238EC0CF00477AD9 /* TrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDebugInfo.swift; sourceTree = "<group>"; };
 		6367D90F238ED8DC00477AD9 /* Dash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dash.swift; sourceTree = "<group>"; };
 		636BCC1A23BF953B00A3BE26 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		636BCC1D23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicLinearPingPongTracker+Future.swift"; sourceTree = "<group>"; };
+		63717D3C2437A47400CAA754 /* SolutionExecution+OptimizePathExecutions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolutionExecution+OptimizePathExecutions.swift"; sourceTree = "<group>"; };
+		63717D3E2438AEBA00CAA754 /* SolutionExecution+RemoveStraightLines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SolutionExecution+RemoveStraightLines.swift"; sourceTree = "<group>"; };
+		63717D412439D56A00CAA754 /* ShortcutTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutTemplate.swift; sourceTree = "<group>"; };
+		63717D432439D58E00CAA754 /* BoardSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardSegment.swift; sourceTree = "<group>"; };
+		63717D452439D59C00CAA754 /* AllShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllShortcuts.swift; sourceTree = "<group>"; };
+		637494A62435ECE600D724F7 /* FlowFreeC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlowFreeC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		637494A82435ECE600D724F7 /* FlowFreeC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlowFreeC.h; sourceTree = "<group>"; };
+		637494A92435ECE600D724F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		637494AF2435EE8400D724F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		637494B12435F42100D724F7 /* execute_cmd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = execute_cmd.c; sourceTree = "<group>"; };
+		637494B22435F42100D724F7 /* execute_cmd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = execute_cmd.h; sourceTree = "<group>"; };
+		637494B82436076B00D724F7 /* flow_solver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = flow_solver.c; sourceTree = "<group>"; };
+		637494BA2436133300D724F7 /* flow_solver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = flow_solver.h; sourceTree = "<group>"; };
+		637494BC24361C3600D724F7 /* CFlowSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CFlowSolver.swift; sourceTree = "<group>"; };
+		637494C124363B3E00D724F7 /* Solution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solution.swift; sourceTree = "<group>"; };
+		637494C324363B7800D724F7 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		637494C524363B8800D724F7 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		637494C724363BC600D724F7 /* GameColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameColor.swift; sourceTree = "<group>"; };
+		637494C924366A1700D724F7 /* String+Subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Subscript.swift"; sourceTree = "<group>"; };
+		637494CB2436855A00D724F7 /* SolutionExecution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolutionExecution.swift; sourceTree = "<group>"; };
 		63758AE82425369700D0F060 /* ImageAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnalyzer.swift; sourceTree = "<group>"; };
 		63758AEA242536AA00D0F060 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		637595392331012C00ACA969 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
@@ -481,11 +548,15 @@
 		637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameQueueTimingStats.swift; sourceTree = "<group>"; };
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
+		63997EE82434959C005473A0 /* Promise+Await.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Await.swift"; sourceTree = "<group>"; };
+		63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowFreeTimeTrial.swift; sourceTree = "<group>"; };
+		63997EEC2434A290005473A0 /* FlowFreeBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowFreeBase.swift; sourceTree = "<group>"; };
 		639B78C9242CDB84009674E8 /* ArrayScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayScanner.swift; sourceTree = "<group>"; };
 		639B78CB242CDCB6009674E8 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		639B78CD242CDD9C009674E8 /* Expressions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expressions.swift; sourceTree = "<group>"; };
 		639C745423BB66DF005FD354 /* JumpingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingProperties.swift; sourceTree = "<group>"; };
 		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
+		63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AllShortcuts+String.swift"; sourceTree = "<group>"; };
 		63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDataSet.swift; sourceTree = "<group>"; };
 		63B40BCA24250C72007A86E9 /* identiti.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = identiti.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B40BCC24250C72007A86E9 /* identiti.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = identiti.h; sourceTree = "<group>"; };
@@ -510,6 +581,10 @@
 		63DF005B24269111001D81B3 /* Angle+Directions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Angle+Directions.swift"; sourceTree = "<group>"; };
 		63DF005E24269816001D81B3 /* BitmapOCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitmapOCR.swift; sourceTree = "<group>"; };
 		63DF00602427E390001D81B3 /* BitmapOCRCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitmapOCRCreator.swift; sourceTree = "<group>"; };
+		63E16AA62433E16F005E67ED /* Dragger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dragger.swift; sourceTree = "<group>"; };
+		63E16AA82433E4BF005E67ED /* PathTracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTracer.swift; sourceTree = "<group>"; };
+		63E16AAA24348400005E67ED /* WindowDragger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDragger.swift; sourceTree = "<group>"; };
+		63E16AAC24348968005E67ED /* WindowOperatorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowOperatorBase.swift; sourceTree = "<group>"; };
 		63E5A06D23FC1D350082E910 /* TimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeProvider.swift; sourceTree = "<group>"; };
 		63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+PixelFormat.swift"; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
@@ -523,6 +598,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		630682C52430CE4C00C5B28E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		631212AA23253DC700C126B4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -588,6 +670,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		637494A32435ECE600D724F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63B40BC724250C72007A86E9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -605,6 +694,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		630682C92430CE4D00C5B28E /* FlowFree */ = {
+			isa = PBXGroup;
+			children = (
+				630682D42430E56600C5B28E /* README.md */,
+				637494A72435ECE600D724F7 /* FlowFreeC */,
+				63179AC22433313D00DA492E /* Scripts */,
+				630682D12430CEA300C5B28E /* Sources */,
+				630682D02430CE9100C5B28E /* SupportingFiles */,
+			);
+			path = FlowFree;
+			sourceTree = "<group>";
+		};
+		630682D02430CE9100C5B28E /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				630682CA2430CE4D00C5B28E /* FlowFree.h */,
+				630682CB2430CE4D00C5B28E /* Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		630682D12430CEA300C5B28E /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				63997EEC2434A290005473A0 /* FlowFreeBase.swift */,
+				630682D22430CEB400C5B28E /* FlowFreeSingleLevel.swift */,
+				63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */,
+				637494C024363B2100D724F7 /* Models */,
+				630682DA2430F57C00C5B28E /* 1 ImageAnalysis */,
+				63179AC52433380300DA492E /* 2 LevelSolving */,
+				63E16AA52433E10F005E67ED /* 3 PathTracing */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		630682D82430F12500C5B28E /* More */ = {
+			isa = PBXGroup;
+			children = (
+				630873F3242E6633000ECE47 /* ValueStreamDamper.swift */,
+			);
+			path = More;
+			sourceTree = "<group>";
+		};
+		630682DA2430F57C00C5B28E /* 1 ImageAnalysis */ = {
+			isa = PBXGroup;
+			children = (
+				630682DF2430FB3800C5B28E /* ImageAnalyzer.swift */,
+				630682DB2430F59000C5B28E /* ScreenLayout.swift */,
+			);
+			path = "1 ImageAnalysis";
+			sourceTree = "<group>";
+		};
 		6306BDAE2405286400C26C08 /* 0 Bars */ = {
 			isa = PBXGroup;
 			children = (
@@ -726,6 +867,8 @@
 				6312140E232587E300C126B4 /* Geometry.framework */,
 				63FABDB123917D6F0088FD77 /* LoggingKit.framework */,
 				63B40BCA24250C72007A86E9 /* identiti.framework */,
+				630682C82430CE4C00C5B28E /* FlowFree.framework */,
+				637494A62435ECE600D724F7 /* FlowFreeC.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -797,6 +940,7 @@
 			isa = PBXGroup;
 			children = (
 				631213DF23257F1F00C126B4 /* README.md */,
+				630682C92430CE4D00C5B28E /* FlowFree */,
 				63B40BCB24250C72007A86E9 /* identiti */,
 				631213D723257EF600C126B4 /* MrFlap */,
 			);
@@ -838,6 +982,7 @@
 			children = (
 				631212EA232574E500C126B4 /* Tapper.swift */,
 				635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */,
+				63E16AA62433E16F005E67ED /* Dragger.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -857,6 +1002,8 @@
 				636BCC1A23BF953B00A3BE26 /* Angle.swift */,
 				6312143A232669B800C126B4 /* AsyncTools.swift */,
 				631212CD2325740000C126B4 /* Event.swift */,
+				63179AD42433BFC200DA492E /* Promise.swift */,
+				63997EE82434959C005473A0 /* Promise+Await.swift */,
 				6377C85F23DC76D40084772F /* Timing.swift */,
 				631214382326686A00C126B4 /* Terminal.swift */,
 				6364934423270ABA00FEF664 /* SimpleRange.swift */,
@@ -1204,7 +1351,9 @@
 			isa = PBXGroup;
 			children = (
 				631213BE23257EB600C126B4 /* NoopTapper.swift */,
+				63E16AAC24348968005E67ED /* WindowOperatorBase.swift */,
 				631213BF23257EB600C126B4 /* WindowTapper.swift */,
+				63E16AAA24348400005E67ED /* WindowDragger.swift */,
 				631213C023257EB600C126B4 /* MouseControl.swift */,
 			);
 			path = Tapping;
@@ -1346,14 +1495,14 @@
 			isa = PBXGroup;
 			children = (
 				63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */,
-				63351A5B234DD11700E42762 /* Array+DropWhile.swift */,
-				6367D905238EAE7200477AD9 /* Array+RemoveAtIndices.swift */,
+				63351A5B234DD11700E42762 /* Array+RemovingRelated.swift */,
 				63B62B2323DC8D06009B07DF /* Array+Scan.swift */,
 				63073E61242AAB8E002C4593 /* CGImage+IO.swift */,
 				63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */,
 				6323F11023EB2C7200182D13 /* Int+TimesMake.swift */,
 				6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */,
 				6312133A2325785000C126B4 /* Sequence+Extensions.swift */,
+				637494C924366A1700D724F7 /* String+Subscript.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1367,6 +1516,25 @@
 				63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */,
 			);
 			path = Drawing;
+			sourceTree = "<group>";
+		};
+		63179AC22433313D00DA492E /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				63179AC42433313D00DA492E /* Acknowledgements.md */,
+				63179AC32433313D00DA492E /* pyflowsolver.py */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		63179AC52433380300DA492E /* 2 LevelSolving */ = {
+			isa = PBXGroup;
+			children = (
+				63179AC62433385D00DA492E /* Level+Solution.swift */,
+				63179ACA243338A000DA492E /* PyFlowSolver.swift */,
+				637494BC24361C3600D724F7 /* CFlowSolver.swift */,
+			);
+			path = "2 LevelSolving";
 			sourceTree = "<group>";
 		};
 		6318966823B4C896002FBD4F /* 3 TapPrediction */ = {
@@ -1550,6 +1718,61 @@
 			path = TrackerFutures;
 			sourceTree = "<group>";
 		};
+		63717D402439D35400CAA754 /* OptimizePathExecutions */ = {
+			isa = PBXGroup;
+			children = (
+				63717D3C2437A47400CAA754 /* SolutionExecution+OptimizePathExecutions.swift */,
+				63717D432439D58E00CAA754 /* BoardSegment.swift */,
+				63717D412439D56A00CAA754 /* ShortcutTemplate.swift */,
+				63717D452439D59C00CAA754 /* AllShortcuts.swift */,
+				63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */,
+			);
+			path = OptimizePathExecutions;
+			sourceTree = "<group>";
+		};
+		637494A72435ECE600D724F7 /* FlowFreeC */ = {
+			isa = PBXGroup;
+			children = (
+				637494AF2435EE8400D724F7 /* README.md */,
+				637494A92435ECE600D724F7 /* Info.plist */,
+				637494AE2435ECFA00D724F7 /* include */,
+				637494B02435EEB900D724F7 /* src */,
+			);
+			path = FlowFreeC;
+			sourceTree = "<group>";
+		};
+		637494AE2435ECFA00D724F7 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				637494A82435ECE600D724F7 /* FlowFreeC.h */,
+				637494B22435F42100D724F7 /* execute_cmd.h */,
+				637494BA2436133300D724F7 /* flow_solver.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		637494B02435EEB900D724F7 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				637494B12435F42100D724F7 /* execute_cmd.c */,
+				637494B82436076B00D724F7 /* flow_solver.c */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		637494C024363B2100D724F7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				637494C724363BC600D724F7 /* GameColor.swift */,
+				637494C324363B7800D724F7 /* Position.swift */,
+				637494C524363B8800D724F7 /* Board.swift */,
+				630682DD2430F59900C5B28E /* Level.swift */,
+				637494C124363B3E00D724F7 /* Solution.swift */,
+				637494CB2436855A00D724F7 /* SolutionExecution.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		63758AE72425367200D0F060 /* 1 ImageAnalysis */ = {
 			isa = PBXGroup;
 			children = (
@@ -1566,6 +1789,7 @@
 				6375953E233A53D900ACA969 /* ShapeErasedImage.swift */,
 				63759540233A63CB00ACA969 /* ShapeErasureType.swift */,
 				63DF005824263747001D81B3 /* CroppedImage.swift */,
+				630682D52430EE7D00C5B28E /* OnOffImageProvider.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -1582,6 +1806,7 @@
 		637B56AF23D06FEB007E51B0 /* Auxiliary */ = {
 			isa = PBXGroup;
 			children = (
+				630682D82430F12500C5B28E /* More */,
 				637B56B423D0718E007E51B0 /* ScatterStrokables */,
 			);
 			path = Auxiliary;
@@ -1680,7 +1905,6 @@
 			isa = PBXGroup;
 			children = (
 				63B40BD524251140007A86E9 /* identiti.swift */,
-				630873F3242E6633000ECE47 /* ValueStreamDamper.swift */,
 				63758AE72425367200D0F060 /* 1 ImageAnalysis */,
 				63672C55242C02B9008FCDFC /* 2 ExerciseSolving */,
 				635CF20C242CF21400DEFDBE /* 3 Tapping */,
@@ -1747,6 +1971,17 @@
 			path = BitmapOCR;
 			sourceTree = "<group>";
 		};
+		63E16AA52433E10F005E67ED /* 3 PathTracing */ = {
+			isa = PBXGroup;
+			children = (
+				63E16AA82433E4BF005E67ED /* PathTracer.swift */,
+				63179AD024339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift */,
+				63717D3E2438AEBA00CAA754 /* SolutionExecution+RemoveStraightLines.swift */,
+				63717D402439D35400CAA754 /* OptimizePathExecutions */,
+			);
+			path = "3 PathTracing";
+			sourceTree = "<group>";
+		};
 		63F0192F23885B7600E380CB /* Debug */ = {
 			isa = PBXGroup;
 			children = (
@@ -1811,6 +2046,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		630682C32430CE4C00C5B28E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				630682CC2430CE4D00C5B28E /* FlowFree.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		631212B523253DE300C126B4 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1875,6 +2118,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		637494A12435ECE600D724F7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				637494BB2436133700D724F7 /* flow_solver.h in Headers */,
+				637494AA2435ECE600D724F7 /* FlowFreeC.h in Headers */,
+				637494B42435F42100D724F7 /* execute_cmd.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63B40BC524250C72007A86E9 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1894,6 +2147,26 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		630682C72430CE4C00C5B28E /* FlowFree */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 630682CF2430CE4D00C5B28E /* Build configuration list for PBXNativeTarget "FlowFree" */;
+			buildPhases = (
+				630682C32430CE4C00C5B28E /* Headers */,
+				630682C42430CE4C00C5B28E /* Sources */,
+				630682C52430CE4C00C5B28E /* Frameworks */,
+				630682C62430CE4C00C5B28E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlowFree;
+			packageProductDependencies = (
+			);
+			productName = FlowFree;
+			productReference = 630682C82430CE4C00C5B28E /* FlowFree.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		631212AC23253DC700C126B4 /* gnimag */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 631212B223253DC700C126B4 /* Build configuration list for PBXNativeTarget "gnimag" */;
@@ -2064,6 +2337,24 @@
 			productReference = 6312140E232587E300C126B4 /* Geometry.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		637494A52435ECE600D724F7 /* FlowFreeC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 637494AB2435ECE600D724F7 /* Build configuration list for PBXNativeTarget "FlowFreeC" */;
+			buildPhases = (
+				637494A12435ECE600D724F7 /* Headers */,
+				637494A22435ECE600D724F7 /* Sources */,
+				637494A32435ECE600D724F7 /* Frameworks */,
+				637494A42435ECE600D724F7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlowFreeC;
+			productName = FlowFreeC;
+			productReference = 637494A62435ECE600D724F7 /* FlowFreeC.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		63B40BC924250C72007A86E9 /* identiti */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63B40BD124250C72007A86E9 /* Build configuration list for PBXNativeTarget "identiti" */;
@@ -2109,6 +2400,10 @@
 				LastSwiftUpdateCheck = 1100;
 				LastUpgradeCheck = 1140;
 				TargetAttributes = {
+					630682C72430CE4C00C5B28E = {
+						CreatedOnToolsVersion = 11.4;
+						LastSwiftMigration = 1140;
+					};
 					631212AC23253DC700C126B4 = {
 						CreatedOnToolsVersion = 11.0;
 						LastSwiftMigration = 1140;
@@ -2137,6 +2432,9 @@
 					};
 					6312140D232587E300C126B4 = {
 						CreatedOnToolsVersion = 11.0;
+					};
+					637494A52435ECE600D724F7 = {
+						CreatedOnToolsVersion = 11.4;
 					};
 					63B40BC924250C72007A86E9 = {
 						CreatedOnToolsVersion = 11.4;
@@ -2175,11 +2473,20 @@
 				63FABDB023917D6F0088FD77 /* LoggingKit */,
 				631213D523257EF600C126B4 /* MrFlap */,
 				63B40BC924250C72007A86E9 /* identiti */,
+				630682C72430CE4C00C5B28E /* FlowFree */,
+				637494A52435ECE600D724F7 /* FlowFreeC */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		630682C62430CE4C00C5B28E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		631212B823253DE300C126B4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2236,6 +2543,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		637494A42435ECE600D724F7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63B40BC824250C72007A86E9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2273,16 +2587,47 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		630682C42430CE4C00C5B28E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63717D462439D59C00CAA754 /* AllShortcuts.swift in Sources */,
+				637494C424363B7800D724F7 /* Position.swift in Sources */,
+				63179AD124339B8200DA492E /* SolutionExecution+GoodExecutionOrders.swift in Sources */,
+				637494C624363B8800D724F7 /* Board.swift in Sources */,
+				637494CC2436855A00D724F7 /* SolutionExecution.swift in Sources */,
+				63997EEB2434A1AD005473A0 /* FlowFreeTimeTrial.swift in Sources */,
+				63717D422439D56A00CAA754 /* ShortcutTemplate.swift in Sources */,
+				637494C824363BC600D724F7 /* GameColor.swift in Sources */,
+				63997EED2434A290005473A0 /* FlowFreeBase.swift in Sources */,
+				63717D3F2438AEBA00CAA754 /* SolutionExecution+RemoveStraightLines.swift in Sources */,
+				63E16AA92433E4BF005E67ED /* PathTracer.swift in Sources */,
+				630682DE2430F59900C5B28E /* Level.swift in Sources */,
+				637494C224363B3E00D724F7 /* Solution.swift in Sources */,
+				63717D442439D58E00CAA754 /* BoardSegment.swift in Sources */,
+				63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */,
+				630682DC2430F59000C5B28E /* ScreenLayout.swift in Sources */,
+				63179ACB243338A000DA492E /* PyFlowSolver.swift in Sources */,
+				63179ACC243387E900DA492E /* Level+Solution.swift in Sources */,
+				637494BD24361C3600D724F7 /* CFlowSolver.swift in Sources */,
+				630682D32430CEB400C5B28E /* FlowFreeSingleLevel.swift in Sources */,
+				630682E02430FB3800C5B28E /* ImageAnalyzer.swift in Sources */,
+				63717D3D2437A47400CAA754 /* SolutionExecution+OptimizePathExecutions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		631212A923253DC700C126B4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				631213CC23257EB600C126B4 /* WindowHelper.swift in Sources */,
 				6354CECA2409467600A4C3B8 /* main.swift in Sources */,
+				63E16AAB24348400005E67ED /* WindowDragger.swift in Sources */,
 				631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */,
 				631213CA23257EB600C126B4 /* WindowTapper.swift in Sources */,
 				631213CB23257EB600C126B4 /* MouseControl.swift in Sources */,
 				631213CE23257EB600C126B4 /* AppWindowImageProvider.swift in Sources */,
+				63E16AAD24348968005E67ED /* WindowOperatorBase.swift in Sources */,
 				631213C923257EB600C126B4 /* NoopTapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2305,6 +2650,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63E16AA72433E16F005E67ED /* Dragger.swift in Sources */,
 				631212EC232574E600C126B4 /* Tapper.swift in Sources */,
 				635CF210242CF28000DEFDBE /* ArbitraryLocationTapper.swift in Sources */,
 			);
@@ -2319,17 +2665,19 @@
 				6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */,
 				631214392326686A00C126B4 /* Terminal.swift in Sources */,
 				6312143B232669B900C126B4 /* AsyncTools.swift in Sources */,
+				63179AD72433C42A00DA492E /* Promise.swift in Sources */,
 				63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */,
 				6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */,
 				63073E62242AAB8E002C4593 /* CGImage+IO.swift in Sources */,
 				63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */,
 				631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */,
+				63997EE92434959C005473A0 /* Promise+Await.swift in Sources */,
 				636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */,
 				6377C86023DC76D40084772F /* Timing.swift in Sources */,
-				6367D906238EAE7200477AD9 /* Array+RemoveAtIndices.swift in Sources */,
-				63351A5D234DD11E00E42762 /* Array+DropWhile.swift in Sources */,
+				63351A5D234DD11E00E42762 /* Array+RemovingRelated.swift in Sources */,
 				6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */,
 				6375953A2331012C00ACA969 /* Operators.swift in Sources */,
+				637494CA24366A1700D724F7 /* String+Subscript.swift in Sources */,
 				63B62B2423DC8D06009B07DF /* Array+Scan.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2343,6 +2691,7 @@
 				631213502325785000C126B4 /* SmallestAABB.swift in Sources */,
 				6312134B2325785000C126B4 /* FindSinglePixel.swift in Sources */,
 				63759541233A63CC00ACA969 /* ShapeErasureType.swift in Sources */,
+				630682D72430EE8000C5B28E /* OnOffImageProvider.swift in Sources */,
 				63073E60242AA2A4002C4593 /* GrayscaleImage.swift in Sources */,
 				631213662325785000C126B4 /* ColorMatch.swift in Sources */,
 				631213642325785000C126B4 /* ExpandingCirclePath.swift in Sources */,
@@ -2382,6 +2731,7 @@
 			files = (
 				634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */,
 				6306CDB823AA48DE00D9EB25 /* ToleranceRangeScatterStrokables.swift in Sources */,
+				630682D92430F13600C5B28E /* ValueStreamDamper.swift in Sources */,
 				637B56B223D070ED007E51B0 /* FunctionWrapper.swift in Sources */,
 				6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */,
 				6312138A2325793C00C126B4 /* MedianTracker.swift in Sources */,
@@ -2516,11 +2866,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		637494A22435ECE600D724F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				637494B92436076B00D724F7 /* flow_solver.c in Sources */,
+				637494B32435F42100D724F7 /* execute_cmd.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63B40BC624250C72007A86E9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				630873F4242E6633000ECE47 /* ValueStreamDamper.swift in Sources */,
 				63B40BD624251140007A86E9 /* identiti.swift in Sources */,
 				63758AEB242536AA00D0F060 /* Exercise.swift in Sources */,
 				6358C626242DE52500DF41CE /* RationalNumber.swift in Sources */,
@@ -2542,7 +2900,6 @@
 			files = (
 				63FABDC6239186DB0088FD77 /* DebugLogger.swift in Sources */,
 				63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */,
-				630873F0242E3FFA000ECE47 /* main.swift in Sources */,
 				63FABDC12391811F0088FD77 /* DebugFrameProtocol.swift in Sources */,
 				63FABDC3239181640088FD77 /* TrackerDebugInfo.swift in Sources */,
 				63FABDBE23917F6C0088FD77 /* DebugParameterType.swift in Sources */,
@@ -2554,6 +2911,110 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		630682CD2430CE4D00C5B28E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = TD9G758WXJ;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Sources/Games/FlowFree/SupportingFiles/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.FlowFree;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		630682CE2430CE4D00C5B28E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = TD9G758WXJ;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Sources/Games/FlowFree/SupportingFiles/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.FlowFree;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		631212A723253DA100C126B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4013,6 +4474,107 @@
 			};
 			name = Release;
 		};
+		637494AC2435ECE600D724F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = TD9G758WXJ;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Sources/Games/FlowFree/FlowFreeC/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.FlowFreeC;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		637494AD2435ECE600D724F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = TD9G758WXJ;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = Sources/Games/FlowFree/FlowFreeC/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.FlowFreeC;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		63B40BCF24250C72007A86E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4228,6 +4790,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		630682CF2430CE4D00C5B28E /* Build configuration list for PBXNativeTarget "FlowFree" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				630682CD2430CE4D00C5B28E /* Debug */,
+				630682CE2430CE4D00C5B28E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		631212A623253DA100C126B4 /* Build configuration list for PBXProject "gnimag" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -4314,6 +4885,15 @@
 			buildConfigurations = (
 				63121420232587E300C126B4 /* Debug */,
 				63121421232587E300C126B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		637494AB2435ECE600D724F7 /* Build configuration list for PBXNativeTarget "FlowFreeC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				637494AC2435ECE600D724F7 /* Debug */,
+				637494AD2435ECE600D724F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

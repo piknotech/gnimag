@@ -1,8 +1,35 @@
 //
-//  Created by David Knothe on 27.11.19.
+//  Created by David Knothe on 09.10.19.
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
-// Taken from https://forums.swift.org/t/removing-elements-at-more-than-one-index-from-an-array/19953/6
+// RemoveAtIndices: Taken from https://forums.swift.org/t/removing-elements-at-more-than-one-index-from-an-array/19953/6
+
+import Foundation
+
+// MARK: DropWhile
+
+extension Array {
+    /// Drop elements, beginning at the start of the array, while `predicate` is fulfilled.
+    /// This is done in-place. Return the elements which have been dropped.
+    @_transparent
+    @discardableResult
+    public mutating func dropWhile(predicate: (Element) -> Bool) -> [Element] {
+        var dropped = [Element]()
+
+        for elem in self {
+            if predicate(elem) {
+                removeFirst()
+                dropped.append(elem)
+            } else {
+                break // Finished here
+            }
+        }
+
+        return dropped
+    }
+}
+
+// MARK: RemoveAtIndices
 
 extension Array {
     /// An efficient way to remove multiple indices from an array at once.
@@ -39,5 +66,15 @@ extension Array {
         self.removeLast(indicesToRemove.count)
 
         return removedElements
+    }
+}
+
+// MARK: RemoveByValue
+
+extension Array where Element: Equatable {
+    /// Return an array by removing all elements that are equal to the given value.
+    @_transparent
+    public func removing(_ value: Element) -> [Element] {
+        filter { $0 != value }
     }
 }

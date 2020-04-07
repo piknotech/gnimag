@@ -18,7 +18,7 @@ public final class identiti {
     private var queue: GameQueue!
 
     /// The stream of exercises which are analyzed each frame.
-    /// `exerciseStream` triggers an event when an exercise leaves the screen and when a new exercise comes in.
+    /// `exerciseStream` triggers an event when an exercise leaves the screen or when a new exercise comes in.
     private var exerciseStream = ValueStreamDamper<Exercise>(
         numberOfConsecutiveValues: 3,
         numberOfConsecutiveNilValues: 2
@@ -75,13 +75,13 @@ public final class identiti {
     }
 
     /// Called from the exerciseStream when it detects a new exercise.
-       private func newExerciseDetected(exercise: Exercise) {
-           // Tap on correct location
-           guard let result = exercise.result else {
-               Terminal.log(.error, "No result for exercise \(exercise)!")
-               return
-           }
+    private func newExerciseDetected(exercise: Exercise) {
+        // Tap on correct location
+        guard let result = exercise.result else {
+            Terminal.log(.error, "No result for exercise \(exercise)!")
+            return
+        }
 
-           buttonTapper.performTap(for: result)
-       }
+        buttonTapper.performTap(for: result)
+    }
 }
