@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63B05574243CC19C00DD741C"
-               BuildableName = "FreakingMath.framework"
-               BlueprintName = "FreakingMath"
+               BuildableName = "KingOfMath.framework"
+               BlueprintName = "KingOfMath"
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -51,8 +51,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63B05574243CC19C00DD741C"
-            BuildableName = "FreakingMath.framework"
-            BlueprintName = "FreakingMath"
+            BuildableName = "KingOfMath.framework"
+            BlueprintName = "KingOfMath"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

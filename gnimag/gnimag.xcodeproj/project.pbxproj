@@ -211,15 +211,14 @@
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
 		63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */; };
 		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
-		63B05579243CC19C00DD741C /* FreakingMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B05577243CC19C00DD741C /* FreakingMath.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		63B05580243CC25F00DD741C /* FreakingMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0557F243CC25F00DD741C /* FreakingMath.swift */; };
+		63B05579243CC19C00DD741C /* KingOfMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B05577243CC19C00DD741C /* KingOfMath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B05584243DBEC400DD741C /* Term.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C59242C057D008FCDFC /* Term.swift */; };
 		63B05585243DBEC400DD741C /* RationalNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C625242DE52500DF41CE /* RationalNumber.swift */; };
 		63B05586243DBEC400DD741C /* ArrayScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78C9242CDB84009674E8 /* ArrayScanner.swift */; };
 		63B05587243DBEC400DD741C /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C5B242C0588008FCDFC /* Tokenizer.swift */; };
 		63B05588243DBEC400DD741C /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CB242CDCB6009674E8 /* Parser.swift */; };
 		63B05589243DBEC400DD741C /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CD242CDD9C009674E8 /* Expressions.swift */; };
-		63B40BCE24250C72007A86E9 /* identiti.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B40BCC24250C72007A86E9 /* identiti.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63B40BCE24250C72007A86E9 /* YesNoMathGames.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B40BCC24250C72007A86E9 /* YesNoMathGames.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B40BD624251140007A86E9 /* identiti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B40BD524251140007A86E9 /* identiti.swift */; };
 		63B62B2423DC8D06009B07DF /* Array+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B62B2323DC8D06009B07DF /* Array+Scan.swift */; };
 		63B64F3423585D95005A5E82 /* Array+CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* Array+CartesianProduct.swift */; };
@@ -560,13 +559,12 @@
 		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
 		63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AllShortcuts+String.swift"; sourceTree = "<group>"; };
 		63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDataSet.swift; sourceTree = "<group>"; };
-		63B05575243CC19C00DD741C /* FreakingMath.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FreakingMath.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		63B05577243CC19C00DD741C /* FreakingMath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FreakingMath.h; sourceTree = "<group>"; };
+		63B05575243CC19C00DD741C /* KingOfMath.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KingOfMath.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63B05577243CC19C00DD741C /* KingOfMath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KingOfMath.h; sourceTree = "<group>"; };
 		63B05578243CC19C00DD741C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		63B0557F243CC25F00DD741C /* FreakingMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreakingMath.swift; sourceTree = "<group>"; };
 		63B05581243CC3AF00DD741C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		63B40BCA24250C72007A86E9 /* identiti.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = identiti.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		63B40BCC24250C72007A86E9 /* identiti.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = identiti.h; sourceTree = "<group>"; };
+		63B40BCA24250C72007A86E9 /* YesNoMathGames.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YesNoMathGames.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63B40BCC24250C72007A86E9 /* YesNoMathGames.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YesNoMathGames.h; sourceTree = "<group>"; };
 		63B40BCD24250C72007A86E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63B40BD424250CB4007A86E9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		63B40BD524251140007A86E9 /* identiti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = identiti.swift; sourceTree = "<group>"; };
@@ -880,10 +878,10 @@
 				631213D623257EF600C126B4 /* MrFlap.framework */,
 				6312140E232587E300C126B4 /* Geometry.framework */,
 				63FABDB123917D6F0088FD77 /* LoggingKit.framework */,
-				63B40BCA24250C72007A86E9 /* identiti.framework */,
+				63B40BCA24250C72007A86E9 /* YesNoMathGames.framework */,
 				630682C82430CE4C00C5B28E /* FlowFree.framework */,
 				637494A62435ECE600D724F7 /* FlowFreeC.framework */,
-				63B05575243CC19C00DD741C /* FreakingMath.framework */,
+				63B05575243CC19C00DD741C /* KingOfMath.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -956,8 +954,8 @@
 			children = (
 				631213DF23257F1F00C126B4 /* README.md */,
 				630682C92430CE4D00C5B28E /* FlowFree */,
-				63B05576243CC19C00DD741C /* FreakingMath */,
-				63B40BCB24250C72007A86E9 /* identiti */,
+				63B05576243CC19C00DD741C /* KingOfMath */,
+				63B40BCB24250C72007A86E9 /* YesNoMathGames */,
 				631213D723257EF600C126B4 /* MrFlap */,
 			);
 			path = Games;
@@ -1897,20 +1895,20 @@
 			path = Infrastructure;
 			sourceTree = "<group>";
 		};
-		63B05576243CC19C00DD741C /* FreakingMath */ = {
+		63B05576243CC19C00DD741C /* KingOfMath */ = {
 			isa = PBXGroup;
 			children = (
 				63B05581243CC3AF00DD741C /* README.md */,
 				63B0557E243CC24300DD741C /* Sources */,
 				63B0557D243CC23800DD741C /* SupportingFiles */,
 			);
-			path = FreakingMath;
+			path = KingOfMath;
 			sourceTree = "<group>";
 		};
 		63B0557D243CC23800DD741C /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				63B05577243CC19C00DD741C /* FreakingMath.h */,
+				63B05577243CC19C00DD741C /* KingOfMath.h */,
 				63B05578243CC19C00DD741C /* Info.plist */,
 			);
 			path = SupportingFiles;
@@ -1919,12 +1917,11 @@
 		63B0557E243CC24300DD741C /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				63B0557F243CC25F00DD741C /* FreakingMath.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		63B40BCB24250C72007A86E9 /* identiti */ = {
+		63B40BCB24250C72007A86E9 /* YesNoMathGames */ = {
 			isa = PBXGroup;
 			children = (
 				63B40BD424250CB4007A86E9 /* README.md */,
@@ -1932,13 +1929,13 @@
 				63672C16242B9DAA008FCDFC /* Resources */,
 				63B40BD224250C92007A86E9 /* SupportingFiles */,
 			);
-			path = identiti;
+			path = YesNoMathGames;
 			sourceTree = "<group>";
 		};
 		63B40BD224250C92007A86E9 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				63B40BCC24250C72007A86E9 /* identiti.h */,
+				63B40BCC24250C72007A86E9 /* YesNoMathGames.h */,
 				63B40BCD24250C72007A86E9 /* Info.plist */,
 			);
 			path = SupportingFiles;
@@ -2175,7 +2172,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B05579243CC19C00DD741C /* FreakingMath.h in Headers */,
+				63B05579243CC19C00DD741C /* KingOfMath.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2183,7 +2180,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B40BCE24250C72007A86E9 /* identiti.h in Headers */,
+				63B40BCE24250C72007A86E9 /* YesNoMathGames.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2406,9 +2403,9 @@
 			productReference = 637494A62435ECE600D724F7 /* FlowFreeC.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		63B05574243CC19C00DD741C /* FreakingMath */ = {
+		63B05574243CC19C00DD741C /* KingOfMath */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 63B0557C243CC19C00DD741C /* Build configuration list for PBXNativeTarget "FreakingMath" */;
+			buildConfigurationList = 63B0557C243CC19C00DD741C /* Build configuration list for PBXNativeTarget "KingOfMath" */;
 			buildPhases = (
 				63B05570243CC19C00DD741C /* Headers */,
 				63B05571243CC19C00DD741C /* Sources */,
@@ -2419,14 +2416,14 @@
 			);
 			dependencies = (
 			);
-			name = FreakingMath;
+			name = KingOfMath;
 			productName = FreakingMath;
-			productReference = 63B05575243CC19C00DD741C /* FreakingMath.framework */;
+			productReference = 63B05575243CC19C00DD741C /* KingOfMath.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		63B40BC924250C72007A86E9 /* identiti */ = {
+		63B40BC924250C72007A86E9 /* YesNoMathGames */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 63B40BD124250C72007A86E9 /* Build configuration list for PBXNativeTarget "identiti" */;
+			buildConfigurationList = 63B40BD124250C72007A86E9 /* Build configuration list for PBXNativeTarget "YesNoMathGames" */;
 			buildPhases = (
 				63B40BC524250C72007A86E9 /* Headers */,
 				63B40BC624250C72007A86E9 /* Sources */,
@@ -2437,9 +2434,9 @@
 			);
 			dependencies = (
 			);
-			name = identiti;
+			name = YesNoMathGames;
 			productName = identiti;
-			productReference = 63B40BCA24250C72007A86E9 /* identiti.framework */;
+			productReference = 63B40BCA24250C72007A86E9 /* YesNoMathGames.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		63FABDB023917D6F0088FD77 /* LoggingKit */ = {
@@ -2545,10 +2542,10 @@
 				631213962325798E00C126B4 /* TestingTools */,
 				63FABDB023917D6F0088FD77 /* LoggingKit */,
 				631213D523257EF600C126B4 /* MrFlap */,
-				63B40BC924250C72007A86E9 /* identiti */,
 				630682C72430CE4C00C5B28E /* FlowFree */,
 				637494A52435ECE600D724F7 /* FlowFreeC */,
-				63B05574243CC19C00DD741C /* FreakingMath */,
+				63B40BC924250C72007A86E9 /* YesNoMathGames */,
+				63B05574243CC19C00DD741C /* KingOfMath */,
 			);
 		};
 /* End PBXProject section */
@@ -2966,7 +2963,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B05580243CC25F00DD741C /* FreakingMath.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4699,7 +4695,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Sources/Games/FreakingMath/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Games/KingOfMath/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4710,7 +4706,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.FreakingMath;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.KingOfMath;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -4750,7 +4746,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Sources/Games/FreakingMath/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Games/KingOfMath/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4761,7 +4757,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.FreakingMath;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.KingOfMath;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -4805,7 +4801,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Sources/Games/identiti/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Games/YesNoMathGames/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4815,7 +4811,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.identiti;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.YesNoMathGames;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -4855,7 +4851,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Sources/Games/identiti/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Sources/Games/YesNoMathGames/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4865,7 +4861,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.identiti;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.YesNoMathGames;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -5095,7 +5091,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		63B0557C243CC19C00DD741C /* Build configuration list for PBXNativeTarget "FreakingMath" */ = {
+		63B0557C243CC19C00DD741C /* Build configuration list for PBXNativeTarget "KingOfMath" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63B0557A243CC19C00DD741C /* Debug */,
@@ -5104,7 +5100,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		63B40BD124250C72007A86E9 /* Build configuration list for PBXNativeTarget "identiti" */ = {
+		63B40BD124250C72007A86E9 /* Build configuration list for PBXNativeTarget "YesNoMathGames" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63B40BCF24250C72007A86E9 /* Debug */,

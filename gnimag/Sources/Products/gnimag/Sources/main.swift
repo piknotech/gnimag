@@ -4,7 +4,7 @@ import Image
 import ImageAnalysisKit
 import TestingTools
 import MrFlap
-import identiti
+import YesNoMathGames
 import FlowFree
 import Geometry
 import Tapping

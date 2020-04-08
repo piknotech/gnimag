@@ -23,19 +23,10 @@ class ButtonTapper {
     func performTap(for result: Exercise.Result) {
         switch result {
         case .equal:
-            let location = relativeTappingLocation(for: screen.equalButton)
-            underlyingTapper.tap(at: location)
+            underlyingTapper.tap(atAbsolute: screen.equalButton.center, screenSize: screen.size)
 
         case .notEqual:
-            let location = relativeTappingLocation(for: screen.notEqualButton)
-            underlyingTapper.tap(at: location)
+            underlyingTapper.tap(atAbsolute: screen.notEqualButton.center, screenSize: screen.size)
         }
-    }
-
-    /// Get the relative tapping location (for ArbitraryLocationTapper) from a button.
-    private func relativeTappingLocation(for button: Circle) -> CGPoint {
-        let x = button.center.x / screen.size.width
-        let y = button.center.y / screen.size.height
-        return CGPoint(x: x, y: y)
     }
 }

@@ -38,7 +38,7 @@ class ImageAnalyzer {
     /// Default initializer.
     init(os: identiti.OSType) {
         // Create OCR instance from the correct directory
-        let baseLocation = NSHomeDirectory() +/ "Library/Application Support/gnimag/identiti/OCR"
+        let baseLocation = NSHomeDirectory() +/ "Library/Application Support/gnimag/YesNoMathGames/identiti/OCR"
         switch os {
         case .iOS:
             ocr = BitmapOCR(location: baseLocation +/ "iOS", configFileDirectory: baseLocation)

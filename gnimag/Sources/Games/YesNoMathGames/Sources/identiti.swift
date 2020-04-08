@@ -36,7 +36,7 @@ public final class identiti {
         buttonTapper = ButtonTapper(underlyingTapper: tapper)
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
 
-        // Subscrube to exerciseStream event
+        // Subscribe to exerciseStream event
         exerciseStream.newValue += { exercise in
             if let exercise = exercise { // If exercise is nil, the current exercise left the screen; not interesting
                 self.newExerciseDetected(exercise: exercise)

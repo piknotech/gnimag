@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63B40BC924250C72007A86E9"
-               BuildableName = "identiti.framework"
-               BlueprintName = "identiti"
+               BuildableName = "YesNoMathGames.framework"
+               BlueprintName = "YesNoMathGames"
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -51,8 +51,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63B40BC924250C72007A86E9"
-            BuildableName = "identiti.framework"
-            BlueprintName = "identiti"
+            BuildableName = "YesNoMathGames.framework"
+            BlueprintName = "YesNoMathGames"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

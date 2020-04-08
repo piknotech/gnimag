@@ -12,7 +12,7 @@ extension Exercise {
     }
 
     /// Parse the exercise and return the result.
-    /// Return nil if one of the term couldn't be parsed.
+    /// Return nil if one of the terms couldn't be parsed.
     var result: Result? {
         let upper = Term(string: upperTerm)
         let lower = Term(string: lowerTerm)
