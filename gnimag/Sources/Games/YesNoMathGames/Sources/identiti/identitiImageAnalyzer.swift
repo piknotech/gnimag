@@ -13,7 +13,7 @@ import ImageAnalysisKit
 private let adHeight = 100
 
 /// ImageAnalyzer extracts term strings from images.
-class ImageAnalyzer {
+class identitiImageAnalyzer: ImageAnalyzerProtocol {
     /// States whether the ImageAnalyzer has been initialized by `initializeWithFirstImage`.
     var isInitialized = false
 
@@ -48,9 +48,8 @@ class ImageAnalyzer {
     }
 
     /// Initialize the ImageAnalyzer by detecting the ScreenLayout using the first image.
-    /// This does not yet analyze the first image; therefore, call `analyze(image:)`.
-    /// Returns false if the screen layout couldn't be detected.
-    func initializeWithFirstImage(_ image: Image) -> Bool {
+    /// Returns nil if the screen layout couldn't be detected.
+    func initializeWithFirstImage(_ image: Image) -> ScreenLayout? {
         precondition(!isInitialized)
 
         // Find background color gradient
@@ -59,7 +58,7 @@ class ImageAnalyzer {
         // Find buttons
         guard let buttons = findButtons(in: image, background: background) else {
             Terminal.log(.error, "Buttons couldn't be found!")
-            return false
+            return nil
         }
 
         // Use "=" button to detect foreground color ("=" sign is transparent in the middle)
@@ -69,7 +68,7 @@ class ImageAnalyzer {
         // Find term boxes
         guard let boxes = findTermBoxes(in: image, with: buttons.left, foreground: foreground, background: background) else {
             Terminal.log(.error, "Term boxes couldn't be found!")
-            return false
+            return nil
         }
 
         // Finalize
@@ -83,11 +82,11 @@ class ImageAnalyzer {
         )
         isInitialized = true
 
-        return true
+        return screen
     }
 
-    /// Analyze an image; return the exercise.
-    /// Returns nil if there are no terms found in the image.
+    /// Analyze an image and return the exercise.
+    /// Returns nil if no terms were found in the image.
     func analyze(image: Image) -> Exercise? {
         guard let upperImage = content(of: screen.upperTermBox, in: image),
             let lowerImage = content(of: screen.lowerTermBox, in: image) else { return nil }

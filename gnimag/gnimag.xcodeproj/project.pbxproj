@@ -186,7 +186,7 @@
 		637494C824363BC600D724F7 /* GameColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494C724363BC600D724F7 /* GameColor.swift */; };
 		637494CA24366A1700D724F7 /* String+Subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494C924366A1700D724F7 /* String+Subscript.swift */; };
 		637494CC2436855A00D724F7 /* SolutionExecution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637494CB2436855A00D724F7 /* SolutionExecution.swift */; };
-		63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63758AE82425369700D0F060 /* ImageAnalyzer.swift */; };
+		63758AE92425369700D0F060 /* identitiImageAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63758AE82425369700D0F060 /* identitiImageAnalyzer.swift */; };
 		63758AEB242536AA00D0F060 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63758AEA242536AA00D0F060 /* Exercise.swift */; };
 		6375953A2331012C00ACA969 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637595392331012C00ACA969 /* Operators.swift */; };
 		6375953C233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */; };
@@ -217,6 +217,10 @@
 		63B05587243DBEC400DD741C /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C5B242C0588008FCDFC /* Tokenizer.swift */; };
 		63B05588243DBEC400DD741C /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CB242CDCB6009674E8 /* Parser.swift */; };
 		63B05589243DBEC400DD741C /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CD242CDD9C009674E8 /* Expressions.swift */; };
+		63B0559B243DD32F00DD741C /* FreakingMathImageAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B05599243DD32E00DD741C /* FreakingMathImageAnalyzer.swift */; };
+		63B0559C243DD32F00DD741C /* FreakingMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0559A243DD32E00DD741C /* FreakingMath.swift */; };
+		63B055A1243DD4C300DD741C /* ImageAnalyzerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0559F243DD49C00DD741C /* ImageAnalyzerProtocol.swift */; };
+		63B055A4243DD5D700DD741C /* GameBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0559D243DD39900DD741C /* GameBase.swift */; };
 		63B40BCE24250C72007A86E9 /* YesNoMathGames.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B40BCC24250C72007A86E9 /* YesNoMathGames.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B40BD624251140007A86E9 /* identiti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B40BD524251140007A86E9 /* identiti.swift */; };
 		63B62B2423DC8D06009B07DF /* Array+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B62B2323DC8D06009B07DF /* Array+Scan.swift */; };
@@ -527,7 +531,7 @@
 		637494C724363BC600D724F7 /* GameColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameColor.swift; sourceTree = "<group>"; };
 		637494C924366A1700D724F7 /* String+Subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Subscript.swift"; sourceTree = "<group>"; };
 		637494CB2436855A00D724F7 /* SolutionExecution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolutionExecution.swift; sourceTree = "<group>"; };
-		63758AE82425369700D0F060 /* ImageAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnalyzer.swift; sourceTree = "<group>"; };
+		63758AE82425369700D0F060 /* identitiImageAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = identitiImageAnalyzer.swift; sourceTree = "<group>"; };
 		63758AEA242536AA00D0F060 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		637595392331012C00ACA969 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+IsAlmostEqual.swift"; sourceTree = "<group>"; };
@@ -561,6 +565,10 @@
 		63B05577243CC19C00DD741C /* KingOfMath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KingOfMath.h; sourceTree = "<group>"; };
 		63B05578243CC19C00DD741C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63B05581243CC3AF00DD741C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		63B05599243DD32E00DD741C /* FreakingMathImageAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreakingMathImageAnalyzer.swift; sourceTree = "<group>"; };
+		63B0559A243DD32E00DD741C /* FreakingMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreakingMath.swift; sourceTree = "<group>"; };
+		63B0559D243DD39900DD741C /* GameBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBase.swift; sourceTree = "<group>"; };
+		63B0559F243DD49C00DD741C /* ImageAnalyzerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnalyzerProtocol.swift; sourceTree = "<group>"; };
 		63B40BCA24250C72007A86E9 /* YesNoMathGames.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YesNoMathGames.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B40BCC24250C72007A86E9 /* YesNoMathGames.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YesNoMathGames.h; sourceTree = "<group>"; };
 		63B40BCD24250C72007A86E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1897,7 +1905,7 @@
 			isa = PBXGroup;
 			children = (
 				63B40BD524251140007A86E9 /* identiti.swift */,
-				63758AE82425369700D0F060 /* ImageAnalyzer.swift */,
+				63758AE82425369700D0F060 /* identitiImageAnalyzer.swift */,
 			);
 			path = identiti;
 			sourceTree = "<group>";
@@ -1905,6 +1913,8 @@
 		63B05596243DCF6400DD741C /* FreakingMath */ = {
 			isa = PBXGroup;
 			children = (
+				63B0559A243DD32E00DD741C /* FreakingMath.swift */,
+				63B05599243DD32E00DD741C /* FreakingMathImageAnalyzer.swift */,
 			);
 			path = FreakingMath;
 			sourceTree = "<group>";
@@ -1912,6 +1922,8 @@
 		63B05597243DD03D00DD741C /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				63B0559D243DD39900DD741C /* GameBase.swift */,
+				63B0559F243DD49C00DD741C /* ImageAnalyzerProtocol.swift */,
 				63758AEA242536AA00D0F060 /* Exercise.swift */,
 				63DF005624261DC1001D81B3 /* ScreenLayout.swift */,
 				635CF20D242CF23300DEFDBE /* ButtonTapper.swift */,
@@ -2976,10 +2988,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B40BD624251140007A86E9 /* identiti.swift in Sources */,
+				63B055A1243DD4C300DD741C /* ImageAnalyzerProtocol.swift in Sources */,
+				63B0559B243DD32F00DD741C /* FreakingMathImageAnalyzer.swift in Sources */,
 				63758AEB242536AA00D0F060 /* Exercise.swift in Sources */,
-				63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */,
+				63B0559C243DD32F00DD741C /* FreakingMath.swift in Sources */,
+				63758AE92425369700D0F060 /* identitiImageAnalyzer.swift in Sources */,
 				63DF005724261DC1001D81B3 /* ScreenLayout.swift in Sources */,
 				635CF20E242CF23300DEFDBE /* ButtonTapper.swift in Sources */,
+				63B055A4243DD5D700DD741C /* GameBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
