@@ -161,7 +161,6 @@
 		635CF210242CF28000DEFDBE /* ArbitraryLocationTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		63672C15242B5CC6008FCDFC /* OCRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C14242B5CC6008FCDFC /* OCRConfig.swift */; };
-		63672C58242C0352008FCDFC /* Exercise+Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C57242C0352008FCDFC /* Exercise+Result.swift */; };
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
 		6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D901238D666400477AD9 /* LinearScatterStrokable.swift */; };
 		6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */; };
@@ -497,7 +496,6 @@
 		63672C2B242B9DC2008FCDFC /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
 		63672C2C242B9DC2008FCDFC /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		63672C2D242B9DC2008FCDFC /* 0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 0.png; sourceTree = "<group>"; };
-		63672C57242C0352008FCDFC /* Exercise+Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exercise+Result.swift"; sourceTree = "<group>"; };
 		63672C59242C057D008FCDFC /* Term.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Term.swift; sourceTree = "<group>"; };
 		63672C5B242C0588008FCDFC /* Tokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
 		6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadCurveScatterStrokable.swift; sourceTree = "<group>"; };
@@ -1665,18 +1663,10 @@
 			path = Other;
 			sourceTree = "<group>";
 		};
-		635CF20C242CF21400DEFDBE /* 3 Tapping */ = {
-			isa = PBXGroup;
-			children = (
-				635CF20D242CF23300DEFDBE /* ButtonTapper.swift */,
-			);
-			path = "3 Tapping";
-			sourceTree = "<group>";
-		};
 		63672C16242B9DAA008FCDFC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				63672C17242B9DC2008FCDFC /* OCR */,
+				63B05598243DD0BC00DD741C /* identiti */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1700,14 +1690,6 @@
 				63672C22242B9DC2008FCDFC /* 4.png */,
 			);
 			path = original_images;
-			sourceTree = "<group>";
-		};
-		63672C55242C02B9008FCDFC /* 2 ExerciseSolving */ = {
-			isa = PBXGroup;
-			children = (
-				63672C57242C0352008FCDFC /* Exercise+Result.swift */,
-			);
-			path = "2 ExerciseSolving";
 			sourceTree = "<group>";
 		};
 		63672C56242C0327008FCDFC /* Parser */ = {
@@ -1785,16 +1767,6 @@
 				637494CB2436855A00D724F7 /* SolutionExecution.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		63758AE72425367200D0F060 /* 1 ImageAnalysis */ = {
-			isa = PBXGroup;
-			children = (
-				63758AE82425369700D0F060 /* ImageAnalyzer.swift */,
-				63758AEA242536AA00D0F060 /* Exercise.swift */,
-				63DF005624261DC1001D81B3 /* ScreenLayout.swift */,
-			);
-			path = "1 ImageAnalysis";
 			sourceTree = "<group>";
 		};
 		6375953D233A539800ACA969 /* More */ = {
@@ -1921,6 +1893,40 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
+		63B05595243DCF5B00DD741C /* identiti */ = {
+			isa = PBXGroup;
+			children = (
+				63B40BD524251140007A86E9 /* identiti.swift */,
+				63758AE82425369700D0F060 /* ImageAnalyzer.swift */,
+			);
+			path = identiti;
+			sourceTree = "<group>";
+		};
+		63B05596243DCF6400DD741C /* FreakingMath */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = FreakingMath;
+			sourceTree = "<group>";
+		};
+		63B05597243DD03D00DD741C /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				63758AEA242536AA00D0F060 /* Exercise.swift */,
+				63DF005624261DC1001D81B3 /* ScreenLayout.swift */,
+				635CF20D242CF23300DEFDBE /* ButtonTapper.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		63B05598243DD0BC00DD741C /* identiti */ = {
+			isa = PBXGroup;
+			children = (
+				63672C17242B9DC2008FCDFC /* OCR */,
+			);
+			path = identiti;
+			sourceTree = "<group>";
+		};
 		63B40BCB24250C72007A86E9 /* YesNoMathGames */ = {
 			isa = PBXGroup;
 			children = (
@@ -1944,10 +1950,9 @@
 		63B40BD324250C9B007A86E9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				63B40BD524251140007A86E9 /* identiti.swift */,
-				63758AE72425367200D0F060 /* 1 ImageAnalysis */,
-				63672C55242C02B9008FCDFC /* 2 ExerciseSolving */,
-				635CF20C242CF21400DEFDBE /* 3 Tapping */,
+				63B05597243DD03D00DD741C /* Common */,
+				63B05596243DCF6400DD741C /* FreakingMath */,
+				63B05595243DCF5B00DD741C /* identiti */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -2973,7 +2978,6 @@
 				63B40BD624251140007A86E9 /* identiti.swift in Sources */,
 				63758AEB242536AA00D0F060 /* Exercise.swift in Sources */,
 				63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */,
-				63672C58242C0352008FCDFC /* Exercise+Result.swift in Sources */,
 				63DF005724261DC1001D81B3 /* ScreenLayout.swift in Sources */,
 				635CF20E242CF23300DEFDBE /* ButtonTapper.swift in Sources */,
 			);

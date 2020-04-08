@@ -12,8 +12,8 @@ struct ScreenLayout {
     let upperTermBox: AABB
     let lowerTermBox: AABB
 
-    let equalButton: Circle
-    let notEqualButton: Circle
+    let equalButtonCenter: CGPoint
+    let notEqualButtonCenter: CGPoint
 
     /// The total size of the screen.
     /// Important: The size of the screen must not change throughout the game.

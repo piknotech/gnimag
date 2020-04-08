@@ -77,8 +77,8 @@ class ImageAnalyzer {
         screen = ScreenLayout(
             upperTermBox: boxes.upper,
             lowerTermBox: boxes.lower,
-            equalButton: buttons.right,
-            notEqualButton: buttons.left,
+            equalButtonCenter: buttons.right.center,
+            notEqualButtonCenter: buttons.left.center,
             size: CGSize(width: image.width, height: image.height)
         )
         isInitialized = true

@@ -16,7 +16,7 @@ fi
 
 # Copy resources
 mkdir -p "$gnimag"/YesNoMathGames
-cp -R Sources/Games/YesNoMathGames/Resources/OCR "$gnimag"/YesNoMathGames/identiti
+cp -R Sources/Games/YesNoMathGames/Resources/ "$gnimag"/YesNoMathGames
 
 mkdir -p "$gnimag"/FlowFree
 cp Sources/Games/FlowFree/Scripts/pyflowsolver.py "$gnimag"/FlowFree

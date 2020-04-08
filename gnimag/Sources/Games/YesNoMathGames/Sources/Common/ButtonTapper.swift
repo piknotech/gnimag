@@ -23,10 +23,10 @@ class ButtonTapper {
     func performTap(for result: Exercise.Result) {
         switch result {
         case .equal:
-            underlyingTapper.tap(atAbsolute: screen.equalButton.center, screenSize: screen.size)
+            underlyingTapper.tap(atAbsolute: screen.equalButtonCenter, screenSize: screen.size)
 
         case .notEqual:
-            underlyingTapper.tap(atAbsolute: screen.notEqualButton.center, screenSize: screen.size)
+            underlyingTapper.tap(atAbsolute: screen.notEqualButtonCenter, screenSize: screen.size)
         }
     }
 }
