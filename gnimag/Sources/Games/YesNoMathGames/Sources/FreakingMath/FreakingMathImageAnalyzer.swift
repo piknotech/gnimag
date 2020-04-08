@@ -29,12 +29,10 @@ class FreakingMathImageAnalyzer: ImageAnalyzerProtocol {
     /// Default initializer.
     init(game: FreakingMath.Game) {
         // Create OCR instance from the correct directory
-        let baseLocation = NSHomeDirectory() +/ "Library/Application Support/gnimag/YesNoMathGames/identiti/OCR"
-        //let baseLocation = NSHomeDirectory() +/ "Library/Application Support/gnimag/YesNoMathGames/FreakingMath/OCR"
+        let baseLocation = NSHomeDirectory() +/ "Library/Application Support/gnimag/YesNoMathGames/FreakingMath/OCR"
         switch game {
         case .normal:
-            ocr = BitmapOCR(location: baseLocation +/ "iOS", configFileDirectory: baseLocation)
-            //ocr = BitmapOCR(location: baseLocation +/ "normal", configFileDirectory: baseLocation)
+            ocr = BitmapOCR(location: baseLocation +/ "normal", configFileDirectory: baseLocation)
         case .plus:
             ocr = BitmapOCR(location: baseLocation +/ "+", configFileDirectory: baseLocation)
         }
@@ -71,8 +69,8 @@ class FreakingMathImageAnalyzer: ImageAnalyzerProtocol {
         screen = ScreenLayout(
             upperTermBox: boxes.upper,
             lowerTermBox: boxes.lower,
-            equalButtonCenter: buttons.right.center,
-            notEqualButtonCenter: buttons.left.center,
+            equalButtonCenter: buttons.left.center,
+            notEqualButtonCenter: buttons.right.center,
             size: CGSize(width: image.width, height: image.height)
         )
         isInitialized = true
@@ -190,25 +188,24 @@ class FreakingMathImageAnalyzer: ImageAnalyzerProtocol {
 
     /// Find the locations of the term boxes.
     private func findTermBoxes(in image: Image, lowerStart: CGFloat, upperStart: CGFloat) -> (upper: AABB, lower: AABB)? {
-        let inset = 5
-
         // Lower edge
         let lowerSegment = LineSegment(from: CGPoint(x: 0.25 * CGFloat(image.width), y: lowerStart), to: CGPoint(x: 0.75 * CGFloat(image.width), y: lowerStart))
         let lowerPath = MovingLineSegmentPath(
-            initialLineSegment: lowerSegment, numOfLineSegments: 200, movementAngle: .north, movementSpeed: 2, randomness: 0.5, numberOfPointsPerLineSegment: 50)
+            initialLineSegment: lowerSegment, numOfLineSegments: 200, movementAngle: .north, movementSpeed: 2, randomness: 0.5, numberOfPointsPerLineSegment: 50, bounds: image.bounds)
         guard let lower = image.findFirstPixel(matching: Coloring.textColor, on: lowerPath) else { return nil }
 
         // Upper edge
         let upperSegment = LineSegment(from: CGPoint(x: 0.25 * CGFloat(image.width), y: upperStart), to: CGPoint(x: 0.75 * CGFloat(image.width), y: upperStart))
         let upperPath = MovingLineSegmentPath(
-            initialLineSegment: upperSegment, numOfLineSegments: 200, movementAngle: .south, movementSpeed: 2, randomness: 0.5, numberOfPointsPerLineSegment: 50)
+            initialLineSegment: upperSegment, numOfLineSegments: 200, movementAngle: .south, movementSpeed: 2, randomness: 0.5, numberOfPointsPerLineSegment: 50, bounds: image.bounds)
         guard let upper = image.findFirstPixel(matching: Coloring.textColor, on: upperPath) else { return nil }
 
         // Create boxes
-        let lowerY = lower.y - 30
-        let upperY = upper.y + 30
-        let middleY = (lowerY + upperY) / 2
+        let lowerY = (lower.y + Int(lowerStart)) / 2
+        let upperY = (upper.y + Int(upperStart)) / 2
+        let middleY = (lower.y + upper.y) / 2
 
+        let inset = 5
         let lowerBox = AABB(containing: [CGPoint(x: inset, y: lowerY), CGPoint(x: image.width - inset, y: middleY)])
         let upperBox = AABB(containing: [CGPoint(x: inset, y: upperY), CGPoint(x: image.width - inset, y: middleY)])
 

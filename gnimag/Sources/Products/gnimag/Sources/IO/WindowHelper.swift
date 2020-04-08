@@ -19,8 +19,8 @@ enum WindowHelper {
         let info = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID) as! [[String: Any]]
 
         let windows = info.filter {
-            ($0["kCGWindowOwnerName"] as! String) == appName &&
-            (windowNameHint == nil || ($0["kCGWindowName"] as! String).contains(windowNameHint!))
+            ($0["kCGWindowOwnerName"] as? String) == appName &&
+            (windowNameHint == nil || ($0["kCGWindowName"] as? String ?? "").contains(windowNameHint!))
         }
 
         switch windows.count {
@@ -29,7 +29,7 @@ enum WindowHelper {
         case 1:
             ()
         default: // (case 2...)
-            let windowNames = windows.map { $0["kCGWindowName"] as! String }
+            let windowNames = windows.map { $0["kCGWindowName"] as? String ?? " " }
             exit(withMessage: "More than one window found for the desired application \"\(appName)\". (\(windowNames.joined(separator: ", ")))")
         }
 

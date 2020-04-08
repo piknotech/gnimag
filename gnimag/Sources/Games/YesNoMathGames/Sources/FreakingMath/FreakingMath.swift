@@ -21,10 +21,12 @@ public final class FreakingMath: GameBase {
         case normal
         case plus
     }
+    private let game: Game
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, game: Game = .normal) {
         self.imageProvider = OnOffImageProvider(wrapping: imageProvider)
+        self.game = game
 
         super.init(
             imageAnalyzer: FreakingMathImageAnalyzer(game: game),
@@ -46,9 +48,9 @@ public final class FreakingMath: GameBase {
             let exercise = imageAnalyzer.analyze(image: image)
             exerciseStream.add(value: exercise)
         } else {
-            // New score: wait 3 frames until equation is fully on-screen
+            // New score: wait some frames (in normal mode) until equation is fully on-screen
+            if game == .normal { imageProvider.ignore(next: 5) }
             lastScore = score
-            imageProvider.ignore(next: 3)
             exerciseStream.add(value: nil) // Clear stream; required if the same equation comes twice
         }
     }

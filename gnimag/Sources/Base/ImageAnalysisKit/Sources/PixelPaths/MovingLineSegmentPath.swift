@@ -4,12 +4,17 @@
 //
 
 import Common
+import Foundation
 import Geometry
 import Image
 
 /// A MovingLineSegmentPath consists of subpaths, each of which is a LineSegment.
 /// In each LineSegment-subpath, a defined number of points are yielded. After the subpath is exhausted, the LineSegment is moved by a given vector.
 public final class MovingLineSegmentPath: PixelPath {
+    /// Pixels outside these bounds are skipped, but these bounds are not considered in random point generation (i.e. they do count to `numberOfPointsPerLineSegment`).
+    /// This means, line segments which cross the bounds yield less pixels in`next`.
+    private let bounds: Bounds
+
     /// LineSegment-movement related properties.
     private var remainingLineSegmentMovements: Int
     private let movementVector: CGPoint
@@ -22,7 +27,8 @@ public final class MovingLineSegmentPath: PixelPath {
     private let numberOfPointsPerLineSegment: Int
 
     /// Default initializer.
-    public init(initialLineSegment: LineSegment, numOfLineSegments: Int, movementAngle: Angle, movementSpeed: CGFloat, randomness: Double, numberOfPointsPerLineSegment: Int) {
+    public init(initialLineSegment: LineSegment, numOfLineSegments: Int, movementAngle: Angle, movementSpeed: CGFloat, randomness: Double, numberOfPointsPerLineSegment: Int, bounds: Bounds) {
+        self.bounds = bounds
         self.remainingLineSegmentMovements = numOfLineSegments - 1
         self.movementVector = Circle(center: .zero, radius: movementSpeed).point(at: movementAngle)
         self.currentLineSegment = initialLineSegment
@@ -40,7 +46,8 @@ public final class MovingLineSegmentPath: PixelPath {
             currentLineSegmentRemainingPoints = randomPointsOnCurrentLineSegment()
         }
 
-        return currentLineSegmentRemainingPoints.removeFirst().nearestPixel
+        let pixel = currentLineSegmentRemainingPoints.removeFirst().nearestPixel
+        return bounds.contains(pixel) ? pixel : next()
     }
 
     /// Move the current line segment by `movementVector` and decrease `remainingLineSegmentMovements`.
