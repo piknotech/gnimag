@@ -9,7 +9,7 @@ import Foundation
 enum Tokenizer {
     /// Tokenize the term. Return nil when an unallowed character is encountered.
     static func tokenize(term: String) -> [Token]? {
-        var scanner = ArrayScanner(array: Array(term)) // Split term into unicode characters
+        var scanner = ArrayScanner(Array(term)) // Split term into unicode characters
         var result = [Token]()
 
         while let character = scanner.next() {

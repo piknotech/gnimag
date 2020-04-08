@@ -3,6 +3,8 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import GameKit
+
 extension Exercise {
     enum Result {
         case equal
@@ -15,7 +17,9 @@ extension Exercise {
         let upper = Term(string: upperTerm)
         let lower = Term(string: lowerTerm)
 
-        guard let upperValue = upper.evaluate(), let lowerValue = lower.evaluate() else { return nil }
+        guard let upperValue = upper.evaluate(verbose: true),
+              let lowerValue = lower.evaluate(verbose: true) else { return nil }
+
         return upperValue == lowerValue ? .equal : .notEqual
     }
 }

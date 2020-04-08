@@ -156,15 +156,12 @@
 		63521E9523D7511F002706C0 /* BisectionSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63521E9423D7511F002706C0 /* BisectionSolver.swift */; };
 		6354CECA2409467600A4C3B8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
 		6358C624242D6EB900DF41CE /* GradientColorMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C623242D6EB900DF41CE /* GradientColorMatching.swift */; };
-		6358C626242DE52500DF41CE /* RationalNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C625242DE52500DF41CE /* RationalNumber.swift */; };
 		635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635962E223DF3ECC00FE4EDF /* Tap.swift */; };
 		635CF20E242CF23300DEFDBE /* ButtonTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20D242CF23300DEFDBE /* ButtonTapper.swift */; };
 		635CF210242CF28000DEFDBE /* ArbitraryLocationTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		63672C15242B5CC6008FCDFC /* OCRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C14242B5CC6008FCDFC /* OCRConfig.swift */; };
 		63672C58242C0352008FCDFC /* Exercise+Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C57242C0352008FCDFC /* Exercise+Result.swift */; };
-		63672C5A242C057D008FCDFC /* Term.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C59242C057D008FCDFC /* Term.swift */; };
-		63672C5C242C0588008FCDFC /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C5B242C0588008FCDFC /* Tokenizer.swift */; };
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
 		6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D901238D666400477AD9 /* LinearScatterStrokable.swift */; };
 		6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D903238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift */; };
@@ -211,14 +208,17 @@
 		63997EE92434959C005473A0 /* Promise+Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EE82434959C005473A0 /* Promise+Await.swift */; };
 		63997EEB2434A1AD005473A0 /* FlowFreeTimeTrial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */; };
 		63997EED2434A290005473A0 /* FlowFreeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEC2434A290005473A0 /* FlowFreeBase.swift */; };
-		639B78CA242CDB84009674E8 /* ArrayScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78C9242CDB84009674E8 /* ArrayScanner.swift */; };
-		639B78CC242CDCB6009674E8 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CB242CDCB6009674E8 /* Parser.swift */; };
-		639B78CE242CDD9C009674E8 /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CD242CDD9C009674E8 /* Expressions.swift */; };
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
 		63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */; };
 		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
 		63B05579243CC19C00DD741C /* FreakingMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B05577243CC19C00DD741C /* FreakingMath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B05580243CC25F00DD741C /* FreakingMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0557F243CC25F00DD741C /* FreakingMath.swift */; };
+		63B05584243DBEC400DD741C /* Term.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C59242C057D008FCDFC /* Term.swift */; };
+		63B05585243DBEC400DD741C /* RationalNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C625242DE52500DF41CE /* RationalNumber.swift */; };
+		63B05586243DBEC400DD741C /* ArrayScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78C9242CDB84009674E8 /* ArrayScanner.swift */; };
+		63B05587243DBEC400DD741C /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C5B242C0588008FCDFC /* Tokenizer.swift */; };
+		63B05588243DBEC400DD741C /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CB242CDCB6009674E8 /* Parser.swift */; };
+		63B05589243DBEC400DD741C /* Expressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78CD242CDD9C009674E8 /* Expressions.swift */; };
 		63B40BCE24250C72007A86E9 /* identiti.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B40BCC24250C72007A86E9 /* identiti.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B40BD624251140007A86E9 /* identiti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B40BD524251140007A86E9 /* identiti.swift */; };
 		63B62B2423DC8D06009B07DF /* Array+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B62B2323DC8D06009B07DF /* Array+Scan.swift */; };
@@ -1233,6 +1233,7 @@
 				637B56AF23D06FEB007E51B0 /* Auxiliary */,
 				637FCB4D2392BBB30067BBCC /* GameQueue */,
 				637B56AE23D06FD7007E51B0 /* Math */,
+				63672C56242C0327008FCDFC /* Parser */,
 				6318966B23B620C4002FBD4F /* Tapping */,
 				631213782325793100C126B4 /* Trackers */,
 			);
@@ -1707,7 +1708,6 @@
 			isa = PBXGroup;
 			children = (
 				63672C57242C0352008FCDFC /* Exercise+Result.swift */,
-				63672C56242C0327008FCDFC /* Parser */,
 			);
 			path = "2 ExerciseSolving";
 			sourceTree = "<group>";
@@ -1718,8 +1718,8 @@
 				63672C59242C057D008FCDFC /* Term.swift */,
 				6358C625242DE52500DF41CE /* RationalNumber.swift */,
 				639B78C9242CDB84009674E8 /* ArrayScanner.swift */,
-				63672C5B242C0588008FCDFC /* Tokenizer.swift */,
 				639B78CB242CDCB6009674E8 /* Parser.swift */,
+				63672C5B242C0588008FCDFC /* Tokenizer.swift */,
 				639B78CD242CDD9C009674E8 /* Expressions.swift */,
 			);
 			path = Parser;
@@ -2814,12 +2814,15 @@
 				6306CDB823AA48DE00D9EB25 /* ToleranceRangeScatterStrokables.swift in Sources */,
 				630682D92430F13600C5B28E /* ValueStreamDamper.swift in Sources */,
 				637B56B223D070ED007E51B0 /* FunctionWrapper.swift in Sources */,
+				63B05588243DBEC400DD741C /* Parser.swift in Sources */,
 				6367D908238EBC0400477AD9 /* SimpleTracker+DebugInfos.swift in Sources */,
 				6312138A2325793C00C126B4 /* MedianTracker.swift in Sources */,
+				63B05586243DBEC400DD741C /* ArrayScanner.swift in Sources */,
 				6323F11323EC355B00182D13 /* Parabola.swift in Sources */,
 				6316BDA723C91BD10062100F /* LinearFunction.swift in Sources */,
 				6323F11823EC4A8900182D13 /* LinearSolver.swift in Sources */,
 				6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */,
+				63B05585243DBEC400DD741C /* RationalNumber.swift in Sources */,
 				6316BDA923CA49FB0062100F /* JumpTracker+Future.swift in Sources */,
 				63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
@@ -2828,6 +2831,7 @@
 				6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */,
 				6312138C2325793C00C126B4 /* SimpleDefaultTracker.swift in Sources */,
 				63440B4423B39D8C0091A012 /* PreliminaryTracker.swift in Sources */,
+				63B05589243DBEC400DD741C /* Expressions.swift in Sources */,
 				6312138B2325793C00C126B4 /* AngularWrapper.swift in Sources */,
 				631213882325793C00C126B4 /* Polynomial.swift in Sources */,
 				63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */,
@@ -2839,6 +2843,7 @@
 				636BCC1E23C4DA5900A3BE26 /* BasicLinearPingPongTracker+Future.swift in Sources */,
 				631213912325794600C126B4 /* PolyTracker.swift in Sources */,
 				631213902325794600C126B4 /* ConstantTracker.swift in Sources */,
+				63B05584243DBEC400DD741C /* Term.swift in Sources */,
 				63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */,
 				635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */,
 				634E4FC423589BA700AE9C91 /* QuadraticSolver.swift in Sources */,
@@ -2853,6 +2858,7 @@
 				639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */,
 				637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */,
 				63456B34236465DB00C71EE5 /* RepeatingPingPongTracker.swift in Sources */,
+				63B05587243DBEC400DD741C /* Tokenizer.swift in Sources */,
 				6367D904238E9F6A00477AD9 /* ArbitraryFunctionScatterStrokable.swift in Sources */,
 				6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */,
 				6312138E2325793C00C126B4 /* Regression.swift in Sources */,
@@ -2970,14 +2976,8 @@
 			files = (
 				63B40BD624251140007A86E9 /* identiti.swift in Sources */,
 				63758AEB242536AA00D0F060 /* Exercise.swift in Sources */,
-				6358C626242DE52500DF41CE /* RationalNumber.swift in Sources */,
-				63672C5A242C057D008FCDFC /* Term.swift in Sources */,
-				63672C5C242C0588008FCDFC /* Tokenizer.swift in Sources */,
 				63758AE92425369700D0F060 /* ImageAnalyzer.swift in Sources */,
-				639B78CC242CDCB6009674E8 /* Parser.swift in Sources */,
 				63672C58242C0352008FCDFC /* Exercise+Result.swift in Sources */,
-				639B78CA242CDB84009674E8 /* ArrayScanner.swift in Sources */,
-				639B78CE242CDD9C009674E8 /* Expressions.swift in Sources */,
 				63DF005724261DC1001D81B3 /* ScreenLayout.swift in Sources */,
 				635CF20E242CF23300DEFDBE /* ButtonTapper.swift in Sources */,
 			);

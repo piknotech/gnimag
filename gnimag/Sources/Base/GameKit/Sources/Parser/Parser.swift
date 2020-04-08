@@ -8,13 +8,13 @@ import Foundation
 /// Parser converts a stream of Tokens into an AST (i.e. a (recursive) top-level Expression instance).
 /// Each parser can only be used once to parse any expression.
 /// Attention: Mulitplication and division is right-associative, i.e. ambiguous expressions with like `1/2*3` will be parsed as `1/(2*3)`. Addition and substraction on the other hand is left-associative.
-struct Parser {
+internal struct Parser {
     /// The stream of tokens.
     private var tokens: ArrayScanner<Token>
 
     /// Default initializer.
     init(tokens: [Token]) {
-        self.tokens = ArrayScanner(array: tokens)
+        self.tokens = ArrayScanner(tokens)
     }
 
     /// Parse the exprssion. Return nil when a syntax error is encountered.
