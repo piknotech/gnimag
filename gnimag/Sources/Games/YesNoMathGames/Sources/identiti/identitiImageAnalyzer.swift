@@ -16,14 +16,10 @@ private let adHeight = 100
 class identitiImageAnalyzer: ImageAnalyzerProtocol {
     /// States whether the ImageAnalyzer has been initialized by `initializeWithFirstImage`.
     var isInitialized = false
-
-    /// The OCR instance.
-    private let ocr: BitmapOCR
-
-    private(set) var screen: ScreenLayout!
-    private var coloring: Coloring!
+    private var screen: ScreenLayout!
 
     /// Coloring describes color properties of the game.
+    private var coloring: Coloring!
     struct Coloring {
         let textColor = Color(0.9, 0.9, 0.9)
         
@@ -34,6 +30,9 @@ class identitiImageAnalyzer: ImageAnalyzerProtocol {
         let foreground: ColorMatch
         let foregroundColor: Color
     }
+
+    /// The OCR instance.
+    private let ocr: BitmapOCR
 
     /// Default initializer.
     init(os: identiti.OSType) {
@@ -146,7 +145,7 @@ class identitiImageAnalyzer: ImageAnalyzerProtocol {
 
     // MARK: Helper Methods for Initialization
 
-    /// The central color of the background gradient.
+    /// The full background gradient color match.
     private func backgroundColorGradient(of image: Image) -> ColorMatch {
         let lower = Pixel(5, adHeight)
         let upper = Pixel(5, image.height - 50)

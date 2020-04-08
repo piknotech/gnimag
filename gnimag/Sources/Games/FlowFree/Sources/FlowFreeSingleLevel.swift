@@ -11,6 +11,7 @@ public class FlowFreeSingleLevel: FlowFreeBase {
     /// Called from the levelStream when it detects a new level.
     override func newLevelDetected(level: Level) {
         onOffImageProvider.pause() // Stop receiving images
+        queue.clear()
 
         // If solution can't be found, exit (because user probably has to install python etc.)
         guard let solution = level.solution else {

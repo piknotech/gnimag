@@ -12,7 +12,7 @@ import Tapping
 /// Each concrete instance of GameBase can play a single concrete game.
 /// Provides the base for identiti and FreakingMath.
 public class GameBase {
-    private let imageAnalyzer: ImageAnalyzerProtocol
+    internal let imageAnalyzer: ImageAnalyzerProtocol
     private let buttonTapper: ButtonTapper
 
     /// The queue where image analysis is performed on.
@@ -20,7 +20,7 @@ public class GameBase {
 
     /// The stream of exercises which are analyzed each frame.
     /// `exerciseStream` triggers an event when an exercise leaves the screen or when a new exercise comes in.
-    private var exerciseStream: ValueStreamDamper<Exercise>
+    internal var exerciseStream: ValueStreamDamper<Exercise>
 
     /// Default initializer.
     init(imageAnalyzer: ImageAnalyzerProtocol, imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, exerciseStream: ValueStreamDamper<Exercise>) {
@@ -44,7 +44,7 @@ public class GameBase {
     }
 
     /// Update method, called each time a new image is available.
-    private func update(image: Image, time: Double) {
+    internal func update(image: Image, time: Double) {
         performFirstImageSetupIfRequired(with: image)
 
         // Get exercise from image; write into stream
@@ -54,7 +54,7 @@ public class GameBase {
 
     /// Initialize the imageAnalyzer and buttonTapper on the very first image.
     /// Does nothing if imageAnalyzer is already initialized.
-    private func performFirstImageSetupIfRequired(with image: Image) {
+    internal func performFirstImageSetupIfRequired(with image: Image) {
         guard !imageAnalyzer.isInitialized else { return }
 
         // Share screen layout with buttonTapper

@@ -10,6 +10,7 @@ public class FlowFreeTimeTrial: FlowFreeBase {
     /// Called from the levelStream when it detects a new level.
     override func newLevelDetected(level: Level) {
         onOffImageProvider.pause() // Pause receiving images until the solution was drawn
+        queue.clear()
 
         // If solution can't be found, exit (because user probably has to install python etc.)
         guard let solution = level.solution else {

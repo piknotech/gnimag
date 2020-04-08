@@ -5,10 +5,17 @@
 
 import GameKit
 import Image
+import ImageAnalysisKit
 import Tapping
 
 /// Each instance of FreakingMath can play a single game of FreakingMath.
 public final class FreakingMath: GameBase {
+    private let imageProvider: OnOffImageProvider
+    private var freakingMathImageAnalyzer: FreakingMathImageAnalyzer { super.imageAnalyzer as! FreakingMathImageAnalyzer }
+
+    /// Use the score to determine whether a new exercise in on-screen.
+    private var lastScore: String?
+
     /// The game which is played, either Freaking Math or Freaking Math+.
     public enum Game {
         case normal
@@ -17,11 +24,32 @@ public final class FreakingMath: GameBase {
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, game: Game = .normal) {
+        self.imageProvider = OnOffImageProvider(wrapping: imageProvider)
+
         super.init(
             imageAnalyzer: FreakingMathImageAnalyzer(game: game),
-            imageProvider: imageProvider,
+            imageProvider: self.imageProvider,
             tapper: tapper,
-            exerciseStream: ValueStreamDamper(numberOfConsecutiveValues: 2, numberOfConsecutiveNilValues: 2)
+            exerciseStream: ValueStreamDamper(numberOfConsecutiveValues: 2, numberOfConsecutiveNilValues: 1)
         )
+    }
+
+    /// Update method, called each time a new image is available.
+    override func update(image: Image, time: Double) {
+        performFirstImageSetupIfRequired(with: image)
+
+        // Determine whether a new score is on-screen. If so, wait 3 frames, then analyze the new exercise.
+        guard let score = freakingMathImageAnalyzer.scoreText(of: image) else { return }
+
+        if score == lastScore {
+            // Get exercise from image; write into stream
+            let exercise = imageAnalyzer.analyze(image: image)
+            exerciseStream.add(value: exercise)
+        } else {
+            // New score: wait 3 frames until equation is fully on-screen
+            lastScore = score
+            imageProvider.ignore(next: 3)
+            exerciseStream.add(value: nil) // Clear stream
+        }
     }
 }

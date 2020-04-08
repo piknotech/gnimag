@@ -45,6 +45,15 @@ public final class GameQueue {
     /// Stop receiving images.
     public func stop() {
         imageProvider.newFrame.unsubscribe(self)
+        clear()
+    }
+
+    /// Remove frames which are currently in waiting state.
+    /// This ensures that the next incoming frame is from the future.
+    public func clear() {
+        synchronized(self) {
+            nextFrameToAnalyze = nil
+        }
     }
 
     /// This method schedules frame analysis in the background.
