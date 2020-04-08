@@ -3,16 +3,15 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-import Common
 import Foundation
 
-enum RandomPoints {
+public enum RandomPoints {
     private static var xoshiro = Xoshiro()
 
     /// Returns an array of size `numPoints` containing evenly distributed points in the given range. The range must be regular.
     /// Additionally, the distance between each pair of points is at least `minimumDistance`.
     /// Returns nil if it is not possible to satisfy this condition.
-    static func on(_ range: SimpleRange<Double>, minimumDistance: Double, numPoints: Int) -> [Double]? {
+    public static func on(_ range: SimpleRange<Double>, minimumDistance: Double, numPoints: Int) -> [Double]? {
         guard let reducedRange = reducedRange(for: range, minimumDistance: minimumDistance, numPoints: numPoints) else { return nil }
 
         // Calculate N points on the reduced interval
@@ -21,11 +20,19 @@ enum RandomPoints {
         return points
     }
 
+    /// Works like `on` but, instead of specifying the minimum distance, specify the randomness.
+    /// A randomness of 0 is a guaranteed uniform distribution, whereas a randomness of 1 is total randomness.
+    public static func on(_ range: SimpleRange<Double>, randomness: Double, minDistance: Double = 0, numPoints: Int) -> [Double]? {
+        let randomness = max(1, min(0, randomness))
+        let distance = (1 - randomness) * range.size / Double(numPoints - 1)
+        return on(range, minimumDistance: max(minDistance, distance), numPoints: numPoints)
+    }
+
     /// Returns an array of size `numPoints` (positive) containing evenly distributed points in the given range. The range must be regular.
     /// Additionally, the distance between each pair of points is at least `minimumDistance`.
     /// Additionally, at least one point must be smaller than the given maximum value.
     /// Returns nil if it is not possible to satisfy this condition.
-    static func on(_ range: SimpleRange<Double>, minimumDistance: Double, numPoints: Int, maximumValueForFirstPoint: Double) -> [Double]? {
+    public static func on(_ range: SimpleRange<Double>, minimumDistance: Double, numPoints: Int, maximumValueForFirstPoint: Double) -> [Double]? {
         guard let reducedRange = reducedRange(for: range, minimumDistance: minimumDistance, numPoints: numPoints) else { return nil }
 
         // Create a point fulfilling the maximum value condition
@@ -68,7 +75,7 @@ enum RandomPoints {
     }
 
     /// Throw a coin.
-    static func fiftyFifty() -> Bool {
+    public static func fiftyFifty() -> Bool {
         xoshiro.next() < .max / 2
     }
 }

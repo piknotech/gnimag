@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 
 /// A circle in R^2.
@@ -22,6 +23,12 @@ public struct Circle {
         let x = center.x + cos(angle) * radius
         let y = center.y + sin(angle) * radius
         return CGPoint(x: x, y: y)
+    }
+
+    /// Return the point on the circle at the given angle.
+    /// 0 means going right, pi/2 means going up, etc. (counterclockwise).
+    public func point(at angle: Angle) -> CGPoint {
+        point(at: CGFloat(angle.value))
     }
 
     /// Inset the circle by adjusting the radius by the given amount.

@@ -133,7 +133,8 @@
 		63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */; };
 		63351A5D234DD11E00E42762 /* Array+RemovingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5B234DD11700E42762 /* Array+RemovingRelated.swift */; };
 		63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5E234DE23E00E42762 /* SimpleDataSet.swift */; };
-		633E4EE123E9CEAD00B389FA /* RandomPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E4EE023E9CEAD00B389FA /* RandomPoints.swift */; };
+		6340B174243DF828003E6EA7 /* MovingLineSegmentPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340B173243DF828003E6EA7 /* MovingLineSegmentPath.swift */; };
+		6340B175243DFD63003E6EA7 /* RandomPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E4EE023E9CEAD00B389FA /* RandomPoints.swift */; };
 		63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */; };
 		63440B4223B388B30091A012 /* TapDelayTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B4123B388B30091A012 /* TapDelayTracker.swift */; };
 		63440B4423B39D8C0091A012 /* PreliminaryTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B4323B39D8B0091A012 /* PreliminaryTracker.swift */; };
@@ -455,6 +456,7 @@
 		63351A5B234DD11700E42762 /* Array+RemovingRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+RemovingRelated.swift"; sourceTree = "<group>"; };
 		63351A5E234DE23E00E42762 /* SimpleDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDataSet.swift; sourceTree = "<group>"; };
 		633E4EE023E9CEAD00B389FA /* RandomPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomPoints.swift; sourceTree = "<group>"; };
+		6340B173243DF828003E6EA7 /* MovingLineSegmentPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovingLineSegmentPath.swift; sourceTree = "<group>"; };
 		63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyFunctionToleranceChecker.swift; sourceTree = "<group>"; };
 		63440B4123B388B30091A012 /* TapDelayTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapDelayTracker.swift; sourceTree = "<group>"; };
 		63440B4323B39D8B0091A012 /* PreliminaryTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreliminaryTracker.swift; sourceTree = "<group>"; };
@@ -856,7 +858,6 @@
 				6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */,
 				6324C13123E49689007E26EB /* SolutionGenerator.swift */,
 				6324C13323E49695007E26EB /* SolutionVerifier.swift */,
-				633E4EE023E9CEAD00B389FA /* RandomPoints.swift */,
 			);
 			path = Randomized;
 			sourceTree = "<group>";
@@ -1024,9 +1025,10 @@
 				631212CD2325740000C126B4 /* Event.swift */,
 				63179AD42433BFC200DA492E /* Promise.swift */,
 				63997EE82434959C005473A0 /* Promise+Await.swift */,
-				6377C85F23DC76D40084772F /* Timing.swift */,
-				631214382326686A00C126B4 /* Terminal.swift */,
+				633E4EE023E9CEAD00B389FA /* RandomPoints.swift */,
 				6364934423270ABA00FEF664 /* SimpleRange.swift */,
+				631214382326686A00C126B4 /* Terminal.swift */,
+				6377C85F23DC76D40084772F /* Timing.swift */,
 				637595392331012C00ACA969 /* Operators.swift */,
 				6312143423258A2600C126B4 /* Extensions */,
 				631BE25623EF53C4008DDEE1 /* Miscellaneous */,
@@ -1197,6 +1199,7 @@
 				631213422325785000C126B4 /* LimitedPath.swift */,
 				631213432325785000C126B4 /* PixelPath.swift */,
 				631213442325785000C126B4 /* ExpandingCirclePath.swift */,
+				6340B173243DF828003E6EA7 /* MovingLineSegmentPath.swift */,
 			);
 			path = PixelPaths;
 			sourceTree = "<group>";
@@ -2766,6 +2769,7 @@
 				63073E62242AAB8E002C4593 /* CGImage+IO.swift in Sources */,
 				63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */,
 				631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */,
+				6340B175243DFD63003E6EA7 /* RandomPoints.swift in Sources */,
 				63997EE92434959C005473A0 /* Promise+Await.swift in Sources */,
 				636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */,
 				6377C86023DC76D40084772F /* Timing.swift in Sources */,
@@ -2813,6 +2817,7 @@
 				631213652325785000C126B4 /* ColorMatchSequence.swift in Sources */,
 				63CB1E112428E94B006B7782 /* ConnectedComponents.swift in Sources */,
 				631213522325785000C126B4 /* SmallestCircle.swift in Sources */,
+				6340B174243DF828003E6EA7 /* MovingLineSegmentPath.swift in Sources */,
 				6312135B2325785000C126B4 /* Pixel+CGPointConversion.swift in Sources */,
 				6312134C2325785000C126B4 /* RayShooter.swift in Sources */,
 				63DF005A2426398D001D81B3 /* CroppedImage.swift in Sources */,
@@ -2905,7 +2910,6 @@
 			files = (
 				6345680423BB955700D32053 /* PlayfieldProperties.swift in Sources */,
 				6345680123BB955700D32053 /* BarProperties.swift in Sources */,
-				633E4EE123E9CEAD00B389FA /* RandomPoints.swift in Sources */,
 				63C7F6D023F588CF00187840 /* BarUpdater.swift in Sources */,
 				6324C13223E49689007E26EB /* SolutionGenerator.swift in Sources */,
 				631213F623257F4000C126B4 /* AnalysisResult.swift in Sources */,
