@@ -49,7 +49,7 @@ public final class FreakingMath: GameBase {
             // New score: wait 3 frames until equation is fully on-screen
             lastScore = score
             imageProvider.ignore(next: 3)
-            exerciseStream.add(value: nil) // Clear stream
+            exerciseStream.add(value: nil) // Clear stream; required if the same equation comes twice
         }
     }
 }

@@ -55,10 +55,11 @@ public final class MovingLineSegmentPath: PixelPath {
     
     /// Get `numberOfPointsPerLineSegment` random points on the current line segment.
     private func randomPointsOnCurrentLineSegment() -> [CGPoint] {
-        let values = RandomPoints.on(SimpleRange(from: 0, to: 1), randomness: randomness, minDistance: 1, numPoints: numberOfPointsPerLineSegment) ?? []
+        let range = SimpleRange<Double>(from: 0, to: Double(currentLineSegment.length))
+        let tValues = RandomPoints.on(range, randomness: randomness, minDistance: 1, numPoints: numberOfPointsPerLineSegment)!
 
-        return values.map {
-            currentLineSegment.startPoint + CGFloat($0) * currentLineSegment.normalizedDirection
+        return tValues.map { t in
+            currentLineSegment.startPoint + CGFloat(t) * currentLineSegment.normalizedDirection
         }
     }
 }
