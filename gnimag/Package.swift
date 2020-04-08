@@ -122,9 +122,9 @@ let package = Package(
         ),
 
         .target(
-            name: "identiti",
+            name: "KingOfMath",
             dependencies: allLibraries,
-            path: "Sources/Games/identiti"
+            path: "Sources/Games/KingOfMath"
         ),
 
         .target(
@@ -133,13 +133,20 @@ let package = Package(
             path: "Sources/Games/MrFlap"
         ),
 
+        .target(
+            name: "YesNoMathGames",
+            dependencies: allLibraries,
+            path: "Sources/Games/YesNoMathGames"
+        ),
+
         // PRODUCTS
         .target(
             name: "gnimag",
             dependencies: allLibraries + [
                 "FlowFree",
-                "identiti",
-                "MrFlap"
+                "KingOfMath",
+                "MrFlap",
+                "YesNoMathGames",
             ],
             path: "Sources/Products/gnimag"
         ),

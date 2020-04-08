@@ -1,6 +1,6 @@
 # FlowFree
 
-FlowFree is a puzzle game in which the player has to connect points on a quadratic grid by paths which must not cross each other.
+Flow Free is a puzzle game in which the player has to connect points on a quadratic grid by paths which must not cross each other.
 
 As such, FlowFree is not a real-time game and does not require time-precise real-time tapping. Instead, it requires position-precise tapping and dragging as very precise paths have to be drawn on the screen.
 

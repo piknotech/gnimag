@@ -141,8 +141,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63B40BC924250C72007A86E9"
-               BuildableName = "identiti.framework"
-               BlueprintName = "identiti"
+               BuildableName = "YesNoMathGames.framework"
+               BlueprintName = "YesNoMathGames"
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -171,6 +171,20 @@
                BlueprintIdentifier = "630682C72430CE4C00C5B28E"
                BuildableName = "FlowFree.framework"
                BlueprintName = "FlowFree"
+               ReferencedContainer = "container:gnimag.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "63B05574243CC19C00DD741C"
+               BuildableName = "KingOfMath.framework"
+               BlueprintName = "KingOfMath"
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

@@ -19,6 +19,10 @@ public class OnOffImageProvider: ImageProvider {
     /// States whether incoming images should be forwarded.
     private var running = true
 
+    /// States how many of the new incoming images should be ignored.
+    /// Calling `continue` will reset this counter.
+    private var ignoreNext = 0
+
     /// Default initializer.
     /// By default, images are forwarded, i.e. there is no need to call `continue` before calling `pause`.
     public init(wrapping provider: ImageProvider) {
@@ -26,9 +30,10 @@ public class OnOffImageProvider: ImageProvider {
 
         // Forward `newFrame` event
         wrapped.newFrame += {
-            if self.running {
+            if self.running && self.ignoreNext <= 0 {
                 self.newFrame.trigger(with: $0)
             }
+            self.ignoreNext -= 1
         }
     }
 
@@ -37,8 +42,15 @@ public class OnOffImageProvider: ImageProvider {
         running = false
     }
 
-    /// Continue forwarding images.
+    /// Continue forwarding and end ignoring images.
     public func `continue`() {
         running = true
+        ignoreNext = 0
+    }
+
+    /// Begin ignoring the next `amount` incoming frames. This overrides the previous call to `ignore(next:)`.
+    /// Calling `continue` will stop ignoring images.
+    public func ignore(next amount: Int) {
+        ignoreNext = amount
     }
 }

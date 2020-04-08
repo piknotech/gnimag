@@ -12,11 +12,11 @@ import Tapping
 /// FlowFreeBase bundles common functionality of different FlowFree game modes.
 public class FlowFreeBase {
     private let imageAnalyzer: ImageAnalyzer
-    let pathTracer: PathTracer
+    internal let pathTracer: PathTracer
 
     /// The queue where image analysis is performed on.
-    private var queue: GameQueue!
-    let onOffImageProvider: OnOffImageProvider
+    internal private(set) var queue: GameQueue!
+    internal let onOffImageProvider: OnOffImageProvider
 
     /// The stream of incoming levels.
     private var levelStream = ValueStreamDamper<Level>(numberOfConsecutiveValues: 1)
@@ -68,6 +68,6 @@ public class FlowFreeBase {
 
     /// Called from the levelStream when it detects a new level.
     /// Override to perform custom logic.
-    func newLevelDetected(level: Level) {
+    internal func newLevelDetected(level: Level) {
     }
 }

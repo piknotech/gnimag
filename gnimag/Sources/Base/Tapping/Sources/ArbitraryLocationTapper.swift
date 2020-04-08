@@ -11,3 +11,12 @@ public protocol ArbitraryLocationTapper {
     /// Tap at the given relative (LLO) location, (0, 0) meaning lower left and (1, 1) meaning upper right.
     func tap(at point: CGPoint)
 }
+
+public extension ArbitraryLocationTapper {
+    /// Convenience method to tap at the given absolute screen location.
+    func tap(atAbsolute point: CGPoint, screenSize: CGSize) {
+        let x = point.x / screenSize.width
+        let y = point.y / screenSize.height
+        tap(at: CGPoint(x: x, y: y))
+    }
+}

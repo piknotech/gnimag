@@ -74,7 +74,7 @@ extension Array {
 extension Array where Element: Equatable {
     /// Return an array by removing all elements that are equal to the given value.
     @_transparent
-    public func removing(_ value: Element) -> [Element] {
+    public func removing(_ value: Element) -> [Element] {
         filter { $0 != value }
     }
 }

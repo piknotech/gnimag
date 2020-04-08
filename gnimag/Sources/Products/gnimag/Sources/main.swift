@@ -4,12 +4,12 @@ import Image
 import ImageAnalysisKit
 import TestingTools
 import MrFlap
-import identiti
+import YesNoMathGames
 import FlowFree
 import Geometry
 import Tapping
 
-let flow = FlowFreeTimeTrial(imageProvider: Scrcpy.imageProvider, dragger: Scrcpy.dragger)
-flow.play()
+let math = FreakingMath(imageProvider: Scrcpy.imageProvider, tapper: Scrcpy.tapper)
+math.play()
 
 RunLoop.main.run()
