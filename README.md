@@ -36,11 +36,10 @@ Currently, there is no possibility to trigger touches on non-jailbroken iPhones.
 Fully implemented:
 
 - [Flow Free](gnimag/Sources/Games/FlowFree) ([App Store Link](https://apps.apple.com/us/app/flow-free/id526641427); [Play Store Link](https://play.google.com/store/apps/details?id=com.bigduckgames.flow))
-- [identiti](gnimag/Sources/Games/identiti) ([App Store Link](https://apps.apple.com/de/app/identiti/id909914922); [Play Store Link](https://play.google.com/store/apps/details?id=de.chipsapps.ca.identiti))
+- [Freaking Math](gnimag/Sources/Games/YesNoMathGames) ([App Store Link](https://apps.apple.com/us/app/freaking-math/id846439108); [Play Store Link](https://play.google.com/store/apps/details?id=com.bangdev.freakingmath))
+- [identiti](gnimag/Sources/Games/YesNoMathGames) ([App Store Link](https://apps.apple.com/de/app/identiti/id909914922); [Play Store Link](https://play.google.com/store/apps/details?id=de.chipsapps.ca.identiti))
 
 In progress:
-
-- [Freaking Math](gnimag/Sources/Games/FreakingMath) ([App Store Link](https://apps.apple.com/us/app/freaking-math/id846439108); [Play Store Link](https://play.google.com/store/apps/details?id=com.bangdev.freakingmath))
 
 - [MrFlap](gnimag/Sources/Games/MrFlap) ([App Store Link](https://apps.apple.com/at/app/mr-flap/id822206495); [APK Link](https://apkpure.com/de/mr-flap/com.mrflap))
 

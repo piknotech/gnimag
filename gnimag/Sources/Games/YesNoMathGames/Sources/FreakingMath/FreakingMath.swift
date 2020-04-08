@@ -10,7 +10,6 @@ import Tapping
 
 /// Each instance of FreakingMath can play a single game of FreakingMath.
 public final class FreakingMath: GameBase {
-    private let imageProvider: OnOffImageProvider
     private var freakingMathImageAnalyzer: FreakingMathImageAnalyzer { super.imageAnalyzer as! FreakingMathImageAnalyzer }
 
     /// Use the score to determine whether a new exercise in on-screen.
@@ -25,12 +24,11 @@ public final class FreakingMath: GameBase {
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, game: Game = .normal) {
-        self.imageProvider = OnOffImageProvider(wrapping: imageProvider)
         self.game = game
 
         super.init(
             imageAnalyzer: FreakingMathImageAnalyzer(game: game),
-            imageProvider: self.imageProvider,
+            imageProvider: imageProvider,
             tapper: tapper,
             exerciseStream: ValueStreamDamper(numberOfConsecutiveValues: 2, numberOfConsecutiveNilValues: 1)
         )
@@ -40,7 +38,7 @@ public final class FreakingMath: GameBase {
     override func update(image: Image, time: Double) {
         performFirstImageSetupIfRequired(with: image)
 
-        // Determine whether a new score is on-screen. If so, wait 3 frames, then analyze the new exercise.
+        // Determine whether a new score is on-screen. If so, wait 100ms, then analyze the new exercise.
         guard let score = freakingMathImageAnalyzer.scoreText(of: image) else { return }
 
         if score == lastScore {
@@ -48,10 +46,13 @@ public final class FreakingMath: GameBase {
             let exercise = imageAnalyzer.analyze(image: image)
             exerciseStream.add(value: exercise)
         } else {
-            // New score: wait some frames (in normal mode) until equation is fully on-screen
-            if game == .normal { imageProvider.ignore(next: 5) }
             lastScore = score
             exerciseStream.add(value: nil) // Clear stream; required if the same equation comes twice
+
+            // Normal game: the equation is fully on-screen only after 100ms
+            if game == .normal {
+                queue.stop(for: 0.1)
+            }
         }
     }
 }

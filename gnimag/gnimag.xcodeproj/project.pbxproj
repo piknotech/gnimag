@@ -463,6 +463,9 @@
 		631D837C243E48F3006BF4C8 /* 0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 0.png; sourceTree = "<group>"; };
 		631D837D243E48F3006BF4C8 /* 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4.png; sourceTree = "<group>"; };
 		631D837E243E48F3006BF4C8 /* 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 6.png; sourceTree = "<group>"; };
+		631D837F243E5762006BF4C8 /* 22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 22.png; sourceTree = "<group>"; };
+		631D8380243E5C41006BF4C8 /* 222.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 222.png; sourceTree = "<group>"; };
+		631D8381243E5C4C006BF4C8 /* 2222.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2222.png; sourceTree = "<group>"; };
 		6323F11023EB2C7200182D13 /* Int+TimesMake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+TimesMake.swift"; sourceTree = "<group>"; };
 		6323F11223EC355B00182D13 /* Parabola.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parabola.swift; sourceTree = "<group>"; };
 		6323F11723EC4A8900182D13 /* LinearSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearSolver.swift; sourceTree = "<group>"; };
@@ -1646,6 +1649,9 @@
 				631D836F243E451C006BF4C8 /* 7.png */,
 				631D8368243E451B006BF4C8 /* 8.png */,
 				631D8369243E451B006BF4C8 /* 9.png */,
+				631D837F243E5762006BF4C8 /* 22.png */,
+				631D8380243E5C41006BF4C8 /* 222.png */,
+				631D8381243E5C4C006BF4C8 /* 2222.png */,
 			);
 			path = normal;
 			sourceTree = "<group>";

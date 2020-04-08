@@ -13,10 +13,10 @@ import Tapping
 /// Provides the base for identiti and FreakingMath.
 public class GameBase {
     internal let imageAnalyzer: ImageAnalyzerProtocol
-    private let buttonTapper: ButtonTapper
+    internal let buttonTapper: ButtonTapper
 
     /// The queue where image analysis is performed on.
-    private var queue: GameQueue!
+    internal var queue: GameQueue!
 
     /// The stream of exercises which are analyzed each frame.
     /// `exerciseStream` triggers an event when an exercise leaves the screen or when a new exercise comes in.

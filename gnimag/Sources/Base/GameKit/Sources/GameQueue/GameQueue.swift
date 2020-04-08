@@ -48,6 +48,17 @@ public final class GameQueue {
         clear()
     }
 
+    /// Convenience method to stop the queue for a given time, then restart it.
+    /// If the queue is not running yet, it will be started after the given time.
+    public func stop(for duration: Double) {
+        stop()
+
+        // Cancel previous `stop(for:)` tasks as the most recent one overrides the previous ones
+        let identification = Timing.Identification.object(self, string: "stop(for:)")
+        Timing.cancelTasks(matching: identification)
+        Timing.perform(after: duration, identification: identification, block: begin)
+    }
+
     /// Remove frames which are currently in waiting state.
     /// This ensures that the next incoming frame is from the future.
     public func clear() {
