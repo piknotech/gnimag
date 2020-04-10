@@ -69,18 +69,3 @@ internal extension CGImage {
         return GrayscaleImage(context.makeImage()!)
     }
 }
-
-internal extension Image {
-    /// The measure of pixel-wise identicality, i.e. the number of pixels which are exactly same (i.e. have exactly the same color) divided by the total number of pixels.
-    /// Especially useful for black-white images (because pixels will often be exactly identical there).
-    /// The images must have the same size.
-    func identicality(to other: Image) -> Double {
-        var equalPixels = 0
-        for x in 0 ..< width {
-            for y in 0 ..< height {
-                if color(at: Pixel(x, y)) == other.color(at: Pixel(x, y)) { equalPixels += 1 }
-            }
-        }
-        return Double(equalPixels) / Double(width * height)
-    }
-}
