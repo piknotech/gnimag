@@ -7,24 +7,20 @@ import Image
 import Tapping
 
 /// Scrcpy provides input and output classes if you want to use the scrcpy application to communicate with an Android device.
-enum Scrcpy {
-    /// Create a new ImageProvider that returns the window content of the scrcpy application.
-    /// scrcpy must be running and streaming.
-    static var imageProvider: ImageProvider {
-        let provider = AppWindowScreenProvider(appName: "scrcpy")
-        provider.removeUpperWindowBorder = true
-        return provider
-    }
+let scrcpy = WindowInteractor(appName: "scrcpy").with {
+    $0.removeUpperWindowBorder = true
+}
 
-    /// Create a new Tapper that taps on the scrcpy application window.
-    /// scrcpy must be running and streaming.
-    static var tapper: Tapper & ArbitraryLocationTapper {
-        WindowTapper(appName: "scrcpy")
-    }
+// MARK: Withable
 
-    /// Create a new Dragger that moves on the scrcpy application window.
-    /// scrcpy must be running and streaming.
-    static var dragger: Dragger {
-        WindowDragger(appName: "scrcpy")
+extension WindowInteractor: Withable { }
+private protocol Withable { }
+
+extension Withable {
+    @discardableResult
+    func with(_ block: (inout Self) -> Void) -> Self {
+        var copy = self
+        block(&copy)
+        return copy
     }
 }

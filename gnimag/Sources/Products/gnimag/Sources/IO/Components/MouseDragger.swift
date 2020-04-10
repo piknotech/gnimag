@@ -7,8 +7,18 @@ import Common
 import Foundation
 import Tapping
 
-/// An implementation of Dragger that performs move and drag actions on the window of an arbitrary macOS application.
-class WindowDragger: WindowOperatorBase, Dragger {
+/// An implementation of Dragger that performs move and drag actions with the macOS mouse.
+class MouseDragger: Dragger {
+    /// The frame determines the absolute location of the full interaction region on the screen, in ULO coordinates.
+    fileprivate let getFrame: () -> CGRect
+
+    /// Default initializer.
+    init(getFrame: @escaping () -> CGRect) {
+        self.getFrame = getFrame
+    }
+
+    // MARK: Configuration
+
     /// The dragging configuration. You can change it from outside.
     var configuration = Configuration(
         draggingType: .realistic(stepLength: 190, stepDuration: 0.06),
@@ -31,6 +41,9 @@ class WindowDragger: WindowOperatorBase, Dragger {
         /// The delay after a tap (without a release) action.
         let delayAfterTap: Double
     }
+
+
+    // MARK: Dragger
 
     /// The current position of the cursor, in absolute coordinates.
     private var currentPosition: CGPoint!
@@ -74,5 +87,13 @@ class WindowDragger: WindowOperatorBase, Dragger {
         }
 
         return .success()
+    }
+
+    /// Convert the given relative (LLO) location (in 0..1 x 0..1) to an absolute screen location.
+    private func convert(fromRelativeLocation point: CGPoint) -> CGPoint {
+        let frame = getFrame()
+        let x = frame.origin.x + point.x * frame.width
+        let y = frame.origin.y + frame.height * (1-point.y) // LLO to ULO
+        return CGPoint(x: x, y: y)
     }
 }

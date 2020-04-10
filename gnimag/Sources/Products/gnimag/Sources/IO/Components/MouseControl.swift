@@ -7,7 +7,8 @@ import Common
 import Geometry
 import Foundation
 
-/// MouseControl can perform mouse actions on the screen.
+/// MouseControl can perform macOS mouse actions on the screen.
+/// In this class, all absolute screen locations are in ULO coordinates, meaning (0,0) is in the upper left corner.
 enum MouseControl {
     /// Perform a click (tap and release) on an absolute screen location.
     static func click(at point: CGPoint) {

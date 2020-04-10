@@ -21,6 +21,7 @@
 		63073E62242AAB8E002C4593 /* CGImage+IO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E61242AAB8E002C4593 /* CGImage+IO.swift */; };
 		63073E63242AAD27002C4593 /* NativeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C323257EB600C126B4 /* NativeImage.swift */; };
 		63073E65242AB7B0002C4593 /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E64242AB7B0002C4593 /* Tools.swift */; };
+		630CE2F32440AD31006017F4 /* ScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630CE2F22440AD31006017F4 /* ScreenInteractor.swift */; };
 		6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */; };
 		6311E0B523E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */; };
 		6311E0B723E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */; };
@@ -75,10 +76,9 @@
 		631213B623257A2F00C126B4 /* ImageListCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AC23257A2F00C126B4 /* ImageListCreator.swift */; };
 		631213B723257A2F00C126B4 /* ImageListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213AD23257A2F00C126B4 /* ImageListProvider.swift */; };
 		631213C923257EB600C126B4 /* NoopTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213BE23257EB600C126B4 /* NoopTapper.swift */; };
-		631213CA23257EB600C126B4 /* WindowTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213BF23257EB600C126B4 /* WindowTapper.swift */; };
+		631213CA23257EB600C126B4 /* MouseTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213BF23257EB600C126B4 /* MouseTapper.swift */; };
 		631213CB23257EB600C126B4 /* MouseControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C023257EB600C126B4 /* MouseControl.swift */; };
-		631213CC23257EB600C126B4 /* WindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C123257EB600C126B4 /* WindowHelper.swift */; };
-		631213CE23257EB600C126B4 /* AppWindowImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C423257EB600C126B4 /* AppWindowImageProvider.swift */; };
+		631213CE23257EB600C126B4 /* DisplayLinkedImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C423257EB600C126B4 /* DisplayLinkedImageProvider.swift */; };
 		631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C623257EB600C126B4 /* Scrcpy.swift */; };
 		631213DA23257EF600C126B4 /* MrFlap.h in Headers */ = {isa = PBXBuildFile; fileRef = 631213D823257EF600C126B4 /* MrFlap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631213F223257F4000C126B4 /* MrFlap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213E223257F4000C126B4 /* MrFlap.swift */; };
@@ -151,6 +151,7 @@
 		634AF72023E84879005FE241 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 634AF71F23E84879005FE241 /* Charts */; };
 		634AF72323E848C3005FE241 /* Surge in Frameworks */ = {isa = PBXBuildFile; productRef = 634AF72223E848C3005FE241 /* Surge */; };
 		634AFA7023CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634AFA6F23CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift */; };
+		634E2C6C2440A383001C2459 /* WindowInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E2C6B2440A383001C2459 /* WindowInteractor.swift */; };
 		634E4FC423589BA700AE9C91 /* QuadraticSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC02358749F00AE9C91 /* QuadraticSolver.swift */; };
 		634E4FC523589BA700AE9C91 /* Polynomial+Arithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */; };
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
@@ -244,8 +245,7 @@
 		63DF00612427E391001D81B3 /* BitmapOCRCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF00602427E390001D81B3 /* BitmapOCRCreator.swift */; };
 		63E16AA72433E16F005E67ED /* Dragger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AA62433E16F005E67ED /* Dragger.swift */; };
 		63E16AA92433E4BF005E67ED /* PathTracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AA82433E4BF005E67ED /* PathTracer.swift */; };
-		63E16AAB24348400005E67ED /* WindowDragger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AAA24348400005E67ED /* WindowDragger.swift */; };
-		63E16AAD24348968005E67ED /* WindowOperatorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AAC24348968005E67ED /* WindowOperatorBase.swift */; };
+		63E16AAB24348400005E67ED /* MouseDragger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AAA24348400005E67ED /* MouseDragger.swift */; };
 		63E5A06E23FC1D360082E910 /* TimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06D23FC1D350082E910 /* TimeProvider.swift */; };
 		63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
@@ -311,6 +311,7 @@
 		630873F1242E47AB000ECE47 /* –.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "–.png"; sourceTree = "<group>"; };
 		630873F2242E47B7000ECE47 /* –.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "–.png"; sourceTree = "<group>"; };
 		630873F3242E6633000ECE47 /* ValueStreamDamper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueStreamDamper.swift; sourceTree = "<group>"; };
+		630CE2F22440AD31006017F4 /* ScreenInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenInteractor.swift; sourceTree = "<group>"; };
 		6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionSolutionStrategy.swift; sourceTree = "<group>"; };
 		6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequenceFromCurrentPosition.swift; sourceTree = "<group>"; };
 		6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptimalSolutionViaRandomizedSearchStrategy.swift; sourceTree = "<group>"; };
@@ -396,11 +397,10 @@
 		631213AE23257A2F00C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		631213BA23257EB600C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		631213BE23257EB600C126B4 /* NoopTapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoopTapper.swift; sourceTree = "<group>"; };
-		631213BF23257EB600C126B4 /* WindowTapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowTapper.swift; sourceTree = "<group>"; };
+		631213BF23257EB600C126B4 /* MouseTapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseTapper.swift; sourceTree = "<group>"; };
 		631213C023257EB600C126B4 /* MouseControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseControl.swift; sourceTree = "<group>"; };
-		631213C123257EB600C126B4 /* WindowHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowHelper.swift; sourceTree = "<group>"; };
 		631213C323257EB600C126B4 /* NativeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeImage.swift; sourceTree = "<group>"; };
-		631213C423257EB600C126B4 /* AppWindowImageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppWindowImageProvider.swift; sourceTree = "<group>"; };
+		631213C423257EB600C126B4 /* DisplayLinkedImageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayLinkedImageProvider.swift; sourceTree = "<group>"; };
 		631213C623257EB600C126B4 /* Scrcpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrcpy.swift; sourceTree = "<group>"; };
 		631213C723257EB600C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		631213C823257EB600C126B4 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -497,6 +497,7 @@
 		634AD0182327D75200D87BAB /* Strokable+Fillable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strokable+Fillable.swift"; sourceTree = "<group>"; };
 		634AD01A2327E78C00D87BAB /* Drawing Shapes+Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drawing Shapes+Lines.swift"; sourceTree = "<group>"; };
 		634AFA6F23CDD9C4007AFF97 /* HorizontalLineScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalLineScatterStrokable.swift; sourceTree = "<group>"; };
+		634E2C6B2440A383001C2459 /* WindowInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowInteractor.swift; sourceTree = "<group>"; };
 		634E4FC02358749F00AE9C91 /* QuadraticSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuadraticSolver.swift; sourceTree = "<group>"; };
 		634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polynomial+Arithmetic.swift"; sourceTree = "<group>"; };
 		634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
@@ -623,8 +624,7 @@
 		63DF00602427E390001D81B3 /* BitmapOCRCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitmapOCRCreator.swift; sourceTree = "<group>"; };
 		63E16AA62433E16F005E67ED /* Dragger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dragger.swift; sourceTree = "<group>"; };
 		63E16AA82433E4BF005E67ED /* PathTracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTracer.swift; sourceTree = "<group>"; };
-		63E16AAA24348400005E67ED /* WindowDragger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDragger.swift; sourceTree = "<group>"; };
-		63E16AAC24348968005E67ED /* WindowOperatorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowOperatorBase.swift; sourceTree = "<group>"; };
+		63E16AAA24348400005E67ED /* MouseDragger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseDragger.swift; sourceTree = "<group>"; };
 		63E5A06D23FC1D350082E910 /* TimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeProvider.swift; sourceTree = "<group>"; };
 		63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+PixelFormat.swift"; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
@@ -1390,32 +1390,24 @@
 		631213BC23257EB600C126B4 /* IO */ = {
 			isa = PBXGroup;
 			children = (
-				631213C123257EB600C126B4 /* WindowHelper.swift */,
-				631213C223257EB600C126B4 /* Image */,
-				631213BD23257EB600C126B4 /* Tapping */,
+				630CE2F22440AD31006017F4 /* ScreenInteractor.swift */,
+				634E2C6B2440A383001C2459 /* WindowInteractor.swift */,
+				631213C223257EB600C126B4 /* Components */,
 				631213C523257EB600C126B4 /* Scrcpy */,
+				631213BE23257EB600C126B4 /* NoopTapper.swift */,
 			);
 			path = IO;
 			sourceTree = "<group>";
 		};
-		631213BD23257EB600C126B4 /* Tapping */ = {
+		631213C223257EB600C126B4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				631213BE23257EB600C126B4 /* NoopTapper.swift */,
-				63E16AAC24348968005E67ED /* WindowOperatorBase.swift */,
-				631213BF23257EB600C126B4 /* WindowTapper.swift */,
-				63E16AAA24348400005E67ED /* WindowDragger.swift */,
+				631213C423257EB600C126B4 /* DisplayLinkedImageProvider.swift */,
+				631213BF23257EB600C126B4 /* MouseTapper.swift */,
+				63E16AAA24348400005E67ED /* MouseDragger.swift */,
 				631213C023257EB600C126B4 /* MouseControl.swift */,
 			);
-			path = Tapping;
-			sourceTree = "<group>";
-		};
-		631213C223257EB600C126B4 /* Image */ = {
-			isa = PBXGroup;
-			children = (
-				631213C423257EB600C126B4 /* AppWindowImageProvider.swift */,
-			);
-			path = Image;
+			path = Components;
 			sourceTree = "<group>";
 		};
 		631213C523257EB600C126B4 /* Scrcpy */ = {
@@ -2804,14 +2796,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				631213CC23257EB600C126B4 /* WindowHelper.swift in Sources */,
 				6354CECA2409467600A4C3B8 /* main.swift in Sources */,
-				63E16AAB24348400005E67ED /* WindowDragger.swift in Sources */,
+				63E16AAB24348400005E67ED /* MouseDragger.swift in Sources */,
 				631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */,
-				631213CA23257EB600C126B4 /* WindowTapper.swift in Sources */,
+				634E2C6C2440A383001C2459 /* WindowInteractor.swift in Sources */,
+				631213CA23257EB600C126B4 /* MouseTapper.swift in Sources */,
 				631213CB23257EB600C126B4 /* MouseControl.swift in Sources */,
-				631213CE23257EB600C126B4 /* AppWindowImageProvider.swift in Sources */,
-				63E16AAD24348968005E67ED /* WindowOperatorBase.swift in Sources */,
+				631213CE23257EB600C126B4 /* DisplayLinkedImageProvider.swift in Sources */,
+				630CE2F32440AD31006017F4 /* ScreenInteractor.swift in Sources */,
 				631213C923257EB600C126B4 /* NoopTapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
