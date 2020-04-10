@@ -6,7 +6,7 @@
 import Foundation
 import Tapping
 
-/// An implementation of Tapper and ArbitraryLocationTapper that clicks on the macOS screen.
+/// An implementation of SomewhereTapper and AnywhereTapper that clicks on the macOS screen.
 class MouseTapper {
     /// The frame determines the absolute location of the full interaction region on the screen, in ULO coordinates.
     fileprivate let getFrame: () -> CGRect
@@ -27,7 +27,7 @@ class MouseTapper {
     }
 }
 
-extension MouseTapper: Tapper {
+extension MouseTapper: SomewhereTapper {
     /// Tap on the center of the window.
     func tap() {
         let frame = getFrame()
@@ -36,7 +36,7 @@ extension MouseTapper: Tapper {
     }
 }
 
-extension MouseTapper: ArbitraryLocationTapper {
+extension MouseTapper: AnywhereTapper {
     /// Convert the given relative (LLO) location (in 0..1 x 0..1) to an absolute screen location.
     private func convert(fromRelativeLocation point: CGPoint) -> CGPoint {
         let frame = getFrame()

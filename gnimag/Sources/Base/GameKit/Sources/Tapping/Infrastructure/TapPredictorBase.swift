@@ -22,7 +22,7 @@ open class TapPredictorBase {
     private var tapSequence: TapSequence?
 
     /// Default initializer.
-    public init(tapper: Tapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
+    public init(tapper: SomewhereTapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
         self.timeProvider = timeProvider
         scheduler = TapScheduler(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: tapDelayTolerance)
 

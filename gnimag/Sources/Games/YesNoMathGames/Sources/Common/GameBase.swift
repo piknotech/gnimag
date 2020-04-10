@@ -23,7 +23,7 @@ public class GameBase {
     internal var exerciseStream: ValueStreamDamper<Exercise>
 
     /// Default initializer.
-    init(imageAnalyzer: ImageAnalyzerProtocol, imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, exerciseStream: ValueStreamDamper<Exercise>) {
+    init(imageAnalyzer: ImageAnalyzerProtocol, imageProvider: ImageProvider, tapper: AnywhereTapper, exerciseStream: ValueStreamDamper<Exercise>) {
         self.imageAnalyzer = imageAnalyzer
         self.exerciseStream = exerciseStream
         buttonTapper = ButtonTapper(underlyingTapper: tapper)

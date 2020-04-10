@@ -22,7 +22,7 @@ class TapPredictor: TapPredictorBase {
     }
 
     /// Default initializer.
-    init(tapper: Tapper, timeProvider: TimeProvider) {
+    init(tapper: SomewhereTapper, timeProvider: TimeProvider) {
         strategies = Strategies(
             idle: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2), // ...?
             singleBar: OptimalSolutionViaRandomizedSearchStrategy()

@@ -12,7 +12,7 @@ public final class TapScheduler {
     public typealias Time = Double
 
     /// Required instances for tapping and time obtainment.
-    private let tapper: Tapper
+    private let tapper: SomewhereTapper
     private let timeProvider: TimeProvider
 
     /// The delay tracker which is used to calculate the average total input+output delay.
@@ -43,7 +43,7 @@ public final class TapScheduler {
     public let tapPerformed = Event<Tap>()
 
     /// Default initializer.
-    public init(tapper: Tapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
+    public init(tapper: SomewhereTapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
         self.tapper = tapper
         self.timeProvider = timeProvider
         delayTracker = TapDelayTracker(tolerance: tapDelayTolerance)

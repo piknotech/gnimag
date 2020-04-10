@@ -7,8 +7,8 @@ import Common
 import Foundation
 import Tapping
 
-/// A Tapper which does nothing.
-class NoopTapper: Tapper, ArbitraryLocationTapper, Dragger {
+/// A tapper and dragger which does nothing.
+class NoopTapper: SomewhereTapper, AnywhereTapper, Dragger {
     func tap() {
     }
 

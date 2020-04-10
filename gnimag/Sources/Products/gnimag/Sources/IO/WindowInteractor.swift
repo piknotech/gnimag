@@ -3,8 +3,8 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Cocoa
 import Common
-import Foundation
 import Image
 import Tapping
 

@@ -23,7 +23,7 @@ public final class FreakingMath: GameBase {
     private let game: Game
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, game: Game = .normal) {
+    public init(imageProvider: ImageProvider, tapper: AnywhereTapper, game: Game = .normal) {
         self.game = game
 
         super.init(

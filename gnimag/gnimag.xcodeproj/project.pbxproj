@@ -32,7 +32,7 @@
 		631212D72325740000C126B4 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212D12325740000C126B4 /* Color.swift */; };
 		631212D82325740000C126B4 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212D22325740000C126B4 /* Bounds.swift */; };
 		631212E32325746B00C126B4 /* Tapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 631212E12325746B00C126B4 /* Tapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		631212EC232574E600C126B4 /* Tapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212EA232574E500C126B4 /* Tapper.swift */; };
+		631212EC232574E600C126B4 /* SomewhereTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212EA232574E500C126B4 /* SomewhereTapper.swift */; };
 		631213022325768000C126B4 /* Common.h in Headers */ = {isa = PBXBuildFile; fileRef = 631212F42325768000C126B4 /* Common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63121315232577EA00C126B4 /* ImageAnalysisKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63121313232577EA00C126B4 /* ImageAnalysisKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631213492325785000C126B4 /* SimpleClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312131F2325785000C126B4 /* SimpleClustering.swift */; };
@@ -160,7 +160,7 @@
 		6358C624242D6EB900DF41CE /* GradientColorMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C623242D6EB900DF41CE /* GradientColorMatching.swift */; };
 		635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635962E223DF3ECC00FE4EDF /* Tap.swift */; };
 		635CF20E242CF23300DEFDBE /* ButtonTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20D242CF23300DEFDBE /* ButtonTapper.swift */; };
-		635CF210242CF28000DEFDBE /* ArbitraryLocationTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */; };
+		635CF210242CF28000DEFDBE /* AnywhereTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20F242CF28000DEFDBE /* AnywhereTapper.swift */; };
 		6364934523270ABA00FEF664 /* SimpleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6364934423270ABA00FEF664 /* SimpleRange.swift */; };
 		63672C15242B5CC6008FCDFC /* OCRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C14242B5CC6008FCDFC /* OCRConfig.swift */; };
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
@@ -332,7 +332,7 @@
 		631212E12325746B00C126B4 /* Tapping.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tapping.h; sourceTree = "<group>"; };
 		631212E22325746B00C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631212E8232574E500C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		631212EA232574E500C126B4 /* Tapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tapper.swift; sourceTree = "<group>"; };
+		631212EA232574E500C126B4 /* SomewhereTapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SomewhereTapper.swift; sourceTree = "<group>"; };
 		631212F22325768000C126B4 /* Common.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Common.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		631212F42325768000C126B4 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		631212F52325768000C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -506,7 +506,7 @@
 		6358C625242DE52500DF41CE /* RationalNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RationalNumber.swift; sourceTree = "<group>"; };
 		635962E223DF3ECC00FE4EDF /* Tap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tap.swift; sourceTree = "<group>"; };
 		635CF20D242CF23300DEFDBE /* ButtonTapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTapper.swift; sourceTree = "<group>"; };
-		635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryLocationTapper.swift; sourceTree = "<group>"; };
+		635CF20F242CF28000DEFDBE /* AnywhereTapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnywhereTapper.swift; sourceTree = "<group>"; };
 		6364934423270ABA00FEF664 /* SimpleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleRange.swift; sourceTree = "<group>"; };
 		63672C14242B5CC6008FCDFC /* OCRConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRConfig.swift; sourceTree = "<group>"; };
 		63672C18242B9DC2008FCDFC /* ocr.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ocr.json; sourceTree = "<group>"; };
@@ -1028,8 +1028,8 @@
 		631212E9232574E500C126B4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				631212EA232574E500C126B4 /* Tapper.swift */,
-				635CF20F242CF28000DEFDBE /* ArbitraryLocationTapper.swift */,
+				631212EA232574E500C126B4 /* SomewhereTapper.swift */,
+				635CF20F242CF28000DEFDBE /* AnywhereTapper.swift */,
 				63E16AA62433E16F005E67ED /* Dragger.swift */,
 			);
 			path = Sources;
@@ -2827,8 +2827,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				63E16AA72433E16F005E67ED /* Dragger.swift in Sources */,
-				631212EC232574E600C126B4 /* Tapper.swift in Sources */,
-				635CF210242CF28000DEFDBE /* ArbitraryLocationTapper.swift in Sources */,
+				631212EC232574E600C126B4 /* SomewhereTapper.swift in Sources */,
+				635CF210242CF28000DEFDBE /* AnywhereTapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

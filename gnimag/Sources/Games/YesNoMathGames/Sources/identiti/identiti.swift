@@ -16,7 +16,7 @@ public final class identiti: GameBase {
     }
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: ArbitraryLocationTapper, os: OSType) {
+    public init(imageProvider: ImageProvider, tapper: AnywhereTapper, os: OSType) {
         super.init(
             imageAnalyzer: identitiImageAnalyzer(os: os),
             imageProvider: imageProvider,

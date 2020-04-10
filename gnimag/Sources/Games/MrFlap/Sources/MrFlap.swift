@@ -14,7 +14,7 @@ import Tapping
 /// Each instance of MrFlap can play a single game of MrFlap.
 public final class MrFlap {
     private let imageProvider: ImageProvider
-    private let tapper: Tapper
+    private let tapper: SomewhereTapper
 
     /// The three great actors – one for each step.
     private let imageAnalyzer: ImageAnalyzer
@@ -41,7 +41,7 @@ public final class MrFlap {
     }
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: Tapper, debugParameters: DebugParameters = .none) {
+    public init(imageProvider: ImageProvider, tapper: SomewhereTapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
         self.tapper = tapper
 
