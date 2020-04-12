@@ -19,6 +19,12 @@ public struct Color {
         self.green = green
         self.blue = blue
     }
+
+    /// Convenience initializer from UInt8 (0-255) color values.
+    @usableFromInline
+    internal init(red: UInt8, green: UInt8, blue: UInt8) {
+        self.init(Double(red) / 255, Double(green) / 255, Double(blue) / 255)
+    }
     
     /// The euclidean distance between this color and another color.
     /// 0 means that the colors are equal. 1 means that the difference is maximal.
