@@ -51,7 +51,7 @@ class ImageAnalyzer {
 
     /// Find the level in an image using the existing board layout.
     private func findLevel(in image: Image) -> Level? {
-        let elements = (Array(0 ..< screen.board.size) × Array(0 ..< screen.board.size)).map { (x, y) -> PositionAndColor in
+        let elements = ((0 ..< screen.board.size) × (0 ..< screen.board.size)).map { (x, y) -> PositionAndColor in
             let position = Position(x, y)
             let center = screen.board.center(ofCellAt: position).nearestPixel
             return PositionAndColor(position: position, color: image.color(at: center))

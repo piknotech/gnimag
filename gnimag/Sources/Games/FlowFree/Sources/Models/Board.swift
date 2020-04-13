@@ -64,7 +64,7 @@ struct Board: LosslessStringConvertible {
         self.init(size: size)
 
         // Fill board, cell by cell
-        for (x, y) in Array(0 ..< size) × Array(0 ..< size) {
+        for (x, y) in (0 ..< size) × (0 ..< size) {
             let char = rowStrings[y][x]
 
             if GameColor.allLetters.contains(char) {

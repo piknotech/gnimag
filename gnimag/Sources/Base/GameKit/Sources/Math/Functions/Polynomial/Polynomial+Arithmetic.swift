@@ -39,7 +39,7 @@ public func * (lhs: Polynomial, rhs: Polynomial) -> Polynomial {
     var result = [Double](repeating: 0, count: lhs.degree + rhs.degree + 1)
 
     // Multiply each coefficient of the left side with each coefficient of the right side
-    for ((i, x), (j, y)) in Array(lhs.coefficients.enumerated()) × Array(rhs.coefficients.enumerated()) {
+    for ((i, x), (j, y)) in lhs.coefficients.enumerated() × Array(rhs.coefficients.enumerated()) {
         result[i + j] += x * y
     }
 
