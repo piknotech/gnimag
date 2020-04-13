@@ -93,7 +93,7 @@ public final class MrFlap {
     /// Analyze the first image to find the playfield. Then tap the screen to start the game.
     private func startGame(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image, time: time) else {
-            debugLogger.logSynchronously()
+            debugLogger.logSynchronously(force: true)
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 

@@ -48,10 +48,10 @@ open class DebugLogger<Parameters, Frame: DebugFrameProtocol> where Frame.Parame
     }
 
     /// Log the current frame to disk, if required, synchronously, and advance to the next frame.
-    /// Only call when `advance` would be to slow, e.g. if the program will immediately be terminated after this call.
-    public func logSynchronously() {
+    /// Only call when `advance` would be to slow, e.g. if the program will immediately be terminated after this call. Use `force` to force logging, irrespective of the user's logging settings.
+    public func logSynchronously(force: Bool = false) {
         // Log frame, synchronously, if relevant
-        if currentFrame.isValidForLogging(with: parameters) {
+        if force || currentFrame.isValidForLogging(with: parameters) {
             currentFrame.prepareSynchronously(with: parameters)
             currentFrame.log(with: self.parameters)
         }

@@ -27,7 +27,7 @@ final class PlayerTracker {
         self.playfield = playfield
         self.debugLogger = debugLogger
 
-        angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(5% * .pi)))
         height = JumpTracker(
             jumpTolerance: Self.circularTolerance(dy: 2% * playfield.freeSpace, on: playfield),
             relativeValueRangeTolerance: 20%,

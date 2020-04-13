@@ -100,17 +100,21 @@ class ImageAnalyzer {
     /// Call this method only once, at the start of the game.
     /// Because this method is only called once (not once per frame), there do not need to be any performance optimizations.
     private func findPlayfield(in image: Image, with coloring: Coloring) -> Playfield? {
-        let screenCenter = Pixel(image.width / 2, image.height / 2)
+        let leftCenter = Pixel(3, image.height / 2)
+        let path = StraightPath(start: leftCenter, angle: .east, bounds: image.bounds)
 
-        // Find inner circle with the following sequence: [blue, white, blue, white]
-        let innerSequence = ColorMatchSequence(tolerance: tolerance, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary])
-        guard let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence) else { return nil }
-        let innerCircle = SmallestCircle.containing(innerContour)
+        let theme = coloring.theme.withTolerance(tolerance)
+        let secondary = coloring.secondary.withTolerance(tolerance)
 
-        // Find outer circle with the following sequence: [blue, white, blue, white, blue]
-        let outerSequence = ColorMatchSequence(tolerance: tolerance, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary, coloring.theme])
-        guard let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence) else { return nil }
-        let outerCircle = SmallestCircle.containing(outerContour)
+        // Find inner and outer circles
+        guard let outerPoint = image.findFirstPixel(matching: secondary, on: path),
+            let innerPoint = image.findFirstPixel(matching: theme, on: path) else { return nil }
+
+        let outerEdge = EdgeDetector.search(in: image, shapeColor: secondary , from: outerPoint, angle: .north)!
+        let outerCircle = SmallestCircle.containing(outerEdge)
+
+        let innerEdge = EdgeDetector.search(in: image, shapeColor: theme, from: innerPoint, angle: .north)!
+        let innerCircle = SmallestCircle.containing(innerEdge)
 
         // Centers should be (nearly) identical
         guard innerCircle.center.distance(to: outerCircle.center) < 1 else { return nil }
