@@ -12,7 +12,7 @@ import TestingTools
 
 /// Use MrFlapGameSimulation to simulate a full MrFlap game.
 public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
-    private let screenSize = CGSize(width: 400, height: 400)
+    let screenSize = CGSize(width: 400, height: 400)
 
     private lazy var playfield = Playfield(
         center: CGPoint(x: screenSize.width / 2, y: screenSize.height / 2),
