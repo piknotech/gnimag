@@ -153,13 +153,23 @@ class ImageAnalyzer {
             return nil & {debug.player.failure = .edgeTooLarge}
         }
 
-        let obb = SmallestOBB.containing(edges.flatMap(id))
-        debug.player.obb = obb
+        var obb = SmallestOBB.containing(edges.flatMap(id))
+        obb = reorientate(obb: obb, respectiveTo: playfield.center)
 
-        // Calculate player properties
+        // Remove player's beak from OBB if it was detected by EdgeDetector
+        if obb.width > obb.height + 1 {
+            let axes = obb.rightHandedCoordinateAxes(respectiveTo: playfield.center)
+            let clockwise = GameProperties.birdMovesClockwise(in: coloring.mode)
+            let beakDirection = clockwise ? axes.right : -axes.right
+            let offsetFromApparentCenterToActualCenter = (obb.width - obb.height) / 2
+            let center = obb.center - offsetFromApparentCenterToActualCenter * beakDirection
+            obb = OBB(center: center, width: obb.height, height: obb.height, rotation: obb.rotation)
+        }
+
+        // Construct player
+        debug.player.obb = obb
         let coords = PolarCoordinates(position: obb.center, center: playfield.center)
-        let (_, height) = reorientate(obb: obb, respectiveTo: playfield.center) // Ignore beak
-        return (Player(coords: coords, size: Double(height)), obb)
+        return (Player(coords: coords, size: Double(obb.height)), obb)
     }
 
     /// Find all bars.
@@ -204,7 +214,7 @@ class ImageAnalyzer {
         guard let innerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: pixel, angle: .east, limit: limit) else {
             return nil & {debug.bars.current.failure = .innerEdge}
         }
-        let innerOBB = SmallestOBB.containing(innerEdge)
+        var innerOBB = SmallestOBB.containing(innerEdge)
         let angle1 = PolarCoordinates.angle(for: innerOBB.center, respectiveTo: playfield.center)
         debug.bars.current.innerOBB = innerOBB
 
@@ -214,7 +224,7 @@ class ImageAnalyzer {
         guard let outerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: upPosition, angle: .east, limit: limit) else {
             return nil & {debug.bars.current.failure = .outerEdge}
         }
-        let outerOBB = SmallestOBB.containing(outerEdge)
+        var outerOBB = SmallestOBB.containing(outerEdge)
         debug.bars.current.outerOBB = outerOBB
         
         // Integrity checks, reorientate OBBs
@@ -224,23 +234,23 @@ class ImageAnalyzer {
             return nil & {debug.bars.current.failure = .anglesDifferent(angle1: angle1, angle2: angle2)}
         }
 
-        let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
-        let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
-        guard width1.isAlmostEqual(to: width2, tolerance: 3) else {
-            return nil & {debug.bars.current.failure = .widthsDifferent(width1: width1, width2: width2)}
+        innerOBB = reorientate(obb: innerOBB, respectiveTo: playfield.center)
+        outerOBB = reorientate(obb: outerOBB, respectiveTo: playfield.center)
+        guard innerOBB.width.isAlmostEqual(to: outerOBB.width, tolerance: 3) else {
+            return nil & {debug.bars.current.failure = .widthsDifferent(width1: innerOBB.width, width2: outerOBB.width)}
         }
-        let width = Double(width1 + width2) / 2
+        let width = Double(innerOBB.width + outerOBB.width) / 2
 
         // The inner obb is a tiny bit too large because of the non-zero width of the box
         let r = sqrt(playfield.innerRadius * playfield.innerRadius - 0.25 * width * width) // Pythagoras
-        let correctInnerHeight = 2 + Double(innerHeight) - playfield.innerRadius + r // r ≈ playfield.radius
+        let correctInnerHeight = 2 + Double(innerOBB.height) - playfield.innerRadius + r // r ≈ playfield.radius
 
         let bar = Bar(
             width: Double(width),
             angle: Angle(angle1).midpoint(between: Angle(angle2)).value,
             innerHeight: correctInnerHeight,
-            outerHeight: Double(outerHeight), // Does not need to be corrected
-            holeSize: playfield.freeSpace - Double(innerHeight + outerHeight)
+            outerHeight: Double(outerOBB.height), // Does not need to be corrected
+            holeSize: playfield.freeSpace - Double(innerOBB.height + outerOBB.height)
         )
 
         debug.bars.current.result = bar
@@ -248,17 +258,19 @@ class ImageAnalyzer {
     }
 
     /// Swap the width and height of the OBB to match with the given direction, if required.
-    /// This means: The OBB is aligned such that its "width" sides are about orthogonal to, and its "height" sides are about parallel to the direction from the obb's center to the given center point.
-    /// Instead of returning a new OBB, just return the width and the height (as the obb's center is not changed, just width and height may be swapped).
-    private func reorientate(obb: OBB, respectiveTo orientationCenter: CGPoint) -> (width: CGFloat, height: CGFloat) {
+    /// This means: The OBB is aligned such that its "width" sides are about orthogonal to, and its "height" sides are about parallel to the direction from the obb's center to the given center point. This also changes the OBB's rotation if required.
+    private func reorientate(obb: OBB, respectiveTo orientationCenter: CGPoint) -> OBB {
         let rotatedCenter = orientationCenter.rotated(by: -obb.rotation, around: obb.center)
         let angle = PolarCoordinates.angle(for: rotatedCenter, respectiveTo: obb.center)
 
         // Angle in [1/4*pi, 3/4*pi) u [5/4*pi, 7/4*pi): orientation is correct (upper and lower quarter of the circle)
         if [1, 2].contains(Int(angle * 4 / .pi) % 4) { // 1/2 is good, 0/3 isn't
-            return (obb.width, obb.height)
+            return obb
         } else {
-            return (obb.height, obb.width) // Swap
+            // Swap width and height
+            let newRotation = obb.rotation + 0.5 * .pi
+            let newAABB = AABB(center: obb.center, width: obb.height, height: obb.width)
+            return OBB(aabb: newAABB, rotation: newRotation)
         }
     }
 }

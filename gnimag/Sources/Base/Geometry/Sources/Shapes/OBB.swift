@@ -11,7 +11,7 @@ public struct OBB {
     /// This is NOT the same as `self.boundingBox`!
     public let aabb: AABB
 
-    /// The rotation, counterclockwise, in [-pi/2, pi/2].
+    /// The counterclockwise rotation.
     public let rotation: CGFloat
 
     /// Default initializer.
@@ -60,5 +60,20 @@ extension OBB: Shape {
 
         let rotated = corners.map { $0.rotated(by: -rotation, around: center) }
         return AABB(containing: rotated)
+    }
+}
+
+extension OBB {
+    /// The OBB consists of four axes beginning at its center: up, down, left and right (relative to the orientation).
+    /// This method finds two of these axes: the direction of the first is most similar to the direction from referencePoint to self.center (which is result.up), and the second is the axis which comes clockwise after the first (result.right).
+    /// The resulting axes are normalized.
+    public func rightHandedCoordinateAxes(respectiveTo referencePoint: CGPoint) -> AABB.Axes {
+        let rotatedReference = referencePoint.rotated(by: -rotation, around: center)
+        let axes = aabb.rightHandedCoordinateAxes(respectiveTo: rotatedReference)
+
+        return AABB.Axes( // Rotate directions around origin
+            up: axes.up.rotated(by: rotation),
+            right: axes.right.rotated(by: rotation)
+        )
     }
 }

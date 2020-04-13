@@ -42,9 +42,8 @@ extension SolutionExecution {
         }
 
         // There could be multiple nearest neighbors, but we ignore them and just use any of them
-        let nearestNeighbor = neighbors.min { n1, n2 in
-            n1.position.distance(to: state.outgoingPosition) <
-                n2.position.distance(to: state.outgoingPosition)
+        let nearestNeighbor = neighbors.min {
+            $0.position.distance(to: state.outgoingPosition)
         }!
 
         // Reverse path if required and determine nextOutgoingPosition

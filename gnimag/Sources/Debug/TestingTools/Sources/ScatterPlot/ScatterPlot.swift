@@ -64,8 +64,8 @@ public final class ScatterPlot {
             view.xAxis.axisMaximum = xMax + dist * rangeAugmentation
         }
 
-        if let yMin = yRange?.lower ?? (dataPoints.min { $0.y < $1.y })?.y,
-            let yMax = yRange?.upper ?? (dataPoints.max { $0.y < $1.y })?.y, yMax > yMin {
+        if let yMin = yRange?.lower ?? (dataPoints.min(by: \.y))?.y,
+            let yMax = yRange?.upper ?? (dataPoints.max(by: \.y))?.y, yMax > yMin {
             let dist = yMax - yMin
             view.leftAxis.axisMinimum = yMin - dist * rangeAugmentation
             view.leftAxis.axisMaximum = yMax + dist * rangeAugmentation
