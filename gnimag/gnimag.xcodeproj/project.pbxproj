@@ -23,6 +23,8 @@
 		63073E65242AB7B0002C4593 /* Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63073E64242AB7B0002C4593 /* Tools.swift */; };
 		630CE2F32440AD31006017F4 /* ScreenInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630CE2F22440AD31006017F4 /* ScreenInteractor.swift */; };
 		630CE2F5244483E8006017F4 /* GameProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630CE2F4244483E8006017F4 /* GameProperties.swift */; };
+		630CE2F82444C802006017F4 /* GameSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630CE2F72444C802006017F4 /* GameSimulation.swift */; };
+		630CE2FA2444C890006017F4 /* SimulatedPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630CE2F92444C890006017F4 /* SimulatedPlayer.swift */; };
 		6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */; };
 		6311E0B523E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */; };
 		6311E0B723E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */; };
@@ -314,6 +316,8 @@
 		630873F3242E6633000ECE47 /* ValueStreamDamper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueStreamDamper.swift; sourceTree = "<group>"; };
 		630CE2F22440AD31006017F4 /* ScreenInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenInteractor.swift; sourceTree = "<group>"; };
 		630CE2F4244483E8006017F4 /* GameProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameProperties.swift; sourceTree = "<group>"; };
+		630CE2F72444C802006017F4 /* GameSimulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSimulation.swift; sourceTree = "<group>"; };
+		630CE2F92444C890006017F4 /* SimulatedPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatedPlayer.swift; sourceTree = "<group>"; };
 		6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionSolutionStrategy.swift; sourceTree = "<group>"; };
 		6311E0B423E0E71D0080288D /* JumpSequenceFromCurrentPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpSequenceFromCurrentPosition.swift; sourceTree = "<group>"; };
 		6311E0B623E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptimalSolutionViaRandomizedSearchStrategy.swift; sourceTree = "<group>"; };
@@ -869,6 +873,15 @@
 				630873ED242E257D000ECE47 /* 3.png */,
 			);
 			path = original_images;
+			sourceTree = "<group>";
+		};
+		630CE2F62444C7D9006017F4 /* GameSimulation */ = {
+			isa = PBXGroup;
+			children = (
+				630CE2F72444C802006017F4 /* GameSimulation.swift */,
+				630CE2F92444C890006017F4 /* SimulatedPlayer.swift */,
+			);
+			path = GameSimulation;
 			sourceTree = "<group>";
 		};
 		6311E0B023E0E56A0080288D /* Strategies */ = {
@@ -1450,6 +1463,7 @@
 				631213E323257F4000C126B4 /* 2 GameModelCollection */,
 				6318966823B4C896002FBD4F /* 3 TapPrediction */,
 				63D002922372F31900041069 /* Logging */,
+				630CE2F62444C7D9006017F4 /* GameSimulation */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -3019,6 +3033,7 @@
 				631213F323257F4000C126B4 /* BarTracker.swift in Sources */,
 				6375AFB9237DA96D0019981E /* DebugParameters.swift in Sources */,
 				6345680323BB955700D32053 /* PlayerProperties.swift in Sources */,
+				630CE2F82444C802006017F4 /* GameSimulation.swift in Sources */,
 				6376A4F123C7BD4700ADF4C2 /* BarMovementBoundCollector.swift in Sources */,
 				6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */,
 				63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */,
@@ -3031,6 +3046,7 @@
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,
 				63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */,
 				6316BDB523CB8D430062100F /* JumpSequencePlot.swift in Sources */,
+				630CE2FA2444C890006017F4 /* SimulatedPlayer.swift in Sources */,
 				6375AFBB237DE6090019981E /* DebugFrame+Logging.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
