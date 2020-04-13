@@ -43,8 +43,8 @@ extension MrFlapGameSimulation {
     private struct Jump {
         let parabola: Parabola
 
-        private let jumpVelocity: Double = 150
-        private let gravity: Double = 600
+        private let jumpVelocity: Double = 300
+        private let gravity: Double = 1200 // -> Jump duration = 0.5s
 
         /// Create a jump starting at the player's current position, such that `parabola(startTime) = player.height`.
         init(player: Player) {

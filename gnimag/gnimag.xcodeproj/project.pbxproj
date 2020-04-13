@@ -160,6 +160,7 @@
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
 		63521E9523D7511F002706C0 /* BisectionSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63521E9423D7511F002706C0 /* BisectionSolver.swift */; };
 		6354CECA2409467600A4C3B8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
+		6355B6FD2444EBF700DCAFBB /* SimulatedBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6355B6FC2444EBF700DCAFBB /* SimulatedBar.swift */; };
 		6358C624242D6EB900DF41CE /* GradientColorMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C623242D6EB900DF41CE /* GradientColorMatching.swift */; };
 		635962E323DF3ECC00FE4EDF /* Tap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635962E223DF3ECC00FE4EDF /* Tap.swift */; };
 		635CF20E242CF23300DEFDBE /* ButtonTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635CF20D242CF23300DEFDBE /* ButtonTapper.swift */; };
@@ -508,6 +509,7 @@
 		634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polynomial+Arithmetic.swift"; sourceTree = "<group>"; };
 		634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
 		63521E9423D7511F002706C0 /* BisectionSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BisectionSolver.swift; sourceTree = "<group>"; };
+		6355B6FC2444EBF700DCAFBB /* SimulatedBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatedBar.swift; sourceTree = "<group>"; };
 		6358C623242D6EB900DF41CE /* GradientColorMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorMatching.swift; sourceTree = "<group>"; };
 		6358C625242DE52500DF41CE /* RationalNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RationalNumber.swift; sourceTree = "<group>"; };
 		635962E223DF3ECC00FE4EDF /* Tap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tap.swift; sourceTree = "<group>"; };
@@ -880,6 +882,7 @@
 			children = (
 				630CE2F72444C802006017F4 /* GameSimulation.swift */,
 				630CE2F92444C890006017F4 /* SimulatedPlayer.swift */,
+				6355B6FC2444EBF700DCAFBB /* SimulatedBar.swift */,
 			);
 			path = GameSimulation;
 			sourceTree = "<group>";
@@ -3003,6 +3006,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6355B6FD2444EBF700DCAFBB /* SimulatedBar.swift in Sources */,
 				6345680423BB955700D32053 /* PlayfieldProperties.swift in Sources */,
 				6345680123BB955700D32053 /* BarProperties.swift in Sources */,
 				63C7F6D023F588CF00187840 /* BarUpdater.swift in Sources */,

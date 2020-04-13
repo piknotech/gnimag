@@ -44,6 +44,14 @@ public struct AABB {
     public func inset(by inset: (dx: CGFloat, dy: CGFloat)) -> AABB {
         AABB(rect: rect.insetBy(dx: inset.dx, dy: inset.dy))
     }
+
+    /// Rotate the AABB by an angle, counterclockwise, around the given point.
+    /// Return an OBB describing the resulting rectangle.
+    public func rotated(by rotation: CGFloat, around center: CGPoint) -> OBB {
+        let newCenter = self.center.rotated(by: rotation, around: center)
+        let newAABB = AABB(center: newCenter, width: width, height: height)
+        return OBB(aabb: newAABB, rotation: rotation)
+    }
 }
 
 extension AABB: Shape {

@@ -21,8 +21,14 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
     )
 
     private lazy var player = Player(
-        height: CGFloat(playfield.innerRadius + 0.5 * playfield.freeSpace)
+        height: CGFloat(playfield.innerRadius + 0.4 * playfield.freeSpace)
     )
+
+    private lazy var bars = [
+        Bar(angle: 1 * .pi / 6, playfield: playfield),
+        Bar(angle: 3 * .pi / 2, playfield: playfield),
+        Bar(angle: 5 * .pi / 6, playfield: playfield)
+    ]
 
     // Timing properties.
     private var elapsedTime: Double = 0 // Time (0-based) since initialization of the simulation.
@@ -82,6 +88,15 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
 
         // Draw player eye
         canvas.fill(playerCenter.nearestPixel, with: .black, width: 3)
+
+        // Draw bars
+        if isRunning {
+            for bar in bars {
+                for obb in bar.obbs(forDrawingIn: playfield) {
+                    canvas.fill(obb, with: .blue)
+                }
+            }
+        }
 
         return canvas.CGImage
     }
