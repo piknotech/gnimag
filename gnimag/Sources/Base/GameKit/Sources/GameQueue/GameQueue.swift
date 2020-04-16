@@ -55,8 +55,8 @@ public final class GameQueue {
 
         // Cancel previous `stop(for:)` tasks as the most recent one overrides the previous ones
         let identification = Timing.Identification.object(self, string: "stop(for:)")
-        Timing.cancelTasks(matching: identification)
-        Timing.perform(after: duration, identification: identification, block: begin)
+        Timing.shared.cancelTasks(matching: identification)
+        Timing.shared.perform(after: duration, identification: identification, block: begin)
     }
 
     /// Remove frames which are currently in waiting state.

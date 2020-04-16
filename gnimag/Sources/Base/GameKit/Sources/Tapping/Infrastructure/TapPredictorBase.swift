@@ -19,7 +19,7 @@ open class TapPredictorBase {
 
     /// The currently scheduled tap sequence, consisting of all future taps.
     /// Performed taps will be removed from this sequence.
-    private var tapSequence: TapSequence?
+    private var tapSequence: RelativeTapSequence?
 
     /// Default initializer.
     public init(tapper: SomewhereTapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
@@ -28,7 +28,7 @@ open class TapPredictorBase {
 
         // Reassess lock each time a tap has been performed
         scheduler.tapPerformed.subscribe { tap in
-            self.tapSequence?.remove(tap: tap)
+            self.tapSequence?.remove(tap: tap.scheduledTap.relativeTap)
             self.reassessLock()
         }
     }
@@ -53,31 +53,32 @@ open class TapPredictorBase {
         }
     }
 
-    /// Override to create a predicted tap sequence for the current frame.
-    open func predictionLogic() -> TapSequence? {
+    /// Override to create a predicted tap sequence for the current frame, relative to the current frame's timepoint.
+    /// When returning nil, the current sequence is left unchanged.
+    open func predictionLogic() -> RelativeTapSequence? {
         nil
     }
 
     /// Reschedule a tap sequence, including its completion time for locking reassessment.
     /// Before scheduling, clear all current scheduled taps.
-    private func reschedule(sequence: TapSequence) {
+    private func reschedule(sequence: RelativeTapSequence) {
         tapSequence = sequence
 
         // Clear current schedule
         scheduler.unscheduleAll()
         unscheduleUnlocking()
 
-        // Schedule taps and unlocking
+        // Schedule new taps and unlocking
         sequence.taps.forEach(scheduler.schedule(tap:))
 
-        if let unlockTime = sequence.unlockTime {
+        if let unlockTime = sequence.unlockDuration {
             scheduleUnlocking(in: unlockTime - timeProvider.currentTime)
         }
     }
 
     /// Schedule unlocking in a given time interval.
     private func scheduleUnlocking(in distance: Double) {
-        Timing.perform(after: distance, identification: .object(self)) {
+        Timing.shared.perform(after: distance, identification: .object(self)) {
             self.tapSequence = nil
             self.lockIsActive = false
         }
@@ -85,7 +86,7 @@ open class TapPredictorBase {
 
     /// Unschedule the scheduled unlocking.
     private func unscheduleUnlocking() {
-        Timing.cancelTasks(withObject: self)
+        Timing.shared.cancelTasks(withObject: self)
     }
 
     // MARK: Locking
@@ -101,16 +102,11 @@ open class TapPredictorBase {
 
     /// Called each time the locking is reassessed. `scheduledSequence` contains the tap sequence which is currently scheduled, relative to the current time.
     /// Override to enable specific locking.
-    open func shouldLock(scheduledSequence: TapSequence) -> Bool {
+    open func shouldLock(scheduledSequence: RelativeTapSequence) -> Bool {
         false
     }
 
     // MARK: Tap Detection Forwarding
-
-    /// Call when a tap has just been performed at the given time.
-    public func tapPerformed(time: Double) {
-        scheduler.delayTracker.tapPerformed(time: time)
-    }
 
     /// Call when a tap has just been detected at the given time.
     public func tapDetected(at endTime: Double) {

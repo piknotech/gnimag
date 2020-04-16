@@ -16,6 +16,14 @@ struct JumpSequenceFromCurrentPosition {
 
     /// The time from the last jump until the jump sequence has finished and fulfilled its purpose.
     let timeUntilEnd: Double
+
+    /// Convert the JumpSequence into a RelativeTapSequence.
+    var tapSequence: RelativeTapSequence {
+        let cumulated = jumpTimeDistances.scan(initial: timeUntilStart, +) // Never empty
+        let unlockTime = cumulated.last! + timeUntilEnd
+        let taps = cumulated.map(RelativeTap.init(scheduledIn:))
+        return RelativeTapSequence(taps: taps, unlockDuration: unlockTime)
+    }
 }
 
 extension JumpSequenceFromCurrentPosition {
@@ -77,12 +85,5 @@ extension JumpSequenceFromCurrentPosition {
         // Add last (partial) jump
         result += properties.parabola.at(remainingTime)
         return result
-    }
-
-    /// Convert this sequence to a TapSequence.
-    func asTapSequence(relativeTo currentTime: Double) -> TapSequence {
-        let cumulated = jumpTimeDistances.scan(initial: currentTime + timeUntilStart, +) // Never empty
-        let unlockTime = cumulated.last! + timeUntilEnd
-        return TapSequence(tapTimes: cumulated, unlockTime: unlockTime)
     }
 }

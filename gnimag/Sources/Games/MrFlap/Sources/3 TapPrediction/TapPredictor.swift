@@ -24,7 +24,7 @@ class TapPredictor: TapPredictorBase {
     /// Default initializer.
     init(tapper: SomewhereTapper, timeProvider: TimeProvider) {
         strategies = Strategies(
-            idle: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2), // ...?
+            idle: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.1), // ...?
             singleBar: OptimalSolutionViaRandomizedSearchStrategy()
         )
 
@@ -43,13 +43,11 @@ class TapPredictor: TapPredictorBase {
 
     /// Calculate AnalysisHints for the given time, i.e. predict where the player will be located at the given (future) time.
     func analysisHints(for time: Double) -> AnalysisHints? {
-        guard let actualTapTimes = scheduler.actualTapTimes(before: time) else { return nil }
-
         guard
             let model = gameModel,
             let playerSize = model.player.size.average,
             let jumping = JumpingProperties(player: model.player),
-            let player = PlayerProperties(player: model.player, jumping: jumping, performedTapTimes: actualTapTimes, currentTime: time) else { return nil }
+            let player = PlayerProperties(player: model.player, jumping: jumping, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: time) else { return nil }
 
         // Convert predicted values to plain Player
         let position = PolarCoordinates(
@@ -63,16 +61,27 @@ class TapPredictor: TapPredictorBase {
 
     /// Analyze the game model to schedule taps.
     /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
-    override func predictionLogic() -> TapSequence? {
+    override func predictionLogic() -> RelativeTapSequence? {
         guard
             let model = gameModel,
             let currentTime = scheduler.delay.map(timeProvider.currentTime.advanced(by:)), // A + B
-            let actualTapTimes = scheduler.actualTapTimes(before: currentTime),
-            let frame = PredictionFrame.from(model: model, performedTapTimes: actualTapTimes, currentTime: currentTime, maxBars: 1) else { return nil }
+            let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) else { return nil }
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
-        return strategy.solution(for: frame)?.asTapSequence(relativeTo: timeProvider.currentTime)
+
+        guard let solution = strategy.solution(for: frame) else { return nil }
+
+        // Debug-draw solution
+        if solution.timeUntilStart < 0.1 {
+            print("locked! \(solution.timeUntilStart); time: \(timeProvider.currentTime)")
+            let now = timeProvider.currentTime
+            DispatchQueue.global(qos: .utility).async {
+                JumpSequencePlot(frame: frame, solution: solution).writeToDesktop(name: "Plots.noSync/\(now).png")
+            }
+        }
+
+        return solution.tapSequence
     }
 
     /// Choose the strategy to calculate the solution for a given frame.
@@ -86,8 +95,11 @@ class TapPredictor: TapPredictorBase {
     }
 
     /// Check if a prediction lock should be applied.
-    override func shouldLock(scheduledSequence: TapSequence) -> Bool {
-        guard let time = scheduledSequence.nextTapTime else { return true } // When the sequence is empty, wait until the sequence unlocks (via unlockTime)
-        return (time - timeProvider.currentTime) < 0.1
+    override func shouldLock(scheduledSequence: RelativeTapSequence) -> Bool {
+         // When the sequence is empty, lock and wait until the sequence unlocks (via unlockDuration)
+        guard let time = scheduledSequence.nextTap?.relativeTime else { return true }
+
+        let shouldLock = (time - timeProvider.currentTime) < 0.1
+        return shouldLock
     }
 }

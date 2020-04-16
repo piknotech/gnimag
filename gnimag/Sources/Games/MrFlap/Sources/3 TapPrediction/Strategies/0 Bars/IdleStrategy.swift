@@ -27,8 +27,6 @@ class IdleStrategy: InteractionSolutionStrategy {
     func solution(for frame: PredictionFrame) -> Solution? {
         let startHeight = jumpStartHeight(for: frame), player = frame.player
 
-        print(player.currentPosition.y, startHeight)
-
         // Jump immediately if player is too low
         if player.currentPosition.y < startHeight {
             return Solution(timeUntilStart: 0, jumpTimeDistances: [], timeUntilEnd: minimumJumpDistance)
