@@ -7,6 +7,7 @@ import Common
 import Foundation
 import Geometry
 import Image
+import QuartzCore
 import Tapping
 import TestingTools
 
@@ -30,18 +31,17 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
         Bar(angle: 5 * .pi / 6, playfield: playfield)
     ]
 
-    // Timing properties.
-    private var elapsedTime: Double = 0 // Time (0-based) since initialization of the simulation.
+    /// Time (0-based) since initialization of the simulation.
+    private var elapsedTime: Double { timeProvider.currentTime }
+
     private var timeOfFirstTap: Double! // Time (0-based) since `tap` was called to start the game.
     private var isRunning: Bool { timeOfFirstTap != nil }
 
-    private var startSystemTime: Double! // Absolute system time of initialization of the simulation.
     private var timer: Timer!
 
     /// Default initializer.
     /// Immediately begin providing images.
     public init(fps: Double) {
-        startSystemTime = CACurrentMediaTime()
         timer = Timer.scheduledTimer(withTimeInterval: 1 / fps, repeats: true) { _ in
             self.gameUpdate()
         }
@@ -49,27 +49,28 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
 
     /// Tap on the screen to either jump or start the game.
     public func tap() {
-        if !isRunning {
-            timeOfFirstTap = elapsedTime
-        }
+        Timing.shared.perform(after: 0.25) { // Artificial delay
+            if !self.isRunning {
+                self.timeOfFirstTap = self.elapsedTime
+            }
 
-        player.jump()
+            self.player.jump()
+        }
     }
 
     /// Called each frame to update game elements and provide the current image.
     @objc private func gameUpdate() {
-        elapsedTime = CACurrentMediaTime() - startSystemTime
-
         if isRunning {
             player.update(currentTime: elapsedTime - timeOfFirstTap)
         }
 
-        newFrame.trigger(with: (NativeImage(currentImage), elapsedTime))
+        let t = elapsedTime
+        newFrame.trigger(with: (NativeImage(currentImage), t))
     }
 
     // MARK: ImageProvider
 
-    public lazy var timeProvider = TimeProvider { self.elapsedTime }
+    public let timeProvider = TimeProvider(CACurrentMediaTime)
     public let newFrame = Event<Frame>()
 
     /// Draw the current game state.
