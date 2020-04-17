@@ -176,11 +176,20 @@ final class DebugFrame: DebugFrameProtocol {
     /// Properties of the Tap Prediction step.
     class TapPrediction {
         var wasPerformed = false
-        var wasNotPerformedBecauseOfActiveLock = false
-
-        var scheduledTapSequence: RelativeTapSequence?
-        var allPerformedTaps = [PerformedTap]()
         var delay: Double?
+        
+        // Properties for FullFramePlot
+        var realTimeDuringTapPrediction: Double?
+        var playerHeight = CompositeTrackerDebugInfo<ParabolaTracker>()
+        var playerAngleConverter: PlayerAngleConverter?
+        var executedTaps: [PerformedTap]?
         var frame: PredictionFrame?
+        var solution: InteractionSolutionStrategy.Solution?
+
+        /// Do necessary preparations before logging.
+        func prepareForLogging() {
+            playerHeight.fetchDataSet(numSegments: 10)
+            playerHeight.fetchFunctionInfos(type: .all, numSegments: 10)
+        }
     }
 }

@@ -68,12 +68,11 @@ class TapPredictor: TapPredictorBase {
     /// Analyze the game model to schedule taps.
     /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
     override func predictionLogic() -> RelativeTapSequence? {
-        debug.wasPerformed = true
+        guard let model = gameModel, let delay = scheduler.delay else { return nil }
+        let currentTime = timeProvider.currentTime + delay
+        guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) else { return nil }
 
-        guard
-            let model = gameModel,
-            let currentTime = scheduler.delay.map(timeProvider.currentTime.advanced(by:)), // A + B
-            let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) else { return nil }
+        performDebugLogging(with: model, frame: frame, delay: delay)
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
@@ -87,27 +86,20 @@ class TapPredictor: TapPredictorBase {
             }
         }
 
-        debug.frame = frame
-        debug.delay = scheduler.delay
-        debug.allPerformedTaps = scheduler.performedTaps
-        debug.scheduledTapSequence = solution.tapSequence
+        debug.solution = solution
 
         return solution.tapSequence
     }
 
-    override func noPredictionBecauseLockIsActive() {
-        debug.wasNotPerformedBecauseOfActiveLock = true
-        debug.scheduledTapSequence = tapSequence
-
-        if let model = gameModel,
-            let currentTime = scheduler.delay.map(timeProvider.currentTime.advanced(by:)), // A + B
-            let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) {
-            debug.frame = frame
-        }
-    }
-
-    func frameWasProcessed() {
-
+    /// Write information about the tap prediction frame into the current debug logger frame.
+    private func performDebugLogging(with model: GameModel, frame: PredictionFrame, delay: Double) {
+        debug.wasPerformed = true
+        debug.delay = delay
+        debug.frame = frame
+        debug.playerHeight.from(tracker: model.player.height)
+        debug.playerAngleConverter = PlayerAngleConverter(player: model.player)
+        debug.realTimeDuringTapPrediction = frame.currentTime - delay // = timeProvider.currentTime
+        debug.executedTaps = scheduler.performedTaps // TODO: only most recent ones
     }
 
     /// Choose the strategy to calculate the solution for a given frame.
@@ -128,7 +120,6 @@ class TapPredictor: TapPredictorBase {
         // Get relative duration from now
         let referenceShift = timeProvider.currentTime - referenceTime
         let time = nextTap.relativeTime - referenceShift
-        print(time, referenceShift)
 
         return time < 0.1
     }

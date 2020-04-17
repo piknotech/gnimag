@@ -5,6 +5,7 @@
 
 import Common
 import Foundation
+import GameKit
 import Image
 import LoggingKit
 import TestingTools
@@ -100,6 +101,7 @@ extension DebugFrame {
         if parameters.severity.alwaysImages || (!parameters.severity.noImages && hasError) {
             logImageAnalysisImages(to: directory)
             logRelevantScatterPlots(to: directory)
+            logFullFramePlot(to: directory)
         }
     }
 
@@ -158,6 +160,22 @@ extension DebugFrame {
         if let plot = self.gameModelCollection.player.angle.createScatterPlot() {
             plot.write(to: directory +/ "player_angle.png")
         }
+    }
+
+    /// Log the FullFramePlot if available.
+    private func logFullFramePlot(to directory: String) {
+        guard
+            let time = time,
+            let realTimeAfterProcessing = tapPrediction.realTimeDuringTapPrediction,
+            let playerAngleConverter = tapPrediction.playerAngleConverter,
+            let executedTaps = tapPrediction.executedTaps,
+            let frame = tapPrediction.frame,
+            let solution = tapPrediction.solution else { return }
+
+        let data = FullFramePlotData(realFrameTime: time, realTimeAfterProcessing: realTimeAfterProcessing, playerHeight: tapPrediction.playerHeight, playerAngleConverter: playerAngleConverter, executedTaps: executedTaps, frame: frame, solution: solution)
+
+        let plot = FullFramePlot(data: data)
+        plot.write(to: directory +/ "FullFrame.png")
     }
 
     // MARK: Log Texts
@@ -259,19 +277,9 @@ extension DebugFrame {
         """
         ––––– TAP PREDICTION –––––
         (was performed: \(tapPrediction.wasPerformed))
-        (was not performed because lock is active: \(tapPrediction.wasNotPerformedBecauseOfActiveLock))
 
         • Delay: \(tapPrediction.delay ??? "nil")
-        • CurrentTime: \(time ??? "nil"), PredictionTime (CT + delay): \(tapPrediction.frame?.currentTime ??? "nil")
-
-        Resulting Solution:
-        \(tapPrediction.scheduledTapSequence ??? "nil")
-
-        Full Frame:
-        \(tapPrediction.frame ??? "nil")
-
-        All Performed Taps So Far:
-        \(tapPrediction.allPerformedTaps ??? "nil")
+        • Time of PredictionFrame: \(tapPrediction.frame?.currentTime ??? "nil")
         """
     }
 }

@@ -42,6 +42,10 @@ public final class TapDelayTracker {
 
     /// Call when a tap has just been detected at the given time.
     public func tapDetected(at detectionTime: Time) {
+        if let t = mostRecentDetectedTap {
+            print("Tap Fertig:", t.actualDetectionTime, t.expectedDetectionTime, delay, (t.actualDetectionTime ?? 0) - t.performedAt) // TODO: diskrepanz zwischen actual und expected detection time manchmal
+        }
+        
         // Finalize previous tap
         tracker.finalizePreliminaryValue()
         mostRecentDetectedTap = nil
