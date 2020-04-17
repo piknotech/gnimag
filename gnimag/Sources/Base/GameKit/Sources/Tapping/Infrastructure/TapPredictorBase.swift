@@ -15,7 +15,7 @@ open class TapPredictorBase {
     /// States if the prediction lock is currently active.
     /// This will hinder tap prediction from re-calculating the tap sequence until the lock is released.
     /// The lock will be reassessed each time a new tap is performed.
-    private var lockIsActive = false
+    public private(set) var lockIsActive = false
 
     /// The currently scheduled tap sequence, consisting of all future taps.
     /// Performed taps will be removed from this sequence.

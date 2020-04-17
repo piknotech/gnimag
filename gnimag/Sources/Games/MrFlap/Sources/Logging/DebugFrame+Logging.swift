@@ -294,6 +294,7 @@ extension DebugFrame {
         (was performed: \(tapPrediction.wasPerformed))
 
         • Delay: \(tapPrediction.delay ??? "nil")
+        • wasLocked: \(tapPrediction.wasLocked ??? "nil"), isLockedNow: \(tapPrediction.isLocked ??? "nil")
         • Time of PredictionFrame: \(tapPrediction.frame?.currentTime ??? "nil")
 
         Excerpt from PredictionFrame:

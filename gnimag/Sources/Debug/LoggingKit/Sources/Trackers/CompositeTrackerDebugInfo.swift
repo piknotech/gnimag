@@ -44,7 +44,12 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: CustomSt
     }
 
     public enum FunctionInfoType {
+        /// All regressions.
+        /// This does not include each segment's tolerance bounds.
+        case noGuesses
+
         /// All regressions and guesses.
+        /// This does not include each segment's tolerance bounds.
         case all
 
         /// Debug infos from each segment, i.e. regressions and tolerance bounds.
@@ -55,8 +60,10 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: CustomSt
     /// Get function infos (for the most recent segments) from the tracker and store them.
     public func fetchFunctionInfos(type: FunctionInfoType, numSegments: Int = .max) {
         switch type {
+        case .noGuesses:
+            allFunctions = tracker?.allDebugFunctionInfos(numSegments: numSegments, includeGuesses: false)
         case .all:
-            allFunctions = tracker?.allDebugFunctionInfos(numSegments: numSegments)
+            allFunctions = tracker?.allDebugFunctionInfos(numSegments: numSegments, includeGuesses: true)
         case .segmentwise:
             allFunctions = tracker?.segmentwiseFullDebugFunctionInfos(numSegments: numSegments)
         }

@@ -92,6 +92,10 @@ class TapPredictor: TapPredictorBase {
     /// Called after each frame, no matter whether predictionLogic was called or not.
     override func frameFinished(hasPredicted: Bool) {
         debug.wasPerformed = hasPredicted
+        debug.scheduledTaps = scheduler.scheduledTaps
+        debug.executedTaps = scheduler.performedTaps
+        debug.wasLocked = !hasPredicted
+        debug.isLocked = lockIsActive
 
         // Create PredictionFrame just for debug logging if required
         if !hasPredicted {
@@ -110,8 +114,6 @@ class TapPredictor: TapPredictorBase {
         debug.playerHeight.from(tracker: model.player.height)
         debug.playerAngleConverter = PlayerAngleConverter(player: model.player)
         debug.realTimeDuringTapPrediction = frame.currentTime - delay // = timeProvider.currentTime
-        debug.executedTaps = scheduler.performedTaps // TODO: only most recent ones
-        debug.scheduledTaps = scheduler.scheduledTaps
 
         debug.delayValues.from(tracker: scheduler.delayTracker.tracker)
         debug.gravityValues.from(tracker: model.player.height.debug.gravityTracker)

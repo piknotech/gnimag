@@ -19,8 +19,7 @@ public extension CompositeTracker {
     }
 
     /// Create information about the regression functions from the most recent `numSegments` segments.
-    /// This includes guesses and creates a very clear picture.
-    func allDebugFunctionInfos(numSegments: Int = .max) -> [FunctionDebugInfo] {
+    func allDebugFunctionInfos(numSegments: Int = .max, includeGuesses: Bool) -> [FunctionDebugInfo] {
         var result = [FunctionDebugInfo]()
         let segments = Array(allSegments.suffix(numSegments))
 
@@ -43,7 +42,7 @@ public extension CompositeTracker {
             }
 
             // Guesses
-            else if let guesses = segment.guesses {
+            else if includeGuesses, let guesses = segment.guesses {
                 for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
                     add(function, with: color, dash: .dashed, from: startTime, to: endTime)
                 }
@@ -59,7 +58,7 @@ public extension CompositeTracker {
             }
         }()
 
-        if let guesses = mostRecentGuessesForNextSegment {
+        if includeGuesses, let guesses = mostRecentGuessesForNextSegment {
             for (startTime, function) in zip(guesses.allStartTimes, guesses.all) {
                 add(function, with: colorForGuesses, dash: .dashed, from: startTime, to: timeInfinity)
             }

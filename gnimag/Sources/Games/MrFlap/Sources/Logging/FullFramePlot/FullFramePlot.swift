@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Image
 import GameKit
 import TestingTools
 
@@ -38,22 +39,127 @@ final class FullFramePlot {
 }
 
 extension FullFramePlotData {
+    private static var dataPointColor = Color.black
+    private static var performedJumpColor = Color.white
+    private static var scheduledJumpColor = Color.red
+
+    /// The time of the earliest data point.
+    private var earliestDataPointTime: Double {
+        guard let firstAngle = playerHeight.allDataPoints?.first?.x else { return 0 }
+        return playerAngleConverter.time(from: firstAngle)
+    }
+
+    /// Read the jumps which are stored in the given tap's debug infos.
+    /// Discard jumps which start before a given absolute time.
+    private func jumps(from taps: [ScheduledTap], startingAfter time: Double) -> [Jump] {
+        taps.compactMap { tap in
+            guard let info = tap.debugInfo else { return nil }
+            let jump = info.jump.shiftedRight(by: info.referenceTime)
+            if jump.startPoint.time < time { return nil }
+            return jump
+        }
+    }
+
     /// All dataPoints (transformed to the correct time-space). These include:
     ///  - Existing time/height datapoints of the player.
-    ///  - Expected start points of previously scheduled jumps. Optimally, they match the start points of the actual jumps.
+    ///  - Expected start points of previously scheduled (i.e. already performed) jumps. Optimally, they would match the start points of the actual jumps.
     ///  – The scheduled jump points of the currently predicted tap sequence.
     var allDataPoints: [ScatterDataPoint] {
-        [ScatterDataPoint(x: 0, y: 0, color: .normal)]
+        var result = [ScatterDataPoint]()
+
+        // FIRST: Existing time/height datapoints of the player
+        result += (playerHeight.allDataPoints ?? []).map { dataPoint -> ScatterDataPoint in
+            let time = playerAngleConverter.time(from: dataPoint.x) // angle -> time conversion
+            return ScatterDataPoint(x: time, y: dataPoint.y, color: .custom(Self.dataPointColor))
+        }
+
+        // SECOND: Expected start points of performed jumps
+        result += jumps(from: executedTaps.map(\.scheduledTap), startingAfter: earliestDataPointTime).map {
+            ScatterDataPoint(x: $0.startPoint.time, y: $0.startPoint.height, color: .custom(Self.performedJumpColor))
+        }
+
+        // THIRD: Scheduled jumps of the currently predicted tap sequence
+        result += jumps(from: scheduledTaps, startingAfter: earliestDataPointTime).map {
+            ScatterDataPoint(x: $0.startPoint.time, y: $0.startPoint.height, color: .custom(Self.scheduledJumpColor))
+        }
+
+        return result
     }
 
     /// All functions (transformed to the correct time-space). These match the three types described by `allDataPoints`.`
     var allFunctionInfos: [FunctionDebugInfo] {
-        []
+        var result = [FunctionDebugInfo]()
+
+        // FIRST: Existing time/height datapoints of the player
+        result += (playerHeight.allFunctions ?? []).map { function -> FunctionDebugInfo in
+            let parabola = function.function as! Parabola
+            let strokable = function.strokable as! QuadCurveScatterStrokable
+
+            return FunctionDebugInfo(
+                function: playerAngleConverter.timeBasedParabola(from: parabola),
+                strokable: playerAngleConverter.timeBasedQuadCurveScatterStrokable(from: strokable),
+                color: .custom(Self.dataPointColor),
+                dash: .dashed
+            )
+        }
+
+        // SECOND: Expected start points of performed jumps
+        result += jumps(from: executedTaps.map(\.scheduledTap), startingAfter: earliestDataPointTime).map {
+            FunctionDebugInfo(
+                function: $0.parabola,
+                strokable: QuadCurveScatterStrokable(parabola: $0.parabola, drawingRange: $0.timeRange),
+                color: .custom(Self.performedJumpColor),
+                dash: .solid
+            )
+        }
+
+        // THIRD: Scheduled jumps of the currently predicted tap sequence
+        result += jumps(from: scheduledTaps, startingAfter: earliestDataPointTime).map {
+            FunctionDebugInfo(
+                function: $0.parabola,
+                strokable: QuadCurveScatterStrokable(parabola: $0.parabola, drawingRange: $0.timeRange),
+                color: .custom(Self.scheduledJumpColor),
+                dash: .solid
+            )
+        }
+
+        return result
     }
 
-    /// The scatter strokables of all future bars (transformed to the correct time-space).
+    /// The scatter strokables of all bars in the prediction frame (transformed to the correct time-space).
     // TODO: also previous bars!
     var barScatterStrokables: [BarScatterStrokable] {
         []
     }
 }
+
+// MARK: Transformations
+
+private extension Jump {
+    /// Shift a Jump to the right by the given amount.
+    func shiftedRight(by amount: Double) -> Jump {
+        let start = Point(time: startPoint.time + amount, height: startPoint.height)
+        let end = Point(time: endPoint.time + amount, height: endPoint.height)
+        let parabola = self.parabola.shiftedLeft(by: -amount)
+        return Jump(startPoint: start, endPoint: end, parabola: parabola)
+    }
+}
+
+private extension PlayerAngleConverter {
+    /// Convert a QuadCurveScatterStrokable whose argument is angle into the same QuadCurveScatterStrokable whose argument is time.
+    func timeBasedQuadCurveScatterStrokable(from scatterStrokable: QuadCurveScatterStrokable) -> QuadCurveScatterStrokable {
+        let parabola = timeBasedParabola(from: scatterStrokable.parabola)
+        let range = timeBasedRange(from: scatterStrokable.drawingRange).regularized
+        return QuadCurveScatterStrokable(parabola: parabola, drawingRange: range)
+    }
+}
+
+/*
+/// A ScatterStrokable wrapping another ScatterStrokable. Thereby, the wrapped ScatterStrokable is shifted and/or strechted in x-direction. The y-values stay unchanged.
+private class HorizontallyTransformedScatterStrokable: ScatterStrokable {
+}
+
+/// A Strokable wrapping another Strokable. Thereby, the wrapped Strokable is shifted and/or strechted in x-direction. The y-values stay unchanged.
+private class HorizontallyTransformedStrokable: Strokable {
+}
+*/

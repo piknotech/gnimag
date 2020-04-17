@@ -172,6 +172,8 @@ final class DebugFrame: DebugFrameProtocol {
     /// Properties of the Tap Prediction step.
     class TapPrediction {
         var wasPerformed = false
+        var wasLocked: Bool?
+        var isLocked: Bool?
         var delay: Double?
         
         // Properties for FullFramePlot
@@ -195,7 +197,7 @@ final class DebugFrame: DebugFrameProtocol {
             }
 
             playerHeight.fetchDataSet(numSegments: 10)
-            playerHeight.fetchFunctionInfos(type: .all, numSegments: 10)
+            playerHeight.fetchFunctionInfos(type: .noGuesses, numSegments: 10)
         }
     }
 }
