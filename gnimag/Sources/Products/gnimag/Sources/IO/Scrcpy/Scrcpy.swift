@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import Image
 import Tapping
 
@@ -11,16 +12,4 @@ let scrcpy = WindowInteractor(appName: "scrcpy").with {
     $0.removeUpperWindowBorder = true
 }
 
-// MARK: Withable
-
 extension WindowInteractor: Withable { }
-private protocol Withable { }
-
-extension Withable {
-    @discardableResult
-    func with(_ block: (inout Self) -> Void) -> Self {
-        var copy = self
-        block(&copy)
-        return copy
-    }
-}

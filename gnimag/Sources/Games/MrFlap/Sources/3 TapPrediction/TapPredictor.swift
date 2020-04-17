@@ -78,28 +78,40 @@ class TapPredictor: TapPredictorBase {
         let strategy = self.strategy(for: frame)
         guard let solution = strategy.solution(for: frame) else { return nil }
 
-        // Debug-draw solution
+        /* Debug-draw solution
         if solution.timeUntilStart < 0.1 {
             let now = timeProvider.currentTime
             DispatchQueue.global(qos: .utility).async {
                 JumpSequencePlot(frame: frame, solution: solution).writeToDesktop(name: "Plots.noSync/\(now).png")
             }
+        }*/
+
+        return solution.convertToRelativeTapSequence(currentTime: currentTime, player: frame.player, jumping: frame.jumping)
+    }
+
+    /// Called after each frame, no matter whether predictionLogic was called or not.
+    override func frameFinished(hasPredicted: Bool) {
+        debug.wasPerformed = hasPredicted
+
+        // Create PredictionFrame just for debug logging if required
+        if !hasPredicted {
+            guard let model = gameModel, let delay = scheduler.delay else { return }
+            let currentTime = timeProvider.currentTime + delay
+            guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) else { return }
+
+            performDebugLogging(with: model, frame: frame, delay: delay)
         }
-
-        debug.solution = solution
-
-        return solution.tapSequence
     }
 
     /// Write information about the tap prediction frame into the current debug logger frame.
     private func performDebugLogging(with model: GameModel, frame: PredictionFrame, delay: Double) {
-        debug.wasPerformed = true
         debug.delay = delay
         debug.frame = frame
         debug.playerHeight.from(tracker: model.player.height)
         debug.playerAngleConverter = PlayerAngleConverter(player: model.player)
         debug.realTimeDuringTapPrediction = frame.currentTime - delay // = timeProvider.currentTime
         debug.executedTaps = scheduler.performedTaps // TODO: only most recent ones
+        debug.scheduledTaps = scheduler.scheduledTaps
 
         debug.delayValues.from(tracker: scheduler.delayTracker.tracker)
         debug.gravityValues.from(tracker: model.player.height.debug.gravityTracker)
@@ -108,7 +120,6 @@ class TapPredictor: TapPredictorBase {
 
     /// Choose the strategy to calculate the solution for a given frame.
     private func strategy(for frame: PredictionFrame) -> InteractionSolutionStrategy {
-        //return strategies.idle
         switch frame.bars.count {
         case 0: return strategies.idle
         default: return strategies.singleBar

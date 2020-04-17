@@ -183,11 +183,11 @@ extension DebugFrame {
             let time = time,
             let realTimeAfterProcessing = tapPrediction.realTimeDuringTapPrediction,
             let playerAngleConverter = tapPrediction.playerAngleConverter,
+            let scheduledTaps = tapPrediction.scheduledTaps,
             let executedTaps = tapPrediction.executedTaps,
-            let frame = tapPrediction.frame,
-            let solution = tapPrediction.solution else { return }
+            let frame = tapPrediction.frame else { return }
 
-        let data = FullFramePlotData(realFrameTime: time, realTimeAfterProcessing: realTimeAfterProcessing, playerHeight: tapPrediction.playerHeight, playerAngleConverter: playerAngleConverter, executedTaps: executedTaps, frame: frame, solution: solution)
+        let data = FullFramePlotData(realFrameTime: time, realTimeAfterProcessing: realTimeAfterProcessing, playerHeight: tapPrediction.playerHeight, playerAngleConverter: playerAngleConverter, scheduledTaps: scheduledTaps, executedTaps: executedTaps, frame: frame)
 
         let plot = FullFramePlot(data: data)
         plot.write(to: directory +/ "FullFrame.png")

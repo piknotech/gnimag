@@ -46,7 +46,7 @@ open class TapPredictorBase {
     /// When predictionLogic returns nil, the current sequence is performed further (and not updated).
     public func predict() {
         if lockIsActive {
-            noPredictionBecauseLockIsActive()
+            frameFinished(hasPredicted: false)
             return
         }
 
@@ -55,6 +55,8 @@ open class TapPredictorBase {
             reschedule(sequence: sequence)
             reassessLock()
         }
+
+        frameFinished(hasPredicted: true)
     }
 
     /// Override to create a predicted tap sequence for the current frame, relative to the current frame's timepoint.
@@ -63,8 +65,8 @@ open class TapPredictorBase {
         nil
     }
 
-    /// Called to inform subclasses that no prediction will be performed this frame because a lock is currently active.
-    open func noPredictionBecauseLockIsActive() {
+    /// Called after each frame, either after predictionLogic was executed (`hasPredicted = true`), or after it was not executed because the lock is active (`hasPredicted = false`).
+    open func frameFinished(hasPredicted: Bool) {
     }
 
     /// Reschedule a tap sequence, including its completion time for locking reassessment.

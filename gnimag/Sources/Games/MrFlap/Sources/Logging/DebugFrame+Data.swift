@@ -179,8 +179,8 @@ final class DebugFrame: DebugFrameProtocol {
         var playerHeight = CompositeTrackerDebugInfo<ParabolaTracker>()
         var playerAngleConverter: PlayerAngleConverter?
         var executedTaps: [PerformedTap]?
+        var scheduledTaps: [ScheduledTap]?
         var frame: PredictionFrame?
-        var solution: InteractionSolutionStrategy.Solution?
 
         // More plots
         var delayValues = SimpleTrackerDebugInfo<ConstantTracker>()

@@ -22,10 +22,14 @@ struct FullFramePlotData {
     /// The converter from player angle to time coordinates.
     let playerAngleConverter: PlayerAngleConverter
 
+    // MARK: Tap Prediction And Scheduling
+    /// The taps that are currently scheduled.
+    /// These were either calculated in this frame or, when a lock is active, in a previous one.
+    let scheduledTaps: [ScheduledTap]
+
     /// All taps which have been performed in `[0, absoluteRealTime]`.
     let executedTaps: [PerformedTap]
 
-    // MARK: Tap Prediction
     /// The tap prediction frame at the relevant timepoint.
     /// `frame.currentTime` is in the future (respective the delay) and does therefore not match `absoluteTime`.
     let frame: PredictionFrame
@@ -34,8 +38,4 @@ struct FullFramePlotData {
     var delay: Double {
         frame.currentTime - realTimeAfterProcessing
     }
-
-    /// The solution of the current frame.
-    /// Nil when there was no tap prediction because a previous solution is already locked.
-    let solution: InteractionSolutionStrategy.Solution?
 }

@@ -18,10 +18,23 @@ struct JumpSequenceFromCurrentPosition {
     let timeUntilEnd: Double
 
     /// Convert the JumpSequence into a RelativeTapSequence.
-    var tapSequence: RelativeTapSequence {
+    /// Thereby, attach DebugInfos to the produced taps to allow recovering the exactly predicted jumps at a later point in time.
+    func convertToRelativeTapSequence(currentTime: Double, player: PlayerProperties, jumping: JumpingProperties) -> RelativeTapSequence {
         let cumulated = jumpTimeDistances.scan(initial: timeUntilStart, +) // Never empty
         let unlockTime = cumulated.last! + timeUntilEnd
-        let taps = cumulated.map(RelativeTap.init(scheduledIn:))
+
+        let jumps = self.jumps(for: player, with: jumping)
+
+        // Create RelativeTaps and attach DebugInfo
+        let taps = zip(cumulated, jumps).map { time, jump in
+            RelativeTap(scheduledIn: time).with {
+                $0.debugInfo = TapDebugInfo(
+                    referenceTime: currentTime,
+                    jump: jump
+                )
+            }
+        }
+
         return RelativeTapSequence(taps: taps, unlockDuration: unlockTime)
     }
 }
