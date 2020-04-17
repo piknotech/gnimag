@@ -10,7 +10,8 @@ public final class TapDelayTracker {
     public typealias Time = Double
 
     /// The tracker creating an average value for the delay time.
-    private let tracker: PreliminaryTracker
+    /// Only use it read-only!
+    public let tracker: PreliminaryTracker
 
     /// All taps that have been performed, but not yet detected – i.e. the next detected tap will correspond to the first value in this collection.
     private var performedTaps = [PerformedTap]()

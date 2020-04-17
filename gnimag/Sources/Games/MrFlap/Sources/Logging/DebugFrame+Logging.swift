@@ -57,9 +57,9 @@ extension DebugFrame {
     /// This method is only called when "isValidForLogging" has returned `true`.
     /// These preparations are performed synchronously.
     func prepareSynchronously(with parameters: DebugParameters) {
-        // Prepare tracker debug infos
         gameModelCollection.player.prepareForLogging()
         gameModelCollection.bars.all.forEach { $0.prepareForLogging() }
+        tapPrediction.prepareForLogging()
     }
 
     // MARK: - Logging
@@ -143,22 +143,37 @@ extension DebugFrame {
     }
 
     /// Log scatter plots of relevant trackers.
+    /// This includes both trackers frm game model collection and from tap prediction.
     private func logRelevantScatterPlots(to directory: String) {
         // Plot the yCenter of each bar
-        for (i, bar) in self.gameModelCollection.bars.all.enumerated() {
+        for (i, bar) in gameModelCollection.bars.all.enumerated() {
             if let plot = bar.yCenter.createScatterPlot() {
                 plot.write(to: directory +/ String(format: "bar_%02d_yCenter.png", i + 1))
             }
         }
 
-        // Plot the player height
-        if let plot = self.gameModelCollection.player.height.createScatterPlot() {
+        // Plot player height
+        if let plot = gameModelCollection.player.height.createScatterPlot() {
             plot.write(to: directory +/ "player_height.png")
         }
 
         // Plot player angle
-        if let plot = self.gameModelCollection.player.angle.createScatterPlot() {
+        if let plot = gameModelCollection.player.angle.createScatterPlot() {
             plot.write(to: directory +/ "player_angle.png")
+        }
+
+        // Plot delay tracker
+        if let plot = tapPrediction.delayValues.createScatterPlot(includeToleranceRegionForLastDataPoint: false) {
+            plot.write(to: directory +/ "TapPredictionDelay.png")
+        }
+
+        // Plot jumpVelocity and gravity
+        if let plot = tapPrediction.jumpVelocityValues.createScatterPlot(includeToleranceRegionForLastDataPoint: false) {
+            plot.write(to: directory +/ "player_jumpVelocity.png")
+        }
+
+        if let plot = tapPrediction.gravityValues.createScatterPlot(includeToleranceRegionForLastDataPoint: false) {
+            plot.write(to: directory +/ "player_gravity.png")
         }
     }
 
@@ -280,6 +295,10 @@ extension DebugFrame {
 
         • Delay: \(tapPrediction.delay ??? "nil")
         • Time of PredictionFrame: \(tapPrediction.frame?.currentTime ??? "nil")
+
+        Excerpt from PredictionFrame:
+        • jumpVelocity (time-based): \(tapPrediction.frame?.jumping.jumpVelocity ??? "nil")
+        • gravity (time-based): \(tapPrediction.frame?.jumping.gravity ??? "nil")
         """
     }
 }

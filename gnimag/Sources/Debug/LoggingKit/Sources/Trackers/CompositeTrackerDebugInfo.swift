@@ -8,7 +8,7 @@ import TestingTools
 
 /// CompositeTrackerDebugInfo describes information about a CompositeTracker at one single given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.
-public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerDebugInfo, CustomStringConvertible {
+public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: CustomStringConvertible {
     private(set) var tracker: CompositeTracker<T>?
     public private(set) var allDataPoints: [ScatterDataPoint]? // The data set is only evaluated when required.
     public private(set) var allFunctions: [FunctionDebugInfo]? // The functions are only evaluated when required.

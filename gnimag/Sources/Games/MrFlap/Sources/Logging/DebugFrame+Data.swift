@@ -130,9 +130,7 @@ final class DebugFrame: DebugFrameProtocol {
             /// Do necessary preparations before logging.
             func prepareForLogging() {
                 angle.fetchFunctionInfos()
-                for tracker in [angle, size] as [TrackerDebugInfo] {
-                    tracker.fetchDataSet()
-                }
+                angle.fetchDataSet(maxDataPoints: 100)
 
                 // Jump tracker: only fetch the most recent segments
                 height.fetchDataSet(numSegments: 25)
@@ -162,10 +160,8 @@ final class DebugFrame: DebugFrameProtocol {
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
-                yCenter.fetchFunctionInfos(type: .all)
-                for tracker in [yCenter, angle, width, holeSize] as [TrackerDebugInfo] {
-                    tracker.fetchDataSet()
-                }
+                yCenter.fetchFunctionInfos(type: .all, numSegments: 3)
+                yCenter.fetchDataSet(numSegments: 3)
             }
         }
     }
@@ -186,8 +182,18 @@ final class DebugFrame: DebugFrameProtocol {
         var frame: PredictionFrame?
         var solution: InteractionSolutionStrategy.Solution?
 
+        // More plots
+        var delayValues = SimpleTrackerDebugInfo<ConstantTracker>()
+        var jumpVelocityValues = SimpleTrackerDebugInfo<ConstantTracker>()
+        var gravityValues = SimpleTrackerDebugInfo<ConstantTracker>()
+
         /// Do necessary preparations before logging.
         func prepareForLogging() {
+            for simple in [delayValues, jumpVelocityValues, gravityValues] {
+                simple.fetchDataSet(maxDataPoints: 100)
+                simple.fetchFunctionInfos()
+            }
+
             playerHeight.fetchDataSet(numSegments: 10)
             playerHeight.fetchFunctionInfos(type: .all, numSegments: 10)
         }

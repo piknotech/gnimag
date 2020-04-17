@@ -9,6 +9,7 @@ import Image
 /// Implement this protocol for Trackers or other objects that have 2-dimensional data you are interested in plotting using ScatterPlot.
 public protocol HasScatterDataSet {
     /// Return the data set which should be plotted.
+    /// These must be sorted by incoming order, i.e. the newest data points are at the end.
     var dataSet: [ScatterDataPoint] { get }
 }
 

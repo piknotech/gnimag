@@ -100,6 +100,10 @@ class TapPredictor: TapPredictorBase {
         debug.playerAngleConverter = PlayerAngleConverter(player: model.player)
         debug.realTimeDuringTapPrediction = frame.currentTime - delay // = timeProvider.currentTime
         debug.executedTaps = scheduler.performedTaps // TODO: only most recent ones
+
+        debug.delayValues.from(tracker: scheduler.delayTracker.tracker)
+        debug.gravityValues.from(tracker: model.player.height.debug.gravityTracker)
+        debug.jumpVelocityValues.from(tracker: model.player.height.debug.jumpVelocityTracker)
     }
 
     /// Choose the strategy to calculate the solution for a given frame.

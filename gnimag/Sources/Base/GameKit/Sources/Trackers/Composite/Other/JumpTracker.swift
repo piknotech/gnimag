@@ -14,8 +14,8 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
     // MARK: Private Properties
 
     /// The constant trackers for gravity and jump velocity.
-    private let gravityTracker: PreliminaryTracker
-    private let jumpVelocityTracker: PreliminaryTracker
+    internal let gravityTracker: PreliminaryTracker
+    internal let jumpVelocityTracker: PreliminaryTracker
 
     /// The estimated gravity, if available.
     private var gravity: Value? { gravityTracker.average ?? gravityTracker.values.last }
