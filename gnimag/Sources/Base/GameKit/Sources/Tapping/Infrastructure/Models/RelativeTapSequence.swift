@@ -5,6 +5,31 @@
 
 import Common
 
+/// A RelativeTap describes a scheduled tap relative to a non-specified reference point in time.
+public class RelativeTap {
+    /// The duration until when the tap will be performed.
+    /// Is always non-negative.
+    public let relativeTime: Double
+
+    /// Default initializer.
+    /// If `relativeTime` is negative, it will be set to zero.
+    public init(scheduledIn relativeTime: Double) {
+        if relativeTime < 0 {
+            Terminal.log(.warning, "RelativeTap – tap has negative relativeTime \(relativeTime).")
+        }
+
+        self.relativeTime = max(0, relativeTime)
+    }
+}
+
+extension RelativeTap: CustomStringConvertible {
+    public var description: String {
+        "RelativeTap(in: \(relativeTime))"
+    }
+}
+
+// MARK: Sequence
+
 /// RelativeTapSequence defines a sequence of scheduled taps relative to a non-specified reference point in time.
 public class RelativeTapSequence {
     /// All taps the sequence consists of.
@@ -31,19 +56,10 @@ public class RelativeTapSequence {
     }
 }
 
-/// A RelativeTap describes a scheduled tap relative to a non-specified reference point in time.
-public class RelativeTap {
-    /// The duration until when the tap will be performed.
-    /// Is always non-negative.
-    public let relativeTime: Double
 
-    /// Default initializer.
-    /// If `relativeTime` is negative, it will be set to zero.
-    public init(scheduledIn relativeTime: Double) {
-        if relativeTime < 0 {
-            Terminal.log(.warning, "RelativeTap – tap has negative relativeTime \(relativeTime).")
-        }
-
-        self.relativeTime = max(0, relativeTime)
+extension RelativeTapSequence: CustomStringConvertible {
+    public var description: String {
+        let sortedTaps = taps.sorted { $0.relativeTime < $1.relativeTime }
+        return "RelativeTapSequence(taps: \(sortedTaps), unlockDuration: \(String(describing: unlockDuration)))"
     }
 }

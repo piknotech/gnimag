@@ -22,7 +22,7 @@ final class DebugFrame: DebugFrameProtocol {
     }
 
     // MARK: Hints
-    var hints = Hints()
+    let hints = Hints()
 
     /// Properties of the image analysis hints calculation.
     class Hints {
@@ -30,7 +30,7 @@ final class DebugFrame: DebugFrameProtocol {
     }
 
     // MARK: Image Analysis
-    var imageAnalysis = ImageAnalysis()
+    let imageAnalysis = ImageAnalysis()
 
     /// Properties of the Image Analysis step.
     class ImageAnalysis {
@@ -168,5 +168,19 @@ final class DebugFrame: DebugFrameProtocol {
                 }
             }
         }
+    }
+
+    // MARK: Tap Prediction
+    let tapPrediction = TapPrediction()
+
+    /// Properties of the Tap Prediction step.
+    class TapPrediction {
+        var wasPerformed = false
+        var wasNotPerformedBecauseOfActiveLock = false
+
+        var scheduledTapSequence: RelativeTapSequence?
+        var allPerformedTaps = [PerformedTap]()
+        var delay: Double?
+        var frame: PredictionFrame?
     }
 }

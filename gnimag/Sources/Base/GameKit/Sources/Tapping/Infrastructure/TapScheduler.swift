@@ -25,16 +25,15 @@ public final class TapScheduler {
     }
 
     /// All taps that are currently scheduled but have not yet been performed.
-    private var scheduledTaps = [ScheduledTap]()
+    public private(set) var scheduledTaps = [ScheduledTap]()
 
     /// All taps that have actually been performed.
     public private(set) var performedTaps = [PerformedTap]()
 
-    /// The expectedDetectionTimes of all performedTaps.
-    /// PerformedTaps which have no expectedDetectionTime are substituted by using the current delay.
+    /// The expected detection times of the taps at the CURRENT timepoint, i.e. using the CURRENT delay.
     public var allExpectedDetectionTimes: [Double] {
         performedTaps.compactMap { tap in
-            tap.expectedDetectionTime ?? delay.flatMap { tap.performedAt + $0 }
+            delay.flatMap { tap.performedAt + $0 } ?? tap.expectedDetectionTime
         }
     }
 
@@ -56,13 +55,12 @@ public final class TapScheduler {
 
     /// Schedule a single tap in the future.
     public func schedule(tap: RelativeTap) {
-        print("Current delay: \(delay)")
         // Create ScheduledTap from RelativeTap
         let t = timeProvider.currentTime
         let scheduledTap = ScheduledTap(
             relativeTap: tap,
             referenceTime: t,
-            expectedDetectionTime: delay.map { t + $0 }
+            expectedDetectionTime: delay.map { t + tap.relativeTime + $0 }
         )
         scheduledTaps.append(scheduledTap)
 
@@ -94,7 +92,7 @@ public final class TapScheduler {
 
     /// Perform a tap at the current moment.
     private func actuallyPerform(_ tap: ScheduledTap) {
-        print("ActuallyPerform – currentTime: \(timeProvider.currentTime), scheduledFor: \(tap.absoluteTime)")
+        print("Actually Tap At: \(tap.absoluteTime)")
 
         tapper.tap()
 

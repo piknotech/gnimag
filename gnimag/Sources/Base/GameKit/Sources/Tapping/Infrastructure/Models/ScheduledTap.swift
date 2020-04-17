@@ -23,3 +23,9 @@ public class ScheduledTap {
         self.expectedDetectionTime = expectedDetectionTime
     }
 }
+
+extension ScheduledTap: CustomStringConvertible {
+    public var description: String {
+        "ScheduledTap(absoluteTime: \(absoluteTime), expectedDetectionTime: \(String(describing: expectedDetectionTime)))"
+    }
+}

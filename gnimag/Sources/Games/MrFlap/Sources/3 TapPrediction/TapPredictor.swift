@@ -7,6 +7,7 @@ import Foundation
 import GameKit
 import Geometry
 import Image
+import LoggingKit
 import Tapping
 
 /// TapPredictor is the main class dealing with tap prediction and scheduling.
@@ -21,14 +22,19 @@ class TapPredictor: TapPredictorBase {
         let singleBar: OptimalSolutionViaRandomizedSearchStrategy
     }
 
+    /// The debug logger and a shorthand form for the current debug frame.
+    private let debugLogger: DebugLogger
+    private var debug: DebugFrame.TapPrediction { debugLogger.currentFrame.tapPrediction }
+
     /// Default initializer.
-    init(tapper: SomewhereTapper, timeProvider: TimeProvider) {
+    init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
         strategies = Strategies(
-            idle: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.1), // ...?
+            idle: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2), // ...?
             singleBar: OptimalSolutionViaRandomizedSearchStrategy()
         )
 
-        super.init(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: .absolute(10)) // ...?
+        self.debugLogger = debugLogger
+        super.init(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: .absolute(0.05)) // ...?
     }
 
     /// Set the game model. Only call this once.
@@ -62,6 +68,8 @@ class TapPredictor: TapPredictorBase {
     /// Analyze the game model to schedule taps.
     /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
     override func predictionLogic() -> RelativeTapSequence? {
+        debug.wasPerformed = true
+
         guard
             let model = gameModel,
             let currentTime = scheduler.delay.map(timeProvider.currentTime.advanced(by:)), // A + B
@@ -69,25 +77,42 @@ class TapPredictor: TapPredictorBase {
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
-
         guard let solution = strategy.solution(for: frame) else { return nil }
 
         // Debug-draw solution
         if solution.timeUntilStart < 0.1 {
-            print("locked! \(solution.timeUntilStart); time: \(timeProvider.currentTime)")
             let now = timeProvider.currentTime
             DispatchQueue.global(qos: .utility).async {
                 JumpSequencePlot(frame: frame, solution: solution).writeToDesktop(name: "Plots.noSync/\(now).png")
             }
         }
 
+        debug.frame = frame
+        debug.delay = scheduler.delay
+        debug.allPerformedTaps = scheduler.performedTaps
+        debug.scheduledTapSequence = solution.tapSequence
+
         return solution.tapSequence
+    }
+
+    override func noPredictionBecauseLockIsActive() {
+        debug.wasNotPerformedBecauseOfActiveLock = true
+        debug.scheduledTapSequence = tapSequence
+
+        if let model = gameModel,
+            let currentTime = scheduler.delay.map(timeProvider.currentTime.advanced(by:)), // A + B
+            let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) {
+            debug.frame = frame
+        }
+    }
+
+    func frameWasProcessed() {
+
     }
 
     /// Choose the strategy to calculate the solution for a given frame.
     private func strategy(for frame: PredictionFrame) -> InteractionSolutionStrategy {
-        return strategies.idle
-        print(frame.bars.count)
+        //return strategies.idle
         switch frame.bars.count {
         case 0: return strategies.idle
         default: return strategies.singleBar
@@ -96,10 +121,15 @@ class TapPredictor: TapPredictorBase {
 
     /// Check if a prediction lock should be applied.
     override func shouldLock(scheduledSequence: RelativeTapSequence) -> Bool {
-         // When the sequence is empty, lock and wait until the sequence unlocks (via unlockDuration)
-        guard let time = scheduledSequence.nextTap?.relativeTime else { return true }
+        guard let nextTap = scheduledSequence.nextTap, let referenceTime = referenceTimeForTapSequence else {
+            return true // When sequence is empty, lock and wait until the sequence unlocks (via unlockDuration)
+        }
 
-        let shouldLock = (time - timeProvider.currentTime) < 0.1
-        return shouldLock
+        // Get relative duration from now
+        let referenceShift = timeProvider.currentTime - referenceTime
+        let time = nextTap.relativeTime - referenceShift
+        print(time, referenceShift)
+
+        return time < 0.1
     }
 }

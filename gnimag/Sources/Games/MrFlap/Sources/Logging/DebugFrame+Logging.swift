@@ -258,7 +258,20 @@ extension DebugFrame {
     private var logTextForTapPrediction: String {
         """
         ––––– TAP PREDICTION –––––
-        tbd
+        (was performed: \(tapPrediction.wasPerformed))
+        (was not performed because lock is active: \(tapPrediction.wasNotPerformedBecauseOfActiveLock))
+
+        • Delay: \(tapPrediction.delay ??? "nil")
+        • CurrentTime: \(time ??? "nil"), PredictionTime (CT + delay): \(tapPrediction.frame?.currentTime ??? "nil")
+
+        Resulting Solution:
+        \(tapPrediction.scheduledTapSequence ??? "nil")
+
+        Full Frame:
+        \(tapPrediction.frame ??? "nil")
+
+        All Performed Taps So Far:
+        \(tapPrediction.allPerformedTaps ??? "nil")
         """
     }
 }

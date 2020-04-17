@@ -69,9 +69,11 @@ struct SolutionVerifier {
         let vertical = verticalHoleRating(for: allJumps)
         if vertical <= requiredMinimum { return 0 } // Shortcut
         let playfield = playfieldRating(for: allJumps)
+        if playfield <= requiredMinimum { return 0 } // Shortcut
+        let descend = descendRating(for: allJumps)
 
         // Return weakest rating
-        return min(horizontal, vertical, playfield)
+        return min(horizontal, vertical, playfield, descend)
     }
 
     /// The rating respective the vertical distance to the bar hole.
@@ -96,6 +98,15 @@ struct SolutionVerifier {
         let desiredValue = 20% * frame.playfield.size
         let distance = frame.playfield.distance(to: jumps)
         return min(1, distance / desiredValue)
+    }
+
+    /// The rating respective the steppest fall. This means, long jumps that fall down a lot and therefore are very steep are discouraged.
+    /// Inside [0, 1].
+    private func descendRating(for jumps: [Jump]) -> Double {
+        let descends = jumps.map { -$0.parabola′($0.endPoint.time) }
+        guard let steepestDescend = descends.max() else { return 1 }
+        let rating = pow(frame.jumping.jumpVelocity / steepestDescend, 3)
+        return min(1, rating)
     }
 }
 
@@ -225,7 +236,7 @@ private extension PlayfieldProperties {
         if lowerDistance <= 0 { return 0 }
 
         let upper = jump.parabola.maximum(in: jump.timeRange)
-        let upperDistance = 2 * (upperRadius - upper) // Top is less dangerous than bottom
+        let upperDistance = 3 * (upperRadius - upper) // Top is less dangerous than bottom
         if upperDistance <= 0 { return 0 }
 
         return min(lowerDistance, upperDistance)

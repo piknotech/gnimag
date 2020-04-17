@@ -49,7 +49,7 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
 
     /// Tap on the screen to either jump or start the game.
     public func tap() {
-        Timing.shared.perform(after: 0.25) { // Artificial delay
+        Timing.shared.perform(after: 0) { // Artificial delay
             if !self.isRunning {
                 self.timeOfFirstTap = self.elapsedTime
             }

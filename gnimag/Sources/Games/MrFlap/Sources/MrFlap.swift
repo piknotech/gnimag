@@ -48,7 +48,7 @@ public final class MrFlap {
         debugLogger = DebugLogger(parameters: debugParameters)
         
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
-        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider)
+        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider, debugLogger: debugLogger)
 
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
 
@@ -121,9 +121,10 @@ public final class MrFlap {
 
     /// Normal update method while in-game.
     private func gameplayUpdate(image: Image, time: Double) {
-        guard case let .success(result) = analyze(image: image, time: time) else { return }
-        if gameModelCollector.accept(result: result, time: time) {
-            tapPredictor.predict()
+        if case let .success(result) = analyze(image: image, time: time) {
+            if gameModelCollector.accept(result: result, time: time) {
+                tapPredictor.predict()
+            }
         }
     }
 

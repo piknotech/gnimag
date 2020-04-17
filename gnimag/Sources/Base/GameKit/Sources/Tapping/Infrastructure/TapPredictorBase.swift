@@ -19,7 +19,8 @@ open class TapPredictorBase {
 
     /// The currently scheduled tap sequence, consisting of all future taps.
     /// Performed taps will be removed from this sequence.
-    private var tapSequence: RelativeTapSequence?
+    public private(set) var tapSequence: RelativeTapSequence?
+    public private(set) var referenceTimeForTapSequence: Double?
 
     /// Default initializer.
     public init(tapper: SomewhereTapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
@@ -44,7 +45,10 @@ open class TapPredictorBase {
     /// When the lock is inactive, the predictionLogic will be executed, and its result will be scheduled. The sequence must only contain tap values in the future!
     /// When predictionLogic returns nil, the current sequence is performed further (and not updated).
     public func predict() {
-        if lockIsActive { return }
+        if lockIsActive {
+            noPredictionBecauseLockIsActive()
+            return
+        }
 
         // Perform prediction logic
         if let sequence = predictionLogic() {
@@ -59,10 +63,15 @@ open class TapPredictorBase {
         nil
     }
 
+    /// Called to inform subclasses that no prediction will be performed this frame because a lock is currently active.
+    open func noPredictionBecauseLockIsActive() {
+    }
+
     /// Reschedule a tap sequence, including its completion time for locking reassessment.
     /// Before scheduling, clear all current scheduled taps.
     private func reschedule(sequence: RelativeTapSequence) {
         tapSequence = sequence
+        referenceTimeForTapSequence = timeProvider.currentTime
 
         // Clear current schedule
         scheduler.unscheduleAll()
@@ -71,8 +80,8 @@ open class TapPredictorBase {
         // Schedule new taps and unlocking
         sequence.taps.forEach(scheduler.schedule(tap:))
 
-        if let unlockTime = sequence.unlockDuration {
-            scheduleUnlocking(in: unlockTime - timeProvider.currentTime)
+        if let unlockDuration = sequence.unlockDuration {
+            scheduleUnlocking(in: unlockDuration)
         }
     }
 
@@ -80,6 +89,7 @@ open class TapPredictorBase {
     private func scheduleUnlocking(in distance: Double) {
         Timing.shared.perform(after: distance, identification: .object(self)) {
             self.tapSequence = nil
+            self.referenceTimeForTapSequence = nil
             self.lockIsActive = false
         }
     }
