@@ -25,11 +25,10 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
         height: CGFloat(playfield.innerRadius + 0.4 * playfield.freeSpace)
     )
 
-    private lazy var bars = [
-        Bar(angle: 1 * .pi / 6, playfield: playfield),
-        Bar(angle: 3 * .pi / 2, playfield: playfield),
-        Bar(angle: 5 * .pi / 6, playfield: playfield)
-    ]
+    private lazy var bars = [0, 1, 2].map { i -> Bar in
+        let angle = (0.6 + 2/3 * Double(i)) * .pi
+        return Bar(angle: angle, angularSpeed: 0.4, yCenterPeriodDuration: 2, playfield: playfield)
+    }
 
     /// Time (0-based) since initialization of the simulation.
     private var elapsedTime: Double { timeProvider.currentTime }
@@ -37,12 +36,14 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
     private var timeOfFirstTap: Double! // Time (0-based) since `tap` was called to start the game.
     private var isRunning: Bool { timeOfFirstTap != nil }
 
+    private let fps: Double
     private var timer: Timer!
 
     /// Default initializer.
     /// Immediately begin providing images.
     public init(fps: Double) {
-        timer = Timer.scheduledTimer(withTimeInterval: 1 / fps, repeats: true) { _ in
+        self.fps = fps
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1 / fps, repeats: true) { _ in
             self.gameUpdate()
         }
     }
@@ -54,7 +55,7 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
                 self.timeOfFirstTap = self.elapsedTime
             }
 
-            self.player.jump()
+            self.player.jump(currentRealTime: self.elapsedTime - self.timeOfFirstTap, fps: self.fps)
         }
     }
 
@@ -62,6 +63,9 @@ public final class MrFlapGameSimulation: ImageProvider, SomewhereTapper {
     @objc private func gameUpdate() {
         if isRunning {
             player.update(currentTime: elapsedTime - timeOfFirstTap)
+            for i in 0 ..< bars.count {
+                bars[i].update(currentTime: elapsedTime - timeOfFirstTap)
+            }
         }
 
         let t = elapsedTime

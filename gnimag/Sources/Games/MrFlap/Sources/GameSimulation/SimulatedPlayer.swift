@@ -11,7 +11,7 @@ extension MrFlapGameSimulation {
     struct Player {
         var size: CGFloat = 10
 
-        /// The current position (angle and height) of the player which depends on the current time.
+        /// The current game time.
         fileprivate var currentTime: Double = 0
 
         var height: CGFloat { CGFloat(currentJump?.parabola(currentTime) ?? Double(startHeight)) }
@@ -22,20 +22,31 @@ extension MrFlapGameSimulation {
 
         /// The current jump.
         private var currentJump: Jump!
+        private var shouldJumpNextFrame = false
 
         /// Default initializer.
         init(height: CGFloat) {
             startHeight = height
         }
 
-        /// Begin a jump at the current time.
-        mutating func jump() {
-            currentJump = Jump(player: self)
+        /// Begin a jump at the current time, or begin it next frame.
+        mutating func jump(currentRealTime: Double, fps: Double) {
+            if (currentRealTime - currentTime) * fps > 0.5 { // Half frame
+                shouldJumpNextFrame = true
+            } else {
+                shouldJumpNextFrame = false
+                currentJump = Jump(player: self)
+            }
         }
 
         /// Update the player by updating its current time and therefore its position.
         mutating func update(currentTime: Double) {
             self.currentTime = currentTime
+
+            if shouldJumpNextFrame {
+                currentJump = Jump(player: self)
+                shouldJumpNextFrame = false
+            }
         }
     }
 
