@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import Image
 import GameKit
 import TestingTools
@@ -16,12 +17,22 @@ final class FullFramePlot {
 
     /// Create a FullFramePlot from the given data.
     init(data: FullFramePlotData) {
-        plot = ScatterPlot(dataPoints: data.allDataPoints)
+        // Create ScatterPlot
+        let yRange = SimpleRange(from: data.frame.playfield.lowerRadius, to: data.frame.playfield.upperRadius)
+        plot = ScatterPlot(dataPoints: data.allDataPoints, yRange: yRange)
 
+        // Draw playfield
+        let lowerPlayfieldLine = HorizontalLineScatterStrokable(y: data.frame.playfield.lowerRadius)
+        let upperPlayfieldLine = HorizontalLineScatterStrokable(y: data.frame.playfield.upperRadius)
+        plot.stroke(lowerPlayfieldLine, with: .normal)
+        plot.stroke(upperPlayfieldLine, with: .normal)
+
+        // Draw all jumps
         for info in data.allFunctionInfos {
             plot.stroke(info.strokable, with: info.color, alpha: 0.75, strokeWidth: 0.5, dash: info.dash.concreteDash)
         }
 
+        // Draw bars
         for bar in data.barScatterStrokables {
             plot.stroke(bar, with: .normal, dash: Dash(on: 1, off: 1))
         }
@@ -79,8 +90,16 @@ extension FullFramePlotData {
         }
 
         // THIRD: Scheduled jumps of the currently predicted tap sequence
-        result += jumps(from: scheduledTaps, startingAfter: earliestDataPointTime).map {
+        let scheduled = jumps(from: scheduledTaps, startingAfter: earliestDataPointTime)
+        result += scheduled.map {
             ScatterDataPoint(x: $0.startPoint.time, y: $0.startPoint.height, color: .custom(Self.scheduledJumpColor))
+        }
+
+        // Add final point
+        if let last = scheduled.last?.endPoint {
+            result.append(
+                ScatterDataPoint(x: last.time, y: last.height, color: .custom(Self.scheduledJumpColor))
+            )
         }
 
         return result
@@ -128,8 +147,10 @@ extension FullFramePlotData {
 
     /// The scatter strokables of all bars in the prediction frame (transformed to the correct time-space).
     // TODO: also previous bars!
-    var barScatterStrokables: [BarScatterStrokable] {
-        []
+    var barScatterStrokables: [ScatterStrokable] {
+        frame.bars.map { interaction in
+            BarScatterStrokable(interaction: interaction).shiftedRight(by: CGFloat(frame.currentTime))
+        }
     }
 }
 
@@ -154,12 +175,33 @@ private extension PlayerAngleConverter {
     }
 }
 
-/*
-/// A ScatterStrokable wrapping another ScatterStrokable. Thereby, the wrapped ScatterStrokable is shifted and/or strechted in x-direction. The y-values stay unchanged.
-private class HorizontallyTransformedScatterStrokable: ScatterStrokable {
+private extension ScatterStrokable {
+    /// Return a ScatterStrokable drawing `self`, but shifted to the right.
+    func shiftedRight(by amount: CGFloat) -> ScatterStrokable {
+        HorizontallyShiftedScatterStrokable(wrapped: self, rightShift: amount)
+    }
 }
 
-/// A Strokable wrapping another Strokable. Thereby, the wrapped Strokable is shifted and/or strechted in x-direction. The y-values stay unchanged.
-private class HorizontallyTransformedStrokable: Strokable {
+/// A ScatterStrokable shifting another ScatterStrokable in x-direction. The y-values stay unchanged.
+private struct HorizontallyShiftedScatterStrokable: ScatterStrokable {
+    let wrapped: ScatterStrokable
+    let rightShift: CGFloat
+
+    func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
+        let strokable = wrapped.concreteStrokable(for: scatterPlot)
+        let shift = rightShift * (scatterPlot.pixelContentRect.width / scatterPlot.dataContentRect.width)
+        return HorizontallyShiftedStrokable(wrapped: strokable, rightShift: shift)
+    }
 }
-*/
+
+/// A Strokable shifting another Strokable in x-direction. The y-values stay unchanged.
+private struct HorizontallyShiftedStrokable: Strokable {
+    let wrapped: Strokable
+    let rightShift: CGFloat
+
+    func stroke(onto context: CGContext) {
+        context.translateBy(x: rightShift, y: 0)
+        wrapped.stroke(onto: context)
+        context.translateBy(x: -rightShift, y: 0)
+    }
+}
