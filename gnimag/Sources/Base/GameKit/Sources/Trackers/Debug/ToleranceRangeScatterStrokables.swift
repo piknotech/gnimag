@@ -14,9 +14,9 @@ internal struct VerticalLineSegmentScatterStrokable: ScatterStrokable {
     let yRadius: Double
 
     /// Convert the line into pixel space.
-    func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let start = scatterPlot.pixelPosition(of: (x, yCenter - yRadius))
-        let end = scatterPlot.pixelPosition(of: (x, yCenter + yRadius))
+    func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let start = frame.pixelPosition(of: (x, yCenter - yRadius))
+        let end = frame.pixelPosition(of: (x, yCenter + yRadius))
         return LineSegment(from: start, to: end)
     }
 }
@@ -26,11 +26,11 @@ internal struct EllipseScatterStrokable: ScatterStrokable {
     let radii: (x: Double, y: Double)
 
     /// Convert the ellipse into pixel space.
-    func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let xFactor = scatterPlot.pixelContentRect.width / scatterPlot.dataContentRect.width
-        let yFactor = scatterPlot.pixelContentRect.height / scatterPlot.dataContentRect.height
+    func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let xFactor = frame.pixelContentRect.width / frame.dataContentRect.width
+        let yFactor = frame.pixelContentRect.height / frame.dataContentRect.height
 
-        let center = scatterPlot.pixelPosition(of: self.center)
+        let center = frame.pixelPosition(of: self.center)
         let rx = CGFloat(radii.x) * xFactor
         let ry = CGFloat(radii.y) * yFactor
 

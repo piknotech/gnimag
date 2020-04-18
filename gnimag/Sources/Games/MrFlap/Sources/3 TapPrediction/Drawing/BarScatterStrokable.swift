@@ -12,7 +12,7 @@ struct BarScatterStrokable: ScatterStrokable {
     let interaction: PlayerBarInteraction
 
     /// Return a MultiStrokable consisting of multiple lines and curves.
-    func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
+    func concreteStrokable(for frame: ScatterFrame) -> Strokable {
         // Bounds curves
         let left = interaction.boundsCurves.left.scatterStrokable
         let right = interaction.boundsCurves.right.scatterStrokable
@@ -21,7 +21,7 @@ struct BarScatterStrokable: ScatterStrokable {
         let sections = interaction.holeMovement.sections.flatMap(\.boundaryStrokables)
 
         let all = [left, right] + sections
-        return MultiScatterStrokable(components: all).concreteStrokable(for: scatterPlot)
+        return MultiScatterStrokable(components: all).concreteStrokable(for: frame)
     }
 }
 

@@ -85,7 +85,8 @@ extension FullFramePlotData {
         }
 
         // SECOND: Expected start points of performed jumps
-        result += jumps(from: executedTaps.map(\.scheduledTap), startingAfter: earliestDataPointTime).map {
+        let executed = jumps(from: executedTaps.map(\.scheduledTap), startingAfter: earliestDataPointTime)
+        result += executed.map {
             ScatterDataPoint(x: $0.startPoint.time, y: $0.startPoint.height, color: .custom(Self.performedJumpColor))
         }
 
@@ -96,10 +97,9 @@ extension FullFramePlotData {
         }
 
         // Add final point
-        if let last = scheduled.last?.endPoint {
-            result.append(
-                ScatterDataPoint(x: last.time, y: last.height, color: .custom(Self.scheduledJumpColor))
-            )
+        if let last = (scheduled.last ?? executed.last)?.endPoint {
+            let color = (scheduled.isEmpty) ? Self.performedJumpColor : Self.scheduledJumpColor
+            result.append(ScatterDataPoint(x: last.time, y: last.height, color: .custom(color)))
         }
 
         return result
@@ -187,21 +187,9 @@ private struct HorizontallyShiftedScatterStrokable: ScatterStrokable {
     let wrapped: ScatterStrokable
     let rightShift: CGFloat
 
-    func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let strokable = wrapped.concreteStrokable(for: scatterPlot)
-        let shift = rightShift * (scatterPlot.pixelContentRect.width / scatterPlot.dataContentRect.width)
-        return HorizontallyShiftedStrokable(wrapped: strokable, rightShift: shift)
-    }
-}
-
-/// A Strokable shifting another Strokable in x-direction. The y-values stay unchanged.
-private struct HorizontallyShiftedStrokable: Strokable {
-    let wrapped: Strokable
-    let rightShift: CGFloat
-
-    func stroke(onto context: CGContext) {
-        context.translateBy(x: rightShift, y: 0)
-        wrapped.stroke(onto: context)
-        context.translateBy(x: -rightShift, y: 0)
+    func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let shiftedDataContentRect = frame.dataContentRect.offsetBy(dx: -rightShift, dy: 0)
+        let shiftedFrame = ScatterFrame(dataContentRect: shiftedDataContentRect, pixelContentRect: frame.pixelContentRect)
+        return wrapped.concreteStrokable(for: shiftedFrame)
     }
 }

@@ -11,9 +11,9 @@ struct HorizontalLineScatterStrokable: ScatterStrokable {
     let y: Double
 
     /// Convert the line into pixel space.
-    func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let start = scatterPlot.pixelPosition(of: (Double(scatterPlot.dataContentRect.minX), y))
-        let end = scatterPlot.pixelPosition(of: (Double(scatterPlot.dataContentRect.maxX), y))
+    func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let start = frame.pixelPosition(of: (Double(frame.dataContentRect.minX), y))
+        let end = frame.pixelPosition(of: (Double(frame.dataContentRect.maxX), y))
         return LineSegment(from: start, to: end)
     }
 }

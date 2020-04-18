@@ -24,8 +24,8 @@ public struct QuadCurveScatterStrokable: ScatterStrokable {
     }
 
      /// Return the concrete strokable for drawing onto a specific ScatterPlot.
-    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let bounds = drawingRange.intersection(with: scatterPlot.dataContentXRange)
+    public func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let bounds = drawingRange.intersection(with: frame.dataContentXRange)
         if bounds.isEmpty { return EmptyStrokable() }
 
         let x1 = bounds.lower
@@ -41,9 +41,9 @@ public struct QuadCurveScatterStrokable: ScatterStrokable {
         let x2 = Double(intersection.x), y2 = Double(intersection.y)
 
         // Convert into scatter plot space
-        let point1 = scatterPlot.pixelPosition(of: (x1, y1))
-        let point2 = scatterPlot.pixelPosition(of: (x2, y2))
-        let point3 = scatterPlot.pixelPosition(of: (x3, y3))
+        let point1 = frame.pixelPosition(of: (x1, y1))
+        let point2 = frame.pixelPosition(of: (x2, y2))
+        let point3 = frame.pixelPosition(of: (x3, y3))
 
         return QuadCurveStrokable(point1: point1, point2: point2, point3: point3)
     }

@@ -29,9 +29,9 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
     }
 
     /// Return the concrete strokable for drawing onto a specific ScatterPlot.
-    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let pixelRect = scatterPlot.pixelContentRect
-        let dataRect = scatterPlot.dataContentRect
+    public func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let pixelRect = frame.pixelContentRect
+        let dataRect = frame.dataContentRect
 
         // Calculate range
         let start = max(drawingRange.lower, Double(dataRect.minX))
@@ -47,7 +47,7 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
         // Function traversal
         while x <= end {
             // Convert to pixel space
-            let point = scatterPlot.pixelPosition(of: (x, function.at(x)))
+            let point = frame.pixelPosition(of: (x, function.at(x)))
             result.append(point)
 
             // Calculate x-delta to the next point (between acc/2 and acc, depending on the slope)
@@ -65,7 +65,7 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
         }
 
         // Add point at the end of the interval
-        let last = scatterPlot.pixelPosition(of: (end, function.at(end)))
+        let last = frame.pixelPosition(of: (end, function.at(end)))
         result.append(last)
 
         // Remove points that are irrelevant to the graph.

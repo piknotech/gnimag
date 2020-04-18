@@ -16,8 +16,8 @@ public struct MultiScatterStrokable: ScatterStrokable {
     }
 
     /// Return a MultiStrokable consisting of the concrete strokables of each component.
-    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let strokables = components.map { $0.concreteStrokable(for: scatterPlot) }
+    public func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let strokables = components.map { $0.concreteStrokable(for: frame) }
         return MultiStrokable(components: strokables)
     }
 }

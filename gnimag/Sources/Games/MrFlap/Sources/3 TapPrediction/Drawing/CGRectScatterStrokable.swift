@@ -11,12 +11,12 @@ import TestingTools
 struct CGRectScatterStrokable: ScatterStrokable {
     let rect: CGRect
 
-    func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let rect = self.rect.intersection(scatterPlot.dataContentRect)
+    func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let rect = self.rect.intersection(frame.dataContentRect)
 
-        let origin = scatterPlot.pixelPosition(of: (Double(rect.minX), Double(rect.minY)))
-        let width = rect.width / scatterPlot.dataContentRect.width * scatterPlot.pixelContentRect.width
-        let height = rect.height / scatterPlot.dataContentRect.height * scatterPlot.pixelContentRect.height
+        let origin = frame.pixelPosition(of: (Double(rect.minX), Double(rect.minY)))
+        let width = rect.width / frame.dataContentRect.width * frame.pixelContentRect.width
+        let height = rect.height / frame.dataContentRect.height * frame.pixelContentRect.height
 
         return AABB(rect: CGRect(x: origin.x, y: origin.y, width: width, height: height))
     }
