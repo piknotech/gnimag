@@ -34,6 +34,9 @@ struct FullFramePlotData {
     /// `frame.currentTime` is in the future (respective the delay) and does therefore not match `absoluteTime`.
     let frame: PredictionFrame
 
+    /// The recorder storing all interactions that happened in the past.
+    let interactionRecorder: InteractionRecorder
+
     /// The timeshift from real time to prediction time.
     var delay: Double {
         frame.currentTime - realTimeAfterProcessing

@@ -54,8 +54,7 @@ final class PlayerTracker {
         // For tap delay tracking, the actual time (from imageProvider) is required.
         // Because player jump tracking is performed using the player's angle, it first has to be converted back to an (approximate) time value.
         func convertPlayerAngleToTime(playerAngle: Double) -> Double? {
-            guard let conversion = angle.tracker.regression?.inverse else { return nil }
-            return conversion.at(playerAngle)
+            PlayerAngleConverter(player: self)?.time(from: playerAngle)
         }
 
         // Link segment switch callback

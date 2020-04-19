@@ -185,9 +185,10 @@ extension DebugFrame {
             let playerAngleConverter = tapPrediction.playerAngleConverter,
             let scheduledTaps = tapPrediction.scheduledTaps,
             let executedTaps = tapPrediction.executedTaps,
+            let recorder = tapPrediction.interactionRecorder,
             let frame = tapPrediction.frame else { return }
 
-        let data = FullFramePlotData(realFrameTime: time, realTimeAfterProcessing: realTimeAfterProcessing, playerHeight: tapPrediction.playerHeight, playerAngleConverter: playerAngleConverter, scheduledTaps: scheduledTaps, executedTaps: executedTaps, frame: frame)
+        let data = FullFramePlotData(realFrameTime: time, realTimeAfterProcessing: realTimeAfterProcessing, playerHeight: tapPrediction.playerHeight, playerAngleConverter: playerAngleConverter, scheduledTaps: scheduledTaps, executedTaps: executedTaps, frame: frame, interactionRecorder: recorder)
 
         let plot = FullFramePlot(data: data)
         plot.write(to: directory +/ "FullFrame.png")

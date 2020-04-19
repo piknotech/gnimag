@@ -26,6 +26,9 @@ class TapPredictor: TapPredictorBase {
     private let debugLogger: DebugLogger
     private var debug: DebugFrame.TapPrediction { debugLogger.currentFrame.tapPrediction }
 
+    /// A class storing all passed bars, for debugging.
+    private let interactionRecorder = InteractionRecorder()
+
     /// Default initializer.
     init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
         strategies = Strategies(
@@ -72,7 +75,9 @@ class TapPredictor: TapPredictorBase {
         let currentTime = timeProvider.currentTime + delay
         guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) else { return nil }
 
+        // Debug logging
         performDebugLogging(with: model, frame: frame, delay: delay)
+        frame.bars.first.map(interactionRecorder.add(interaction:))
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
@@ -111,9 +116,10 @@ class TapPredictor: TapPredictorBase {
     private func performDebugLogging(with model: GameModel, frame: PredictionFrame, delay: Double) {
         debug.delay = delay
         debug.frame = frame
+        debug.realTimeDuringTapPrediction = frame.currentTime - delay // = timeProvider.currentTime
         debug.playerHeight.from(tracker: model.player.height)
         debug.playerAngleConverter = PlayerAngleConverter(player: model.player)
-        debug.realTimeDuringTapPrediction = frame.currentTime - delay // = timeProvider.currentTime
+        debug.interactionRecorder = interactionRecorder
 
         debug.delayValues.from(tracker: scheduler.delayTracker.tracker)
         debug.gravityValues.from(tracker: model.player.height.debug.gravityTracker)

@@ -10,7 +10,10 @@ extension PlayerBarInteraction {
     private typealias Portion = BasicLinearPingPongTracker.LinearSegmentPortion
 
     /// Create a `PlayerBarInteraction` from the given models and the current time.
-    init(player: PlayerProperties, bar: BarProperties, playfield: PlayfieldProperties, currentTime: Double) {
+    init(player: PlayerProperties, bar: BarProperties, playfield: PlayfieldProperties, currentTime: Double, barTracker: BarTracker) {
+        self.currentTime = currentTime
+        self.barTracker = barTracker
+        
         // Calculate when the player will hit the bar
         let direction = player.xSpeed - bar.xSpeed
         totalSpeed = abs(direction)

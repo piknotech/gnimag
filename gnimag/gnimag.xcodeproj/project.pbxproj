@@ -122,6 +122,7 @@
 		6318427F2449F48C006AF53A /* JumpTracker+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318427D2449F453006AF53A /* JumpTracker+Debug.swift */; };
 		63184281244A154B006AF53A /* RelativeTap+DebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63184280244A154B006AF53A /* RelativeTap+DebugInfo.swift */; };
 		63184283244A1AA4006AF53A /* Withable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63184282244A1AA4006AF53A /* Withable.swift */; };
+		63184285244C6E88006AF53A /* InteractionRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63184284244C6E88006AF53A /* InteractionRecorder.swift */; };
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
 		631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631BE25723EF53EE008DDEE1 /* CwlRandom.swift */; };
@@ -454,6 +455,7 @@
 		6318427D2449F453006AF53A /* JumpTracker+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JumpTracker+Debug.swift"; sourceTree = "<group>"; };
 		63184280244A154B006AF53A /* RelativeTap+DebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RelativeTap+DebugInfo.swift"; sourceTree = "<group>"; };
 		63184282244A1AA4006AF53A /* Withable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Withable.swift; sourceTree = "<group>"; };
+		63184284244C6E88006AF53A /* InteractionRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionRecorder.swift; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
 		631BE25723EF53EE008DDEE1 /* CwlRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CwlRandom.swift; sourceTree = "<group>"; };
@@ -905,6 +907,7 @@
 			children = (
 				630FA82E2448DDBE0001AB1B /* FullFramePlot.swift */,
 				6318427B2449D20E006AF53A /* FullFramePlotData.swift */,
+				63184284244C6E88006AF53A /* InteractionRecorder.swift */,
 			);
 			path = FullFramePlot;
 			sourceTree = "<group>";
@@ -3045,6 +3048,7 @@
 				631213F823257F4000C126B4 /* Bar.swift in Sources */,
 				631213FC23257F4000C126B4 /* AnalysisHints.swift in Sources */,
 				63184281244A154B006AF53A /* RelativeTap+DebugInfo.swift in Sources */,
+				63184285244C6E88006AF53A /* InteractionRecorder.swift in Sources */,
 				637FCB4B2391AA0C0067BBCC /* DebugLogger.swift in Sources */,
 				637B56A723CE7FDE007E51B0 /* BarScatterStrokable.swift in Sources */,
 				632696B123D0CA39009FE1E0 /* PlayerBarInteraction.swift in Sources */,

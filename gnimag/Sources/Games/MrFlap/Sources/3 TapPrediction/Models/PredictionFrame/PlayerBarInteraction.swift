@@ -9,6 +9,9 @@ import GameKit
 /// PlayerBarInteraction describes the interaction between a player and a bar – on a given playfield – focusing on the time range during which the player passes through the bar.
 /// All properties and functions in this class are time-based (instead of angle-based) and are offset so that 0 corresponds to the currentTime.
 struct PlayerBarInteraction {
+    /// The current reference time, corresponding to 0.
+    let currentTime: Double
+
     /// The total (absolute) speed with which the player and the bar are approaching each other.
     let totalSpeed: Double
 
@@ -29,6 +32,10 @@ struct PlayerBarInteraction {
 
     /// The full hole movement which is happening during `fullInteractionRange`.
     let holeMovement: HoleMovement
+
+    /// The actual bar tracker object from which this interaction emerged
+    /// Do not use it except for debugging purposes.
+    let barTracker: BarTracker
 
     // MARK: Subtypes
 

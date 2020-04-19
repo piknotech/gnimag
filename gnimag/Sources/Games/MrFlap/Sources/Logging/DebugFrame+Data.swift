@@ -183,6 +183,7 @@ final class DebugFrame: DebugFrameProtocol {
         var executedTaps: [PerformedTap]?
         var scheduledTaps: [ScheduledTap]?
         var frame: PredictionFrame?
+        var interactionRecorder: InteractionRecorder?
 
         // More plots
         var delayValues = SimpleTrackerDebugInfo<ConstantTracker>()
