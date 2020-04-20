@@ -23,7 +23,7 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         let frameDiff = frame.currentTime - (lastFrameTime ?? frame.currentTime)
         lastFrameTime = frame.currentTime
 
-        var bestSolution = lastSolution.flatMap { shift(solution: $0, by: frameDiff) }
+        var bestSolution = lastSolution.flatMap { $0.shifted(by: frameDiff) }
         var bestRating = bestSolution.map { verifier.rating(of: $0, requiredMinimum: 0) } ?? 0
 
         // Generate random solutions
@@ -47,14 +47,5 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
 
         lastSolution = bestSolution
         return bestSolution
-    }
-
-    /// Shift a solution by a given time. This is used to transform a solution from a different frame to the current frame by changing the `timeUntilStart` value.
-    /// Use positive `shift` values to transform a solution from a previous frame into the current frame.
-    /// If the solution would be invalid after shifting (i.e. begin in the past), return nil.
-    private func shift(solution: Solution, by shift: Double) -> Solution? {
-        let timeUntilStart = solution.timeUntilStart - shift
-        if timeUntilStart < 0 { return nil }
-        return Solution(timeUntilStart: timeUntilStart, jumpTimeDistances: solution.jumpTimeDistances, timeUntilEnd: solution.timeUntilEnd)
     }
 }

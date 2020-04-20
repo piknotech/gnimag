@@ -175,6 +175,12 @@ extension DebugFrame {
         if let plot = tapPrediction.gravityValues.createScatterPlot(includeToleranceRegionForLastDataPoint: false) {
             plot.write(to: directory +/ "player_gravity.png")
         }
+
+        // Plot current solution
+        if let mostRecent = tapPrediction.mostRecentSolution {
+            let plot = JumpSequencePlot(frame: mostRecent.associatedPredictionFrame, solution: mostRecent.solution)
+            plot.write(to: directory +/ "mostRecentSolution.png")
+        }
     }
 
     /// Log the FullFramePlot if available.
@@ -290,7 +296,9 @@ extension DebugFrame {
 
     /// The log text describing tap prediction.
     private var logTextForTapPrediction: String {
-        """
+        let currentSolutionIsFromCurrentFrame = tapPrediction.mostRecentSolution?.referenceTime == tapPrediction.frame?.currentTime
+
+        return """
         ––––– TAP PREDICTION –––––
         (was performed: \(tapPrediction.wasPerformed))
 
@@ -301,6 +309,10 @@ extension DebugFrame {
         Excerpt from PredictionFrame:
         • jumpVelocity (time-based): \(tapPrediction.frame?.jumping.jumpVelocity ??? "nil")
         • gravity (time-based): \(tapPrediction.frame?.jumping.gravity ??? "nil")
+
+        Most recent solution:
+        • referenceTime: \(tapPrediction.mostRecentSolution?.referenceTime ??? "nil") (is from current frame: \(currentSolutionIsFromCurrentFrame))
+        • Solution: \(tapPrediction.mostRecentSolution?.solution ??? "nil")
         """
     }
 }

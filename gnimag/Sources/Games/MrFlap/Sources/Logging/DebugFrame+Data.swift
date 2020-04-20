@@ -189,6 +189,7 @@ final class DebugFrame: DebugFrameProtocol {
         var delayValues = SimpleTrackerDebugInfo<ConstantTracker>()
         var jumpVelocityValues = SimpleTrackerDebugInfo<ConstantTracker>()
         var gravityValues = SimpleTrackerDebugInfo<ConstantTracker>()
+        var mostRecentSolution: TapPredictor.MostRecentSolution?
 
         /// Do necessary preparations before logging.
         func prepareForLogging() {

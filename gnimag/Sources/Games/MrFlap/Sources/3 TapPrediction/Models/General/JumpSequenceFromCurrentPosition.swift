@@ -37,6 +37,27 @@ struct JumpSequenceFromCurrentPosition {
 
         return RelativeTapSequence(taps: taps, unlockDuration: unlockTime)
     }
+
+    /// Shift the jump sequence by a given time. This is used to transform a jump sequence from a different frame to the current frame by changing the `timeUntilStart` value.
+    /// Use positive `shift` values to transform a jump sequence from a previous frame into the current frame.
+    /// If the jump sequence would be completely invalid after shifting (i.e. all taps begin in the past), return nil.
+    func shifted(by shift: Double) -> JumpSequenceFromCurrentPosition? {
+        JumpSequenceFromCurrentPosition(timeUntilStart: timeUntilStart - shift, jumpTimeDistances: jumpTimeDistances, timeUntilEnd: timeUntilEnd).removingTapsInThePast
+    }
+
+    /// Remove taps which are in the past. This means, if `timeUntilStart < 0`, drop the first jump and use the second jump as the sequence's start.
+    /// Returns nil if all jumps begin in the past.
+    private var removingTapsInThePast: JumpSequenceFromCurrentPosition? {
+        if timeUntilStart >= 0 { return self }
+
+        // Remove first jump
+        guard let firstJump = jumpTimeDistances.first else { return nil }
+        let newTimeUntilStart = timeUntilStart + firstJump
+        let new = JumpSequenceFromCurrentPosition(timeUntilStart: newTimeUntilStart, jumpTimeDistances: Array(jumpTimeDistances[1...]), timeUntilEnd: timeUntilEnd)
+
+        // Recursive removal
+        return new.removingTapsInThePast
+    }
 }
 
 extension JumpSequenceFromCurrentPosition {

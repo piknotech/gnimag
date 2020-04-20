@@ -29,6 +29,18 @@ class TapPredictor: TapPredictorBase {
     /// A class storing all recently passed bars, for debugging.
     private let interactionRecorder = InteractionRecorder(maximumStoredInteractions: 50)
 
+    /// Information about the most recent solution, for debugging.
+    /// Thereby, the most recent solution can either be the result from the current frame or from a previous frame.
+    private var mostRecentSolution: MostRecentSolution?
+    struct MostRecentSolution {
+        /// The original solution. `referenceTime` corresponds to 0.
+        let solution: InteractionSolutionStrategy.Solution
+        var referenceTime: Double { associatedPredictionFrame.currentTime }
+
+        /// The prediction frame that was used for calculating the solution.
+        let associatedPredictionFrame: PredictionFrame
+    }
+
     /// Default initializer.
     init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
         strategies = Strategies(
@@ -83,13 +95,8 @@ class TapPredictor: TapPredictorBase {
         let strategy = self.strategy(for: frame)
         guard let solution = strategy.solution(for: frame) else { return nil }
 
-        /* Debug-draw solution
-        if solution.timeUntilStart < 0.1 {
-            let now = timeProvider.currentTime
-            DispatchQueue.global(qos: .utility).async {
-                JumpSequencePlot(frame: frame, solution: solution).writeToDesktop(name: "Plots.noSync/\(now).png")
-            }
-        }*/
+        // Debug-store solution
+        mostRecentSolution = MostRecentSolution(solution: solution, associatedPredictionFrame: frame)
 
         return solution.convertToRelativeTapSequence(currentTime: currentTime, player: frame.player, jumping: frame.jumping)
     }
@@ -101,6 +108,7 @@ class TapPredictor: TapPredictorBase {
         debug.executedTaps = scheduler.performedTaps
         debug.wasLocked = !hasPredicted
         debug.isLocked = lockIsActive
+        debug.mostRecentSolution = mostRecentSolution
 
         // Create PredictionFrame just for debug logging if required
         if !hasPredicted {
