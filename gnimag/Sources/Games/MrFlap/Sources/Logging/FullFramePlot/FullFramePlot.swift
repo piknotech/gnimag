@@ -148,9 +148,7 @@ extension FullFramePlotData {
     /// The scatter strokables of all bars in the prediction frame (transformed to the correct time-space)
     /// Contains also all previous bars which are visible in the ScatterFrame.
     func barScatterStrokables(in scatterFrame: ScatterFrame) -> [ScatterStrokable] {
-        let visiblePreviousBars = interactionRecorder.passedInteractions.filter { interaction in
-            !interaction.fullInteractionRange.shifted(by: interaction.currentTime).intersection(with: scatterFrame.dataContentXRange).isEmpty
-        }
+        let visiblePreviousBars = interactionRecorder.interactions(before: frame.currentTime, intersectingRange: scatterFrame.dataContentXRange)
 
         return (frame.bars + visiblePreviousBars).map { interaction in
             BarScatterStrokable(interaction: interaction).shiftedRight(by: CGFloat(interaction.currentTime))

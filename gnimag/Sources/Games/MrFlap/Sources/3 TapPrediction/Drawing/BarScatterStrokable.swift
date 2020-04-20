@@ -13,24 +13,32 @@ struct BarScatterStrokable: ScatterStrokable {
 
     /// Return a MultiStrokable consisting of multiple lines and curves.
     func concreteStrokable(for frame: ScatterFrame) -> Strokable {
-        // Bounds curves
-        let left = interaction.boundsCurves.left.scatterStrokable
-        let right = interaction.boundsCurves.right.scatterStrokable
-
-        // Movement sections
+        let boundary = interaction.partialBoundaryScatterStrokables
         let sections = interaction.holeMovement.sections.flatMap(\.boundaryStrokables)
 
-        let all = [left, right] + sections
+        let all = boundary + sections
         return MultiScatterStrokable(components: all).concreteStrokable(for: frame)
     }
 }
 
 // MARK: Extensions for Creating ScatterStrokables
 
-private extension PlayerBarInteraction.BoundsCurves.Curve {
-    /// Create a ScatterStrokable drawing `self`.
-    var scatterStrokable: ScatterStrokable {
-        ArbitraryFunctionScatterStrokable(function: function, drawingRange: range, interpolationPoints: 25)
+private extension PlayerBarInteraction {
+    /// Create up to 4 ScatterStrokables drawing the outer bounds curves. Thereby, a hole is left in the middle for the range where the hole movement happens.
+    var partialBoundaryScatterStrokables: [ScatterStrokable] {
+        partialScatterStrokables(for: boundsCurves.left, intersection: holeMovement.intersectionsWithBoundsCurves.left) +
+        partialScatterStrokables(for: boundsCurves.right, intersection: holeMovement.intersectionsWithBoundsCurves.right)
+    }
+
+    /// Return up to two ScatterStrokables that describe the (either left or right) boundary of the bar. Thereby, a hole is left in the middle for the range where the hole movement happens.
+    private func partialScatterStrokables(for curve: BoundsCurves.Curve, intersection: HoleMovement.IntersectionsWithBoundsCurves.IntersectionWithBoundsCurve) -> [ScatterStrokable] {
+        let range1 = SimpleRange(from: curve.range.lower, to: intersection.xRange.lower)
+        let range2 = SimpleRange(from: intersection.xRange.upper, to: curve.range.upper)
+
+        return [
+            ArbitraryFunctionScatterStrokable(function: curve.function, drawingRange: range1, interpolationPoints: 25),
+            ArbitraryFunctionScatterStrokable(function: curve.function, drawingRange: range2, interpolationPoints: 25),
+        ]
     }
 }
 

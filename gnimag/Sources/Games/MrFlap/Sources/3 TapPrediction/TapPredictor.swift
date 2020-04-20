@@ -26,8 +26,8 @@ class TapPredictor: TapPredictorBase {
     private let debugLogger: DebugLogger
     private var debug: DebugFrame.TapPrediction { debugLogger.currentFrame.tapPrediction }
 
-    /// A class storing all passed bars, for debugging.
-    private let interactionRecorder = InteractionRecorder()
+    /// A class storing all recently passed bars, for debugging.
+    private let interactionRecorder = InteractionRecorder(maximumStoredInteractions: 50)
 
     /// Default initializer.
     init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
