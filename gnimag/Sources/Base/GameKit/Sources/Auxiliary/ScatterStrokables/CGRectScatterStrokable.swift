@@ -8,10 +8,16 @@ import Geometry
 import TestingTools
 
 /// Draws a CGRect which is given in data point space.
-struct CGRectScatterStrokable: ScatterStrokable {
-    let rect: CGRect
+public struct CGRectScatterStrokable: ScatterStrokable {
+    public let rect: CGRect
 
-    func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+    /// Default initializer.
+    public init(rect: CGRect) {
+        self.rect = rect
+    }
+
+    /// Convert the rect into pixel space.
+    public func concreteStrokable(for frame: ScatterFrame) -> Strokable {
         let rect = self.rect.intersection(frame.dataContentRect)
 
         let origin = frame.pixelPosition(of: (Double(rect.minX), Double(rect.minY)))

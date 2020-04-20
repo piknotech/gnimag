@@ -6,6 +6,7 @@
 import Common
 import Image
 import GameKit
+import Geometry
 import TestingTools
 
 /// FullFramePlot bundles plots from GameModelCollection and TapPrediction into one single, informative plot.
@@ -36,6 +37,12 @@ final class FullFramePlot {
         for bar in data.barScatterStrokables(in: plot.frame) {
             plot.stroke(bar, with: .normal, dash: Dash(on: 1, off: 1))
         }
+
+        // Draw time markers
+        let frameTime = VerticalLineScatterStrokable(x: data.realFrameTime)
+        let predictionTime = VerticalLineScatterStrokable(x: data.frame.currentTime)
+        plot.stroke(frameTime, with: .custom(.lightBlue), dash: Dash(on: 2, off: 2))
+        plot.stroke(predictionTime, with: .custom(.lightBlue), dash: Dash(on: 2, off: 2))
     }
 
     /// Write the plot to a given destination.
@@ -78,19 +85,19 @@ extension FullFramePlotData {
     var allDataPoints: [ScatterDataPoint] {
         var result = [ScatterDataPoint]()
 
-        // FIRST: Existing time/height datapoints of the player
+        // Existing time/height datapoints of the player
         result += (playerHeight.allDataPoints ?? []).map { dataPoint -> ScatterDataPoint in
             let time = playerAngleConverter.time(from: dataPoint.x) // angle -> time conversion
             return ScatterDataPoint(x: time, y: dataPoint.y, color: .custom(Self.dataPointColor))
         }
 
-        // SECOND: Expected start points of performed jumps
+        // Expected start points of performed jumps
         let executed = jumps(from: executedTaps.map(\.scheduledTap), startingAfter: earliestDataPointTime)
         result += executed.map {
             ScatterDataPoint(x: $0.startPoint.time, y: $0.startPoint.height, color: .custom(Self.performedJumpColor))
         }
 
-        // THIRD: Scheduled jumps of the currently predicted tap sequence
+        // Scheduled jumps of the currently predicted tap sequence
         let scheduled = jumps(from: scheduledTaps, startingAfter: earliestDataPointTime)
         result += scheduled.map {
             ScatterDataPoint(x: $0.startPoint.time, y: $0.startPoint.height, color: .custom(Self.scheduledJumpColor))
@@ -122,22 +129,26 @@ extension FullFramePlotData {
             )
         }
 
-        // SECOND: Expected start points of performed jumps
-        result += jumps(from: executedTaps.map(\.scheduledTap), startingAfter: earliestDataPointTime).map {
-            FunctionDebugInfo(
-                function: $0.parabola,
-                strokable: QuadCurveScatterStrokable(parabola: $0.parabola, drawingRange: $0.timeRange),
-                color: .custom(Self.performedJumpColor),
-                dash: .solid
-            )
+        // Expected start points of performed jumps and scheduled jumps of the currently predicted tap sequence
+        let executedJumps = jumps(from: executedTaps.map(\.scheduledTap), startingAfter: earliestDataPointTime)
+        let scheduledJumps = jumps(from: scheduledTaps, startingAfter: earliestDataPointTime)
+
+        var allJumps = executedJumps + scheduledJumps
+        if allJumps.isEmpty { return result }
+
+        // Correct jump lengths so all jumps directly join each other (time-wise)
+        for i in 0 ..< allJumps.count - 1 {
+            let jump = allJumps[i], endTime = allJumps[i+1].startPoint.time
+            let endPoint = Point(time: endTime, height: jump.parabola.at(endTime))
+            allJumps[i] = Jump(startPoint: jump.startPoint, endPoint: endPoint, parabola: jump.parabola)
         }
 
-        // THIRD: Scheduled jumps of the currently predicted tap sequence
-        result += jumps(from: scheduledTaps, startingAfter: earliestDataPointTime).map {
-            FunctionDebugInfo(
-                function: $0.parabola,
-                strokable: QuadCurveScatterStrokable(parabola: $0.parabola, drawingRange: $0.timeRange),
-                color: .custom(Self.scheduledJumpColor),
+        result += allJumps.enumerated().map { i, jump in
+            let color = (i < executedJumps.count) ? Self.performedJumpColor : Self.scheduledJumpColor
+            return FunctionDebugInfo(
+                function: jump.parabola,
+                strokable: QuadCurveScatterStrokable(parabola: jump.parabola, drawingRange: jump.timeRange),
+                color: .custom(color),
                 dash: .solid
             )
         }

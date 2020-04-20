@@ -11,11 +11,11 @@ import TestingTools
 /// LinaerScatterStrokable is a ScatterStrokable that can draw a line (segment).
 public struct LinearScatterStrokable: ScatterStrokable {
     /// The line in the data point space.
-    let line: LinearFunction
+    public let line: LinearFunction
 
     /// The x value range where the line should be drawn (in data point space).
     /// Attention: the range must be regular, i.e. upper > lower.
-    let drawingRange: SimpleRange<Double>
+    public let drawingRange: SimpleRange<Double>
 
     /// Default initializer.
     public init(line: LinearFunction, drawingRange: SimpleRange<Double>) {

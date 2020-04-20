@@ -11,15 +11,15 @@ import TestingTools
 /// A ScatterStrokable that can draw any function by calculating and connecting points on the function at certain intervals.
 public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
     /// The function in the data point space.
-    let function: Function
+    public let function: Function
 
     /// The x value range where the function should be drawn (in data point space).
     /// Attention: the range must be regular, i.e. upper > lower.
-    let drawingRange: SimpleRange<Double>
+    public let drawingRange: SimpleRange<Double>
 
     /// The minimum number of interpolation points that will be used.
     /// If the function is curvy (high derivative), more points will be used, up to `2 * interpolationPoints`.
-    let interpolationPoints: Int
+    public let interpolationPoints: Int
 
     /// Default initializer.
     public init(function: Function, drawingRange: SimpleRange<Double>, interpolationPoints: Int) {
