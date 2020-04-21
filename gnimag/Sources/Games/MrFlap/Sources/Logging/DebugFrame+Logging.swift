@@ -298,6 +298,10 @@ extension DebugFrame {
     private var logTextForTapPrediction: String {
         let currentSolutionIsFromCurrentFrame = tapPrediction.mostRecentSolution?.referenceTime == tapPrediction.frame?.currentTime
 
+        let barToString: (PlayerBarInteraction) -> String = { bar in
+            "• timeUntilHittingCenter: \(bar.timeUntilHittingCenter); holeMovementSections: \(bar.holeMovement.sections)"
+        }
+
         return """
         ––––– TAP PREDICTION –––––
         (was performed: \(tapPrediction.wasPerformed))
@@ -313,6 +317,9 @@ extension DebugFrame {
         Most recent solution:
         • referenceTime: \(tapPrediction.mostRecentSolution?.referenceTime ??? "nil") (is from current frame: \(currentSolutionIsFromCurrentFrame))
         • Solution: \(tapPrediction.mostRecentSolution?.solution ??? "nil")
+
+        All interactions in frame:
+        \(tapPrediction.frame?.bars.map(barToString).joined(separator: "\n") ??? "nil")
         """
     }
 }

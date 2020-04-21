@@ -49,8 +49,8 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         idleHeightBeforeInitialSegment: Value? = nil
     ) {
         let tolerance = TrackerTolerance.relative(relativeValueRangeTolerance)
-        gravityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
-        jumpVelocityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
+        gravityTracker = PreliminaryTracker(maxDataPoints: 200, tolerancePoints: 1, tolerance: tolerance)
+        jumpVelocityTracker = PreliminaryTracker(maxDataPoints: 200, tolerancePoints: 1, tolerance: tolerance)
 
         self.customRelativeGuessRange = customRelativeGuessRange
         self.idleHeightBeforeInitialSegment = idleHeightBeforeInitialSegment

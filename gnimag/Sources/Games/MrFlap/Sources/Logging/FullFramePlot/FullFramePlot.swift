@@ -5,6 +5,7 @@
 
 import Common
 import Image
+import Foundation
 import GameKit
 import Geometry
 import TestingTools

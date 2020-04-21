@@ -65,8 +65,8 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
         guard let line = segment.tracker.regression else { return nil }
         guard monotonicityChecker.direction != .both else { return nil }
 
-        // 1.: Determine the direction if it is unknown
-        if firstSegmentDirection == nil {
+        // 1.: Determine the direction if it is unknown, or anytime during the first segment
+        if firstSegmentDirection == nil || currentSegment.index == 0 {
             let approachingUpperBound = (line.slope > 0) == (monotonicityChecker.direction == .increasing)
             let isEvenSegment = currentSegment.index.isMultiple(of: 2)
             firstSegmentDirection = (approachingUpperBound == isEvenSegment) ? .up : .down

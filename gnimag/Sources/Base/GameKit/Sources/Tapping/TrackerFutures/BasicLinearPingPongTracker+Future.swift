@@ -51,6 +51,7 @@ public extension BasicLinearPingPongTracker {
         // Calculate begin and end segment indices (with end > begin)
         let beginIndex = indexForSegment(atTime: timeRange.lower)
         let endIndex = indexForSegment(atTime: timeRange.upper)
+        if beginIndex > endIndex { return nil }
 
         // Calculate LinearSegmentPortion for each partial or full segment
         return (beginIndex ... endIndex).compactMap { index in

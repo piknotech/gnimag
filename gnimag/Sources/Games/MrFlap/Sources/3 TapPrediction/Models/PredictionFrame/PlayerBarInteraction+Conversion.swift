@@ -60,7 +60,7 @@ extension PlayerBarInteraction {
         let yCenterMovement = bar.yCenterMovementPortionsForTimeRange(fullRange)
 
         // Map to HoleMovement.Sections
-        let sections = yCenterMovement.map {
+        let sections = yCenterMovement.compactMap {
             movementSection(from: $0, bar: bar, currentTime: currentTime, widths: widths, curves: curves)
         }
 
@@ -74,7 +74,7 @@ extension PlayerBarInteraction {
 
     /// Convert a LinearSegmentPortion into a HoleMovement.Section.
     /// Returns nil if the section is fully irrelevant, i.e. outside the enclosing curves.
-    private static func movementSection(from portion: Portion, bar: BarProperties, currentTime: Double, widths: BarWidths, curves: BoundsCurves) -> HoleMovement.Section {
+    private static func movementSection(from portion: Portion, bar: BarProperties, currentTime: Double, widths: BarWidths, curves: BoundsCurves) -> HoleMovement.Section? {
         // Shift portion back by currentTime (such that 0 corresponds to currentTime)
         let timeRange = portion.timeRange.shifted(by: -currentTime)
         let line = portion.line.shiftedLeft(by: currentTime)
@@ -128,6 +128,9 @@ extension PlayerBarInteraction {
         let fullTimeRange = validRanges.reduce(SimpleRange<Double>(from: .infinity, to: -.infinity)) { fullRange, new in
             fullRange.pseudoUnion(with: new)
         }
+
+        // Discard irrelevant sections
+        if fullTimeRange.isEmpty { return nil }
 
         return HoleMovement.Section(
             fullTimeRange: fullTimeRange,
