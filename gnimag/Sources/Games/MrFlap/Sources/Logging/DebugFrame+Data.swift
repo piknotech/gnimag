@@ -175,6 +175,7 @@ final class DebugFrame: DebugFrameProtocol {
         var wasLocked: Bool?
         var isLocked: Bool?
         var delay: Double?
+        var fellBackToIdleStrategy = false
         
         // Properties for FullFramePlot
         var realTimeDuringTapPrediction: Double?

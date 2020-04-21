@@ -317,7 +317,7 @@ extension DebugFrame {
         Most recent solution:
         • referenceTime: \(tapPrediction.mostRecentSolution?.referenceTime ??? "nil") (is from current frame: \(currentSolutionIsFromCurrentFrame))
         • Solution: \(tapPrediction.mostRecentSolution?.solution ??? "nil")
-
+        \(tapPrediction.fellBackToIdleStrategy ? "Fell back to idle strategy because singleBar didn't yield a solution!\n" : "")
         All interactions in frame:
         \(tapPrediction.frame?.bars.map(barToString).joined(separator: "\n") ??? "nil")
         """

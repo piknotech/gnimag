@@ -20,15 +20,15 @@ struct SolutionVerifier {
     func precondition(forValidSolution solution: Solution) -> Bool {
         let player = frame.player, jumping = frame.jumping
 
-        // Left side. Approximate via center (just requiring 1 instead of 2 height calculations)
+        // Left side. Attention: we assume the direction of the bounds curve (as it is always shaped like this)
         let leftSide = interaction.holeMovement.intersectionsWithBoundsCurves.left
-        let leftHeight = solution.height(at: leftSide.xRange.center, for: player, with: jumping)
-        if !leftSide.yRange.contains(leftHeight) { return false }
+        if solution.height(at: leftSide.xRange.lower, for: player, with: jumping) <= leftSide.yRange.lower { return false }
+        if solution.height(at: leftSide.xRange.upper, for: player, with: jumping) >= leftSide.yRange.upper { return false }
 
-        // Right side (same as above)
+        // Right side (same assumptions)
         let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right
-        let rightHeight = solution.height(at: rightSide.xRange.center, for: player, with: jumping)
-        if !rightSide.yRange.contains(rightHeight) { return false }
+        if solution.height(at: rightSide.xRange.lower, for: player, with: jumping) >= rightSide.yRange.upper { return false }
+        if solution.height(at: rightSide.xRange.upper, for: player, with: jumping) <= rightSide.yRange.lower { return false }
 
         return true
     }

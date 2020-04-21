@@ -45,7 +45,7 @@ class TapPredictor: TapPredictorBase {
     init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
         strategies = Strategies(
             idle: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2), // ...?
-            singleBar: OptimalSolutionViaRandomizedSearchStrategy()
+            singleBar: OptimalSolutionViaRandomizedSearchStrategy(minimumJumpDistance: 0.2)
         )
 
         self.debugLogger = debugLogger
@@ -93,7 +93,15 @@ class TapPredictor: TapPredictorBase {
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
-        guard let solution = strategy.solution(for: frame) else { return nil }
+        var solution: InteractionSolutionStrategy.Solution
+
+        if let directSolution = strategy.solution(for: frame) {
+            solution = directSolution
+        } else {
+            // Fallback
+            solution = strategies.idle.solution(for: frame)!
+            debug.fellBackToIdleStrategy = true
+        }
 
         // Debug-store solution
         mostRecentSolution = MostRecentSolution(solution: solution, associatedPredictionFrame: frame)

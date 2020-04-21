@@ -32,7 +32,7 @@ extension MrFlapGameSimulation {
             let distance: Double = 10
             let min = playfield.innerRadius + Double(holeSize) / 2 + distance
             let max = playfield.fullRadius - Double(holeSize) / 2 - distance
-            let start = Double.random(in: max ... min)
+            let start = Double.random(in: min...max)
             let speed = 2 * (max - min) / yCenterPeriodDuration
 
             yCenterFunction = FunctionWrapper { t in

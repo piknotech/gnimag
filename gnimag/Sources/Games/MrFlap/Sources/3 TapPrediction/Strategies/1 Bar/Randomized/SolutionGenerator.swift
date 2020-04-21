@@ -34,8 +34,8 @@ struct SolutionGenerator {
 
     /// Generate a random solution meeting the requirements.
     /// Returns nil if it is not possible to solve the interaction or to meet the requirements.
-    func randomSolution(minimumConsecutiveTapDistance: Double) -> Solution? {
-        let T = interaction.holeMovement.intersectionsWithBoundsCurves.right.xRange.upper
+    func randomSolution(minimumConsecutiveTapDistance: Double, increaseMinimumTapDistanceForLargeNumberOfTaps: Bool) -> Solution? {
+        let T = interaction.fullInteractionRange.upper
         guard var taps = randomNumberOfTaps else { return nil }
 
         // Calculate tap range
