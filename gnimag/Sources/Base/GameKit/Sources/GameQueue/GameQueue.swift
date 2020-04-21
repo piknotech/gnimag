@@ -16,8 +16,8 @@ public final class GameQueue {
 
     private let imageProvider: ImageProvider
 
-    /// High-priority queue where frame analysis is performed.
-    private let queue: DispatchQueue
+    /// High-priority queue where frame analysis and further calculation is performed on.
+    private let queue = DispatchQueue(label: "gnimag.gamequeue", qos: .userInteractive)
 
     /// The callback which is executed in the background to analyze frames.
     /// Only return from this callback after you finished analyzing the frame.
@@ -33,7 +33,6 @@ public final class GameQueue {
     public init(imageProvider: ImageProvider, synchronousFrameCallback: @escaping (Frame) -> Void) {
         self.imageProvider = imageProvider
         self.synchronousFrameCallback = synchronousFrameCallback
-        self.queue = DispatchQueue(label: "GameQueue", qos: .userInteractive) // High-priority queue
         self.timingStats = GameQueueTimingStats(timeProvider: imageProvider.timeProvider)
     }
 

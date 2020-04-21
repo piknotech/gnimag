@@ -13,6 +13,9 @@ open class DebugLogger<Parameters, Frame: DebugFrameProtocol> where Frame.Parame
     /// The current debug frame. Enumeration starts at one.
     public private(set) var currentFrame = Frame(index: 1)
 
+    /// The dispatch queue where logging is performed on.
+    private let queue = DispatchQueue(label: "gnimag.logging", qos: .utility)
+
     /// Default initializer.
     /// Calling this initializer creates and empties the logging directory specified in `parameters`.
     public init(parameters: Parameters) {
@@ -39,7 +42,7 @@ open class DebugLogger<Parameters, Frame: DebugFrameProtocol> where Frame.Parame
         // Log frame, asynchronously, if relevant
         if frame.isValidForLogging(with: parameters) {
             frame.prepareSynchronously(with: parameters)
-            DispatchQueue.global(qos: .utility).async {
+            queue.async {
                 frame.log(with: self.parameters)
             }
         }
