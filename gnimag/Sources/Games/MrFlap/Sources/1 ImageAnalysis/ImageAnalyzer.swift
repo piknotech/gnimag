@@ -130,7 +130,7 @@ class ImageAnalyzer {
 
         // Find eye or wing pixel via its unique color
         let path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
-        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(tolerance), on: path) else {
+        guard let eye = image.findFirstPixel(matching: coloring.eye, on: path) else {
             return nil & {debug.player.failure = .eyeNotFound}
         }
         debug.player.eyePosition = eye

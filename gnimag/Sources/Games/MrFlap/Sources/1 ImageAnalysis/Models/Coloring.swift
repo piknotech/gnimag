@@ -4,6 +4,7 @@
 //
 
 import Image
+import ImageAnalysisKit
 
 /// Coloring describes the color scheme of the playfield.
 /// It also contains game mode-specific colors used for analysis.
@@ -16,7 +17,7 @@ struct Coloring {
     let secondary: Color
 
     /// The eye or wing color that identifies the player. It is unique and does not appear anywhere else on the playfield.
-    let eye: Color
+    let eye: ColorMatch
 
     /// A color that is safe on draw with both on foreground and background.
     let safeLoggingColor: Color
@@ -36,11 +37,11 @@ struct Coloring {
         /// Determine eyeColor and safeLoggingColor
         switch mode {
         case .normal:
-            eye = .black
+            eye = .color(.black, tolerance: 0.25)
             safeLoggingColor = .red
 
         case .hard:
-            eye = .white
+            eye = .color(.white, tolerance: 0.05)
             safeLoggingColor = Color(0.5, 0.5, 1) // light blue
         }
     }
