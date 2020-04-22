@@ -41,7 +41,7 @@ struct BarProperties {
             let holeSize = bar.holeSize.average,
             let angleByPlayerAngle = bar.angle.tracker.regression else { return nil }
 
-        self.holeSize = holeSize
+        self.holeSize = holeSize - playerSize
 
         // widthAtHeight implementation
         angularWidthAtHeight = { height in
