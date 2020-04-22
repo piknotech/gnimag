@@ -27,6 +27,9 @@ class TapPredictor: TapPredictorBase {
     private let debugLogger: DebugLogger
     private var debug: DebugFrame.TapPrediction { debugLogger.currentFrame.tapPrediction }
 
+    /// Only perform one "strategy switch" logging call per bar.
+    private var loggingDamper = ActionStreamDamper(delay: .infinity, performFirstActionImmediately: true)
+
     /// A class storing all recently passed bars, for debugging.
     private let interactionRecorder = InteractionRecorder(maximumStoredInteractions: 50)
 
@@ -51,6 +54,11 @@ class TapPredictor: TapPredictorBase {
 
         self.debugLogger = debugLogger
         super.init(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: .absolute(0.05)) // ...?
+
+        // Re-allow logging "strategy switch" once interaction changes
+        interactionRecorder.interactionCompleted += {
+            self.loggingDamper.reset()
+        }
     }
 
     /// Set the game model. Only call this once.
@@ -98,10 +106,13 @@ class TapPredictor: TapPredictorBase {
         if let directSolution = strategy.solution(for: frame) {
             solution = directSolution
         } else {
-            // Fallback
-            Terminal.log(.warning, "TapPredictor – didn't find a solution with the preferred strategy, falling back to IdleStrategy.")
+            // Fallback strategy
             solution = strategies.idle.solution(for: frame)!
             debug.fellBackToIdleStrategy = true
+
+            loggingDamper.perform {
+                Terminal.log(.warning, "TapPredictor – didn't find a solution with the preferred strategy, falling back to IdleStrategy (predictionTime: \(frame.currentTime)).")
+            }
         }
 
         // Debug-store solution

@@ -18,6 +18,10 @@ final class InteractionRecorder {
     /// The most recent interaction. Once an incoming interaction does not match this interaction, this interaction will be marked as passed.
     private var mostRecentInteraction: PlayerBarInteraction?
 
+    /// Triggered each time an interaction is fully completed and a new one is detected.
+    /// The parameter is the completed interaction.
+    let interactionCompleted = Event<PlayerBarInteraction>()
+
     /// Default initializer.
     init(maximumStoredInteractions: Int) {
         self.maximumStoredInteractions = maximumStoredInteractions
@@ -27,12 +31,13 @@ final class InteractionRecorder {
     /// If this interaction is new, i.e. does not match the previous one, the previous interaction will be marked as completed.
     func add(interaction: PlayerBarInteraction) {
         if let mostRecent = mostRecentInteraction, isNew(interaction: interaction) {
-            print("new bar at \(interaction.currentTime)")
             passedInteractions.append(mostRecent)
 
             if passedInteractions.count > maximumStoredInteractions {
                 passedInteractions.removeFirst()
             }
+
+            interactionCompleted.trigger(with: mostRecent)
         }
 
         mostRecentInteraction = interaction

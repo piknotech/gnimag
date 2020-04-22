@@ -22,7 +22,7 @@ public enum Measurement {
             let (_, startTime) = runningMeasurements.remove(at: index)
             Terminal.log(.nice, "Task \"\(id)\" took \(1000 * (time - startTime)) ms!")
         } else {
-            Terminal.log(.warning, "There is no task named \"\(id)\"!")
+            Terminal.log(.info, "Measurement – There is no task named \"\(id)\"!")
         }
     }
 

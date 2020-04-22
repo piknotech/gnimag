@@ -83,7 +83,7 @@ extension DebugFrame {
             try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
             return directory
         } catch {
-            Terminal.log(.warning, "DebugLogger – subdirectory \"\(directory)\" couldn't be created!")
+            Terminal.log(.error, "DebugLogger – subdirectory \"\(directory)\" couldn't be created!")
             return nil
         }
     }

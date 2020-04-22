@@ -23,7 +23,7 @@ public final class MrFlap {
 
     /// The queue where all steps are performed on.
     private var queue: GameQueue!
-    private var statsPrintingTimer: Timer!
+    private var statsPrinting = ActionStreamDamper(delay: 10, performFirstActionImmediately: false)
 
     /// The shared playfield.
     private var playfield: Playfield!
@@ -51,12 +51,6 @@ public final class MrFlap {
         tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider, debugLogger: debugLogger)
 
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
-
-        statsPrintingTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
-            Terminal.logNewline()
-            Terminal.log(.info, self.queue.timingStats.detailedDescription)
-            Terminal.logNewline()
-        }
     }
 
     /// Begin receiving images and play the game.
@@ -86,6 +80,12 @@ public final class MrFlap {
         }
 
         debugLogger.advance()
+        
+        statsPrinting.perform {
+            Terminal.logNewline()
+            Terminal.log(.info, self.queue.timingStats.detailedDescription)
+            Terminal.logNewline()
+        }
     }
 
     // MARK: State-Specific Update Methods

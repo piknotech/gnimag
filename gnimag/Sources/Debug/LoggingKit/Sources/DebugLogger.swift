@@ -16,6 +16,8 @@ open class DebugLogger<Parameters, Frame: DebugFrameProtocol> where Frame.Parame
     /// The dispatch queue where logging is performed on.
     private let queue = DispatchQueue(label: "gnimag.logging", qos: .utility)
 
+    private let watchdog = DebugLoggingSpeedWatchdog()
+
     /// Default initializer.
     /// Calling this initializer creates and empties the logging directory specified in `parameters`.
     public init(parameters: Parameters) {
@@ -42,7 +44,9 @@ open class DebugLogger<Parameters, Frame: DebugFrameProtocol> where Frame.Parame
         // Log frame, asynchronously, if relevant
         if frame.isValidForLogging(with: parameters) {
             frame.prepareSynchronously(with: parameters)
+
             queue.async {
+                self.watchdog.frameWasLogged(frameIndex: frame.index, currentFrameIndex: self.currentFrame.index)
                 frame.log(with: self.parameters)
             }
         }

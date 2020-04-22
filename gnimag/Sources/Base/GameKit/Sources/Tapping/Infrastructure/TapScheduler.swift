@@ -92,8 +92,6 @@ public final class TapScheduler {
 
     /// Perform a tap at the current moment.
     private func actuallyPerform(_ tap: ScheduledTap) {
-        print("Actually Tap At: \(tap.absoluteTime)")
-
         tapper.tap()
 
         let performedTap = PerformedTap(scheduledTap: tap)

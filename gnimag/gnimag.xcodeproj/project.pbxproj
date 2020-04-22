@@ -125,6 +125,8 @@
 		63184285244C6E88006AF53A /* InteractionRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63184284244C6E88006AF53A /* InteractionRecorder.swift */; };
 		63184287244E1798006AF53A /* HorizontalAndVerticalLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63184286244E1798006AF53A /* HorizontalAndVerticalLine.swift */; };
 		63184288244E182F006AF53A /* CGRectScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */; };
+		6318428A24506CB0006AF53A /* ActionStreamDamper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318428924506CB0006AF53A /* ActionStreamDamper.swift */; };
+		6318428D245076FC006AF53A /* DebugLoggingSpeedWatchdog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318428B245076F1006AF53A /* DebugLoggingSpeedWatchdog.swift */; };
 		6318966A23B4C8B4002FBD4F /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966923B4C8B4002FBD4F /* TapPredictor.swift */; };
 		6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6318966C23B621B9002FBD4F /* TapScheduler.swift */; };
 		631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631BE25723EF53EE008DDEE1 /* CwlRandom.swift */; };
@@ -454,6 +456,8 @@
 		63184282244A1AA4006AF53A /* Withable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Withable.swift; sourceTree = "<group>"; };
 		63184284244C6E88006AF53A /* InteractionRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionRecorder.swift; sourceTree = "<group>"; };
 		63184286244E1798006AF53A /* HorizontalAndVerticalLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalAndVerticalLine.swift; sourceTree = "<group>"; };
+		6318428924506CB0006AF53A /* ActionStreamDamper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStreamDamper.swift; sourceTree = "<group>"; };
+		6318428B245076F1006AF53A /* DebugLoggingSpeedWatchdog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLoggingSpeedWatchdog.swift; sourceTree = "<group>"; };
 		6318966923B4C8B4002FBD4F /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6318966C23B621B9002FBD4F /* TapScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapScheduler.swift; sourceTree = "<group>"; };
 		631BE25723EF53EE008DDEE1 /* CwlRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CwlRandom.swift; sourceTree = "<group>"; };
@@ -795,6 +799,7 @@
 		630682D82430F12500C5B28E /* More */ = {
 			isa = PBXGroup;
 			children = (
+				6318428924506CB0006AF53A /* ActionStreamDamper.swift */,
 				630873F3242E6633000ECE47 /* ValueStreamDamper.swift */,
 			);
 			path = More;
@@ -1329,8 +1334,8 @@
 			isa = PBXGroup;
 			children = (
 				6312137D2325793100C126B4 /* AngularWrapper.swift */,
-				6312137C2325793100C126B4 /* MedianTracker.swift */,
 				63440B4323B39D8B0091A012 /* PreliminaryTracker.swift */,
+				6312137C2325793100C126B4 /* MedianTracker.swift */,
 			);
 			path = Special;
 			sourceTree = "<group>";
@@ -2187,6 +2192,7 @@
 			isa = PBXGroup;
 			children = (
 				63D002932373024600041069 /* DebugLogger.swift */,
+				6318428B245076F1006AF53A /* DebugLoggingSpeedWatchdog.swift */,
 				63FABDBD23917F6C0088FD77 /* DebugParameterType.swift */,
 				63FABDC02391811F0088FD77 /* DebugFrameProtocol.swift */,
 				6375AFB4237DA8B40019981E /* Operators.swift */,
@@ -2957,6 +2963,7 @@
 				63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
 				6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift in Sources */,
+				6318428A24506CB0006AF53A /* ActionStreamDamper.swift in Sources */,
 				63876E662356093500132A21 /* JumpTracker.swift in Sources */,
 				6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */,
 				634449D62447598D00042102 /* RelativeTapSequence.swift in Sources */,
@@ -3128,6 +3135,7 @@
 			files = (
 				63FABDC6239186DB0088FD77 /* DebugLogger.swift in Sources */,
 				63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */,
+				6318428D245076FC006AF53A /* DebugLoggingSpeedWatchdog.swift in Sources */,
 				63FABDC12391811F0088FD77 /* DebugFrameProtocol.swift in Sources */,
 				63FABDBE23917F6C0088FD77 /* DebugParameterType.swift in Sources */,
 				63FABDC4239181640088FD77 /* SimpleTrackerDebugInfo.swift in Sources */,
