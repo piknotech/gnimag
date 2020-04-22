@@ -32,7 +32,7 @@ public final class MonotonicityChecker<T: Comparable> {
     private let strict: Bool
 
     /// The most recently verified value.
-    private var lastValue: T!
+    public private(set) var lastValue: T!
 
     /// Default initializer.
     public init(direction: Direction, strict: Bool) {

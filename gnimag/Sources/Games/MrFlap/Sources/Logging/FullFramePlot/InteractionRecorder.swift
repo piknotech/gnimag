@@ -32,15 +32,20 @@ final class InteractionRecorder {
     func add(interaction: PlayerBarInteraction) {
         if let mostRecent = mostRecentInteraction, isNew(interaction: interaction) {
             passedInteractions.append(mostRecent)
-
-            if passedInteractions.count > maximumStoredInteractions {
-                passedInteractions.removeFirst()
-            }
+            if passedInteractions.count > maximumStoredInteractions { passedInteractions.removeFirst() }
 
             interactionCompleted.trigger(with: mostRecent)
         }
 
         mostRecentInteraction = interaction
+
+        // Remove most recent interaction when bar disappears
+        interaction.barTracker.disappearedOrOrphaned.unsubscribe(self)
+        interaction.barTracker.disappearedOrOrphaned += self • {
+            if self.mostRecentInteraction?.barTracker == interaction.barTracker {
+                self.mostRecentInteraction = nil
+            }
+        }
     }
 
     /// Return all interactions whose reference time is smaller than a given time.

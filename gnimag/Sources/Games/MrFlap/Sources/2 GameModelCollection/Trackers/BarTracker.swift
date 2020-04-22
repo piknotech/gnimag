@@ -19,6 +19,13 @@ final class BarTracker {
     /// Only trackers with a "normal" state should be considered by prediction algorithms.
     var state: BarTrackerState!
 
+    var isDisappearing: Bool {
+        state is BarTrackerStateDisappearing
+    }
+
+    /// Triggered when the bar switches to disappearing state, or when it was detected to be orphaned.
+    let disappearedOrOrphaned = Event<Void>()
+
     // The angle and the center of the hole. yCenter is only used in state "normal".
     let angle: AngularWrapper<LinearTracker>
     let yCenter: BasicLinearPingPongTracker
@@ -71,6 +78,14 @@ final class BarTracker {
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
         guard width.isValueValid(bar.width, &debug.width) else { return false }
+
+        // Trigger disappearing event after the state has possibly changed in the state-specific integrityCheck
+        let wasDisappearing = isDisappearing
+        defer {
+            if !wasDisappearing && isDisappearing {
+                disappearedOrOrphaned.trigger()
+            }
+        }
 
         // State-specific integrityCheck
         // Extend lifetime as state may be changed (i.e. dereferenced) within its own integrityCheck

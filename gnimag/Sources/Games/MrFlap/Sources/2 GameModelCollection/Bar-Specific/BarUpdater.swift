@@ -72,9 +72,14 @@ struct BarUpdater {
             model.bars.append(tracker)
         }
 
-        // Remove orphaned trackers
+        // Remove orphaned trackers and trigger orphaned events
         model.bars.removeAll { tracker in
-            tracker.orphanage.isOrphaned
+            if tracker.orphanage.isOrphaned {
+                tracker.disappearedOrOrphaned.trigger()
+                return true
+            } else {
+                return false
+            }
         }
     }
 }

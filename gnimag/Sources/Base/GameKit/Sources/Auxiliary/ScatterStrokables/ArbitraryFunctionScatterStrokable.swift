@@ -38,16 +38,15 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
         let end = min(drawingRange.upper, Double(dataRect.maxX))
         let accuracy = CGFloat(end - start) / CGFloat(interpolationPoints)
 
-        if start >= end { return PolygonalChainsStrokable(chains: [[]]) }
-
         // Use the derivative for better point distribution if the function is differentiable
         let derivative = (function as? DifferentiableFunction)?.derivative
 
         var result = [CGPoint]()
         var x = start
+        var i = 0 // Fix for too small accuracies
 
         // Function traversal
-        while x <= end {
+        while x <= end && i <= 2 * interpolationPoints {
             // Convert to pixel space
             let point = frame.pixelPosition(of: (x, function.at(x)))
             result.append(point)
@@ -64,6 +63,7 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
             let d = cos(atan(scaledDeriv)) * accuracy
             let deltaX = max(d, accuracy / 2)
             x += Double(deltaX)
+            i += 1
         }
 
         // Add point at the end of the interval

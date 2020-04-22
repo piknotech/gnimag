@@ -31,6 +31,7 @@ extension PredictionFrame {
     /// Convert all bars to PlayerBarInteractions, sorted by their directed distance from the player.
     private static func convertBars(model: GameModel, player: PlayerProperties, playfield: PlayfieldProperties, currentTime: Double) -> [PlayerBarInteraction] {
         model.bars.compactMap { tracker in
+            if tracker.isDisappearing { return nil }
             guard let bar = BarProperties(bar: tracker, with: model.player, playfield: playfield, currentTime: currentTime) else { return nil }
             return PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime, barTracker: tracker)
         }.sorted {
