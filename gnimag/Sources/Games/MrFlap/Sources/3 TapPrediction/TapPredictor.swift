@@ -90,7 +90,6 @@ class TapPredictor: TapPredictorBase {
 
         // Debug logging
         performDebugLogging(with: model, frame: frame, delay: delay)
-        frame.bars.first.map(interactionRecorder.add(interaction:))
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
@@ -138,6 +137,8 @@ class TapPredictor: TapPredictorBase {
         debug.playerHeight.from(tracker: model.player.height)
         debug.playerAngleConverter = PlayerAngleConverter(player: model.player)
         debug.interactionRecorder = interactionRecorder
+
+        frame.bars.first.map(interactionRecorder.add(interaction:))
 
         debug.delayValues.from(tracker: scheduler.delayTracker.tracker)
         debug.gravityValues.from(tracker: model.player.height.debug.gravityTracker)
