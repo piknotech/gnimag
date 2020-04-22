@@ -89,9 +89,10 @@ struct SolutionGenerator {
         let player = frame.player, jumping = frame.jumping, interaction = frame.bars.first!
 
         // Calculate distance for the lower right point of the hole (respective to the current jump start of the player)
-        let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right
-        var heightDiff = rightSide.yRange.lower - player.currentJumpStart.y
-        var T = rightSide.xRange.upper + player.timePassedSinceJumpStart // Consider the full timespan starting at the jump start
+        let width = interaction.fullInteractionRange.upper
+        let height = interaction.holeMovement.intersectionsWithBoundsCurves.right.yRange.lower
+        var heightDiff = height - player.currentJumpStart.y
+        var T = width + player.timePassedSinceJumpStart // Consider the full timespan starting at the jump start
 
         // First: Try performing N equistant jumps in [0,T] (this is the strategy achieving the highest end result after N jumps)
         // --> Find smallest N with hDiff <= N * f(T/N) (f being the jump parabola)
@@ -103,8 +104,8 @@ struct SolutionGenerator {
 
         // Then: If the jump sequence is impossible (i.e. the first tap is in the past because we considered the larger time interval), adapt the strategy to start the jump now (i.e. reduce the interval).
         // This yields a worse result than the first approach, but is still the best result (as the first approach is impossible).
-        heightDiff = rightSide.yRange.lower - player.currentPosition.y
-        T = rightSide.xRange.upper
+        heightDiff = height - player.currentPosition.y
+        T = width
 
         if jumping.jumpVelocity * T < heightDiff { return nil } // Target too high
 

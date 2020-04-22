@@ -43,7 +43,8 @@ struct SolutionVerifier {
         let timeDistanceForFirstJump = frame.player.timePassedSinceJumpStart + solution.timeUntilStart
         var allTimeDistances = solution.jumpTimeDistances
         allTimeDistances.append(timeDistanceForFirstJump)
-        let timeRating = allTimeDistances.min()!
+        let maximumTimeRating = frame.jumping.horizontalJumpLength // Limit time rating to avoid perverse results
+        let timeRating = min(maximumTimeRating, allTimeDistances.min()!)
 
         // Multiply with safety rating
         let requiredSafetyRating = requiredMinimum / timeRating

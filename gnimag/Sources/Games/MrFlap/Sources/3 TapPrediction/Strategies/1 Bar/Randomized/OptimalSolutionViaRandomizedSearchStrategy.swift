@@ -3,6 +3,8 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
+
 /// This InteractionSolutionStrategy finds an optimal solution (respective to a rating method) by intelligently trying a large amount of random tap sequences and choosing the best one.
 /// Currently, this class only considers the first bar in the frame.
 class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
@@ -20,6 +22,12 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
     /// Default initializer.
     init(minimumJumpDistance: Double) {
         self.minimumJumpDistance = minimumJumpDistance
+    }
+
+    /// The minimum number of taps that are required to solve the frame.
+    /// Returns nil when the frame cannot be solved because the vertical distance to the bar hole is too high.
+    func minimumNumberOfTaps(for frame: PredictionFrame) -> Int? {
+        SolutionGenerator(frame: frame).minimumNumberOfTaps
     }
     
     /// Calculate the solution for the given frame.

@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 import GameKit
 import Geometry
@@ -99,6 +100,7 @@ class TapPredictor: TapPredictorBase {
             solution = directSolution
         } else {
             // Fallback
+            Terminal.log(.warning, "TapPredictor – didn't find a solution with the preferred strategy, falling back to IdleStrategy.")
             solution = strategies.idle.solution(for: frame)!
             debug.fellBackToIdleStrategy = true
         }
@@ -144,9 +146,19 @@ class TapPredictor: TapPredictorBase {
 
     /// Choose the strategy to calculate the solution for a given frame.
     private func strategy(for frame: PredictionFrame) -> InteractionSolutionStrategy {
-        switch frame.bars.count {
-        case 0: return strategies.idle
-        default: return strategies.singleBar
+        if frame.bars.count == 0 {
+            return strategies.idle
+        }
+
+        guard let numTaps = strategies.singleBar.minimumNumberOfTaps(for: frame) else {
+            Terminal.log(.error, "TapPredictor – it is impossible to solve the current frame, going to crash.")
+            return strategies.idle
+        }
+
+        if numTaps > 5 { // 6 or more taps - singleBarStrategy yields weird results
+            return strategies.idle
+        } else {
+            return strategies.singleBar
         }
     }
 
@@ -160,6 +172,6 @@ class TapPredictor: TapPredictorBase {
         let referenceShift = timeProvider.currentTime - referenceTime
         let time = nextTap.relativeTime - referenceShift
 
-        return time < 0.1
+        return time < 0.05
     }
 }
