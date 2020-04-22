@@ -38,6 +38,8 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
         let end = min(drawingRange.upper, Double(dataRect.maxX))
         let accuracy = CGFloat(end - start) / CGFloat(interpolationPoints)
 
+        if start >= end { return PolygonalChainsStrokable(chains: [[]]) }
+
         // Use the derivative for better point distribution if the function is differentiable
         let derivative = (function as? DifferentiableFunction)?.derivative
 

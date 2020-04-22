@@ -8,8 +8,6 @@ import Darwin
 import Foundation
 import GameKit
 
-import TestingTools
-
 /// When debug logging is happening too often, it might not be fast enough to keep up in real time.
 /// This means that, over time, more and more debug frames (which are from old frames but have not yet been processed) get piled up and fill up the memory.
 /// When this happens, DebugLoggingSpeedWatchdog writes warnings to the terminal.
@@ -17,7 +15,7 @@ internal class DebugLoggingSpeedWatchdog {
     private let tracker = LinearTracker(maxDataPoints: .max, tolerance: .absolute(0))
 
     /// The damper enforcing a minimum delay between warning messages.
-    private var loggingDamper = ActionStreamDamper(delay: 10, performFirstActionImmediately: false)
+    private var loggingDamper = ActionStreamDamper(delay: 10, performFirstActionImmediately: true)
 
     /// Call when a new frame was logged.
     /// If required, this will write a warning to the terminal.
@@ -26,7 +24,6 @@ internal class DebugLoggingSpeedWatchdog {
 
         if let slope = tracker.slope, slope < 0.95, currentFrameIndex - frameIndex > 50 {
             loggingDamper.perform {
-                ScatterPlot(from: tracker).writeToDesktop(name: "\(slope).png")
                 Terminal.log(.error, "DebugLogger cant't keep up with the logging workload in real-time! (logging frame \(frameIndex) while current frame is \(currentFrameIndex)). Over time, memory will get filled up more and more with DebugFrames. Current memory load: \(getMemoryUsage() ??? "nil") MB.")
             }
         }

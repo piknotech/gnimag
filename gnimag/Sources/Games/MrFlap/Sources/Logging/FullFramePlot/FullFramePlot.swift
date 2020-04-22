@@ -19,9 +19,13 @@ final class FullFramePlot {
 
     /// Create a FullFramePlot from the given data.
     init(data: FullFramePlotData) {
-        // Create ScatterPlot
+        // Create ScatterPlot; include all bars of the current frame in the plot
+        let points = data.allDataPoints
+        let min = points.map(\.x).min() ?? 0
+        let max = (points.map(\.x) + [data.maximumTimeOfBarInFrame ?? 0]).max()!
+        let xRange = SimpleRange(from: min, to: max)
         let yRange = SimpleRange(from: data.frame.playfield.lowerRadius, to: data.frame.playfield.upperRadius)
-        plot = ScatterPlot(dataPoints: data.allDataPoints, yRange: yRange)
+        plot = ScatterPlot(dataPoints: points, xRange: xRange, yRange: yRange)
 
         // Draw playfield
         let lowerPlayfieldLine = HorizontalLineScatterStrokable(y: data.frame.playfield.lowerRadius)
@@ -155,6 +159,13 @@ extension FullFramePlotData {
         }
 
         return result
+    }
+
+    /// The maximum time value of the interaction range of any interaction in this frame.
+    var maximumTimeOfBarInFrame: Double? {
+        frame.bars.map {
+            $0.fullInteractionRange.upper + $0.currentTime
+        }.max()
     }
 
     /// The scatter strokables of all bars in the prediction frame (transformed to the correct time-space)
