@@ -40,9 +40,12 @@ final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugFrame> {
 
         // Log in background, but with high priority
         queue.qualityOfService = .userInteractive
-        queue.addOperation {
-            for frame in self.lastFrames.elements {
-                frame.log(with: self.parameters)
+
+        Timing.shared.perform(after: 0) { // Wait until the current frame has been added to lastFrames
+            self.queue.addOperation {
+                for frame in self.lastFrames.elements {
+                    frame.log(with: self.parameters)
+                }
             }
         }
     }

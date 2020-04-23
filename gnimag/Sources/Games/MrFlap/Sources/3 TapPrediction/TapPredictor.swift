@@ -78,11 +78,13 @@ class TapPredictor: TapPredictorBase {
 
     /// Calculate AnalysisHints for the given time, i.e. predict where the player will be located at the given (future) time.
     func analysisHints(for time: Double) -> AnalysisHints? {
+        let expectedDetectionTimes = scheduler.allExpectedDetectionTimes.filter { $0 <= time }
+
         guard
             let model = gameModel,
             let playerSize = model.player.size.average,
             let jumping = JumpingProperties(player: model.player),
-            let player = PlayerProperties(player: model.player, jumping: jumping, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: time) else { return nil }
+            let player = PlayerProperties(player: model.player, jumping: jumping, performedTapTimes: expectedDetectionTimes, currentTime: time) else { return nil }
 
         // Convert predicted values to plain Player
         let position = PolarCoordinates(
