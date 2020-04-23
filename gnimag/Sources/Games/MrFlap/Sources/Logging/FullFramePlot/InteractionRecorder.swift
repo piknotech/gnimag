@@ -55,9 +55,8 @@ final class InteractionRecorder {
     /// Determine whether an interaction is an actual new bar or if it just matches the last interaction.
     private func isNew(interaction: PlayerBarInteraction) -> Bool {
         guard let mostRecent = mostRecentInteraction else { return true }
-        if interaction.barTracker != mostRecent.barTracker { return true }
 
-        let errorTolerance = 0.1
-        return interaction.timeUntilHittingCenter > mostRecent.timeUntilHittingCenter + errorTolerance
+        let tolerance = 0.05
+        return interaction.timeUntilHittingCenter > mostRecent.timeUntilHittingCenter + tolerance
     }
 }

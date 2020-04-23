@@ -13,7 +13,7 @@ extension PlayerBarInteraction {
     init(player: PlayerProperties, bar: BarProperties, playfield: PlayfieldProperties, currentTime: Double, barTracker: BarTracker) {
         self.currentTime = currentTime
         self.barTracker = barTracker
-        
+
         // Calculate when the player will hit the bar
         let direction = player.xSpeed - bar.xSpeed
         totalSpeed = abs(direction)

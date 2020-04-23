@@ -34,7 +34,7 @@ final class FullFramePlot {
         plot.stroke(upperPlayfieldLine, with: .normal)
 
         // Draw all jumps
-        for info in data.allFunctionInfos {
+        for info in data.allJumps {
             plot.stroke(info.strokable, with: info.color, alpha: 0.75, strokeWidth: 0.5, dash: info.dash.concreteDash)
         }
 
@@ -65,6 +65,7 @@ extension FullFramePlotData {
     private static var dataPointColor = Color.black
     private static var performedJumpColor = Color.white
     private static var scheduledJumpColor = Color.red
+    private static var currentlyExtrapolatedJumpColor = Color.green
 
     /// The time of the earliest data point.
     private var earliestDataPointTime: Double {
@@ -87,6 +88,7 @@ extension FullFramePlotData {
     ///  - Existing time/height datapoints of the player.
     ///  - Expected start points of previously scheduled (i.e. already performed) jumps. Optimally, they would match the start points of the actual jumps.
     ///  – The scheduled jump points of the currently predicted tap sequence.
+    ///  – The start point of the currently extrapolated (predicted) jump.
     var allDataPoints: [ScatterDataPoint] {
         var result = [ScatterDataPoint]()
 
@@ -108,6 +110,11 @@ extension FullFramePlotData {
             ScatterDataPoint(x: $0.startPoint.time, y: $0.startPoint.height, color: .custom(Self.scheduledJumpColor))
         }
 
+        // Current player jump start
+        let start = frame.player.currentJumpStartPoint
+        let extrapolated = ScatterDataPoint(x: start.time, y: start.height, color: .custom(Self.currentlyExtrapolatedJumpColor))
+        result.append(extrapolated)
+
         // Add final point
         if let last = (scheduled.last ?? executed.last)?.endPoint {
             let color = (scheduled.isEmpty) ? Self.performedJumpColor : Self.scheduledJumpColor
@@ -117,11 +124,11 @@ extension FullFramePlotData {
         return result
     }
 
-    /// All functions (transformed to the correct time-space). These match the three types described by `allDataPoints`.`
-    var allFunctionInfos: [FunctionDebugInfo] {
+    /// All jumps (transformed to the correct time-space). These match the four types described by `allDataPoints`.`
+    var allJumps: [FunctionDebugInfo] {
         var result = [FunctionDebugInfo]()
 
-        // FIRST: Existing time/height datapoints of the player
+        // Existing time/height datapoints of the player
         result += (playerHeight.allFunctions ?? []).map { function -> FunctionDebugInfo in
             let parabola = function.function as! Parabola
             let strokable = function.strokable as! QuadCurveScatterStrokable
@@ -158,6 +165,19 @@ extension FullFramePlotData {
             )
         }
 
+        // Additionally: currently extrapolated jump
+        let start = frame.player.currentJumpStartPoint
+        let jump = frame.jumping.parabola.shiftedLeft(by: -start.time) + start.height
+        let range = SimpleRange(from: start.time, to: .infinity)
+
+        let extrapolated = FunctionDebugInfo(
+            function: jump,
+            strokable: QuadCurveScatterStrokable(parabola: jump, drawingRange: range),
+            color: .custom(Self.currentlyExtrapolatedJumpColor),
+            dash: .solid
+        )
+        result.append(extrapolated)
+
         return result
     }
 
@@ -179,7 +199,7 @@ extension FullFramePlotData {
     }
 }
 
-// MARK: Transformations
+// MARK: Transformations & Strokables
 
 private extension Jump {
     /// Shift a Jump to the right by the given amount.

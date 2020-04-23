@@ -11,6 +11,7 @@ struct PlayerProperties {
     /// The position where the current jump started.
     /// Together with the passed time, this gives the exact current player position and velocity.
     let currentJumpStart: Position
+    let currentJumpStartPoint: Point // Same as `currentJumpStart`, just using absolute (!) time instead of angle
     let timePassedSinceJumpStart: Double
 
     /// The current position of the player.
@@ -34,7 +35,8 @@ struct PlayerProperties {
         guard let angularJumpStart = player.height.finalFutureJumpUsingJumpTimes(times: tapTimeAngles, overlapTolerance: 0.05) else { return nil }
 
         currentJumpStart = Position(x: Angle(angularJumpStart.time), y: angularJumpStart.value)
-        timePassedSinceJumpStart = currentTime - converter.time(from: angularJumpStart.time)
+        currentJumpStartPoint = Point(time: converter.time(from: angularJumpStart.time), height: angularJumpStart.value)
+        timePassedSinceJumpStart = currentTime - currentJumpStartPoint.time
 
         // Get current position
         let currentPositionX = currentJumpStart.x.value + xSpeed * timePassedSinceJumpStart
