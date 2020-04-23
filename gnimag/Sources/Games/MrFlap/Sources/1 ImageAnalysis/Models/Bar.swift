@@ -3,6 +3,8 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Image
+
 /// Bar describes the measurements of a vertical bar.
 struct Bar {
     /// The width of the bar.
@@ -23,4 +25,7 @@ struct Bar {
     /// The y-center, in bar coordinates (ignoring the playfield radius).
     /// This means, yCenter is in [0, playfield.freeSpace].
     var yCenter: Double { innerHeight + holeSize / 2 }
+
+    /// The color of the bar.
+    let color: Color
 }

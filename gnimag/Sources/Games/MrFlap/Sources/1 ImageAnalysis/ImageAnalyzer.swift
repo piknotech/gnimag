@@ -255,7 +255,8 @@ class ImageAnalyzer {
             angle: Angle(angle1).midpoint(between: Angle(angle2)).value,
             innerHeight: correctInnerHeight,
             outerHeight: Double(outerOBB.height), // Does not need to be corrected
-            holeSize: playfield.freeSpace - Double(innerOBB.height + outerOBB.height)
+            holeSize: playfield.freeSpace - Double(innerOBB.height + outerOBB.height),
+            color: coloring.theme
         )
 
         debug.bars.current.result = bar

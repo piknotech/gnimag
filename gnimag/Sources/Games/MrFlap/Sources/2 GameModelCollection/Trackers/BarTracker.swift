@@ -6,6 +6,7 @@
 import Common
 import Foundation
 import GameKit
+import ImageAnalysisKit
 import TestingTools
 
 /// BarTracker bundles trackers for a single bar.
@@ -37,13 +38,18 @@ final class BarTracker {
     /// The shared playfield.
     private let playfield: Playfield
 
+    /// The colors that this bar has. The color does not change.
+    /// This is used to distinguish bars when the theme color changes, i.e. old bars disappear and new bars appear.
+    private let color: ColorMatch
+
     /// The debug logger and a shorthand form for the current debug frame.
     let debugLogger: DebugLogger
     var debug: DebugFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
 
     // Default initializer.
-    init(playfield: Playfield, debugLogger: DebugLogger) {
+    init(playfield: Playfield, color: ColorMatch, debugLogger: DebugLogger) {
         self.playfield = playfield
+        self.color = color
         self.debugLogger = debugLogger
 
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
@@ -97,6 +103,10 @@ final class BarTracker {
     /// Update the trackers with the values from the given bar.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with bar: Bar, at time: Double) {
+        // Important: if the color doesn't match, the bar may or may not be the correct one. Definitely don't update and let OrphanageDetector do its thing.
+        // We could already return "false" on integrityCheck, but that would trigger wrong integrityError logging.
+        if !color.matches(bar.color) { return }
+
         debug.integrityCheckSuccessful = true
 
         orphanage.markBarAsValid()
