@@ -7,9 +7,12 @@ import Common
 import Image
 import Tapping
 
+extension WindowInteractor: Withable { }
+
 /// Scrcpy provides input and output classes if you want to use the scrcpy application to communicate with an Android device.
 let scrcpy = WindowInteractor(appName: "scrcpy").with {
     $0.removeUpperWindowBorder = true
 }
 
-extension WindowInteractor: Withable { }
+/// Vysor provides input and output classes if you want to use the Vysor application to communicate with an Android device.
+let vysor = WindowInteractor(appName: "Vysor")

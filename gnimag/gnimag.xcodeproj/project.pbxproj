@@ -83,7 +83,7 @@
 		631213CA23257EB600C126B4 /* MouseTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213BF23257EB600C126B4 /* MouseTapper.swift */; };
 		631213CB23257EB600C126B4 /* MouseControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C023257EB600C126B4 /* MouseControl.swift */; };
 		631213CE23257EB600C126B4 /* DisplayLinkedImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C423257EB600C126B4 /* DisplayLinkedImageProvider.swift */; };
-		631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C623257EB600C126B4 /* Scrcpy.swift */; };
+		631213CF23257EB600C126B4 /* Android.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C623257EB600C126B4 /* Android.swift */; };
 		631213DA23257EF600C126B4 /* MrFlap.h in Headers */ = {isa = PBXBuildFile; fileRef = 631213D823257EF600C126B4 /* MrFlap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631213F223257F4000C126B4 /* MrFlap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213E223257F4000C126B4 /* MrFlap.swift */; };
 		631213F323257F4000C126B4 /* BarTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213E523257F4000C126B4 /* BarTracker.swift */; };
@@ -416,7 +416,7 @@
 		631213C023257EB600C126B4 /* MouseControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MouseControl.swift; sourceTree = "<group>"; };
 		631213C323257EB600C126B4 /* NativeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeImage.swift; sourceTree = "<group>"; };
 		631213C423257EB600C126B4 /* DisplayLinkedImageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayLinkedImageProvider.swift; sourceTree = "<group>"; };
-		631213C623257EB600C126B4 /* Scrcpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrcpy.swift; sourceTree = "<group>"; };
+		631213C623257EB600C126B4 /* Android.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Android.swift; sourceTree = "<group>"; };
 		631213C723257EB600C126B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		631213C823257EB600C126B4 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		631213D623257EF600C126B4 /* MrFlap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MrFlap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1440,7 +1440,7 @@
 				630CE2F22440AD31006017F4 /* ScreenInteractor.swift */,
 				634E2C6B2440A383001C2459 /* WindowInteractor.swift */,
 				631213C223257EB600C126B4 /* Components */,
-				631213C523257EB600C126B4 /* Scrcpy */,
+				631213C523257EB600C126B4 /* Android */,
 				631213BE23257EB600C126B4 /* NoopTapper.swift */,
 			);
 			path = IO;
@@ -1457,13 +1457,13 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		631213C523257EB600C126B4 /* Scrcpy */ = {
+		631213C523257EB600C126B4 /* Android */ = {
 			isa = PBXGroup;
 			children = (
-				631213C623257EB600C126B4 /* Scrcpy.swift */,
+				631213C623257EB600C126B4 /* Android.swift */,
 				631213C723257EB600C126B4 /* README.md */,
 			);
-			path = Scrcpy;
+			path = Android;
 			sourceTree = "<group>";
 		};
 		631213D723257EF600C126B4 /* MrFlap */ = {
@@ -2839,7 +2839,7 @@
 			files = (
 				6354CECA2409467600A4C3B8 /* main.swift in Sources */,
 				63E16AAB24348400005E67ED /* MouseDragger.swift in Sources */,
-				631213CF23257EB600C126B4 /* Scrcpy.swift in Sources */,
+				631213CF23257EB600C126B4 /* Android.swift in Sources */,
 				634E2C6C2440A383001C2459 /* WindowInteractor.swift in Sources */,
 				631213CA23257EB600C126B4 /* MouseTapper.swift in Sources */,
 				631213CB23257EB600C126B4 /* MouseControl.swift in Sources */,

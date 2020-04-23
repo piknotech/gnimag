@@ -12,13 +12,16 @@ import Geometry
 import Tapping
 
 // let a = ScreenInteractor(frame: CGRect(x: 332, y: 68, width: 778, height: 767))
+// let a = ImageListProvider(directoryPath: "/Users/David/Desktop/I", framerate: 50)
+// let game = MrFlapGameSimulation(fps: 50)
 
 let mrflap = MrFlap(
-    imageProvider: scrcpy.imageProvider,
-    tapper: scrcpy.tapper,
+    imageProvider: vysor.imageProvider,
+    tapper: vysor.tapper,
     debugParameters: DebugParameters(
         location: "/Users/David/Desktop/Debug.noSync",
         occasions: [],
+        logEvery: nil,
         content: .all,
         logLast50FramesOnCrash: true
     )

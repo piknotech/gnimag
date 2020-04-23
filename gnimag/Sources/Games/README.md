@@ -59,7 +59,7 @@ To summarize: use Trackers to calculate physics values and game parameters. Try 
 
 A very important thing to think about is input/output delay.
 
-Any tool you use for transferring the screen content from your mobile device to your computer, like [scrcpy](../Products/gnimag/Sources/IO/Scrcpy), has a small, but noticeable input delay. Depending on what you use for tapping, there may arise an additional output delay.
+Any tool you use for transferring the screen content from your mobile device to your computer, like [scrcpy](../Products/gnimag/Sources/IO/Android), has a small, but noticeable input delay. Depending on what you use for tapping, there may arise an additional output delay.
 
 Your game must of course make up for this delay. Anything your program sees is slightly in the past. You want to calculate the **current**, live game model and use this to make tap predictions.
 
