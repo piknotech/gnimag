@@ -9,11 +9,8 @@ import Common
 /// Once an interaction has been (successfully) completed, it can be stored via InteractionRecorder.
 /// Then, when drawing a FullFramePlot, the passed interactions can be retrieved.
 final class InteractionRecorder {
-    /// The maximum number of recent interactions that will be stored.
-    let maximumStoredInteractions: Int
-
     /// All interactions that have been passed.
-    private(set) var passedInteractions = [PlayerBarInteraction]()
+    private(set) var passedInteractions: FixedSizeFIFO<PlayerBarInteraction>
 
     /// The most recent interaction. Once an incoming interaction does not match this interaction, this interaction will be marked as passed.
     private var mostRecentInteraction: PlayerBarInteraction?
@@ -24,7 +21,7 @@ final class InteractionRecorder {
 
     /// Default initializer.
     init(maximumStoredInteractions: Int) {
-        self.maximumStoredInteractions = maximumStoredInteractions
+        passedInteractions = FixedSizeFIFO<PlayerBarInteraction>(capacity: maximumStoredInteractions)
     }
 
     /// Call each frame with the upcoming interaction.
@@ -32,8 +29,6 @@ final class InteractionRecorder {
     func add(interaction: PlayerBarInteraction) {
         if let mostRecent = mostRecentInteraction, isNew(interaction: interaction) {
             passedInteractions.append(mostRecent)
-            if passedInteractions.count > maximumStoredInteractions { passedInteractions.removeFirst() }
-
             interactionCompleted.trigger(with: mostRecent)
         }
 
@@ -51,7 +46,7 @@ final class InteractionRecorder {
     /// Return all interactions whose reference time is smaller than a given time.
     /// Also, discard (early) interactions which do not intersect a given time range.
     func interactions(before: Double, intersectingRange range: SimpleRange<Double>) -> [PlayerBarInteraction] {
-        passedInteractions.filter {
+        passedInteractions.elements.filter {
             $0.currentTime < before &&
             !$0.fullInteractionRange.shifted(by: $0.currentTime).intersection(with: range).isEmpty
         }

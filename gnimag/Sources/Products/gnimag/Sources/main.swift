@@ -18,9 +18,9 @@ let mrflap = MrFlap(
     tapper: scrcpy.tapper,
     debugParameters: DebugParameters(
         location: "/Users/David/Desktop/Debug.noSync",
-        occasions: [.errors, .interestingTapPrediction],
-        logEvery: 20,
-        content: .all
+        occasions: [],
+        content: .all,
+        logLast50FramesOnCrash: true
     )
 )
 

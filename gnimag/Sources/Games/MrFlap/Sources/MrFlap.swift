@@ -151,6 +151,7 @@ public final class MrFlap {
     private func playerHasCrashed() {
         queue.stop()
         tapPredictor.removeScheduledTaps()
+        debugLogger.playerHasCrashed()
         crashed.trigger()
     }
 

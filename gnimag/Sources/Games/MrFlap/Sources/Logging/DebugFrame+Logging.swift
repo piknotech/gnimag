@@ -53,6 +53,11 @@ extension DebugFrame {
         return false
     }
 
+    /// States if the player was detected to have crashed.
+    var playerCrashed: Bool {
+        imageAnalysis.outcome == .some(.crashed)
+    }
+
     /// Check if the frame should be logged given the severity.
     func isValidForLogging(with parameters: DebugParameters) -> Bool {
         if let num = parameters.controlFramerate, index.isMultiple(of: num) { return true }
@@ -81,11 +86,12 @@ extension DebugFrame {
         let prefix = String(format: "%06d", index)
         var suffix: String
 
-        switch (hasIntegrityError, hasImageAnalysisError, hasBarLocationError, tapPrediction.fellBackToIdleStrategy) {
-        case (true, _, _, _): suffix = "_IntegrityError"
-        case (_, true, _, _): suffix = "_AnalysisError"
-        case (_, _, true, _): suffix = "_LocateBarError"
-        case (_, _, _, true): suffix = "_FallbackFromIdle"
+        switch (playerCrashed, hasIntegrityError, hasImageAnalysisError, hasBarLocationError, tapPrediction.fellBackToIdleStrategy) {
+        case (true, _, _, _, _): suffix = "_Crashed"
+        case (_, true, _, _, _): suffix = "_IntegrityError"
+        case (_, _, true, _, _): suffix = "_AnalysisError"
+        case (_, _, _, true, _): suffix = "_LocateBarError"
+        case (_, _, _, _, true): suffix = "_FallbackToIdle"
         default: suffix = "_Okay"
         }
 
@@ -113,17 +119,9 @@ extension DebugFrame {
         }
 
         // Log images
-        if parameters.content.contains(.imageAnalysis) {
-            logImageAnalysisImages(to: directory)
-        }
-
-        if parameters.content.contains(.gameModelCollection) {
-            logGameModelCollectionImages(to: directory)
-        }
-
-        if parameters.content.contains(.tapPrediction) {
-            logTapPredictionImages(to: directory)
-        }
+        if parameters.content.contains(.imageAnalysis) { logImageAnalysisImages(to: directory) }
+        if parameters.content.contains(.gameModelCollection) { logGameModelCollectionImages(to: directory) }
+        if parameters.content.contains(.tapPrediction) { logTapPredictionImages(to: directory) }
     }
 
     // MARK: Log Images
