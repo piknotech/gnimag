@@ -40,6 +40,7 @@ final class DebugFrame: DebugFrameProtocol {
         enum Outcome {
             case success
             case error
+            case crashed
             case samePlayerPosition
         }
 
@@ -175,7 +176,7 @@ final class DebugFrame: DebugFrameProtocol {
         var wasLocked: Bool?
         var isLocked: Bool?
         var delay: Double?
-        var fellBackToIdleStrategy = false 
+        var fellBackToIdleStrategy = false
 
         // Properties for FullFramePlot
         var realTimeDuringTapPrediction: Double?

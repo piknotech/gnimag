@@ -26,4 +26,8 @@ let mrflap = MrFlap(
 
 mrflap.play()
 
+mrflap.crashed += {
+    print("CRASHED!")
+}
+
 RunLoop.main.run()

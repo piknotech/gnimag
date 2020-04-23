@@ -71,6 +71,11 @@ class TapPredictor: TapPredictorBase {
         gameModel.player.linkPlayerJump(to: self)
     }
 
+    /// Remove all scheduled taps.
+    func removeScheduledTaps() {
+        scheduler.unscheduleAll()
+    }
+
     /// Calculate AnalysisHints for the given time, i.e. predict where the player will be located at the given (future) time.
     func analysisHints(for time: Double) -> AnalysisHints? {
         guard

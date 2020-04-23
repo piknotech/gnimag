@@ -40,6 +40,10 @@ public final class MrFlap {
         case finished
     }
 
+    /// An Event that is triggered a single time once the player crashes.
+    /// Also, when the player crashes, image analysis stops.
+    public let crashed = Event<Void>()
+
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: SomewhereTapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
@@ -121,10 +125,17 @@ public final class MrFlap {
 
     /// Normal update method while in-game.
     private func gameplayUpdate(image: Image, time: Double) {
-        if case let .success(result) = analyze(image: image, time: time) {
+        switch analyze(image: image, time: time) {
+        case let .success(result): // ImageAnalysis -> GameModelCollection -> TapPrediction
             if gameModelCollector.accept(result: result, time: time) {
                 tapPredictor.predict()
             }
+
+        case .failure(.crashed):
+            playerHasCrashed()
+
+        default:
+            ()
         }
     }
 
@@ -133,6 +144,14 @@ public final class MrFlap {
         let pos1 = player1.coords.position(respectiveTo: playfield.center)
         let pos2 = player2.coords.position(respectiveTo: playfield.center)
         return pos1.distance(to: pos2)
+    }
+
+    /// Called when the player has crashed.
+    /// Stops image analysis and performs finalization tasks.
+    private func playerHasCrashed() {
+        queue.stop()
+        tapPredictor.removeScheduledTaps()
+        crashed.trigger()
     }
 
     // MARK: Analysis & Hints

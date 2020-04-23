@@ -44,6 +44,11 @@ class ImageAnalyzer {
         }
         debug.coloring.result = coloring
 
+        // Decide whether player has crashed
+        if coloring.crashColor.matches(coloring.theme) {
+            return .failure(.crashed) & {debug.outcome = .crashed}
+        }
+
         // Find playfield (only at first call)
         playfield ??= findPlayfield(in: image, with: coloring)
         if playfield == nil {

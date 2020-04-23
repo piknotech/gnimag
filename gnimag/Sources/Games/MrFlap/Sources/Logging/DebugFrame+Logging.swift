@@ -22,7 +22,7 @@ extension DebugFrame {
         switch imageAnalysis.outcome {
         case .none: return false // Image analysis wasn't executed
         case .samePlayerPosition: return false // No game model collection etc. happened
-        case .error: return true
+        case .error, .crashed: return true
         case .success: break
         }
 
@@ -42,6 +42,17 @@ extension DebugFrame {
             gameModelCollection.bars.all.any { !$0.integrityCheckSuccessful })
     }
 
+    /// States if the frame is interesting from a tap prediction perspective.
+    /// This includes each frame where a lock was set.
+    var interestingForTapPrediction: Bool {
+        if tapPrediction.fellBackToIdleStrategy { return true }
+        if let wasLocked = tapPrediction.wasLocked, let isLocked = tapPrediction.isLocked {
+            return !wasLocked && isLocked
+        }
+
+        return false
+    }
+
     /// Check if the frame should be logged given the severity.
     func isValidForLogging(with parameters: DebugParameters) -> Bool {
         if let num = parameters.controlFramerate, index.isMultiple(of: num) { return true }
@@ -49,7 +60,7 @@ extension DebugFrame {
         if parameters.occasions.contains(.imageAnalysisErrors) && hasImageAnalysisError { return true }
         if parameters.occasions.contains(.barLocationErrors) && hasBarLocationError { return true }
         if parameters.occasions.contains(.integrityErrors) && hasIntegrityError { return true }
-        if parameters.occasions.contains(.interestingTapPrediction) && false { return true } // TODO
+        if parameters.occasions.contains(.interestingTapPrediction) && interestingForTapPrediction { return true }
 
         return false
     }
@@ -70,10 +81,11 @@ extension DebugFrame {
         let prefix = String(format: "%06d", index)
         var suffix: String
 
-        switch (hasIntegrityError, hasImageAnalysisError, hasBarLocationError) {
-        case (true, _, _): suffix = "_IntegrityError"
-        case (_, true, _): suffix = "_AnalysisError"
-        case (_, _, true): suffix = "_LocateBarError"
+        switch (hasIntegrityError, hasImageAnalysisError, hasBarLocationError, tapPrediction.fellBackToIdleStrategy) {
+        case (true, _, _, _): suffix = "_IntegrityError"
+        case (_, true, _, _): suffix = "_AnalysisError"
+        case (_, _, true, _): suffix = "_LocateBarError"
+        case (_, _, _, true): suffix = "_FallbackFromIdle"
         default: suffix = "_Okay"
         }
 

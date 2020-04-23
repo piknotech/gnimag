@@ -17,9 +17,12 @@ struct AnalysisResult {
 }
 
 enum AnalysisError: Error {
-    // The player position did not change.
+    /// The player position did not change.
     case samePlayerPosition
 
-    // Player was not found.
+    /// Player was not found.
     case error
+
+    /// Player has crashed.
+    case crashed
 }

@@ -55,8 +55,5 @@ public struct DebugParameters: DebugParameterType {
 
     /// Shorthand for no logging.
     public static let none = DebugParameters(location: "", occasions: [])
-
-    internal var isNone: Bool {
-        location.isEmpty
-    }
+    internal var isNone: Bool { location.isEmpty }
 }
