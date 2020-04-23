@@ -44,13 +44,14 @@ extension DebugFrame {
 
     /// Check if the frame should be logged given the severity.
     func isValidForLogging(with parameters: DebugParameters) -> Bool {
-        switch parameters.severity {
-        case .none: return false
-        case .always, .alwaysText: return true
-        case .every(let num): return index.isMultiple(of: num)
-        case .onErrors, .onErrorsTextOnly: return hasError
-        case .onIntegrityErrors: return hasIntegrityError
-        }
+        if let num = parameters.controlFramerate, index.isMultiple(of: num) { return true }
+
+        if parameters.occasions.contains(.imageAnalysisErrors) && hasImageAnalysisError { return true }
+        if parameters.occasions.contains(.barLocationErrors) && hasBarLocationError { return true }
+        if parameters.occasions.contains(.integrityErrors) && hasIntegrityError { return true }
+        if parameters.occasions.contains(.interestingTapPrediction) && false { return true } // TODO
+
+        return false
     }
 
     /// Do preparations that are necessary before logging.
@@ -94,14 +95,22 @@ extension DebugFrame {
         guard let directory = createSubdirectory(parameters: parameters) else { return }
 
         // Log text
-        let textPath = directory +/ "Frame.txt"
-        try? fullLoggingText.write(toFile: textPath, atomically: false, encoding: .utf8)
+        if parameters.content.contains(.text) {
+            let textPath = directory +/ "Frame.txt"
+            try? fullLoggingText.write(toFile: textPath, atomically: false, encoding: .utf8)
+        }
 
         // Log images
-        if parameters.severity.alwaysImages || (!parameters.severity.noImages && hasError) {
+        if parameters.content.contains(.imageAnalysis) {
             logImageAnalysisImages(to: directory)
-            logRelevantScatterPlots(to: directory)
-            logFullFramePlot(to: directory)
+        }
+
+        if parameters.content.contains(.gameModelCollection) {
+            logGameModelCollectionImages(to: directory)
+        }
+
+        if parameters.content.contains(.tapPrediction) {
+            logTapPredictionImages(to: directory)
         }
     }
 
@@ -142,9 +151,8 @@ extension DebugFrame {
         }
     }
 
-    /// Log scatter plots of relevant trackers.
-    /// This includes both trackers frm game model collection and from tap prediction.
-    private func logRelevantScatterPlots(to directory: String) {
+    /// Log scatter plots of relevant trackers from game model collection.
+    private func logGameModelCollectionImages(to directory: String) {
         // Plot the yCenter of each bar
         for (i, bar) in gameModelCollection.bars.all.enumerated() {
             if let plot = bar.yCenter.createScatterPlot() {
@@ -161,6 +169,12 @@ extension DebugFrame {
         if let plot = gameModelCollection.player.angle.createScatterPlot() {
             plot.write(to: directory +/ "player_angle.png")
         }
+    }
+
+    /// Log relevant scatter plots of tap prediction.
+    /// This includes the FullFramePlot.
+    private func logTapPredictionImages(to directory: String) {
+        logFullFramePlot(to: directory)
 
         // Plot delay tracker
         if let plot = tapPrediction.delayValues.createScatterPlot(includeToleranceRegionForLastDataPoint: false) {
@@ -299,7 +313,7 @@ extension DebugFrame {
         let currentSolutionIsFromCurrentFrame = tapPrediction.mostRecentSolution?.referenceTime == tapPrediction.frame?.currentTime
 
         let barToString: (PlayerBarInteraction) -> String = { bar in
-            "• timeUntilHittingCenter: \(bar.timeUntilHittingCenter); holeMovementSections: \(bar.holeMovement.sections)"
+            "\(bar)"
         }
 
         return """
