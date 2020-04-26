@@ -130,7 +130,6 @@ class TapPredictor: TapPredictorBase {
 
     /// Called after each frame, no matter whether predictionLogic was called or not.
     override func frameFinished(hasPredicted: Bool) {
-        debug.wasPerformed = hasPredicted
         debug.scheduledTaps = scheduler.scheduledTaps
         debug.executedTaps = scheduler.performedTaps
         debug.wasLocked = !hasPredicted

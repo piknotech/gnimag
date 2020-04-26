@@ -124,18 +124,18 @@ public final class MrFlap {
     }
 
     /// Normal update method while in-game.
+    /// Perform TapPrediction each frame, i.e. no matter what the outcome of ImageAnalysis and GameModelCollection is.
     private func gameplayUpdate(image: Image, time: Double) {
         switch analyze(image: image, time: time) {
-        case let .success(result): // ImageAnalysis -> GameModelCollection -> TapPrediction
-            if gameModelCollector.accept(result: result, time: time) {
-                tapPredictor.predict()
-            }
+        case let .success(result):
+            _ = gameModelCollector.accept(result: result, time: time)
+            tapPredictor.predict()
 
         case .failure(.crashed):
             playerHasCrashed()
 
         default:
-            ()
+            tapPredictor.predict()
         }
     }
 

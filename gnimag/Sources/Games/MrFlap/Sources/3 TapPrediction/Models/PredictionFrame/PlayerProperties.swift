@@ -34,7 +34,7 @@ struct PlayerProperties {
         let tapTimeAngles = performedTapTimes.map(converter.angle(from:))
         let timeTolerance = 0.05
         let angularTolerance = converter.angleToTime.slope * timeTolerance
-        guard let (angularJumpStart, debug) = player.height.finalFutureJumpUsingJumpTimes(times: tapTimeAngles, overlapTolerance: angularTolerance) else { return nil }
+        guard let angularJumpStart = player.height.finalFutureJumpUsingJumpTimes(times: tapTimeAngles, overlapTolerance: angularTolerance) else { return nil }
 
         currentJumpStart = Position(x: Angle(angularJumpStart.time), y: angularJumpStart.value)
         currentJumpStartPoint = Point(time: converter.time(from: angularJumpStart.time), height: angularJumpStart.value)

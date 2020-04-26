@@ -323,15 +323,14 @@ extension DebugFrame {
         let currentSolutionIsFromCurrentFrame = tapPrediction.mostRecentSolution?.referenceTime == tapPrediction.frame?.currentTime
 
         let barToString: (PlayerBarInteraction) -> String = { bar in
-            "\(bar)"
+            "• timeUntilHittingCenter: \(bar.timeUntilHittingCenter); holeMovementSections: \(bar.holeMovement.sections)"
         }
 
         return """
         ––––– TAP PREDICTION –––––
-        (was performed: \(tapPrediction.wasPerformed))
+        (wasLocked: \(tapPrediction.wasLocked ??? "nil"), isLockedNow: \(tapPrediction.isLocked ??? "nil"))
 
         • Delay: \(tapPrediction.delay ??? "nil")
-        • wasLocked: \(tapPrediction.wasLocked ??? "nil"), isLockedNow: \(tapPrediction.isLocked ??? "nil")
         • Time of PredictionFrame: \(tapPrediction.frame?.currentTime ??? "nil")
 
         Excerpt from PredictionFrame:

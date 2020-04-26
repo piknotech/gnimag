@@ -172,7 +172,6 @@ final class DebugFrame: DebugFrameProtocol {
 
     /// Properties of the Tap Prediction step.
     class TapPrediction {
-        var wasPerformed = false
         var wasLocked: Bool?
         var isLocked: Bool?
         var delay: Double?
