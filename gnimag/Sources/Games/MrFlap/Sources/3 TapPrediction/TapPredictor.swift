@@ -56,7 +56,7 @@ class TapPredictor: TapPredictorBase {
         super.init(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: .absolute(0.05)) // ...?
 
         // Re-allow logging "strategy switch" once interaction changes
-        interactionRecorder.interactionCompleted += {
+        interactionRecorder.interactionCompleted += { _ in
             self.loggingDamper.reset()
         }
     }
