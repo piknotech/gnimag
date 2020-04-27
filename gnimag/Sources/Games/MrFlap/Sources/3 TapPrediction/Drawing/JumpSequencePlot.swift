@@ -8,33 +8,22 @@ import GameKit
 import Geometry
 import TestingTools
 
-/// A class which can draw a playfield and a jump sequence.
-/// The class can both draw `JumpSequenceFromSpecificPosition` and `JumpSequenceFromCurrentPosition`.
+/// A class which can draw a playfield and a Solution.
 /// The plot is a time/height-plot; no (angular) x-values are plotted!
 final class JumpSequencePlot {
     let plot: ScatterPlot
 
     /// Create a JumpSequencePlot from a frame and a solution.
     /// Draw both the jump sequence and the player-bar interaction.
-    convenience init(frame: PredictionFrame, solution: JumpSequenceFromCurrentPosition) {
-        self.init(sequence: solution, player: frame.player, playfield: frame.playfield, jumping: frame.jumping)
+    convenience init(frame: PredictionFrame, solution: Solution) {
+        self.init(solution: solution, player: frame.player, playfield: frame.playfield, jumping: frame.jumping)
         frame.bars.forEach(draw(interaction:))
-    }
-    
-    /// Create a JumpSequencePlot from a jump sequence starting at a specific (player-independent) position (where the current time corresponds to 0).
-    convenience init(sequence: JumpSequenceFromSpecificPosition, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
-        let jumps = sequence.jumps(with: jumping)
-
-        self.init(jumps: jumps, player: player, playfield: playfield)
-
-        // Draw jumps
-        jumps.forEach { plot.stroke($0.scatterStrokable, with: .normal) }
     }
 
     /// Create a JumpSequencePlot from a jump sequence starting at the current player position (and time=0).
-    convenience init(sequence: JumpSequenceFromCurrentPosition, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
-        let initialJump = sequence.currentJump(for: player, with: jumping, startingAt: .currentJumpStart)
-        let jumps = sequence.jumps(for: player, with: jumping)
+    private convenience init(solution: Solution, player: PlayerProperties, playfield: PlayfieldProperties, jumping: JumpingProperties) {
+        let initialJump = solution.currentJump(for: player, with: jumping, startingAt: .currentJumpStart)
+        let jumps = solution.jumps(for: player, with: jumping)
 
         let currentPlayerPosition = ScatterDataPoint(x: 0, y: player.currentPosition.y)
 

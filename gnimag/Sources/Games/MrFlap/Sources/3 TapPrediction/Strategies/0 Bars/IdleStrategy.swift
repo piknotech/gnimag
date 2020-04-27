@@ -30,7 +30,7 @@ class IdleStrategy: InteractionSolutionStrategy {
         // Jump immediately (as early as possible) if player is too low
         if player.currentPosition.y < startHeight {
             let tapDistance = max(0, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
-            return Solution(timeUntilStart: tapDistance, jumpTimeDistances: [], timeUntilEnd: 0)
+            return Solution(relativeTimes: [tapDistance], unlockDuration: nil)
         }
 
         // Else: Jump exactly when the player reaches the idle jump start height
@@ -45,7 +45,7 @@ class IdleStrategy: InteractionSolutionStrategy {
         let timeFromJumpStart = max(solutions.0, solutions.1)
         var timeFromNow = timeFromJumpStart - player.timePassedSinceJumpStart
         timeFromNow = max(timeFromNow, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
-        return Solution(timeUntilStart: timeFromNow, jumpTimeDistances: [], timeUntilEnd: 0)
+        return Solution(relativeTimes: [timeFromNow], unlockDuration: nil)
     }
 
     /// The start height of an optimal idle jump (with respect to `relativeIdleHeight`).

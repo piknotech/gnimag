@@ -11,8 +11,6 @@ import GameKit
 /// These solutions can be required to meet certain requirements, e.g. a minimum distance between consecutive taps etc.
 /// Currently, this class only considers the first bar in the frame.
 struct SolutionGenerator {
-    typealias Solution = InteractionSolutionStrategy.Solution
-
     let frame: PredictionFrame
     var interaction: PlayerBarInteraction { frame.bars.first! }
 
@@ -49,23 +47,8 @@ struct SolutionGenerator {
         
         guard let points = RandomPoints.on(tapRange, minimumDistance: minimumConsecutiveTapDistance, numPoints: taps, maximumValueForFirstPoint: maxTimeForFirstTap) else { return nil }
 
-        return solutionFromRandomPointsSequence(points, T: T)
-    }
-
-    /// Convert a random points sequence (as obtained from `RandomPoints.on(_:)`) into a Solution.
-    private func solutionFromRandomPointsSequence(_ points: [Double], T: Double) -> Solution {
-        // Find time differences between subsequent elements
-        var differences = [Double]()
-        differences.reserveCapacity(points.count - 1)
-        for i in 1 ..< points.count {
-            differences.append(points[i] - points[i-1])
-        }
-
-        // Find start and end time and create solution
-        let timeUntilStart = points.first!
-        let timeUntilEnd = T - points.last!
-
-        return Solution(timeUntilStart: timeUntilStart, jumpTimeDistances: differences, timeUntilEnd: timeUntilEnd)
+        // Convert into Solution
+        return Solution(relativeTimes: points, unlockDuration: T)
     }
 
     /// Pick a positive random number of taps.

@@ -10,8 +10,6 @@ import GameKit
 /// SolutionVerifier assigns a rating to solutions for a given frame.
 /// Currently, this class only considers the first bar in the frame.
 struct SolutionVerifier {
-    typealias Solution = InteractionSolutionStrategy.Solution
-
     let frame: PredictionFrame
     var interaction: PlayerBarInteraction { frame.bars.first! }
 
@@ -40,9 +38,9 @@ struct SolutionVerifier {
     /// `requiredMinimum` is used as a performance boost: when, during evaluation, it becomes impossible to beat the required minimum rating, terminate evaluation early and return 0.
     func rating(of solution: Solution, requiredMinimum: Double) -> Double {
         // Determine time rating
-        let timeDistanceForFirstJump = frame.player.timePassedSinceJumpStart + solution.timeUntilStart
+        let firstJump = frame.player.timePassedSinceJumpStart + (solution.jumpTimeDistances.first ?? solution.lengthOfLastJump)
         var allTimeDistances = solution.jumpTimeDistances
-        allTimeDistances.append(timeDistanceForFirstJump)
+        allTimeDistances.append(firstJump)
         let maximumTimeRating = frame.jumping.horizontalJumpLength // Limit time rating to avoid perverse results
         let timeRating = min(maximumTimeRating, allTimeDistances.min()!)
 

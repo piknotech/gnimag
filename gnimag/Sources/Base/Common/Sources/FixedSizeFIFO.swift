@@ -3,7 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-/// A FixedSizeFIFO wraps an array of fixes size. Once the capacity of the array is surpassed, earliest elements are removed.
+/// A FixedSizeFIFO wraps an array of fixed size. Once the capacity of the array is surpassed, earliest elements are removed.
 public struct FixedSizeFIFO<T> {
     public private(set) var elements = Array<T>()
     public let capacity: Int
@@ -20,6 +20,7 @@ public struct FixedSizeFIFO<T> {
         self.capacity = capacity
     }
 
+    /// Append an element at the end of the array. If the capacity is surpassed, the first element is removed.
     public mutating func append(_ element: T) {
         elements.append(element)
         enforeCapacity()

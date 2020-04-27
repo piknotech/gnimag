@@ -195,7 +195,8 @@ final class DebugFrame: DebugFrameProtocol {
         /// Do necessary preparations before logging.
         func prepareForLogging() {
             for simple in [delayValues, jumpVelocityValues, gravityValues] {
-                simple.fetchDataSet(maxDataPoints: 100)
+                simple.fetchDataSet(maxDataPoints: .max)
+                print(simple.allDataPoints?.count)
                 simple.fetchFunctionInfos()
             }
 

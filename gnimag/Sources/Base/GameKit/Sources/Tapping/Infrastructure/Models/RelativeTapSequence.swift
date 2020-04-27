@@ -31,8 +31,10 @@ extension RelativeTap: CustomStringConvertible {
 // MARK: Sequence
 
 /// RelativeTapSequence defines a sequence of scheduled taps relative to a non-specified reference point in time.
-public class RelativeTapSequence {
+/// Attention: a value-copy of a RelativeTapSequence contains a new array of taps, but the taps refer to the same RelativeTap instances (as RelativeTap is a class).
+public struct RelativeTapSequence {
     /// All taps the sequence consists of.
+    /// These are sorted by their respective `relativeTime`s.
     public private(set) var taps: [RelativeTap]
 
     /// The duration, from the start of the sequence, until this sequence is completed.
@@ -41,17 +43,32 @@ public class RelativeTapSequence {
 
     /// The smallest time value in this sequence.
     public var nextTap: RelativeTap? {
-        taps.min(by: \.relativeTime)
+        taps.first
     }
 
     /// Default intializer.
     public init(taps: [RelativeTap], unlockDuration: Double?) {
-        self.taps = taps
+        self.taps = taps.sorted { $0.relativeTime < $1.relativeTime }
         self.unlockDuration = unlockDuration
     }
 
-    /// Remove a tap from the sequence.
-    func remove(tap: RelativeTap) {
+    /// Shift the tap sequence by a given time.
+    /// Use positive `shift` values to transform a tap sequence from a previous frame into the current frame.
+    /// Remove all Taps which would have a negative relativeTime after shifting.
+    public func shifted(by shift: Double) -> RelativeTapSequence {
+        let newTaps = taps.filter {
+            $0.relativeTime >= shift
+        }.map {
+            RelativeTap(scheduledIn: $0.relativeTime - shift)
+        }
+
+        let newUnlockDuration = unlockDuration.flatMap { $0 >= shift ? $0 - shift : nil }
+
+        return RelativeTapSequence(taps: newTaps, unlockDuration: newUnlockDuration)
+    }
+
+    /// Remove a tap from the sequence in-place.
+    mutating func remove(tap: RelativeTap) {
         taps.removeAll { tap === $0 }
     }
 }

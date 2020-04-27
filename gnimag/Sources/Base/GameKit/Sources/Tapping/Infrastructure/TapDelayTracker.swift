@@ -32,7 +32,7 @@ public final class TapDelayTracker {
 
     /// Default initializer.
     public init(tolerance: TrackerTolerance) {
-        tracker = PreliminaryTracker(maxDataPoints: 200, tolerancePoints: 0, tolerance: tolerance)
+        tracker = PreliminaryTracker(maxDataPoints: 500, tolerancePoints: 0, tolerance: tolerance)
     }
 
     /// Call when a tap has just been performed at the given time.

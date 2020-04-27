@@ -38,7 +38,7 @@ class TapPredictor: TapPredictorBase {
     private var mostRecentSolution: MostRecentSolution?
     struct MostRecentSolution {
         /// The original solution. `referenceTime` corresponds to 0.
-        let solution: InteractionSolutionStrategy.Solution
+        let solution: Solution
         var referenceTime: Double { associatedPredictionFrame.currentTime }
 
         /// The prediction frame that was used for calculating the solution.
@@ -108,7 +108,7 @@ class TapPredictor: TapPredictorBase {
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
-        var solution: InteractionSolutionStrategy.Solution
+        var solution: Solution
 
         if let directSolution = strategy.solution(for: frame) {
             solution = directSolution
@@ -124,8 +124,9 @@ class TapPredictor: TapPredictorBase {
 
         // Debug-store solution
         mostRecentSolution = MostRecentSolution(solution: solution, associatedPredictionFrame: frame)
+        solution.annonateTapsWithDebugInfo(for: frame)
 
-        return solution.convertToRelativeTapSequence(currentTime: currentTime, player: frame.player, jumping: frame.jumping)
+        return solution.sequence
     }
 
     /// Called after each frame, no matter whether predictionLogic was called or not.
@@ -182,8 +183,9 @@ class TapPredictor: TapPredictorBase {
 
     /// Check if a prediction lock should be applied.
     override func shouldLock(scheduledSequence: RelativeTapSequence) -> Bool {
+         // When sequence is empty, lock and wait until the sequence unlocks (via unlockDuration)
         guard let nextTap = scheduledSequence.nextTap, let referenceTime = referenceTimeForTapSequence else {
-            return true // When sequence is empty, lock and wait until the sequence unlocks (via unlockDuration)
+            return scheduledSequence.unlockDuration != nil
         }
 
         // Get relative duration from now
