@@ -202,7 +202,7 @@ extension DebugFrame {
 
         // Plot current solution
         if let mostRecent = tapPrediction.mostRecentSolution {
-            let plot = JumpSequencePlot(frame: mostRecent.associatedPredictionFrame, solution: mostRecent.solution)
+            let plot = SolutionPlot(frame: mostRecent.associatedPredictionFrame, solution: mostRecent.solution)
             plot.write(to: directory +/ "solution.png")
         }
     }

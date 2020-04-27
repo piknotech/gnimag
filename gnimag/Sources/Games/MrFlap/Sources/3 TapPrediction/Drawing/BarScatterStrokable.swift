@@ -7,7 +7,7 @@ import Common
 import GameKit
 import TestingTools
 
-/// BarScatterStrokable strokes a `PlayerBarInteraction` onto a time/height-plot (like JumpSequencePlot).
+/// BarScatterStrokable strokes a `PlayerBarInteraction` onto a time/height-plot (like SolutionPlot).
 struct BarScatterStrokable: ScatterStrokable {
     let interaction: PlayerBarInteraction
 

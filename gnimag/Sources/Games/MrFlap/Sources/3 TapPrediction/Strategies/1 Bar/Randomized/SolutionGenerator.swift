@@ -30,6 +30,12 @@ struct SolutionGenerator {
         maxTimeForFirstTap = Self.calculateMaxTimeForFirstTap(for: frame)
     }
 
+    /// Generate the unique solution consisting of zero taps.
+    var zeroSolution: Solution {
+        let T = interaction.fullInteractionRange.upper
+        return Solution(relativeTimes: [], unlockDuration: T)
+    }
+
     /// Generate a random solution meeting the requirements.
     /// Returns nil if it is not possible to solve the interaction or to meet the requirements.
     func randomSolution(minimumConsecutiveTapDistance: Double, increaseMinimumTapDistanceForLargeNumberOfTaps: Bool) -> Solution? {

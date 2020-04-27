@@ -58,8 +58,9 @@ struct Solution {
 
     /// Shift the solution by a given time. This is used to transform a jump sequence from a different frame to the current frame by changing the `timeUntilStart` value.
     /// Use positive `shift` values to transform a jump sequence from a previous frame into the current frame.
-    func shifted(by shift: Double) -> Solution {
-        Solution(sequence: sequence.shifted(by: shift))
+    /// If this would render the whole sequence in the past, return nil.
+    func shifted(by shift: Double) -> Solution? {
+        sequence.shifted(by: shift).map(Solution.init(sequence:))
     }
 }
 
@@ -108,7 +109,13 @@ extension Solution {
         var remainingTime = t + player.timePassedSinceJumpStart
 
         // Compute each jump until reaching the required time
-        for jumpDuration in jumpTimeDistances {
+        for i in 0 ..< jumpTimeDistances.count {
+            // Get duration of current jump
+            var jumpDuration = jumpTimeDistances[i]
+            if i == 0 {
+                jumpDuration += player.timePassedSinceJumpStart
+            }
+
             // Stop when the jump is not fully finished
             if remainingTime < jumpDuration { break }
 

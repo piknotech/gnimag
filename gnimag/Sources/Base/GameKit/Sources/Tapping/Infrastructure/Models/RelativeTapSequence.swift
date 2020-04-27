@@ -55,14 +55,16 @@ public struct RelativeTapSequence {
     /// Shift the tap sequence by a given time.
     /// Use positive `shift` values to transform a tap sequence from a previous frame into the current frame.
     /// Remove all Taps which would have a negative relativeTime after shifting.
-    public func shifted(by shift: Double) -> RelativeTapSequence {
+    /// If this would render the whole sequence in the past (because the shift is larger than unlockDuration), return nil.
+    public func shifted(by shift: Double) -> RelativeTapSequence? {
+        if let unlock = unlockDuration, unlock < shift { return nil }
+        let newUnlockDuration = unlockDuration.map { $0 - shift }
+
         let newTaps = taps.filter {
             $0.relativeTime >= shift
         }.map {
             RelativeTap(scheduledIn: $0.relativeTime - shift)
         }
-
-        let newUnlockDuration = unlockDuration.flatMap { $0 >= shift ? $0 - shift : nil }
 
         return RelativeTapSequence(taps: newTaps, unlockDuration: newUnlockDuration)
     }

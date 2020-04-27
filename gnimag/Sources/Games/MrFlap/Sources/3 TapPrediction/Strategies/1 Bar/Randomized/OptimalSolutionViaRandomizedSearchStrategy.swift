@@ -43,8 +43,23 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         var bestSolution = lastSolution.flatMap { $0.shifted(by: frameDiff) }
         var bestRating = bestSolution.map { verifier.rating(of: $0, requiredMinimum: 0) } ?? 0
 
+        // Evaluate a solution and update the best solution if required.
+        func evaluate(_ solution: Solution) {
+            // Performance-shortcut: avoid evaluating `rating` if possible
+            if verifier.precondition(forValidSolution: solution) {
+                let rating = verifier.rating(of: solution, requiredMinimum: bestRating)
+                if rating > bestRating {
+                    bestSolution = solution
+                    bestRating = rating
+                }
+            }
+        }
+
+        // Try 0-solution
+        evaluate(generator.zeroSolution)
+
         // Generate random solutions
-        // Consider: 500 solutions doesn't seem much, but: once a (good enough) solution is available, all generated solutions will just get better and better (because they have to obey minimum requirements to be able to beat the current best solution, therefore SolutionGenerator will generate only sensible solutions, designed to beat the currently best solution).
+        // Consider: 1000 solutions don't seem much, but: once a (good enough) solution is available, all generated solutions will just get better and better (because they have to obey minimum requirements to be able to beat the current best solution, therefore SolutionGenerator will generate only sensible solutions, designed to beat the currently best solution).
         // Combined with the fact that the best solution from the last frame is used as a starting point, this leads to an immensely good final solution after (60fps * 1000solutions/frame) = 60,000 solutions generated in e.g. 1 second.
         let numTries = 1000
 
@@ -52,16 +67,8 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
             numTries.repeat {
                 let minTapDistance = respectMinimumTapDistance ? max(minimumJumpDistance, bestRating) : bestRating
 
-                guard let solution = generator.randomSolution(minimumConsecutiveTapDistance: minTapDistance, increaseMinimumTapDistanceForLargeNumberOfTaps: false) else { return }
-
-                // Performance-shortcut: avoid evaluating `rating` if possible
-                guard verifier.precondition(forValidSolution: solution) else { return }
-
-                // Calculate rating and update best solution
-                let rating = verifier.rating(of: solution, requiredMinimum: bestRating)
-                if rating > bestRating {
-                    bestSolution = solution
-                    bestRating = rating
+                if let solution = generator.randomSolution(minimumConsecutiveTapDistance: minTapDistance, increaseMinimumTapDistanceForLargeNumberOfTaps: false) {
+                    evaluate(solution)
                 }
             }
 
