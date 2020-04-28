@@ -35,7 +35,7 @@ extension PredictionFrame {
             guard let bar = BarProperties(bar: tracker, with: model.player, playfield: playfield, currentTime: currentTime) else { return nil }
             return PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime, barTracker: tracker)
         }.sorted {
-            $0.timeUntilHittingCenter < $1.timeUntilHittingCenter
+            $0.timeUntilLeaving < $1.timeUntilLeaving
         }
     }
 }

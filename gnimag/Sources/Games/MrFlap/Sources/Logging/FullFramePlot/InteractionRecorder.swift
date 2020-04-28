@@ -57,6 +57,6 @@ final class InteractionRecorder {
         guard let mostRecent = mostRecentInteraction else { return true }
 
         let tolerance = 0.05
-        return interaction.timeUntilHittingCenter > mostRecent.timeUntilHittingCenter + tolerance
+        return interaction.timeUntilLeaving > mostRecent.timeUntilLeaving + tolerance
     }
 }

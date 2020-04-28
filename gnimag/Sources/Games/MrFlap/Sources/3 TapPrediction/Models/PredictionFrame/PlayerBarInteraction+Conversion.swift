@@ -5,6 +5,7 @@
 
 import Common
 import GameKit
+import simd
 
 extension PlayerBarInteraction {
     private typealias Portion = BasicLinearPingPongTracker.LinearSegmentPortion
@@ -14,15 +15,21 @@ extension PlayerBarInteraction {
         self.currentTime = currentTime
         self.barTracker = barTracker
 
-        // Calculate when the player will hit the bar
+        // Speed, direction and bar width (time-wise and angular)
         let direction = player.xSpeed - bar.xSpeed
         totalSpeed = abs(direction)
-        let distanceToCenter = player.currentPosition.x.directedDistance(to: bar.xPosition, direction: direction)
-        timeUntilHittingCenter = distanceToCenter / totalSpeed
+        widths = Self.timeWidths(bar: bar, playfield: playfield, totalSpeed: totalSpeed)
+        let angularBarWidth = widths.full * totalSpeed
+
+        // Calculate when player will hit the bar's center and when it will fully leave the bar
+        let leavingAngle = Angle(bar.xPosition.value + sign(direction) * angularBarWidth / 2)
+        let distanceToLeaving = player.currentPosition.x.directedDistance(to: leavingAngle, direction: direction)
+
+        timeUntilLeaving = distanceToLeaving / totalSpeed
+        timeUntilHittingCenter = distanceToLeaving - widths.full / 2
+        fullInteractionRange = SimpleRange(around: timeUntilHittingCenter, diameter: widths.full)
 
         // Calculate remaining properties
-        widths = Self.timeWidths(bar: bar, playfield: playfield, totalSpeed: totalSpeed)
-        fullInteractionRange = SimpleRange(around: timeUntilHittingCenter, diameter: widths.full)
         boundsCurves = Self.boundsCurves(bar: bar, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, totalSpeed: totalSpeed)
         holeMovement = Self.holeMovement(bar: bar, currentTime: currentTime, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, curves: boundsCurves)
     }

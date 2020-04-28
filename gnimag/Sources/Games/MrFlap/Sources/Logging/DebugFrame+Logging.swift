@@ -323,7 +323,7 @@ extension DebugFrame {
         let currentSolutionIsFromCurrentFrame = tapPrediction.mostRecentSolution?.referenceTime == tapPrediction.frame?.currentTime
 
         let barToString: (PlayerBarInteraction) -> String = { bar in
-            "• timeUntilHittingCenter: \(bar.timeUntilHittingCenter); holeMovementSections: \(bar.holeMovement.sections)"
+            "• timeUntilHittingCenter: \(bar.timeUntilHittingCenter); timeUntilLeaving: \(bar.timeUntilLeaving); holeMovementSections: \(bar.holeMovement.sections)"
         }
 
         return """

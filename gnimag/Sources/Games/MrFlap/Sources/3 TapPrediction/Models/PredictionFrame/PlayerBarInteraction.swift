@@ -16,7 +16,12 @@ struct PlayerBarInteraction {
     let totalSpeed: Double
 
     /// The time until the player hits the bar's center.
+    /// This can be negative.
     let timeUntilHittingCenter: Double
+
+    /// The time until the player fully leaves the bar.
+    /// This is always non-negative!
+    let timeUntilLeaving: Double
 
     /// The maximum time range during which the bar and the player could interact (e.g. at the furthest outward points).
     /// This is a range centered around `timeUntilHittingCenter`.
