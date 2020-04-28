@@ -20,9 +20,13 @@ struct Solution {
     /// If the sequence consists of 0 jumps, this is the length of the current jump.
     let lengthOfLastJump: Double
 
+    /// The strategy that produced this solution.
+    let strategy: InteractionSolutionStrategy.Type
+
     /// Default initializer.
-    init(sequence: RelativeTapSequence) {
+    init(sequence: RelativeTapSequence, strategy: InteractionSolutionStrategy.Type) {
         self.sequence = sequence
+        self.strategy = strategy
 
         jumpTimeDistances = {
             var result = [Double]()
@@ -44,9 +48,9 @@ struct Solution {
     }
 
     /// Convenience intializer, implicitly constructing a RelativeTapSequence.
-    init(relativeTimes: [Double], unlockDuration: Double?) {
+    init(relativeTimes: [Double], unlockDuration: Double?, strategy: InteractionSolutionStrategy.Type) {
         let taps = relativeTimes.map(RelativeTap.init(scheduledIn:))
-        self.init(sequence: RelativeTapSequence(taps: taps, unlockDuration: unlockDuration))
+        self.init(sequence: RelativeTapSequence(taps: taps, unlockDuration: unlockDuration), strategy: strategy)
     }
 
     /// Annonate all RelativeTaps in the sequence with TapDebugInfos to allow recovering the exactly predicted jumps at a later point in time.
@@ -60,7 +64,7 @@ struct Solution {
     /// Use positive `shift` values to transform a jump sequence from a previous frame into the current frame.
     /// If this would render the whole sequence in the past, return nil.
     func shifted(by shift: Double) -> Solution? {
-        sequence.shifted(by: shift).map(Solution.init(sequence:))
+        sequence.shifted(by: shift).map { Solution(sequence: $0, strategy: strategy) }
     }
 }
 

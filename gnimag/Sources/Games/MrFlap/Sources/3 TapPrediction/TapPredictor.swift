@@ -108,7 +108,7 @@ class TapPredictor: TapPredictorBase {
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
-        debug.originalStrategy = "\(type(of: strategy))"
+        debug.originalStrategy = type(of: strategy)
 
         var solution: Solution
 
@@ -193,6 +193,11 @@ class TapPredictor: TapPredictorBase {
         let referenceShift = timeProvider.currentTime - referenceTime
         let time = nextTap.relativeTime - referenceShift
 
-        return time < 0.05
+        switch mostRecentSolution?.solution.strategy {
+        case is IdleStrategy.Type:
+            return false // Don't ever lock IdleStrategy because the next bar could be recognized any frame
+        default:
+            return time < 0.05
+        }
     }
 }

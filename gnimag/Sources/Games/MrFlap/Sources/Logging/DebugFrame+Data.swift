@@ -175,7 +175,7 @@ final class DebugFrame: DebugFrameProtocol {
         var wasLocked: Bool?
         var isLocked: Bool?
         var delay: Double?
-        var originalStrategy: String?
+        var originalStrategy: InteractionSolutionStrategy.Type?
         var fellBackToIdleStrategy = false
 
         // Properties for FullFramePlot

@@ -33,7 +33,7 @@ struct SolutionGenerator {
     /// Generate the unique solution consisting of zero taps.
     var zeroSolution: Solution {
         let T = interaction.fullInteractionRange.upper
-        return Solution(relativeTimes: [], unlockDuration: T)
+        return Solution(relativeTimes: [], unlockDuration: T, strategy: OptimalSolutionViaRandomizedSearchStrategy.self)
     }
 
     /// Generate a random solution meeting the requirements.
@@ -54,7 +54,7 @@ struct SolutionGenerator {
         guard let points = RandomPoints.on(tapRange, minimumDistance: minimumConsecutiveTapDistance, numPoints: taps, maximumValueForFirstPoint: maxTimeForFirstTap) else { return nil }
 
         // Convert into Solution
-        return Solution(relativeTimes: points, unlockDuration: T)
+        return Solution(relativeTimes: points, unlockDuration: T, strategy: OptimalSolutionViaRandomizedSearchStrategy.self)
     }
 
     /// Pick a positive random number of taps.
