@@ -108,6 +108,8 @@ class TapPredictor: TapPredictorBase {
 
         // Choose and apply strategy
         let strategy = self.strategy(for: frame)
+        debug.originalStrategy = "\(type(of: strategy))"
+
         var solution: Solution
 
         if let directSolution = strategy.solution(for: frame) {
@@ -151,7 +153,6 @@ class TapPredictor: TapPredictorBase {
     private func performDebugLogging(with model: GameModel, frame: PredictionFrame, delay: Double) {
         debug.delay = delay
         debug.frame = frame
-        debug.realTimeDuringTapPrediction = frame.currentTime - delay // = timeProvider.currentTime
         debug.playerHeight.from(tracker: model.player.height)
         debug.playerAngleConverter = PlayerAngleConverter(player: model.player)
         debug.interactionRecorder = interactionRecorder

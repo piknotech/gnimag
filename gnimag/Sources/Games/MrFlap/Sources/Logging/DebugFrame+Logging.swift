@@ -211,14 +211,13 @@ extension DebugFrame {
     private func logFullFramePlot(to directory: String) {
         guard
             let time = time,
-            let realTimeAfterProcessing = tapPrediction.realTimeDuringTapPrediction,
             let playerAngleConverter = tapPrediction.playerAngleConverter,
             let scheduledTaps = tapPrediction.scheduledTaps,
             let executedTaps = tapPrediction.executedTaps,
             let recorder = tapPrediction.interactionRecorder,
             let frame = tapPrediction.frame else { return }
 
-        let data = FullFramePlotData(realFrameTime: time, realTimeAfterProcessing: realTimeAfterProcessing, playerHeight: tapPrediction.playerHeight, playerAngleConverter: playerAngleConverter, scheduledTaps: scheduledTaps, executedTaps: executedTaps, frame: frame, interactionRecorder: recorder)
+        let data = FullFramePlotData(realFrameTime: time, playerHeight: tapPrediction.playerHeight, playerAngleConverter: playerAngleConverter, scheduledTaps: scheduledTaps, executedTaps: executedTaps, frame: frame, interactionRecorder: recorder)
 
         let plot = FullFramePlot(data: data)
         plot.write(to: directory +/ "FullFrame.png")
@@ -340,6 +339,7 @@ extension DebugFrame {
         Most recent solution:
         • referenceTime: \(tapPrediction.mostRecentSolution?.referenceTime ??? "nil") (is from current frame: \(currentSolutionIsFromCurrentFrame))
         • Solution: \(tapPrediction.mostRecentSolution?.solution ??? "nil")
+        • originalStrategy: \(tapPrediction.originalStrategy ??? "nil")
         \(tapPrediction.fellBackToIdleStrategy ? "Fell back to idle strategy because singleBar didn't yield a solution!\n" : "")
         All interactions in most recent solution's frame:
         \(tapPrediction.mostRecentSolution?.associatedPredictionFrame.bars.map(barToString).joined(separator: "\n") ??? "nil")

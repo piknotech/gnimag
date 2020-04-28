@@ -26,7 +26,7 @@ extension PlayerBarInteraction {
         let distanceToLeaving = player.currentPosition.x.directedDistance(to: leavingAngle, direction: direction)
 
         timeUntilLeaving = distanceToLeaving / totalSpeed
-        timeUntilHittingCenter = distanceToLeaving - widths.full / 2
+        timeUntilHittingCenter = timeUntilLeaving - widths.full / 2
         fullInteractionRange = SimpleRange(around: timeUntilHittingCenter, diameter: widths.full)
 
         // Calculate remaining properties

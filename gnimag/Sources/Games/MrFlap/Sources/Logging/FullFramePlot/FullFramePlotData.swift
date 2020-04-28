@@ -12,10 +12,6 @@ struct FullFramePlotData {
     /// The absolute real (i.e. present) time of the received frame.
     let realFrameTime: Double
 
-    /// The absolute real time after processing, but before performing tap prediction.
-    /// A delay is added on top of this real time to obtain the future time of the tap prediction frame.
-    let realTimeAfterProcessing: Double
-
     /// A snapshot of the player tracker.
     let playerHeight: CompositeTrackerDebugInfo<ParabolaTracker>
 
@@ -36,9 +32,4 @@ struct FullFramePlotData {
 
     /// The recorder storing all interactions that happened in the past.
     let interactionRecorder: InteractionRecorder
-
-    /// The timeshift from real time to prediction time.
-    var delay: Double {
-        frame.currentTime - realTimeAfterProcessing
-    }
 }

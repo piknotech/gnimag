@@ -175,10 +175,10 @@ final class DebugFrame: DebugFrameProtocol {
         var wasLocked: Bool?
         var isLocked: Bool?
         var delay: Double?
+        var originalStrategy: String?
         var fellBackToIdleStrategy = false
 
         // Properties for FullFramePlot
-        var realTimeDuringTapPrediction: Double?
         var playerHeight = CompositeTrackerDebugInfo<ParabolaTracker>()
         var playerAngleConverter: PlayerAngleConverter?
         var executedTaps: [PerformedTap]?
