@@ -129,13 +129,13 @@ public final class MrFlap {
         switch analyze(image: image, time: time) {
         case let .success(result):
             _ = gameModelCollector.accept(result: result, time: time)
-            tapPredictor.predict()
+            tapPredictor.predictionStep()
 
         case .failure(.crashed):
             playerHasCrashed()
 
         default:
-            tapPredictor.predict()
+            tapPredictor.predictionStep()
         }
     }
 

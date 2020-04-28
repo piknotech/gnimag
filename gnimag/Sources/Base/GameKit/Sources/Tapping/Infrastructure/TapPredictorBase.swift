@@ -43,16 +43,18 @@ open class TapPredictorBase {
 
     /// Call to perform a prediction step.
     /// When the lock is inactive, the predictionLogic will be executed, and its result will be scheduled. The sequence must only contain tap values in the future!
-    /// When predictionLogic returns nil, the current sequence is performed further (and not updated).
-    public func predict() {
+    /// When predictionLogic returns nil, nothing happens (i.e. no taps and no lock), and predictionLogic will be called again next frame.
+    public func predictionStep() {
         if lockIsActive {
             frameFinished(hasPredicted: false)
             return
         }
 
-        // Perform prediction logic
+        // Perform prediction logic. Unschedule taps beforehand to prevent taps (which would be unscheduled afterwards) from being executed during predictionLogic.
+        unschedule()
+
         if let sequence = predictionLogic() {
-            reschedule(sequence: sequence)
+            schedule(sequence: sequence)
             reassessLock()
         }
 
@@ -60,7 +62,7 @@ open class TapPredictorBase {
     }
 
     /// Override to create a predicted tap sequence for the current frame, relative to the current frame's timepoint.
-    /// When returning nil, the current sequence is left unchanged.
+    /// When returning nil, nothing happens (i.e. no taps and no lock), and predictionLogic will be called again next frame.
     open func predictionLogic() -> RelativeTapSequence? {
         nil
     }
@@ -69,21 +71,34 @@ open class TapPredictorBase {
     open func frameFinished(hasPredicted: Bool) {
     }
 
-    /// Reschedule a tap sequence, including its completion time for locking reassessment.
-    /// Before scheduling, clear all current scheduled taps.
-    private func reschedule(sequence: RelativeTapSequence) {
+    /// Unschedule all scheduled taps and unlocking.
+    private func unschedule() {
+        scheduler.unscheduleAll()
+        Timing.shared.cancelTasks(withObject: self) // Unschedule unlocking
+    }
+
+    /// Schedule a tap sequence, including its completion time for locking reassessment.
+    private func schedule(sequence: RelativeTapSequence) {
         tapSequence = sequence
         referenceTimeForTapSequence = timeProvider.currentTime
 
-        // Clear current schedule
-        scheduler.unscheduleAll()
-        unscheduleUnlocking()
-
-        // Schedule new taps and unlocking
+        // Schedule new taps
         sequence.taps.forEach(scheduler.schedule(tap:))
+    }
 
-        if let unlockDuration = sequence.unlockDuration {
-            scheduleUnlocking(in: unlockDuration)
+    // MARK: Locking
+
+    /// Reassess if locking should still be active. Then, schedule unlocking of the lock.
+    /// When the current sequence has no unlockTime, no lock will be applied.
+    private func reassessLock() {
+        guard let sequence = tapSequence, let unlockTime = sequence.unlockDuration else {
+            lockIsActive = false
+            return
+        }
+
+        lockIsActive = shouldLock(scheduledSequence: sequence)
+        if lockIsActive {
+            scheduleUnlocking(in: unlockTime)
         }
     }
 
@@ -93,22 +108,6 @@ open class TapPredictorBase {
             self.tapSequence = nil
             self.referenceTimeForTapSequence = nil
             self.lockIsActive = false
-        }
-    }
-
-    /// Unschedule the scheduled unlocking.
-    private func unscheduleUnlocking() {
-        Timing.shared.cancelTasks(withObject: self)
-    }
-
-    // MARK: Locking
-
-    /// Reassess if locking should still be active.
-    private func reassessLock() {
-        if let sequence = tapSequence {
-            lockIsActive = shouldLock(scheduledSequence: sequence)
-        } else {
-            lockIsActive = false
         }
     }
 
