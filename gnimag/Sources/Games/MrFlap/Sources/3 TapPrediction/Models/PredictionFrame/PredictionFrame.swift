@@ -5,7 +5,7 @@
 
 /// PredictionFrame bundles all properties (i.e. simplified models) that are relevant for a single frame of tap prediction.
 struct PredictionFrame {
-    let bars: [PlayerBarInteraction]
+    var bars: [PlayerBarInteraction]
 
     let player: PlayerProperties
     let playfield: PlayfieldProperties

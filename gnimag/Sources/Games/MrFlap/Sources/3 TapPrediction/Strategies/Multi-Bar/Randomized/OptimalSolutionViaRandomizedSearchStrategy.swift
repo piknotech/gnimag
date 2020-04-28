@@ -6,7 +6,7 @@
 import Common
 
 /// This InteractionSolutionStrategy finds an optimal solution (respective to a rating method) by intelligently trying a large amount of random tap sequences and choosing the best one.
-/// Currently, this class only considers the first bar in the frame.
+/// This class considers all bars in the frame.
 class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
     /// The solution that was found during the previous call to `solution(for:on:)`.
     /// This is used as a starting point for the next calculation.
@@ -24,12 +24,21 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         self.minimumJumpDistance = minimumJumpDistance
     }
 
+    /// State whether produced solutions should be locked directly before executing a tap.
+    var shouldLockSolution: Bool { true }
+
+    /// When the number of required taps would be too high, the strategy decides that it would be insensible to try solving the full frame.
+    func canSolve(frame: PredictionFrame) -> Bool {
+        guard let taps = minimumNumberOfTaps(for: frame) else { return false }
+        return taps <= 5
+    }
+
     /// The minimum number of taps that are required to solve the frame.
     /// Returns nil when the frame cannot be solved because the vertical distance to the bar hole is too high.
-    func minimumNumberOfTaps(for frame: PredictionFrame) -> Int? {
+    private func minimumNumberOfTaps(for frame: PredictionFrame) -> Int? {
         SolutionGenerator(frame: frame).minimumNumberOfTaps
     }
-    
+
     /// Calculate the solution for the given frame.
     func solution(for frame: PredictionFrame) -> Solution? {
         // Create generator and verifier

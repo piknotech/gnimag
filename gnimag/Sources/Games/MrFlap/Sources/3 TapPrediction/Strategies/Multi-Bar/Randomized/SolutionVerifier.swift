@@ -8,14 +8,20 @@ import Foundation
 import GameKit
 
 /// SolutionVerifier assigns a rating to solutions for a given frame.
-/// Currently, this class only considers the first bar in the frame.
+/// This class considers all bars in the frame.
 struct SolutionVerifier {
     let frame: PredictionFrame
-    var interaction: PlayerBarInteraction { frame.bars.first! }
 
     /// Checks if the given solution fulfills a precondition. If not, the solution can immediately be discarded because it will probably not solve the interaction (and would receive a rating of 0).
     /// The precondition is a simple check whether the player passes through the left and right hole bounds.
     func precondition(forValidSolution solution: Solution) -> Bool {
+        frame.bars.allSatisfy { bar in
+            precondition(for: solution, interaction: bar)
+        }
+    }
+
+    /// Check whether the precondition is fulfilled for the given interaction.
+    private func precondition(for solution: Solution, interaction: PlayerBarInteraction) -> Bool {
         let player = frame.player, jumping = frame.jumping
 
         // Left side. Attention: we assume the direction of the bounds curve (as it is always shaped like this)
@@ -64,13 +70,14 @@ struct SolutionVerifier {
         allJumps.insert(firstJump, at: 0)
 
         // Calculate safety ratings
-        let horizontal = horizontalHoleRating(for: allJumps)
-        if horizontal <= requiredMinimum { return 0 } // Shortcut
-        let vertical = verticalHoleRating(for: allJumps)
-        if vertical <= requiredMinimum { return 0 } // Shortcut
         let playfield = playfieldRating(for: allJumps)
         if playfield <= requiredMinimum { return 0 } // Shortcut
         let descend = descendRating(for: allJumps)
+        if descend <= requiredMinimum { return 0 } // Shortcut
+        let horizontal = horizontalHoleRating(for: allJumps, requiredMinimum: requiredMinimum)
+        if horizontal <= requiredMinimum { return 0 } // Shortcut
+        let vertical = verticalHoleRating(for: allJumps, requiredMinimum: requiredMinimum)
+        if vertical <= requiredMinimum { return 0 } // Shortcut
 
         // Return weakest rating
         return min(horizontal, vertical, playfield, descend)
@@ -78,18 +85,33 @@ struct SolutionVerifier {
 
     /// The rating respective the vertical distance to the bar hole.
     /// Inside [0, 1].
-    private func verticalHoleRating(for jumps: [Jump]) -> Double {
-        let desiredValue = 30% * interaction.holeMovement.holeSize
-        let distance = interaction.holeMovement.distance(to: jumps)
-        return min(1, distance / desiredValue)
+    private func verticalHoleRating(for jumps: [Jump], requiredMinimum: Double) -> Double {
+        var rating = 1.0
+
+        for interaction in frame.bars {
+            let distance = interaction.holeMovement.distance(to: jumps)
+            let desiredValue = 30% * interaction.holeMovement.holeSize
+            let score = min(1, distance / desiredValue)
+            if score < requiredMinimum { return 0 }
+            rating = min(score, rating)
+        }
+        
+        return rating
     }
 
     /// The rating respective the horizontal distance to the bar hole curve intersections.
     /// Inside [0, 1].
-    private func horizontalHoleRating(for jumps: [Jump]) -> Double {
+    private func horizontalHoleRating(for jumps: [Jump], requiredMinimum: Double) -> Double {
         let desiredValue = 25% * frame.jumping.horizontalJumpLength
-        let distance = interaction.holeMovement.intersectionsWithBoundsCurves.distance(to: jumps)
-        return min(1, distance / desiredValue)
+
+        var rating = 1.0
+        for interaction in frame.bars {
+            let distance = interaction.holeMovement.intersectionsWithBoundsCurves.distance(to: jumps)
+            let score = min(1, distance / desiredValue)
+            if score < requiredMinimum { return 0 }
+            rating = min(score, rating)
+        }
+        return rating
     }
 
     /// The rating respective the distance to the playfield bounds.
@@ -105,8 +127,8 @@ struct SolutionVerifier {
     private func descendRating(for jumps: [Jump]) -> Double {
         let descends = jumps.map { -$0.parabola′($0.endPoint.time) }
         guard let steepestDescend = descends.max() else { return 1 }
-        let rating = 2 - steepestDescend / frame.jumping.jumpVelocity
-        return max(0, min(1, rating))
+        if steepestDescend < frame.jumping.jumpVelocity { return 1 }
+        return frame.jumping.jumpVelocity / steepestDescend
     }
 }
 

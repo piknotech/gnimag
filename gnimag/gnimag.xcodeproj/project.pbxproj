@@ -814,20 +814,20 @@
 			path = "1 ImageAnalysis";
 			sourceTree = "<group>";
 		};
-		6306BDAE2405286400C26C08 /* 0 Bars */ = {
+		6306BDAE2405286400C26C08 /* No Bars */ = {
 			isa = PBXGroup;
 			children = (
 				6306BDB02405298800C26C08 /* IdleStrategy.swift */,
 			);
-			path = "0 Bars";
+			path = "No Bars";
 			sourceTree = "<group>";
 		};
-		6306BDAF240528DA00C26C08 /* 1 Bar */ = {
+		6306BDAF240528DA00C26C08 /* Multi-Bar */ = {
 			isa = PBXGroup;
 			children = (
 				6311E0B323E0E5FE0080288D /* Randomized */,
 			);
-			path = "1 Bar";
+			path = "Multi-Bar";
 			sourceTree = "<group>";
 		};
 		630873DA242E1CAA000ECE47 /* iOS */ = {
@@ -915,8 +915,8 @@
 			isa = PBXGroup;
 			children = (
 				6311E0B123E0E5F80080288D /* InteractionSolutionStrategy.swift */,
-				6306BDAE2405286400C26C08 /* 0 Bars */,
-				6306BDAF240528DA00C26C08 /* 1 Bar */,
+				6306BDAE2405286400C26C08 /* No Bars */,
+				6306BDAF240528DA00C26C08 /* Multi-Bar */,
 			);
 			path = Strategies;
 			sourceTree = "<group>";

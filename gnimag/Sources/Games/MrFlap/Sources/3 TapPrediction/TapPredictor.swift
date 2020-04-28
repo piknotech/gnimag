@@ -19,8 +19,10 @@ class TapPredictor: TapPredictorBase {
     /// The strategies which are used to perform the prediction calculation.
     private let strategies: Strategies
     struct Strategies {
-        let idle: IdleStrategy
-        let singleBar: OptimalSolutionViaRandomizedSearchStrategy
+        let `default`: InteractionSolutionStrategy
+
+        /// `canSolve(frame:)` must always return true and `solution(for:)` must never return nil.
+        let fallback: InteractionSolutionStrategy
     }
 
     /// The debug logger and a shorthand form for the current debug frame.
@@ -33,13 +35,16 @@ class TapPredictor: TapPredictorBase {
     /// A class storing all recently passed bars, for debugging.
     private let interactionRecorder = InteractionRecorder(maximumStoredInteractions: 50)
 
-    /// Information about the most recent solution, for debugging.
+    /// Information about the most recent solution.
     /// Thereby, the most recent solution can either be the result from the current frame or from a previous frame.
     private var mostRecentSolution: MostRecentSolution?
     struct MostRecentSolution {
         /// The original solution. `referenceTime` corresponds to 0.
         let solution: Solution
         var referenceTime: Double { associatedPredictionFrame.currentTime }
+
+        /// The strategy that was used for calculating the solution.
+        let strategy: InteractionSolutionStrategy
 
         /// The prediction frame that was used for calculating the solution.
         let associatedPredictionFrame: PredictionFrame
@@ -48,8 +53,8 @@ class TapPredictor: TapPredictorBase {
     /// Default initializer.
     init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
         strategies = Strategies(
-            idle: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2), // ...?
-            singleBar: OptimalSolutionViaRandomizedSearchStrategy(minimumJumpDistance: 0.2)
+            default: OptimalSolutionViaRandomizedSearchStrategy(minimumJumpDistance: 0.2), // ...?
+            fallback: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2)
         )
 
         self.debugLogger = debugLogger
@@ -101,31 +106,15 @@ class TapPredictor: TapPredictorBase {
     override func predictionLogic() -> RelativeTapSequence? {
         guard let model = gameModel, let delay = scheduler.delay else { return nil }
         let currentTime = timeProvider.currentTime + delay
-        guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) else { return nil }
+        guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return nil }
 
         // Debug logging
         performDebugLogging(with: model, frame: frame, delay: delay)
 
-        // Choose and apply strategy
-        let strategy = self.strategy(for: frame)
-        debug.originalStrategy = type(of: strategy)
+        // Find and store solution
+        var (solution, strategy) = self.solution(for: frame)
 
-        var solution: Solution
-
-        if let directSolution = strategy.solution(for: frame) {
-            solution = directSolution
-        } else {
-            // Fallback strategy
-            solution = strategies.idle.solution(for: frame)!
-            debug.fellBackToIdleStrategy = true
-
-            loggingDamper.perform {
-                Terminal.log(.warning, "TapPredictor – didn't find a solution with the preferred strategy, falling back to IdleStrategy (predictionTime: \(frame.currentTime)).")
-            }
-        }
-
-        // Debug-store solution
-        mostRecentSolution = MostRecentSolution(solution: solution, associatedPredictionFrame: frame)
+        mostRecentSolution = MostRecentSolution(solution: solution, strategy: strategy, associatedPredictionFrame: frame)
         solution.annonateTapsWithDebugInfo(for: frame)
 
         return solution.sequence
@@ -143,7 +132,7 @@ class TapPredictor: TapPredictorBase {
         if !hasPredicted {
             guard let model = gameModel, let delay = scheduler.delay else { return }
             let currentTime = timeProvider.currentTime + delay
-            guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 1) else { return }
+            guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return }
 
             performDebugLogging(with: model, frame: frame, delay: delay)
         }
@@ -164,22 +153,42 @@ class TapPredictor: TapPredictorBase {
         debug.jumpVelocityValues.from(tracker: model.player.height.debug.jumpVelocityTracker)
     }
 
-    /// Choose the strategy to calculate the solution for a given frame.
-    private func strategy(for frame: PredictionFrame) -> InteractionSolutionStrategy {
-        if frame.bars.count == 0 {
-            return strategies.idle
+    /// Choose the correct strategy and find a solution for a given frame.
+    /// Also, return the strategy that has been used for finding the solution.
+    private func solution(for frame: PredictionFrame) -> (Solution, InteractionSolutionStrategy) {
+        let (strategy, frame) = self.strategy(for: frame)
+        debug.chosenStrategy = type(of: strategy)
+
+        if let solution = strategy.solution(for: frame) {
+            return (solution, strategy)
+        }
+        else {
+            // Fallback
+            debug.fellBackToIdleStrategy = true
+            loggingDamper.perform {
+                Terminal.log(.error, "TapPredictor – didn't find a solution with the preferred strategy, falling back to IdleStrategy (predictionTime: \(frame.currentTime)).")
+            }
+
+            // this is false: precondition(strategies.fallback.canSolve(frame: frame))
+            let solution = strategies.fallback.solution(for: frame)!
+            return (solution, strategy)
+        }
+    }
+
+    /// Choose the correct strategy for a given frame.
+    /// Also, modify the frame to remove non-considered interactions and return it.
+    private func strategy(for frame: PredictionFrame) -> (InteractionSolutionStrategy, PredictionFrame) {
+        var frame = frame
+
+        while !frame.bars.isEmpty {
+            if strategies.default.canSolve(frame: frame) {
+                return (strategies.default, frame)
+            } else {
+                frame.bars.removeLast()
+            }
         }
 
-        guard let numTaps = strategies.singleBar.minimumNumberOfTaps(for: frame) else {
-            Terminal.log(.error, "TapPredictor – it is impossible to solve the current frame, going to crash.")
-            return strategies.idle
-        }
-
-        if numTaps > 5 { // 6 or more taps - singleBarStrategy yields weird results
-            return strategies.idle
-        } else {
-            return strategies.singleBar
-        }
+        return (strategies.fallback, frame)
     }
 
     /// Check if a prediction lock should be applied.
@@ -193,11 +202,10 @@ class TapPredictor: TapPredictorBase {
         let referenceShift = timeProvider.currentTime - referenceTime
         let time = nextTap.relativeTime - referenceShift
 
-        switch mostRecentSolution?.solution.strategy {
-        case is IdleStrategy.Type:
-            return false // Don't ever lock IdleStrategy because the next bar could be recognized any frame
-        default:
+        if let shouldLock = mostRecentSolution?.strategy.shouldLockSolution, shouldLock {
             return time < 0.05
         }
+
+        return false
     }
 }

@@ -22,6 +22,14 @@ class IdleStrategy: InteractionSolutionStrategy {
         self.minimumJumpDistance = minimumJumpDistance
     }
 
+    /// State whether produced solutions should be locked directly before executing a tap.
+    var shouldLockSolution: Bool { false }
+
+    /// IdleStrategy can only provide a sensible solution when there are no bars in the frame.
+    func canSolve(frame: PredictionFrame) -> Bool {
+        frame.bars.isEmpty
+    }
+
     /// Calculate the solution for the given frame.
     /// Ignores the PlayerBarInteractions in the frame and just focuses on preventing the player from crashing the floor and jumping at a regular pace.
     func solution(for frame: PredictionFrame) -> Solution? {
@@ -30,7 +38,7 @@ class IdleStrategy: InteractionSolutionStrategy {
         // Jump immediately (as early as possible) if player is too low
         if player.currentPosition.y < startHeight {
             let tapDistance = max(0, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
-            return Solution(relativeTimes: [tapDistance], unlockDuration: nil, strategy: IdleStrategy.self)
+            return Solution(relativeTimes: [tapDistance], unlockDuration: nil)
         }
 
         // Else: Jump exactly when the player reaches the idle jump start height
@@ -45,7 +53,7 @@ class IdleStrategy: InteractionSolutionStrategy {
         let timeFromJumpStart = max(solutions.0, solutions.1)
         var timeFromNow = timeFromJumpStart - player.timePassedSinceJumpStart
         timeFromNow = max(timeFromNow, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
-        return Solution(relativeTimes: [timeFromNow], unlockDuration: nil, strategy: IdleStrategy.self)
+        return Solution(relativeTimes: [timeFromNow], unlockDuration: nil)
     }
 
     /// The start height of an optimal idle jump (with respect to `relativeIdleHeight`).
