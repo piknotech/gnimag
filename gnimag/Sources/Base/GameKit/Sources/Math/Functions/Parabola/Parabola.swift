@@ -29,6 +29,12 @@ public struct Parabola: DifferentiableFunction {
     public var derivative: Function {
         LinearFunction(slope: 2 * a, intercept: b)
     }
+
+    /// The derivative at a single value.
+    @_transparent
+    public func derivative(at value: Value) -> Value {
+        2 * a * value + b
+    }
 }
 
 // MARK: CustomStringConvertible
@@ -75,7 +81,7 @@ extension Parabola: ScalarFunctionArithmetic {
     @_transparent
     public func shiftedLeft(by amount: Double) -> Parabola {
         // Solve f(0) = self(amount), f'(0) = self'(amount); a stays same
-        let b = self′(amount) // b = f'(0) = self'(amount)
+        let b = self.derivative(at: amount) // b = f'(0) = self'(amount)
         let c = self(amount) // c = f(0) = self(amount)
         return Parabola(a: a, b: b, c: c)
     }

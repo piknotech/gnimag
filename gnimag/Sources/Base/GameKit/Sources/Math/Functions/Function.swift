@@ -22,6 +22,9 @@ public protocol ScalarFunctionArithmetic: Function {
 /// DifferentiableFunctions provide a derivative function.
 public protocol DifferentiableFunction: Function {
     var derivative: Function { get }
+
+    /// More performant way to calculate the derivative at a single value, without constructing the derivative function.
+    func derivative(at value: Value) -> Value
 }
 
 // MARK: Operators
@@ -32,15 +35,4 @@ public extension Function {
     func callAsFunction(_ x: Value) -> Value {
         at(x)
     }
-}
-
-// Differential operator. u+2032 unicode symbol.
-postfix operator ′
-public postfix func ′(f: DifferentiableFunction) -> Function {
-    f.derivative
-}
-
-infix operator ′
-public func ′(f: DifferentiableFunction, x: Double) -> Double {
-    (f′)(x)
 }

@@ -95,7 +95,7 @@ struct SolutionVerifier {
             if score < requiredMinimum { return 0 }
             rating = min(score, rating)
         }
-        
+
         return rating
     }
 
@@ -125,7 +125,7 @@ struct SolutionVerifier {
     /// The rating respective the steppest fall. This means, long jumps that fall down a lot and therefore are very steep are discouraged.
     /// Inside [0, 1].
     private func descendRating(for jumps: [Jump]) -> Double {
-        let descends = jumps.map { -$0.parabola′($0.endPoint.time) }
+        let descends = jumps.map { -$0.parabola.derivative(at: $0.endPoint.time) }
         guard let steepestDescend = descends.max() else { return 1 }
         if steepestDescend < frame.jumping.jumpVelocity { return 1 }
         return frame.jumping.jumpVelocity / steepestDescend
@@ -138,11 +138,15 @@ extension PlayerBarInteraction.HoleMovement {
     /// Return the minimal vertical distance from any of the jumps to one of the movement sections.
     /// 0 means there is a crash or touching point.
     func distance(to jumps: [Jump]) -> Double {
-        let distances = cartesianMap(jumps, sections) { jump, section in
-            section.distance(to: jump)
+        var smallest = Double.infinity
+
+        for jump in jumps {
+            for section in sections {
+                smallest = min(smallest, section.distance(to: jump))
+            }
         }
 
-        return distances.min() ?? .infinity
+        return smallest
     }
 }
 
@@ -173,7 +177,7 @@ extension PlayerBarInteraction.HoleMovement.Section.LinearMovement {
 }
 
 private extension Parabola {
-    /// The minimal absolute value in the given range. Only works for parabolas.
+    /// The minimal absolute value in the given range.
     func minimalAbsoluteValue(in range: SimpleRange<Double>) -> Double {
         // Check for a zero
         if let zeroes = QuadraticSolver.solve(self, equals: .zero) {
