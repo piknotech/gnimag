@@ -5,11 +5,13 @@
 
 import GameKit
 
-/// A Solution is a wrapper around a RelativeTapSequence.
+/// A Solution is a performant wrapper describing a RelativeTapSequence.
 /// It provides methods to calculate jumps that are performed within this sequence.
 /// Thereby, the start position of the solution is given externally, and the solution works relative to this start position.
 struct Solution {
-    let sequence: RelativeTapSequence
+    /// Properties that a RelativeTapSequence has: the (sorted) relative time values of all taps, and the unlock duration.
+    let relativeTapTimes: [Double]
+    let unlockDuration: Double?
 
     /// The time distances, between all consecutive jumps.
     /// This includes the time, beginning at zero, until the first jump.
@@ -21,46 +23,58 @@ struct Solution {
     let lengthOfLastJump: Double
 
     /// Default initializer.
-    init(sequence: RelativeTapSequence) {
-        self.sequence = sequence
+    init(relativeTimes: [Double], unlockDuration: Double?) {
+        self.relativeTapTimes = relativeTimes
+        self.unlockDuration = unlockDuration
 
         jumpTimeDistances = {
             var result = [Double]()
+            result.reserveCapacity(relativeTimes.count)
             var last: Double = 0
 
-            for tap in sequence.taps {
-                result.append(tap.relativeTime - last)
-                last = tap.relativeTime
+            for tapTime in relativeTimes {
+                result.append(tapTime - last)
+                last = tapTime
             }
 
             return result
         }()
 
         lengthOfLastJump = {
-            let lastJump = sequence.taps.last?.relativeTime ?? 0
-            let unlock = sequence.unlockDuration ?? lastJump
+            let lastJump = relativeTimes.last ?? 0
+            let unlock = unlockDuration ?? lastJump
             return unlock - lastJump
         }()
     }
 
-    /// Convenience intializer, implicitly constructing a RelativeTapSequence.
-    init(relativeTimes: [Double], unlockDuration: Double?) {
-        let taps = relativeTimes.map(RelativeTap.init(scheduledIn:))
-        self.init(sequence: RelativeTapSequence(taps: taps, unlockDuration: unlockDuration))
-    }
+    /// Convert the Solution into a RelativeTapSequence.
+    /// Thereby, attach DebugInfos to the produced taps to allow recovering the exactly predicted jumps at a later point in time.
+    func convertToRelativeTapSequence(in frame: PredictionFrame) -> RelativeTapSequence {
+        let jumps = self.jumps(for: frame.player, with: frame.jumping)
 
-    /// Annonate all RelativeTaps in the sequence with TapDebugInfos to allow recovering the exactly predicted jumps at a later point in time.
-    mutating func annonateTapsWithDebugInfo(for frame: PredictionFrame) {
-        for (tap, jump) in zip(sequence.taps, jumps(for: frame.player, with: frame.jumping)) {
-            tap.debugInfo = TapDebugInfo(referenceTime: frame.currentTime, jump: jump)
+        // Create RelativeTaps and attach DebugInfo
+        let taps = zip(relativeTapTimes, jumps).map { time, jump in
+            RelativeTap(scheduledIn: time).with {
+                $0.debugInfo = TapDebugInfo(
+                    referenceTime: frame.currentTime,
+                    jump: jump
+                )
+            }
         }
+
+        return RelativeTapSequence(taps: taps, unlockDuration: unlockDuration, isAlreadySorted: true)
     }
 
-    /// Shift the solution by a given time. This is used to transform a jump sequence from a different frame to the current frame by changing the `timeUntilStart` value.
-    /// Use positive `shift` values to transform a jump sequence from a previous frame into the current frame.
-    /// If this would render the whole sequence in the past, return nil.
-    func shifted(by shift: Double) -> Solution? {
-        sequence.shifted(by: shift).map(Solution.init(sequence:))
+    /// Shift the solution by a given time.
+    /// Use positive `shift` values to transform a tap sequence from a previous frame into the current frame.
+    /// Remove all Taps which would have a negative relativeTime after shifting.
+    /// If this would render the whole sequence in the past (because the shift is larger than unlockDuration), return nil.
+    public func shifted(by shift: Double) -> Solution? {
+        if let unlock = unlockDuration, unlock < shift { return nil }
+        let newUnlockDuration = unlockDuration.map { $0 - shift }
+
+        let newTaps = relativeTapTimes.filter { $0 >= shift }.map { $0 - shift }
+        return Solution(relativeTimes: newTaps, unlockDuration: newUnlockDuration)
     }
 }
 

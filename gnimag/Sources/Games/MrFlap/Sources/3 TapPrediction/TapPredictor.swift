@@ -112,12 +112,10 @@ class TapPredictor: TapPredictorBase {
         performDebugLogging(with: model, frame: frame, delay: delay)
 
         // Find and store solution
-        var (solution, strategy) = self.solution(for: frame)
-
+        let (solution, strategy) = self.solution(for: frame)
         mostRecentSolution = MostRecentSolution(solution: solution, strategy: strategy, associatedPredictionFrame: frame)
-        solution.annonateTapsWithDebugInfo(for: frame)
 
-        return solution.sequence
+        return solution.convertToRelativeTapSequence(in: frame)
     }
 
     /// Called after each frame, no matter whether predictionLogic was called or not.
