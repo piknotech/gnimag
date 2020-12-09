@@ -246,6 +246,8 @@
 		63C7F6D423F5A12A00187840 /* BarTracker+OrphanageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */; };
 		63CB1E112428E94B006B7782 /* ConnectedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CB1E102428E94B006B7782 /* ConnectedComponents.swift */; };
 		63CB1E132428EFBF006B7782 /* OCRComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CB1E122428EFBF006B7782 /* OCRComponent.swift */; };
+		63CCCAFF246178E7002605DD /* ORSSerial in Frameworks */ = {isa = PBXBuildFile; productRef = 63CCCAFE246178E7002605DD /* ORSSerial */; };
+		63CCCB01246178F8002605DD /* Arduino.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CCCB00246178F8002605DD /* Arduino.swift */; };
 		63D002962373037900041069 /* DebugFrame+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugFrame+Data.swift */; };
 		63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9523D89C5D00121F2B /* Point+Position.swift */; };
 		63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9A23D9FFEE00121F2B /* Jump.swift */; };
@@ -632,6 +634,7 @@
 		63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarTracker+OrphanageDetector.swift"; sourceTree = "<group>"; };
 		63CB1E102428E94B006B7782 /* ConnectedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedComponents.swift; sourceTree = "<group>"; };
 		63CB1E122428EFBF006B7782 /* OCRComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRComponent.swift; sourceTree = "<group>"; };
+		63CCCB00246178F8002605DD /* Arduino.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arduino.swift; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		63D002952373037900041069 /* DebugFrame+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugFrame+Data.swift"; sourceTree = "<group>"; };
 		63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectScatterStrokable.swift; sourceTree = "<group>"; };
@@ -669,6 +672,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63CCCAFF246178E7002605DD /* ORSSerial in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1427,6 +1431,7 @@
 			isa = PBXGroup;
 			children = (
 				631213C823257EB600C126B4 /* main.swift */,
+				63CCCB00246178F8002605DD /* Arduino.swift */,
 				631213BC23257EB600C126B4 /* IO */,
 			);
 			path = Sources;
@@ -2365,6 +2370,9 @@
 			dependencies = (
 			);
 			name = gnimag;
+			packageProductDependencies = (
+				63CCCAFE246178E7002605DD /* ORSSerial */,
+			);
 			productName = MacCLI;
 			productReference = 631212AD23253DC700C126B4 /* gnimag */;
 			productType = "com.apple.product-type.tool";
@@ -2663,6 +2671,7 @@
 			packageReferences = (
 				634AF71E23E84879005FE241 /* XCRemoteSwiftPackageReference "Charts" */,
 				634AF72123E848C3005FE241 /* XCRemoteSwiftPackageReference "Surge" */,
+				63CCCAFD246178E7002605DD /* XCRemoteSwiftPackageReference "ORSSerialPort" */,
 			);
 			productRefGroup = 631212AE23253DC700C126B4 /* Products */;
 			projectDirPath = "";
@@ -2836,6 +2845,7 @@
 			files = (
 				6354CECA2409467600A4C3B8 /* main.swift in Sources */,
 				63E16AAB24348400005E67ED /* MouseDragger.swift in Sources */,
+				63CCCB01246178F8002605DD /* Arduino.swift in Sources */,
 				631213CF23257EB600C126B4 /* Android.swift in Sources */,
 				634E2C6C2440A383001C2459 /* WindowInteractor.swift in Sources */,
 				631213CA23257EB600C126B4 /* MouseTapper.swift in Sources */,
@@ -5286,6 +5296,14 @@
 				minimumVersion = 2.3.0;
 			};
 		};
+		63CCCAFD246178E7002605DD /* XCRemoteSwiftPackageReference "ORSSerialPort" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/armadsen/ORSSerialPort";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -5298,6 +5316,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 634AF72123E848C3005FE241 /* XCRemoteSwiftPackageReference "Surge" */;
 			productName = Surge;
+		};
+		63CCCAFE246178E7002605DD /* ORSSerial */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63CCCAFD246178E7002605DD /* XCRemoteSwiftPackageReference "ORSSerialPort" */;
+			productName = ORSSerial;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
