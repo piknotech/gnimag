@@ -13,10 +13,10 @@ struct PlayerAngleConverter {
     typealias Time = Double
 
     /// The time to angle conversion function.
-    private let timeToAngle: LinearFunction
+    let timeToAngle: LinearFunction
 
     /// The angle conversion function.
-    private let angleToTime: LinearFunction
+    let angleToTime: LinearFunction
 
     /// Create a PlayerAngleConverter from the given player tracker.
     init?(player: PlayerTracker) {
@@ -58,14 +58,30 @@ struct PlayerAngleConverter {
 
     // MARK: Jumping Parabola Conversion
 
+    /// Convert a parabola whose argument is time into the same parabola whose argument is angle.
+    func angleBasedParabola(from parabola: Parabola) -> Parabola {
+        var poly = Polynomial([parabola.c, parabola.b, parabola.a])
+        poly = linearTransform(polynomial: poly, by: angleToTime)
+        return Parabola(a: poly.a, b: poly.b, c: poly.c)
+    }
+
+    /// Convert a parabola whose argument is angle into the same parabola whose argument is time.
+    func timeBasedParabola(from parabola: Parabola) -> Parabola {
+        var poly = Polynomial([parabola.c, parabola.b, parabola.a])
+        poly = linearTransform(polynomial: poly, by: timeToAngle)
+        return Parabola(a: poly.a, b: poly.b, c: poly.c)
+    }
+
     /// Convert a jumping parabola (i.e. a parabola going through (0,0)) whose argument is time into the same parabola whose argument is angle.
-    func angleBasedJumpingParabola(from parabola: Parabola) -> Parabola {
+    /// Therefore, the point at (0,0) is retained.
+    func angleBasedParabolaIgnoringIntercept(from parabola: Parabola) -> Parabola {
         let factor = angleToTime.slope
         return Parabola(a: parabola.a * factor * factor, b: parabola.b * factor, c: parabola.c)
     }
 
     /// Convert a jumping parabola (i.e. a parabola going through (0,0)) whose argument is angle into the same parabola whose argument is time.
-    func timeBasedJumpingParabola(from parabola: Parabola) -> Parabola {
+    /// Therefore, the point at (0,0) is retained.
+    func timeBasedParabolaIgnoringIntercept(from parabola: Parabola) -> Parabola {
         let factor = timeToAngle.slope
         return Parabola(a: parabola.a * factor * factor, b: parabola.b * factor, c: parabola.c)
     }

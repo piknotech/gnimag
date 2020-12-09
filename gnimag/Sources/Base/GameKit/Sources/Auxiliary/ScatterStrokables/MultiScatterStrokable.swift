@@ -8,7 +8,7 @@ import TestingTools
 
 /// A composition of ScatterStrokables, which is drawn by drawing all components consecutively.
 public struct MultiScatterStrokable: ScatterStrokable {
-    private let components: [ScatterStrokable]
+    public let components: [ScatterStrokable]
 
     /// Default initializer.
     public init(components: [ScatterStrokable]) {
@@ -16,15 +16,15 @@ public struct MultiScatterStrokable: ScatterStrokable {
     }
 
     /// Return a MultiStrokable consisting of the concrete strokables of each component.
-    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let strokables = components.map { $0.concreteStrokable(for: scatterPlot) }
+    public func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let strokables = components.map { $0.concreteStrokable(for: frame) }
         return MultiStrokable(components: strokables)
     }
 }
 
 /// A composition of Strokables, which is drawn by drawing all components consecutively.
 public struct MultiStrokable: Strokable {
-    private let components: [Strokable]
+    public let components: [Strokable]
 
     /// Default initializer.
     public init(components: [Strokable]) {

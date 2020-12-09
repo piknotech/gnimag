@@ -36,15 +36,14 @@ extension SolutionExecution {
         }
 
         // Find nearest neighbor
-        let neighbors: [(color: GameColor, position: Position)] = (state.remainingColors × [true, false]).map { color, begin in
+        let neighbors: [(color: GameColor, position: Position)] = cartesianMap(state.remainingColors, [true, false]) { color, begin in
             let startPosition = begin ? pathForColor(color).begin : pathForColor(color).end
             return (color, startPosition)
         }
 
         // There could be multiple nearest neighbors, but we ignore them and just use any of them
-        let nearestNeighbor = neighbors.min { n1, n2 in
-            n1.position.distance(to: state.outgoingPosition) <
-                n2.position.distance(to: state.outgoingPosition)
+        let nearestNeighbor = neighbors.min {
+            $0.position.distance(to: state.outgoingPosition)
         }!
 
         // Reverse path if required and determine nextOutgoingPosition

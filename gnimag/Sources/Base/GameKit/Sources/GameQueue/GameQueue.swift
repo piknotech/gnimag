@@ -16,8 +16,8 @@ public final class GameQueue {
 
     private let imageProvider: ImageProvider
 
-    /// High-priority queue where frame analysis is performed.
-    private let queue: DispatchQueue
+    /// High-priority queue where frame analysis and further calculation is performed on.
+    private let queue = DispatchQueue(label: "gnimag.gamequeue", qos: .userInteractive)
 
     /// The callback which is executed in the background to analyze frames.
     /// Only return from this callback after you finished analyzing the frame.
@@ -33,7 +33,6 @@ public final class GameQueue {
     public init(imageProvider: ImageProvider, synchronousFrameCallback: @escaping (Frame) -> Void) {
         self.imageProvider = imageProvider
         self.synchronousFrameCallback = synchronousFrameCallback
-        self.queue = DispatchQueue(label: "GameQueue", qos: .userInteractive) // High-priority queue
         self.timingStats = GameQueueTimingStats(timeProvider: imageProvider.timeProvider)
     }
 
@@ -55,8 +54,8 @@ public final class GameQueue {
 
         // Cancel previous `stop(for:)` tasks as the most recent one overrides the previous ones
         let identification = Timing.Identification.object(self, string: "stop(for:)")
-        Timing.cancelTasks(matching: identification)
-        Timing.perform(after: duration, identification: identification, block: begin)
+        Timing.shared.cancelTasks(matching: identification)
+        Timing.shared.perform(after: duration, identification: identification, block: begin)
     }
 
     /// Remove frames which are currently in waiting state.

@@ -5,21 +5,31 @@
 
 import Common
 import GameKit
+import simd
 
 extension PlayerBarInteraction {
     private typealias Portion = BasicLinearPingPongTracker.LinearSegmentPortion
 
     /// Create a `PlayerBarInteraction` from the given models and the current time.
-    init(player: PlayerProperties, bar: BarProperties, playfield: PlayfieldProperties, currentTime: Double) {
-        // Calculate when the player will hit the bar
+    init(player: PlayerProperties, bar: BarProperties, playfield: PlayfieldProperties, currentTime: Double, barTracker: BarTracker) {
+        self.currentTime = currentTime
+        self.barTracker = barTracker
+
+        // Speed, direction and bar width (time-wise and angular)
         let direction = player.xSpeed - bar.xSpeed
         totalSpeed = abs(direction)
-        let distanceToCenter = player.currentPosition.x.directedDistance(to: bar.xPosition, direction: direction)
-        timeUntilHittingCenter = distanceToCenter / totalSpeed
+        widths = Self.timeWidths(bar: bar, playfield: playfield, totalSpeed: totalSpeed)
+        let angularBarWidth = widths.full * totalSpeed
+
+        // Calculate when player will hit the bar's center and when it will fully leave the bar
+        let leavingAngle = Angle(bar.xPosition.value + sign(direction) * angularBarWidth / 2)
+        let distanceToLeaving = player.currentPosition.x.directedDistance(to: leavingAngle, direction: direction)
+
+        timeUntilLeaving = distanceToLeaving / totalSpeed
+        timeUntilHittingCenter = timeUntilLeaving - widths.full / 2
+        fullInteractionRange = SimpleRange(around: timeUntilHittingCenter, diameter: widths.full)
 
         // Calculate remaining properties
-        widths = Self.timeWidths(bar: bar, playfield: playfield, totalSpeed: totalSpeed)
-        fullInteractionRange = SimpleRange(around: timeUntilHittingCenter, diameter: widths.full)
         boundsCurves = Self.boundsCurves(bar: bar, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, totalSpeed: totalSpeed)
         holeMovement = Self.holeMovement(bar: bar, currentTime: currentTime, timeUntilHittingCenter: timeUntilHittingCenter, widths: widths, curves: boundsCurves)
     }
@@ -57,7 +67,7 @@ extension PlayerBarInteraction {
         let yCenterMovement = bar.yCenterMovementPortionsForTimeRange(fullRange)
 
         // Map to HoleMovement.Sections
-        let sections = yCenterMovement.map {
+        let sections = yCenterMovement.compactMap {
             movementSection(from: $0, bar: bar, currentTime: currentTime, widths: widths, curves: curves)
         }
 
@@ -71,7 +81,7 @@ extension PlayerBarInteraction {
 
     /// Convert a LinearSegmentPortion into a HoleMovement.Section.
     /// Returns nil if the section is fully irrelevant, i.e. outside the enclosing curves.
-    private static func movementSection(from portion: Portion, bar: BarProperties, currentTime: Double, widths: BarWidths, curves: BoundsCurves) -> HoleMovement.Section {
+    private static func movementSection(from portion: Portion, bar: BarProperties, currentTime: Double, widths: BarWidths, curves: BoundsCurves) -> HoleMovement.Section? {
         // Shift portion back by currentTime (such that 0 corresponds to currentTime)
         let timeRange = portion.timeRange.shifted(by: -currentTime)
         let line = portion.line.shiftedLeft(by: currentTime)
@@ -125,6 +135,9 @@ extension PlayerBarInteraction {
         let fullTimeRange = validRanges.reduce(SimpleRange<Double>(from: .infinity, to: -.infinity)) { fullRange, new in
             fullRange.pseudoUnion(with: new)
         }
+
+        // Discard irrelevant sections
+        if fullTimeRange.isEmpty { return nil }
 
         return HoleMovement.Section(
             fullTimeRange: fullTimeRange,

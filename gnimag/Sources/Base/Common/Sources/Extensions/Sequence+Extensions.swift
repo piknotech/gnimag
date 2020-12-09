@@ -24,3 +24,42 @@ extension Sequence {
         !contains(where: predicate)
     }
 }
+
+extension Sequence {
+    /// Map each element to a comparable property and return the element with the minimum property.
+    @_transparent
+    public func min<T: Comparable>(by property: (Element) -> T) -> Element? {
+        var best: (elem: Element, value: T)?
+
+        for elem in self {
+            let value = property(elem)
+            if best?.value == nil || best!.value > value {
+                best = (elem, value)
+            }
+        }
+
+        return best?.elem
+    }
+
+    @_transparent
+    public func max<T: Comparable>(by property: (Element) -> T) -> Element? {
+        min {
+            Negative(value: property($0))
+        }
+    }
+}
+
+/// A comparable reversing the compared result.
+public struct Negative<T: Comparable>: Comparable {
+    public let value: T
+
+    @_transparent
+    public init(value: T) {
+        self.value = value
+    }
+
+    @_transparent
+    public static func < (lhs: Negative<T>, rhs: Negative<T>) -> Bool {
+        lhs.value > rhs.value
+    }
+}

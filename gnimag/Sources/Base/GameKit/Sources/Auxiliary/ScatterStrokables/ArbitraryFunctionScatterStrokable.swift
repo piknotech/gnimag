@@ -11,15 +11,15 @@ import TestingTools
 /// A ScatterStrokable that can draw any function by calculating and connecting points on the function at certain intervals.
 public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
     /// The function in the data point space.
-    let function: Function
+    public let function: Function
 
     /// The x value range where the function should be drawn (in data point space).
     /// Attention: the range must be regular, i.e. upper > lower.
-    let drawingRange: SimpleRange<Double>
+    public let drawingRange: SimpleRange<Double>
 
     /// The minimum number of interpolation points that will be used.
     /// If the function is curvy (high derivative), more points will be used, up to `2 * interpolationPoints`.
-    let interpolationPoints: Int
+    public let interpolationPoints: Int
 
     /// Default initializer.
     public init(function: Function, drawingRange: SimpleRange<Double>, interpolationPoints: Int) {
@@ -29,9 +29,9 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
     }
 
     /// Return the concrete strokable for drawing onto a specific ScatterPlot.
-    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let pixelRect = scatterPlot.pixelContentRect
-        let dataRect = scatterPlot.dataContentRect
+    public func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let pixelRect = frame.pixelContentRect
+        let dataRect = frame.dataContentRect
 
         // Calculate range
         let start = max(drawingRange.lower, Double(dataRect.minX))
@@ -43,11 +43,12 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
 
         var result = [CGPoint]()
         var x = start
+        var i = 0 // Fix for too small accuracies
 
         // Function traversal
-        while x <= end {
+        while x <= end && i <= 2 * interpolationPoints {
             // Convert to pixel space
-            let point = scatterPlot.pixelPosition(of: (x, function.at(x)))
+            let point = frame.pixelPosition(of: (x, function.at(x)))
             result.append(point)
 
             // Calculate x-delta to the next point (between acc/2 and acc, depending on the slope)
@@ -62,10 +63,11 @@ public struct ArbitraryFunctionScatterStrokable: ScatterStrokable {
             let d = cos(atan(scaledDeriv)) * accuracy
             let deltaX = max(d, accuracy / 2)
             x += Double(deltaX)
+            i += 1
         }
 
         // Add point at the end of the interval
-        let last = scatterPlot.pixelPosition(of: (end, function.at(end)))
+        let last = frame.pixelPosition(of: (end, function.at(end)))
         result.append(last)
 
         // Remove points that are irrelevant to the graph.

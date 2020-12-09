@@ -10,55 +10,55 @@ public struct DebugParameters: DebugParameterType {
     /// The path to the directory in which the logging is performed.
     public let location: String
 
-    /// The logging severity.
-    public let severity: Severity
+    /// Occasions on which frames are logged.
+    public let occasions: Occasions
+    public struct Occasions: OptionSet {
+        public let rawValue: Int
 
-    public enum Severity {
-        case none
-
-        /// Log text and images on errors.
-        /// Error means either an image analysis error or a data integrity error.
-        case onErrors
-
-        /// Log text on errors.
-        /// Error means either an image analysis error or a data integrity error.
-        case onErrorsTextOnly
-
-        /// Log text and images, but only for integrity errors.
-        case onIntegrityErrors
-
-        /// Always log text. Log text and images on errors.
-        case alwaysText
-
-        /// Always log text and images.
-        case always
-
-        /// Log every x frames with text and images; do not log errors explicitly.
-        case every(Int)
-
-        /// True if logging of images is disabled.
-        var noImages: Bool {
-            switch self {
-            case .none, .onErrorsTextOnly: return true
-            default: return false
-            }
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
         }
 
-        /// True if images are logged always, independent of whether an error has occurred or not.
-        var alwaysImages: Bool {
-            switch self {
-            case .always, .every: return true
-            default: return false
-            }
-        }
+        public static let imageAnalysisErrors = Occasions(rawValue: 1 << 0)
+        public static let barLocationErrors = Occasions(rawValue: 1 << 1)
+        public static let integrityErrors = Occasions(rawValue: 1 << 2)
+        public static let errors: Occasions = [.imageAnalysisErrors, .barLocationErrors, .integrityErrors]
+        public static let interestingTapPrediction = Occasions(rawValue: 1 << 3)
     }
 
+    /// The content that is logged.
+    public let content: LoggingContent
+    public struct LoggingContent: OptionSet {
+        public let rawValue: Int
+
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+
+        public static let text = LoggingContent(rawValue: 1 << 0)
+        public static let imageAnalysis = LoggingContent(rawValue: 1 << 1)
+        public static let gameModelCollection = LoggingContent(rawValue: 1 << 2)
+        public static let tapPrediction = LoggingContent(rawValue: 1 << 3)
+        public static let all: LoggingContent = [.text, .imageAnalysis, .gameModelCollection, .tapPrediction]
+    }
+
+    /// When set, every `controlFramerate` frames the current frame is logged, independent of whether it matches one of the occasions.
+    public let controlFramerate: Int?
+
+    /// When set, the most recent 50 frames will be logged when the player crashes.
+    /// Attention: Because this requires every frame to call `prepareSynchronously`, this slows down performance.
+    public let logLast50FramesOnCrash: Bool
+
     /// Default initializer.
-    public init(location: String, severity: Severity) {
+    public init(location: String, occasions: Occasions, logEvery controlFramerate: Int? = nil, content: LoggingContent = .all, logLast50FramesOnCrash: Bool) {
         self.location = location
-        self.severity = severity
+        self.occasions = occasions
+        self.controlFramerate = controlFramerate
+        self.content = content
+        self.logLast50FramesOnCrash = logLast50FramesOnCrash
     }
 
     /// Shorthand for no logging.
-    public static let none = DebugParameters(location: "", severity: .none)
+    public static let none = DebugParameters(location: "", occasions: [], logLast50FramesOnCrash: false)
+    internal var isNone: Bool { location.isEmpty }
 }

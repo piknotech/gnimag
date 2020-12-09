@@ -22,7 +22,7 @@ final class DebugFrame: DebugFrameProtocol {
     }
 
     // MARK: Hints
-    var hints = Hints()
+    let hints = Hints()
 
     /// Properties of the image analysis hints calculation.
     class Hints {
@@ -30,7 +30,7 @@ final class DebugFrame: DebugFrameProtocol {
     }
 
     // MARK: Image Analysis
-    var imageAnalysis = ImageAnalysis()
+    let imageAnalysis = ImageAnalysis()
 
     /// Properties of the Image Analysis step.
     class ImageAnalysis {
@@ -40,6 +40,7 @@ final class DebugFrame: DebugFrameProtocol {
         enum Outcome {
             case success
             case error
+            case crashed
             case samePlayerPosition
         }
 
@@ -130,9 +131,7 @@ final class DebugFrame: DebugFrameProtocol {
             /// Do necessary preparations before logging.
             func prepareForLogging() {
                 angle.fetchFunctionInfos()
-                for tracker in [angle, size] as [TrackerDebugInfo] {
-                    tracker.fetchDataSet()
-                }
+                angle.fetchDataSet(maxDataPoints: 100)
 
                 // Jump tracker: only fetch the most recent segments
                 height.fetchDataSet(numSegments: 25)
@@ -162,11 +161,46 @@ final class DebugFrame: DebugFrameProtocol {
 
             /// Do necessary preparations before logging.
             func prepareForLogging() {
-                yCenter.fetchFunctionInfos(type: .all)
-                for tracker in [yCenter, angle, width, holeSize] as [TrackerDebugInfo] {
-                    tracker.fetchDataSet()
-                }
+                yCenter.fetchFunctionInfos(type: .all, numSegments: 3)
+                yCenter.fetchDataSet(numSegments: 3)
             }
+        }
+    }
+
+    // MARK: Tap Prediction
+    let tapPrediction = TapPrediction()
+
+    /// Properties of the Tap Prediction step.
+    class TapPrediction {
+        var wasLocked: Bool?
+        var isLocked: Bool?
+        var delay: Double?
+        var chosenStrategy: InteractionSolutionStrategy.Type?
+        var fellBackToIdleStrategy = false
+
+        // Properties for FullFramePlot
+        var playerHeight = CompositeTrackerDebugInfo<ParabolaTracker>()
+        var playerAngleConverter: PlayerAngleConverter?
+        var executedTaps: [PerformedTap]?
+        var scheduledTaps: [ScheduledTap]?
+        var frame: PredictionFrame?
+        var interactionRecorder: InteractionRecorder?
+
+        // More plots
+        var delayValues = SimpleTrackerDebugInfo<ConstantTracker>()
+        var jumpVelocityValues = SimpleTrackerDebugInfo<ConstantTracker>()
+        var gravityValues = SimpleTrackerDebugInfo<ConstantTracker>()
+        var mostRecentSolution: TapPredictor.MostRecentSolution?
+
+        /// Do necessary preparations before logging.
+        func prepareForLogging() {
+            for simple in [delayValues, jumpVelocityValues, gravityValues] {
+                simple.fetchDataSet(maxDataPoints: .max)
+                simple.fetchFunctionInfos()
+            }
+
+            playerHeight.fetchDataSet(numSegments: 10)
+            playerHeight.fetchFunctionInfos(type: .noGuesses, numSegments: 10)
         }
     }
 }

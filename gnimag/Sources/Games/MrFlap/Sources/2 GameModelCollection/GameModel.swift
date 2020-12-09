@@ -24,15 +24,7 @@ final class GameModel {
         self.bars = []
 
         // Create shared bar movement bound collector
-        let guess = guessPercentage(for: mode)
+        let guess = GameProperties.barDirectionReversionPercentageGuess(for: mode)
         BarTracker.momventBoundCollector = BarMovementBoundCollector(playfield: playfield, guessPercentage: guess)
-    }
-
-    /// The guess percentage for the shared bar movement bound collector, depending on the game mode.
-    private func guessPercentage(for mode: GameMode) -> Double {
-        switch mode {
-        case .normal: return 30%
-        case .hard: return 25%
-        }
     }
 }

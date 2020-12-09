@@ -3,6 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 
 /// An axis-aligned bounding box.
@@ -43,6 +44,14 @@ public struct AABB {
     public func inset(by inset: (dx: CGFloat, dy: CGFloat)) -> AABB {
         AABB(rect: rect.insetBy(dx: inset.dx, dy: inset.dy))
     }
+
+    /// Rotate the AABB by an angle, counterclockwise, around the given point.
+    /// Return an OBB describing the resulting rectangle.
+    public func rotated(by rotation: CGFloat, around center: CGPoint) -> OBB {
+        let newCenter = self.center.rotated(by: rotation, around: center)
+        let newAABB = AABB(center: newCenter, width: width, height: height)
+        return OBB(aabb: newAABB, rotation: rotation)
+    }
 }
 
 extension AABB: Shape {
@@ -70,4 +79,35 @@ extension AABB: Shape {
     }
 
     public var boundingBox: AABB { self }
+}
+
+extension AABB {
+    /// Two normalized vectors describing the axes of a right-handed coordinate system.
+    /// Thereby, `right` is `up` rotated by 90° clockwise (and possibly scaled).
+    /// These vectors describe directions and are therefore independent of self.center.
+    public struct Axes {
+        public let up: CGPoint
+        public let right: CGPoint
+    }
+
+    /// The AABB consists of four axes beginning at its center: up, down, left and right.
+    /// This method finds two of these axes: the direction of the first is most similar to the direction from referencePoint to self.center (which is result.up), and the second is the axis which comes clockwise after the first (result.right).
+    /// The resulting axes are normalized.
+    public func rightHandedCoordinateAxes(respectiveTo referencePoint: CGPoint) -> Axes {
+        let directions = [CGPoint(x: 0, y: 0.5), CGPoint(x: 0.5, y: 0), CGPoint(x: 0, y: -0.5), CGPoint(x: -0.5, y: 0)]
+        let axes = directions.map {
+            CGPoint(x: width * $0.x, y: height * $0.y).normalized
+        }
+
+        // Find axis whose direction is most similar to referenceDirection
+        let referenceDirection = center - referencePoint
+        let upAxis = axes.min { axis in
+            acos(axis.dot(referenceDirection) / (axis.length * referenceDirection.length))
+        }!
+
+        let indexOfUpAxis = axes.firstIndex(of: upAxis)!
+        let rightAxis = axes[(indexOfUpAxis + 1) % axes.count]
+
+        return Axes(up: upAxis, right: rightAxis)
+    }
 }

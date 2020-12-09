@@ -35,7 +35,7 @@ struct Jump {
     }
 
     /// Calculate all jumps for the jump sequence defined by the given time distances, starting at the given point.
-    static func jumps(forTimeDistances timeDistances: [Double], timeUntilEnd: Double, startPoint: Point, jumping: JumpingProperties) -> [Jump] {
+    static func jumps(forTimeDistances timeDistances: [Double], lastJumpDuration: Double, startPoint: Point, jumping: JumpingProperties) -> [Jump] {
         var result = [Jump]()
         result.reserveCapacity(timeDistances.count + 1)
 
@@ -43,9 +43,9 @@ struct Jump {
 
         // Perform each jump
         for i in 0 ... timeDistances.count {
-            // Performantly subscript `timeDistances + [timeUntilEnd]`
+            // Performantly subscript `timeDistances + [lastJumpDuration]`
             let distance = (i == timeDistances.count)
-                ? timeUntilEnd
+                ? lastJumpDuration
                 : timeDistances[i]
 
             let jump = from(startPoint: currentPoint, duration: distance, jumping: jumping)

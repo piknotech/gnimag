@@ -40,10 +40,7 @@ class PathTracer {
         }
 
         // Find best SolutionExecution, depending both on in-air and on-screen length
-        let best = optimized.min {
-            ($0.inAirLength + $0.pathLength) < ($1.inAirLength + $1.pathLength)
-        }!
-
+        let best = optimized.min { $0.inAirLength + $0.pathLength }!
         execute(best)
     }
 

@@ -14,8 +14,8 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
     // MARK: Private Properties
 
     /// The constant trackers for gravity and jump velocity.
-    private let gravityTracker: PreliminaryTracker
-    private let jumpVelocityTracker: PreliminaryTracker
+    internal let gravityTracker: PreliminaryTracker
+    internal let jumpVelocityTracker: PreliminaryTracker
 
     /// The estimated gravity, if available.
     private var gravity: Value? { gravityTracker.average ?? gravityTracker.values.last }
@@ -49,8 +49,8 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         idleHeightBeforeInitialSegment: Value? = nil
     ) {
         let tolerance = TrackerTolerance.relative(relativeValueRangeTolerance)
-        gravityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
-        jumpVelocityTracker = PreliminaryTracker(tolerancePoints: 1, tolerance: tolerance)
+        gravityTracker = PreliminaryTracker(maxDataPoints: 500, tolerancePoints: 1, tolerance: tolerance)
+        jumpVelocityTracker = PreliminaryTracker(maxDataPoints: 500, tolerancePoints: 1, tolerance: tolerance)
 
         self.customRelativeGuessRange = customRelativeGuessRange
         self.idleHeightBeforeInitialSegment = idleHeightBeforeInitialSegment
@@ -74,7 +74,7 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         // Calculate gravity, jump velocity and jump start
         let jumpStart = calculateStartTimeForCurrentJump(currentJump: jump)
         let gravity = -2 * jump.a
-        let jumpVelocity = jump′(jumpStart)
+        let jumpVelocity = jump.derivative(at: jumpStart)
 
         gravityTracker.removePreliminaryValue()
         jumpVelocityTracker.removePreliminaryValue()
@@ -170,7 +170,7 @@ public final class JumpTracker: CompositeTracker<ParabolaTracker> {
         guard let parabola = segment.tracker.regression else { return false }
         guard let jumpStart = segment.supposedStartTime else { return false }
         let gravity = -2 * parabola.a
-        let jumpVelocity = parabola′(jumpStart)
+        let jumpVelocity = parabola.derivative(at: jumpStart)
 
         return gravityTracker.isValueValid(gravity) && jumpVelocityTracker.isValueValid(jumpVelocity)
     }

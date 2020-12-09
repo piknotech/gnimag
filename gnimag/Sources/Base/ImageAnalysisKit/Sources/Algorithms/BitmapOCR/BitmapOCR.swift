@@ -27,7 +27,7 @@ public final class BitmapOCR {
         /// All images inside this dataset have the same size.
         let characters: [Character]
         struct Character {
-            let image: Image
+            let image: GrayscaleImage
             let string: String
             let aspectRatio: Double // = width / height
         }
@@ -119,12 +119,13 @@ public final class BitmapOCR {
         // Find suitable common image size
         let width = imagesAndNames.map { $0.0.width }.max() ?? 0
         let height = imagesAndNames.map { $0.0.height }.max() ?? 0
+        let size = min(width, height)
 
         return Dataset(
-            imageSize: (width, height),
+            imageSize: (size, size),
             characters: imagesAndNames.map { (image, name) in
                 let ratio = Double(image.width) / Double(image.height)
-                let scaled = image.scaled(toWidth: width, height: height, mode: .aspectFitCenter)
+                let scaled = image.scaled(toWidth: size, height: size, mode: .aspectFitCenter)
                 return BitmapOCR.Dataset.Character(image: scaled, string: name, aspectRatio: ratio)
             }
         )

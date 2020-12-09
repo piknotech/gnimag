@@ -14,7 +14,7 @@ import Tapping
 /// Each instance of MrFlap can play a single game of MrFlap.
 public final class MrFlap {
     private let imageProvider: ImageProvider
-    private let tapper: Tapper
+    private let tapper: SomewhereTapper
 
     /// The three great actors – one for each step.
     private let imageAnalyzer: ImageAnalyzer
@@ -23,7 +23,7 @@ public final class MrFlap {
 
     /// The queue where all steps are performed on.
     private var queue: GameQueue!
-    private var statsPrintingTimer: Timer!
+    private var statsPrinting = ActionStreamDamper(delay: 10, performFirstActionImmediately: false)
 
     /// The shared playfield.
     private var playfield: Playfield!
@@ -40,23 +40,21 @@ public final class MrFlap {
         case finished
     }
 
+    /// An Event that is triggered a single time once the player crashes.
+    /// Also, when the player crashes, image analysis stops.
+    public let crashed = Event<Void>()
+
     /// Default initializer.
-    public init(imageProvider: ImageProvider, tapper: Tapper, debugParameters: DebugParameters = .none) {
+    public init(imageProvider: ImageProvider, tapper: SomewhereTapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
         self.tapper = tapper
 
         debugLogger = DebugLogger(parameters: debugParameters)
         
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
-        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider)
+        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider, debugLogger: debugLogger)
 
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
-
-        statsPrintingTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
-            Terminal.logNewline()
-            Terminal.log(.info, self.queue.timingStats.detailedDescription)
-            Terminal.logNewline()
-        }
     }
 
     /// Begin receiving images and play the game.
@@ -86,6 +84,12 @@ public final class MrFlap {
         }
 
         debugLogger.advance()
+        
+        statsPrinting.perform {
+            Terminal.logNewline()
+            Terminal.log(.info, self.queue.timingStats.detailedDescription)
+            Terminal.logNewline()
+        }
     }
 
     // MARK: State-Specific Update Methods
@@ -93,7 +97,7 @@ public final class MrFlap {
     /// Analyze the first image to find the playfield. Then tap the screen to start the game.
     private func startGame(image: Image, time: Double) {
         guard case let .success(result) = analyze(image: image, time: time) else {
-            debugLogger.logSynchronously()
+            debugLogger.logSynchronously(force: true)
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
 
@@ -120,10 +124,18 @@ public final class MrFlap {
     }
 
     /// Normal update method while in-game.
+    /// Perform TapPrediction each frame, i.e. no matter what the outcome of ImageAnalysis and GameModelCollection is.
     private func gameplayUpdate(image: Image, time: Double) {
-        guard case let .success(result) = analyze(image: image, time: time) else { return }
-        if gameModelCollector.accept(result: result, time: time) {
-            tapPredictor.predict()
+        switch analyze(image: image, time: time) {
+        case let .success(result):
+            _ = gameModelCollector.accept(result: result, time: time)
+            tapPredictor.predictionStep()
+
+        case .failure(.crashed):
+            playerHasCrashed()
+
+        default:
+            tapPredictor.predictionStep()
         }
     }
 
@@ -134,6 +146,15 @@ public final class MrFlap {
         return pos1.distance(to: pos2)
     }
 
+    /// Called when the player has crashed.
+    /// Stops image analysis and performs finalization tasks.
+    private func playerHasCrashed() {
+        queue.stop()
+        tapPredictor.removeScheduledTaps()
+        debugLogger.playerHasCrashed()
+        crashed.trigger()
+    }
+
     // MARK: Analysis & Hints
 
     /// Analyze an image using the ImageAnalyzer and the hints.
@@ -142,28 +163,13 @@ public final class MrFlap {
         let result = imageAnalyzer.analyze(image: image, hints: hints)
         debugLogger.currentFrame.hints.hints = hints
 
-        // TODO: auf real device: das testen (i.e. ob delay-shift von performedTaps zu actualTaps korrekt ist)
-        if case let .success(result) = result {
-            //print("h", hints.expectedPlayer)
-            //print("r", result.player)
-            lastPos = result.player.coords
-        }
-
         return result
     }
 
     /// Calculate the hints for the current image.
     private func hintsForCurrentFrame(image: Image, time: Double) -> AnalysisHints {
-        //tapPredictor.analysisHints(for: time) ?? initialHints(for: image) (TODO)
-        if let pos = lastPos {
-            return AnalysisHints(expectedPlayer: Player(coords: pos, size: 20))
-        } else {
-            return initialHints(for: image)
-        }
+        tapPredictor.analysisHints(for: time) ?? initialHints(for: image)
     }
-
-    // TODO: remove
-    var lastPos: PolarCoordinates?
 
     /// Use approximated default values to create hints for the first image.
     private func initialHints(for image: Image) -> AnalysisHints {

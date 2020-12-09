@@ -143,7 +143,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         lastToleranceRegionScatterStrokable = nil // Reset debug info; will be set in `currentSegmentMatches`
 
         if !monotonicityChecker.verify(value: time) {
-            Terminal.log(.warning, "\(self) – time not in monotone order! Attempted time value: \(time)")
+            Terminal.log(.warning, "\(self) – time not in monotone order! Attempted time value: \(time), previous one: \(monotonicityChecker.lastValue!), direction: \(monotonicityChecker.direction)")
             return false
         }
 

@@ -33,6 +33,7 @@ public struct Polynomial: DifferentiableFunction {
     }
     
     /// The derivative of the polynomial.
+    @_transparent
     public var derivative: Function {
         // Trivial case
         if degree < 1 {
@@ -46,6 +47,20 @@ public struct Polynomial: DifferentiableFunction {
         deriv.removeFirst()
         
         return Polynomial(deriv)
+    }
+
+    /// The derivative at a single value.
+    @_transparent
+    public func derivative(at x: Value) -> Value {
+        if degree < 1 { return 0 }
+        var result = Value.zero
+
+        for i in stride(from: degree, through: 1, by: -1) {
+            result *= x
+            result += Double(i) * coefficients[i]
+        }
+
+        return result
     }
 
     // MARK: Convenience coefficients

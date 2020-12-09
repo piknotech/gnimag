@@ -4,18 +4,13 @@
 //
 
 import Foundation
-import Image
 
-/// GrayscaleImage is an Image effectively wrapping a CGImage using bitmap data.
-/// The wrapped CGImage must be a grayscale image, i.e. have one byte per pixel.
+/// GrayscaleImage is a wrapper around a grayscale CGImage having one byte per pixel.
 /// When initializing a GrayscaleImage, the whole pixel bitmap is read and stored for fast pixel-by-pixel-access.
-internal class GrayscaleImage: Image {
+internal class GrayscaleImage {
     /// The raw pixel data.
     @usableFromInline
     private(set) var data: [UInt8]
-
-    private let _cgImage: CGImage
-    public override var CGImage: CGImage { _cgImage }
 
     /// Default initializer.
     init(_ image: CGImage) {
@@ -23,18 +18,21 @@ internal class GrayscaleImage: Image {
         let cfData = image.dataProvider!.data!
         data = [UInt8](repeating: 0, count: CFDataGetLength(cfData))
         CFDataGetBytes(cfData, CFRangeMake(0, CFDataGetLength(cfData)), &data)
-
-        _cgImage = image
-
-        super.init(width: image.width, height: image.height)
     }
+}
 
-    /// Get the color value at the given pixel.
-    @inlinable @inline(__always)
-    override func color(at pixel: Pixel) -> Color {
-        // Read pixel value
-        let offset = width * (height - 1 - pixel.y) + pixel.x
-        let gray = Double(data[offset]) / 255
-        return Color(gray, gray, gray)
+extension GrayscaleImage {
+    /// The measure of pixel-wise identicality, i.e. the number of pixels which are exactly same (i.e. have the same grayscale value) divided by the total number of pixels.
+    /// The images should have the same size.
+    @inline(__always)
+    func identicality(to other: GrayscaleImage) -> Double {
+        let size = min(data.count, other.data.count)
+        var equalPixels = 0
+
+        for i in 0 ..< size {
+            if data[i] == other.data[i] { equalPixels += 1 }
+        }
+
+        return Double(equalPixels) / Double(size)
     }
 }

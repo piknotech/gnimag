@@ -65,16 +65,21 @@ struct BarUpdater {
 
         // Create trackers from new bars
         for bar in newBars {
-            let tracker = BarTracker(playfield: model.playfield, debugLogger: debugLogger)
+            let tracker = BarTracker(playfield: model.playfield, color: .color(bar.color, tolerance: 0.1), debugLogger: debugLogger)
             tracker.setupDebugLogging()
             tracker.update(with: bar, at: time)
             tracker.performDebugLogging()
             model.bars.append(tracker)
         }
 
-        // Remove orphaned trackers
+        // Remove orphaned trackers and trigger orphaned events
         model.bars.removeAll { tracker in
-            tracker.orphanage.isOrphaned
+            if tracker.orphanage.isOrphaned {
+                tracker.disappearedOrOrphaned.trigger()
+                return true
+            } else {
+                return false
+            }
         }
     }
 }

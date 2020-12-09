@@ -14,6 +14,9 @@ public final class Event<T> {
     /// All subscribers of the event.
     private var subscribers = [Subscriber]()
 
+    /// States whether the event currently has any subscribers.
+    public var hasSubscribers: Bool { subscribers.count > 0 }
+
     /// Default initializer.
     public init() {
     }

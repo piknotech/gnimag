@@ -5,6 +5,7 @@
 
 import Common
 import Foundation
+import GameKit
 import Image
 import LoggingKit
 import TestingTools
@@ -21,7 +22,7 @@ extension DebugFrame {
         switch imageAnalysis.outcome {
         case .none: return false // Image analysis wasn't executed
         case .samePlayerPosition: return false // No game model collection etc. happened
-        case .error: return true
+        case .error, .crashed: return true
         case .success: break
         }
 
@@ -41,24 +42,41 @@ extension DebugFrame {
             gameModelCollection.bars.all.any { !$0.integrityCheckSuccessful })
     }
 
+    /// States if the frame is interesting from a tap prediction perspective.
+    /// This includes each frame where a lock was set.
+    var interestingForTapPrediction: Bool {
+        if tapPrediction.fellBackToIdleStrategy { return true }
+        if let wasLocked = tapPrediction.wasLocked, let isLocked = tapPrediction.isLocked {
+            return !wasLocked && isLocked
+        }
+
+        return false
+    }
+
+    /// States if the player was detected to have crashed.
+    var playerCrashed: Bool {
+        imageAnalysis.outcome == .some(.crashed)
+    }
+
     /// Check if the frame should be logged given the severity.
     func isValidForLogging(with parameters: DebugParameters) -> Bool {
-        switch parameters.severity {
-        case .none: return false
-        case .always, .alwaysText: return true
-        case .every(let num): return index.isMultiple(of: num)
-        case .onErrors, .onErrorsTextOnly: return hasError
-        case .onIntegrityErrors: return hasIntegrityError
-        }
+        if let num = parameters.controlFramerate, index.isMultiple(of: num) { return true }
+
+        if parameters.occasions.contains(.imageAnalysisErrors) && hasImageAnalysisError { return true }
+        if parameters.occasions.contains(.barLocationErrors) && hasBarLocationError { return true }
+        if parameters.occasions.contains(.integrityErrors) && hasIntegrityError { return true }
+        if parameters.occasions.contains(.interestingTapPrediction) && interestingForTapPrediction { return true }
+
+        return false
     }
 
     /// Do preparations that are necessary before logging.
     /// This method is only called when "isValidForLogging" has returned `true`.
     /// These preparations are performed synchronously.
     func prepareSynchronously(with parameters: DebugParameters) {
-        // Prepare tracker debug infos
         gameModelCollection.player.prepareForLogging()
         gameModelCollection.bars.all.forEach { $0.prepareForLogging() }
+        tapPrediction.prepareForLogging()
     }
 
     // MARK: - Logging
@@ -68,10 +86,12 @@ extension DebugFrame {
         let prefix = String(format: "%06d", index)
         var suffix: String
 
-        switch (hasIntegrityError, hasImageAnalysisError, hasBarLocationError) {
-        case (true, _, _): suffix = "_IntegrityError"
-        case (_, true, _): suffix = "_AnalysisError"
-        case (_, _, true): suffix = "_LocateBarError"
+        switch (playerCrashed, hasIntegrityError, hasImageAnalysisError, hasBarLocationError, tapPrediction.fellBackToIdleStrategy) {
+        case (true, _, _, _, _): suffix = "_Crashed"
+        case (_, true, _, _, _): suffix = "_IntegrityError"
+        case (_, _, true, _, _): suffix = "_AnalysisError"
+        case (_, _, _, true, _): suffix = "_LocateBarError"
+        case (_, _, _, _, true): suffix = "_FallbackToIdle"
         default: suffix = "_Okay"
         }
 
@@ -82,7 +102,7 @@ extension DebugFrame {
             try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
             return directory
         } catch {
-            Terminal.log(.warning, "DebugLogger – subdirectory \"\(directory)\" couldn't be created!")
+            Terminal.log(.error, "DebugLogger – subdirectory \"\(directory)\" couldn't be created!")
             return nil
         }
     }
@@ -93,14 +113,15 @@ extension DebugFrame {
         guard let directory = createSubdirectory(parameters: parameters) else { return }
 
         // Log text
-        let textPath = directory +/ "Frame.txt"
-        try? fullLoggingText.write(toFile: textPath, atomically: false, encoding: .utf8)
+        if parameters.content.contains(.text) {
+            let textPath = directory +/ "Frame.txt"
+            try? fullLoggingText.write(toFile: textPath, atomically: false, encoding: .utf8)
+        }
 
         // Log images
-        if parameters.severity.alwaysImages || (!parameters.severity.noImages && hasError) {
-            logImageAnalysisImages(to: directory)
-            logRelevantScatterPlots(to: directory)
-        }
+        if parameters.content.contains(.imageAnalysis) { logImageAnalysisImages(to: directory) }
+        if parameters.content.contains(.gameModelCollection) { logGameModelCollectionImages(to: directory) }
+        if parameters.content.contains(.tapPrediction) { logTapPredictionImages(to: directory) }
     }
 
     // MARK: Log Images
@@ -140,24 +161,66 @@ extension DebugFrame {
         }
     }
 
-    /// Log scatter plots of relevant trackers.
-    private func logRelevantScatterPlots(to directory: String) {
+    /// Log scatter plots of relevant trackers from game model collection.
+    private func logGameModelCollectionImages(to directory: String) {
         // Plot the yCenter of each bar
-        for (i, bar) in self.gameModelCollection.bars.all.enumerated() {
+        for (i, bar) in gameModelCollection.bars.all.enumerated() {
             if let plot = bar.yCenter.createScatterPlot() {
                 plot.write(to: directory +/ String(format: "bar_%02d_yCenter.png", i + 1))
             }
         }
 
-        // Plot the player height
-        if let plot = self.gameModelCollection.player.height.createScatterPlot() {
+        // Plot player height
+        if let plot = gameModelCollection.player.height.createScatterPlot() {
             plot.write(to: directory +/ "player_height.png")
         }
 
         // Plot player angle
-        if let plot = self.gameModelCollection.player.angle.createScatterPlot() {
+        if let plot = gameModelCollection.player.angle.createScatterPlot() {
             plot.write(to: directory +/ "player_angle.png")
         }
+    }
+
+    /// Log relevant scatter plots of tap prediction.
+    /// This includes the FullFramePlot.
+    private func logTapPredictionImages(to directory: String) {
+        logFullFramePlot(to: directory)
+
+        // Plot delay tracker
+        if let plot = tapPrediction.delayValues.createScatterPlot(includeToleranceRegionForLastDataPoint: false) {
+            plot.write(to: directory +/ "TapPredictionDelay.png")
+        }
+
+        // Plot jumpVelocity and gravity
+        if let plot = tapPrediction.jumpVelocityValues.createScatterPlot(includeToleranceRegionForLastDataPoint: false) {
+            plot.write(to: directory +/ "player_jumpVelocity.png")
+        }
+
+        if let plot = tapPrediction.gravityValues.createScatterPlot(includeToleranceRegionForLastDataPoint: false) {
+            plot.write(to: directory +/ "player_gravity.png")
+        }
+
+        // Plot current solution
+        if let mostRecent = tapPrediction.mostRecentSolution {
+            let plot = SolutionPlot(frame: mostRecent.associatedPredictionFrame, solution: mostRecent.solution)
+            plot.write(to: directory +/ "solution.png")
+        }
+    }
+
+    /// Log the FullFramePlot if available.
+    private func logFullFramePlot(to directory: String) {
+        guard
+            let time = time,
+            let playerAngleConverter = tapPrediction.playerAngleConverter,
+            let scheduledTaps = tapPrediction.scheduledTaps,
+            let executedTaps = tapPrediction.executedTaps,
+            let recorder = tapPrediction.interactionRecorder,
+            let frame = tapPrediction.frame else { return }
+
+        let data = FullFramePlotData(realFrameTime: time, playerHeight: tapPrediction.playerHeight, playerAngleConverter: playerAngleConverter, scheduledTaps: scheduledTaps, executedTaps: executedTaps, frame: frame, interactionRecorder: recorder)
+
+        let plot = FullFramePlot(data: data)
+        plot.write(to: directory +/ "FullFrame.png")
     }
 
     // MARK: Log Texts
@@ -256,9 +319,30 @@ extension DebugFrame {
 
     /// The log text describing tap prediction.
     private var logTextForTapPrediction: String {
-        """
+        let currentSolutionIsFromCurrentFrame = tapPrediction.mostRecentSolution?.referenceTime == tapPrediction.frame?.currentTime
+
+        let barToString: (PlayerBarInteraction) -> String = { bar in
+            "• timeUntilHittingCenter: \(bar.timeUntilHittingCenter), timeUntilLeaving: \(bar.timeUntilLeaving)"
+        }
+
+        return """
         ––––– TAP PREDICTION –––––
-        tbd
+        (wasLocked: \(tapPrediction.wasLocked ??? "nil"), isLockedNow: \(tapPrediction.isLocked ??? "nil"))
+
+        • Delay: \(tapPrediction.delay ??? "nil")
+        • Time of PredictionFrame: \(tapPrediction.frame?.currentTime ??? "nil")
+
+        Excerpt from PredictionFrame:
+        • jumpVelocity (time-based): \(tapPrediction.frame?.jumping.jumpVelocity ??? "nil")
+        • gravity (time-based): \(tapPrediction.frame?.jumping.gravity ??? "nil")
+
+        Most recent solution:
+        • referenceTime: \(tapPrediction.mostRecentSolution?.referenceTime ??? "nil") (is from current frame: \(currentSolutionIsFromCurrentFrame))
+        • Solution: \(tapPrediction.mostRecentSolution?.solution ??? "nil")
+        • chosenStrategy: \(tapPrediction.chosenStrategy ??? "nil")
+        \(tapPrediction.fellBackToIdleStrategy ? "– Fell back to idle strategy because chosenStrategy didn't yield a solution!\n" : "")
+        All interactions in most recent solution's frame:
+        \(tapPrediction.mostRecentSolution?.associatedPredictionFrame.bars.map(barToString).joined(separator: "\n") ??? "nil")
         """
     }
 }

@@ -68,7 +68,7 @@ struct ShortcutTemplate {
         if width != segment.width || height != segment.height { return false }
 
         // Check each cell
-        for (x, y) in Array(0 ..< width) × Array(0 ..< height) {
+        for (x, y) in (0 ..< width) × (0 ..< height) {
             let position = Position(x, y)
 
             let template = at(position)

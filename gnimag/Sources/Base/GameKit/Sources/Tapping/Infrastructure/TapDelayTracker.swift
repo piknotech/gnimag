@@ -3,19 +3,22 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
+
 /// TapDelayTracker considers taps which have been performed, e.g. by TapScheduler, and calculates the average delay from performing the tap to detection of this tap, which is the total input+output delay.
 public final class TapDelayTracker {
     public typealias Time = Double
 
     /// The tracker creating an average value for the delay time.
-    private let tracker: PreliminaryTracker
+    /// Only use it read-only!
+    public let tracker: PreliminaryTracker
 
-    /// All tap times where a tap has been performed at, but not yet detected – i.e. the next detected tap will correspond to the first value in this collection.
-    private var performedTaps = [Time]()
+    /// All taps that have been performed, but not yet detected – i.e. the next detected tap will correspond to the first value in this collection.
+    private var performedTaps = [PerformedTap]()
 
-    /// The tap time of the tap that has been detected most recently.
+    /// The tap that has been detected most recently.
     /// Used when the current tap detection time is refined.
-    private var latestTapTime: Time!
+    private var mostRecentDetectedTap: PerformedTap?
 
     /// The average delay.
     public var delay: Time? {
@@ -29,31 +32,36 @@ public final class TapDelayTracker {
 
     /// Default initializer.
     public init(tolerance: TrackerTolerance) {
-        tracker = PreliminaryTracker(tolerancePoints: 0, tolerance: tolerance)
+        tracker = PreliminaryTracker(maxDataPoints: 500, tolerancePoints: 0, tolerance: tolerance)
     }
 
     /// Call when a tap has just been performed at the given time.
-    public func tapPerformed(time: Time) {
-        performedTaps.append(time)
+    public func tapPerformed(_ tap: PerformedTap) {
+        performedTaps.append(tap)
+        performedTaps.sort { $0.performedAt < $1.performedAt }
     }
 
     /// Call when a tap has just been detected at the given time.
-    public func tapDetected(at endTime: Time) {
+    public func tapDetected(at detectionTime: Time) {
         // Finalize previous tap
         tracker.finalizePreliminaryValue()
-        latestTapTime = nil
+        mostRecentDetectedTap = nil
 
         guard !performedTaps.isEmpty else { return } // TODO: error detection / fallback mechanism
 
-        // Add delay to tracker preliminarily, as it may be updated lateron (`refineLastTapDetectionTime`)
-        latestTapTime = performedTaps.removeFirst()
-        tracker.updatePreliminaryValueIfValid(value: endTime - latestTapTime)
+        // Add delay to tracker preliminarily as it may be updated lateron (`refineLastTapDetectionTime`)
+        mostRecentDetectedTap = performedTaps.removeFirst()
+        mostRecentDetectedTap!.actualDetectionTime = detectionTime
+
+        tracker.updatePreliminaryValueIfValid(value: detectionTime - mostRecentDetectedTap!.performedAt)
     }
 
     /// Call when the tap detection time of the latest tap has been updated.
     /// This updates the latest delay value.
-    public func refineLastTapDetectionTime(with endTime: Time) {
-        guard let startTime = latestTapTime else { return }
-        tracker.updatePreliminaryValueIfValid(value: endTime - startTime)
+    public func refineLastTapDetectionTime(with detectionTime: Time) {
+        guard let tap = mostRecentDetectedTap else { return }
+        tap.actualDetectionTime = detectionTime
+
+        tracker.updatePreliminaryValueIfValid(value: detectionTime - tap.performedAt)
     }
 }

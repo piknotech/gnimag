@@ -11,11 +11,11 @@ import TestingTools
 /// LinaerScatterStrokable is a ScatterStrokable that can draw a line (segment).
 public struct LinearScatterStrokable: ScatterStrokable {
     /// The line in the data point space.
-    let line: LinearFunction
+    public let line: LinearFunction
 
     /// The x value range where the line should be drawn (in data point space).
     /// Attention: the range must be regular, i.e. upper > lower.
-    let drawingRange: SimpleRange<Double>
+    public let drawingRange: SimpleRange<Double>
 
     /// Default initializer.
     public init(line: LinearFunction, drawingRange: SimpleRange<Double>) {
@@ -24,8 +24,8 @@ public struct LinearScatterStrokable: ScatterStrokable {
     }
 
      /// Return the concrete strokable for drawing onto a specific ScatterPlot.
-    public func concreteStrokable(for scatterPlot: ScatterPlot) -> Strokable {
-        let bounds = drawingRange.intersection(with: scatterPlot.dataContentXRange)
+    public func concreteStrokable(for frame: ScatterFrame) -> Strokable {
+        let bounds = drawingRange.intersection(with: frame.dataContentXRange)
         if bounds.isEmpty { return EmptyStrokable() }
         
         let x1 = bounds.lower
@@ -33,8 +33,8 @@ public struct LinearScatterStrokable: ScatterStrokable {
         let y1 = line.at(x1), y2 = line.at(x2)
 
         // Convert into scatter plot space
-        let point1 = scatterPlot.pixelPosition(of: (x1, y1))
-        let point2 = scatterPlot.pixelPosition(of: (x2, y2))
+        let point1 = frame.pixelPosition(of: (x1, y1))
+        let point2 = frame.pixelPosition(of: (x2, y2))
 
         return LineSegment(from: point1, to: point2)
     }

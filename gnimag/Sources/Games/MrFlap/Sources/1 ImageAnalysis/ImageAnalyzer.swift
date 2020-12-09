@@ -44,6 +44,11 @@ class ImageAnalyzer {
         }
         debug.coloring.result = coloring
 
+        // Decide whether player has crashed
+        if coloring.crashColor.matches(coloring.theme) {
+            return .failure(.crashed) & {debug.outcome = .crashed}
+        }
+
         // Find playfield (only at first call)
         playfield ??= findPlayfield(in: image, with: coloring)
         if playfield == nil {
@@ -100,17 +105,21 @@ class ImageAnalyzer {
     /// Call this method only once, at the start of the game.
     /// Because this method is only called once (not once per frame), there do not need to be any performance optimizations.
     private func findPlayfield(in image: Image, with coloring: Coloring) -> Playfield? {
-        let screenCenter = Pixel(image.width / 2, image.height / 2)
+        let leftCenter = Pixel(3, image.height / 2)
+        let path = StraightPath(start: leftCenter, angle: .east, bounds: image.bounds)
 
-        // Find inner circle with the following sequence: [blue, white, blue, white]
-        let innerSequence = ColorMatchSequence(tolerance: tolerance, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary])
-        guard let innerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: innerSequence) else { return nil }
-        let innerCircle = SmallestCircle.containing(innerContour)
+        let theme = coloring.theme.withTolerance(tolerance)
+        let secondary = coloring.secondary.withTolerance(tolerance)
 
-        // Find outer circle with the following sequence: [blue, white, blue, white, blue]
-        let outerSequence = ColorMatchSequence(tolerance: tolerance, colors: [coloring.theme, coloring.secondary, coloring.theme, coloring.secondary, coloring.theme])
-        guard let outerContour = RayShooter.findContour(in: image, center: screenCenter, numRays: 7, colorSequence: outerSequence) else { return nil }
-        let outerCircle = SmallestCircle.containing(outerContour)
+        // Find inner and outer circles
+        guard let outerPoint = image.findFirstPixel(matching: secondary, on: path),
+            let innerPoint = image.findFirstPixel(matching: theme, on: path) else { return nil }
+
+        let outerEdge = EdgeDetector.search(in: image, shapeColor: secondary , from: outerPoint, angle: .north)!
+        let outerCircle = SmallestCircle.containing(outerEdge)
+
+        let innerEdge = EdgeDetector.search(in: image, shapeColor: theme, from: innerPoint, angle: .north)!
+        let innerCircle = SmallestCircle.containing(innerEdge)
 
         // Centers should be (nearly) identical
         guard innerCircle.center.distance(to: outerCircle.center) < 1 else { return nil }
@@ -126,7 +135,7 @@ class ImageAnalyzer {
 
         // Find eye or wing pixel via its unique color
         let path = ExpandingCirclePath(center: searchCenter, bounds: image.bounds).limited(by: 50_000)
-        guard let eye = image.findFirstPixel(matching: coloring.eye.withTolerance(tolerance), on: path) else {
+        guard let eye = image.findFirstPixel(matching: coloring.eye, on: path) else {
             return nil & {debug.player.failure = .eyeNotFound}
         }
         debug.player.eyePosition = eye
@@ -149,13 +158,23 @@ class ImageAnalyzer {
             return nil & {debug.player.failure = .edgeTooLarge}
         }
 
-        let obb = SmallestOBB.containing(edges.flatMap(id))
-        debug.player.obb = obb
+        var obb = SmallestOBB.containing(edges.flatMap(id))
+        obb = reorientate(obb: obb, respectiveTo: playfield.center)
 
-        // Calculate player properties
+        // Remove player's beak from OBB if it was detected by EdgeDetector
+        if obb.width > obb.height + 1 {
+            let axes = obb.rightHandedCoordinateAxes(respectiveTo: playfield.center)
+            let clockwise = GameProperties.birdMovesClockwise(in: coloring.mode)
+            let beakDirection = clockwise ? axes.right : -axes.right
+            let offsetFromApparentCenterToActualCenter = (obb.width - obb.height) / 2
+            let center = obb.center - offsetFromApparentCenterToActualCenter * beakDirection
+            obb = OBB(center: center, width: obb.height, height: obb.height, rotation: obb.rotation)
+        }
+
+        // Construct player
+        debug.player.obb = obb
         let coords = PolarCoordinates(position: obb.center, center: playfield.center)
-        let (_, height) = reorientate(obb: obb, respectiveTo: playfield.center) // Ignore beak
-        return (Player(coords: coords, size: Double(height)), obb)
+        return (Player(coords: coords, size: Double(obb.height)), obb)
     }
 
     /// Find all bars.
@@ -200,7 +219,7 @@ class ImageAnalyzer {
         guard let innerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: pixel, angle: .east, limit: limit) else {
             return nil & {debug.bars.current.failure = .innerEdge}
         }
-        let innerOBB = SmallestOBB.containing(innerEdge)
+        var innerOBB = SmallestOBB.containing(innerEdge)
         let angle1 = PolarCoordinates.angle(for: innerOBB.center, respectiveTo: playfield.center)
         debug.bars.current.innerOBB = innerOBB
 
@@ -210,7 +229,7 @@ class ImageAnalyzer {
         guard let outerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: upPosition, angle: .east, limit: limit) else {
             return nil & {debug.bars.current.failure = .outerEdge}
         }
-        let outerOBB = SmallestOBB.containing(outerEdge)
+        var outerOBB = SmallestOBB.containing(outerEdge)
         debug.bars.current.outerOBB = outerOBB
         
         // Integrity checks, reorientate OBBs
@@ -220,23 +239,24 @@ class ImageAnalyzer {
             return nil & {debug.bars.current.failure = .anglesDifferent(angle1: angle1, angle2: angle2)}
         }
 
-        let (width1, innerHeight) = reorientate(obb: innerOBB, respectiveTo: playfield.center)
-        let (width2, outerHeight) = reorientate(obb: outerOBB, respectiveTo: playfield.center)
-        guard width1.isAlmostEqual(to: width2, tolerance: 3) else {
-            return nil & {debug.bars.current.failure = .widthsDifferent(width1: width1, width2: width2)}
+        innerOBB = reorientate(obb: innerOBB, respectiveTo: playfield.center)
+        outerOBB = reorientate(obb: outerOBB, respectiveTo: playfield.center)
+        guard innerOBB.width.isAlmostEqual(to: outerOBB.width, tolerance: 3) else {
+            return nil & {debug.bars.current.failure = .widthsDifferent(width1: innerOBB.width, width2: outerOBB.width)}
         }
-        let width = Double(width1 + width2) / 2
+        let width = Double(innerOBB.width + outerOBB.width) / 2
 
         // The inner obb is a tiny bit too large because of the non-zero width of the box
         let r = sqrt(playfield.innerRadius * playfield.innerRadius - 0.25 * width * width) // Pythagoras
-        let correctInnerHeight = 2 + Double(innerHeight) - playfield.innerRadius + r // r ≈ playfield.radius
+        let correctInnerHeight = 2 + Double(innerOBB.height) - playfield.innerRadius + r // r ≈ playfield.radius
 
         let bar = Bar(
             width: Double(width),
             angle: Angle(angle1).midpoint(between: Angle(angle2)).value,
             innerHeight: correctInnerHeight,
-            outerHeight: Double(outerHeight), // Does not need to be corrected
-            holeSize: playfield.freeSpace - Double(innerHeight + outerHeight)
+            outerHeight: Double(outerOBB.height), // Does not need to be corrected
+            holeSize: playfield.freeSpace - Double(innerOBB.height + outerOBB.height),
+            color: coloring.theme
         )
 
         debug.bars.current.result = bar
@@ -244,17 +264,19 @@ class ImageAnalyzer {
     }
 
     /// Swap the width and height of the OBB to match with the given direction, if required.
-    /// This means: The OBB is aligned such that its "width" sides are about orthogonal to, and its "height" sides are about parallel to the direction from the obb's center to the given center point.
-    /// Instead of returning a new OBB, just return the width and the height (as the obb's center is not changed, just width and height may be swapped).
-    private func reorientate(obb: OBB, respectiveTo orientationCenter: CGPoint) -> (width: CGFloat, height: CGFloat) {
+    /// This means: The OBB is aligned such that its "width" sides are about orthogonal to, and its "height" sides are about parallel to the direction from the obb's center to the given center point. This also changes the OBB's rotation if required.
+    private func reorientate(obb: OBB, respectiveTo orientationCenter: CGPoint) -> OBB {
         let rotatedCenter = orientationCenter.rotated(by: -obb.rotation, around: obb.center)
         let angle = PolarCoordinates.angle(for: rotatedCenter, respectiveTo: obb.center)
 
         // Angle in [1/4*pi, 3/4*pi) u [5/4*pi, 7/4*pi): orientation is correct (upper and lower quarter of the circle)
         if [1, 2].contains(Int(angle * 4 / .pi) % 4) { // 1/2 is good, 0/3 isn't
-            return (obb.width, obb.height)
+            return obb
         } else {
-            return (obb.height, obb.width) // Swap
+            // Swap width and height
+            let newRotation = obb.rotation + 0.5 * .pi
+            let newAABB = AABB(center: obb.center, width: obb.height, height: obb.width)
+            return OBB(aabb: newAABB, rotation: newRotation)
         }
     }
 }

@@ -5,7 +5,7 @@
 
 /// PredictionFrame bundles all properties (i.e. simplified models) that are relevant for a single frame of tap prediction.
 struct PredictionFrame {
-    let bars: [PlayerBarInteraction]
+    var bars: [PlayerBarInteraction]
 
     let player: PlayerProperties
     let playfield: PlayfieldProperties
@@ -31,12 +31,11 @@ extension PredictionFrame {
     /// Convert all bars to PlayerBarInteractions, sorted by their directed distance from the player.
     private static func convertBars(model: GameModel, player: PlayerProperties, playfield: PlayfieldProperties, currentTime: Double) -> [PlayerBarInteraction] {
         model.bars.compactMap { tracker in
-            BarProperties(bar: tracker, with: model.player, playfield: playfield, currentTime: currentTime)
-        }.map {
-            PlayerBarInteraction(player: player, bar: $0, playfield: playfield, currentTime: currentTime)
+            if tracker.isDisappearing { return nil }
+            guard let bar = BarProperties(bar: tracker, with: model.player, playfield: playfield, currentTime: currentTime) else { return nil }
+            return PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime, barTracker: tracker)
         }.sorted {
-            $0.timeUntilHittingCenter < $1.timeUntilHittingCenter
+            $0.timeUntilLeaving < $1.timeUntilLeaving
         }
     }
 }
-

@@ -8,25 +8,37 @@ import Foundation
 /// Timing provides the possibility to perform a task after a certain amount of time.
 /// Tasks can be tagged with an identification to be cancelled at a later point.
 public class Timing {
-    private init() { }
+    /// Create a new private instance of Timing.
+    public init() {
+    }
+
+    /// The shared Timing instance. You can use it as a shortcut if you don't need a custom Timing instance.
+    public static let shared = Timing()
 
     /// All running timers.
-    private static var timers = [Timer]()
+    private var timers = [Timer]()
 
     /// Schedule the timer with the given callback.
     /// You can provide an identification for later cancellation.
     /// If `delay <= 0`, the block is executed (quasi) immediately (not necessarily in the same thread).
-    public static func perform(after delay: TimeInterval, identification: Identification = .empty, block: @escaping () -> Void) {
-        let userInfo = UserInfo(block: block, identification: identification)
-        let timer = Timer(timeInterval: delay, target: self, selector: #selector(fire(timer:)), userInfo: userInfo, repeats: false)
-        timers.append(timer)
-        RunLoop.main.add(timer, forMode: .common)
+    public func perform(after delay: TimeInterval, identification: Identification = .empty, block: @escaping () -> Void) {
+        synchronized(self) {
+            let userInfo = UserInfo(block: block, identification: identification)
+            let timer = Timer(timeInterval: delay, target: self, selector: #selector(fire(timer:)), userInfo: userInfo, repeats: false)
+            timers.append(timer)
+            RunLoop.main.add(timer, forMode: .common)
+        }
+    }
+
+    /// Cancel all scheduled tasks.
+    public func cancelAllTasks() {
+        _ = cancelTasks { _ in true }
     }
 
     /// Cancel all scheduled tasks exactly matching the given identification.
     /// Returns `true` if at least one timer has been cancelled.
     @discardableResult
-    public static func cancelTasks(matching identification: Identification) -> Bool {
+    public func cancelTasks(matching identification: Identification) -> Bool {
         cancelTasks {
             let userInfo = $0.userInfo as! UserInfo
             return userInfo.identification.exactlyMatches(other: identification)
@@ -36,7 +48,7 @@ public class Timing {
     /// Cancel all scheduled tasks matching the given object, regardless of their ID or string.
     /// Returns `true` if at least one timer has been cancelled.
     @discardableResult
-    public static func cancelTasks(withObject object: AnyObject) -> Bool {
+    public func cancelTasks(withObject object: AnyObject) -> Bool {
         cancelTasks {
             let userInfo = $0.userInfo as! UserInfo
             return Identification.object(object).contains(other: userInfo.identification)
@@ -44,30 +56,34 @@ public class Timing {
     }
 
     /// Common method for cancelling timers based on a decision handler.
-    private static func cancelTasks(decisionHandler shouldCancelTimer: (Timer) -> Bool) -> Bool {
-        var cancelled = false
+    private func cancelTasks(decisionHandler shouldCancelTimer: (Timer) -> Bool) -> Bool {
+        synchronized(self) {
+            var cancelled = false
 
-        timers.removeAll {
-            let matches = shouldCancelTimer($0)
-            if matches { $0.invalidate() }
-            cancelled = cancelled || matches
-            return matches
+            timers.removeAll {
+                let matches = shouldCancelTimer($0)
+                if matches { $0.invalidate() }
+                cancelled = cancelled || matches
+                return matches
+            }
+
+            return cancelled
         }
-
-        return cancelled
     }
 
     /// Perform the callback and remove the timer.
     @objc
-    private static func fire(timer: Timer) {
-        if !timer.isValid { return } // Timer may just have been cancelled from another thread
+    private func fire(timer: Timer) {
+        synchronized(self) {
+            if !timer.isValid { return } // Timer may just have been cancelled from another thread
 
-        // Remove timer from dictionary
-        guard let index = (timers.firstIndex { $0 === timer }) else { return }
-        timers.remove(at: index)
+            // Remove timer from dictionary
+            guard let index = (timers.firstIndex { $0 === timer }) else { return }
+            timers.remove(at: index)
 
-        let userInfo = (timer.userInfo as! UserInfo)
-        userInfo.block()
+            let userInfo = (timer.userInfo as! UserInfo)
+            userInfo.block()
+        }
     }
 
     /// A simple class providing user info that is used in conjunction with a timer.

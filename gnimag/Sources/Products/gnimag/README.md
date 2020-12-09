@@ -6,6 +6,6 @@ Use gnimag for the development of your game or just to start a game that you wou
 
 To start a game, just import the according game library into main.swift, create an instance of the game and call `play()` (or something like that)!
 
-To play a game on an android device, you need [scrcpy](Sources/IO/Scrcpy). Use scrcpy to mirror the device to your Mac. Open the game and you can start playing as described above.
+To play a game on an android device, you need [scrcpy or vysor](Sources/IO/Android). Use them to mirror the device to your Mac. Open the game and you can start playing as described above.
 
 iOS devices are not supported.

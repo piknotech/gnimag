@@ -27,10 +27,10 @@ final class PlayerTracker {
         self.playfield = playfield
         self.debugLogger = debugLogger
 
-        angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(7% * .pi)))
         height = JumpTracker(
             jumpTolerance: Self.circularTolerance(dy: 2% * playfield.freeSpace, on: playfield),
-            relativeValueRangeTolerance: 20%,
+            relativeValueRangeTolerance: 10%,
             consecutiveNumberOfPointsRequiredToDetectJump: 2,
             idleHeightBeforeInitialSegment: initialPlayer.height
         )
@@ -54,8 +54,7 @@ final class PlayerTracker {
         // For tap delay tracking, the actual time (from imageProvider) is required.
         // Because player jump tracking is performed using the player's angle, it first has to be converted back to an (approximate) time value.
         func convertPlayerAngleToTime(playerAngle: Double) -> Double? {
-            guard let conversion = angle.tracker.regression?.inverse else { return nil }
-            return conversion.at(playerAngle)
+            PlayerAngleConverter(player: self)?.time(from: playerAngle)
         }
 
         // Link segment switch callback

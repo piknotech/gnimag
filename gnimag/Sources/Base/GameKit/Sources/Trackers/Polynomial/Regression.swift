@@ -17,8 +17,7 @@ public enum Regression {
             let (a, b) = linregress(x, y)
             return Polynomial([b, a])
         default:
-            let coefficients = polyRegressionImp(x: x, y: y, n: n)
-            return Polynomial(coefficients)
+            return polyRegressionImp(x: x, y: y, n: n)
         }
     }
 
@@ -32,7 +31,13 @@ public enum Regression {
     
     /// Perform a polynomial regression.
     /// Return the coefficients, beginning with the lowest one (x^0, x^1, ... x^n).
-    private static func polyRegressionImp(x: [Double], y: [Double], n: Int) -> [Double] {
+    private static func polyRegressionImp(x: [Double], y: [Double], n: Int) -> Polynomial {
+        // Move regression frame
+        let xShift = sum(x) / Double(x.count)
+        let yShift = sum(x) / Double(y.count)
+        let x = add(x, -xShift)
+        let y = add(y, -yShift)
+
         var xgrid = [[Double]]()
         
         // Construct (transposed) vandermonde matrix
@@ -47,6 +52,8 @@ public enum Regression {
         
         // Calculate coefficient vector
         let reg = inv(mx * transpose(mx)) * mx * my
-        return reg[column: 0]
+        let poly = Polynomial(reg[column: 0])
+
+        return poly.shiftedLeft(by: -xShift) + yShift
     }
 }

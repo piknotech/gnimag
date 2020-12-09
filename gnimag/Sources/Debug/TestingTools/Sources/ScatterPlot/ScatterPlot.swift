@@ -64,8 +64,8 @@ public final class ScatterPlot {
             view.xAxis.axisMaximum = xMax + dist * rangeAugmentation
         }
 
-        if let yMin = yRange?.lower ?? (dataPoints.min { $0.y < $1.y })?.y,
-            let yMax = yRange?.upper ?? (dataPoints.max { $0.y < $1.y })?.y, yMax > yMin {
+        if let yMin = yRange?.lower ?? (dataPoints.min(by: \.y))?.y,
+            let yMax = yRange?.upper ?? (dataPoints.max(by: \.y))?.y, yMax > yMin {
             let dist = yMax - yMin
             view.leftAxis.axisMinimum = yMin - dist * rangeAugmentation
             view.leftAxis.axisMaximum = yMax + dist * rangeAugmentation
@@ -92,18 +92,16 @@ public final class ScatterPlot {
     /// Draw the outline of the ScatterStrokable.
     public func stroke(_ scatterStrokable: ScatterStrokable, with color: ScatterColor, alpha: Double = 1, strokeWidth: Double = 1, dash: Dash? = nil) {
         let color = color.concreteColor
-        let strokable = scatterStrokable.concreteStrokable(for: self)
+        let strokable = scatterStrokable.concreteStrokable(for: frame)
         canvas.stroke(strokable, with: color, alpha: alpha, strokeWidth: strokeWidth, dash: dash)
     }
 
-    /// The x range of `dataContentRect`.
-    public var dataContentXRange: SimpleRange<Double> {
-        SimpleRange(from: Double(dataContentRect.minX), to: Double(dataContentRect.maxX))
-    }
+    /// The drawing area of the plot.
+    public lazy var frame = ScatterFrame(dataContentRect: dataContentRect, pixelContentRect: pixelContentRect)
 
     /// The drawing area of the plot, in data point space.
-    public var dataContentRect: CGRect {
-         // Avoid returning an empty or invalid rect
+    private var dataContentRect: CGRect {
+        // Avoid returning an empty or invalid rect
         if view.isEmpty() {
             return CGRect(x: -1, y: -1, width: 2, height: 2)
         } else {
@@ -112,10 +110,31 @@ public final class ScatterPlot {
     }
 
     /// The drawing area of the plot, in pixel space.
-    public var pixelContentRect: CGRect {
+    private var pixelContentRect: CGRect {
         var rect = view.viewPortHandler.contentRect
         rect.origin.y = view.viewPortHandler.offsetBottom // Rect is ULO, we want LLO
         return rect
+    }
+}
+
+/// ScatterFrame describes the drawing area of the plot, in both pixel and data space.
+/// Use it to convert points from pixel to data space and vice versa.
+public struct ScatterFrame {
+    /// The drawing area of the plot, in data point space.
+    public let dataContentRect: CGRect
+
+    /// The drawing area of the plot, in pixel space.
+    public let pixelContentRect: CGRect
+
+    /// The x range of `dataContentRect`.
+    public var dataContentXRange: SimpleRange<Double> {
+        SimpleRange(from: Double(dataContentRect.minX), to: Double(dataContentRect.maxX))
+    }
+
+    /// Default initializer.
+    public init(dataContentRect: CGRect, pixelContentRect: CGRect) {
+        self.dataContentRect = dataContentRect
+        self.pixelContentRect = pixelContentRect
     }
 
     /// Convert a point in the dataset-space into its actual pixel location on the image (i.e. pixel-space).

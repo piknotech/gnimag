@@ -8,7 +8,7 @@ import TestingTools
 
 /// CompositeTrackerDebugInfo describes information about a CompositeTracker at one single given frame.
 /// This includes both general information like the regression and specific information about a single validity-check call.
-public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerDebugInfo, CustomStringConvertible {
+public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: CustomStringConvertible {
     private(set) var tracker: CompositeTracker<T>?
     public private(set) var allDataPoints: [ScatterDataPoint]? // The data set is only evaluated when required.
     public private(set) var allFunctions: [FunctionDebugInfo]? // The functions are only evaluated when required.
@@ -44,7 +44,12 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerD
     }
 
     public enum FunctionInfoType {
+        /// All regressions.
+        /// This does not include each segment's tolerance bounds.
+        case noGuesses
+
         /// All regressions and guesses.
+        /// This does not include each segment's tolerance bounds.
         case all
 
         /// Debug infos from each segment, i.e. regressions and tolerance bounds.
@@ -55,8 +60,10 @@ public final class CompositeTrackerDebugInfo<T: SimpleTrackerProtocol>: TrackerD
     /// Get function infos (for the most recent segments) from the tracker and store them.
     public func fetchFunctionInfos(type: FunctionInfoType, numSegments: Int = .max) {
         switch type {
+        case .noGuesses:
+            allFunctions = tracker?.allDebugFunctionInfos(numSegments: numSegments, includeGuesses: false)
         case .all:
-            allFunctions = tracker?.allDebugFunctionInfos(numSegments: numSegments)
+            allFunctions = tracker?.allDebugFunctionInfos(numSegments: numSegments, includeGuesses: true)
         case .segmentwise:
             allFunctions = tracker?.segmentwiseFullDebugFunctionInfos(numSegments: numSegments)
         }
