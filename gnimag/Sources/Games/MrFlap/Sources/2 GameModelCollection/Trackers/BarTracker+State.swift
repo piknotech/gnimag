@@ -42,24 +42,47 @@ final class BarTrackerStateAppearing: BarTrackerState {
     private let constantHoleSize: ConstantTracker
     private var consecutiveFramesWithConstantHoleSize = 0
 
+    /// Data points that can immediately be transferred to the yCenter tracker on state switch.
+    private var yCenterData = [(value: Double, time: Double)]()
+
+    /// The last inner and outer height values, for early yCenter guessing.
+    var lastInnerAndOuterHeights: (Double, Double)?
+
+    var holeSizeWasConstant = false
+
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
+        print(time, bar.innerHeight, bar.outerHeight)
         if constantHoleSize.isValueValid(bar.holeSize, fallback: .invalid) {
             consecutiveFramesWithConstantHoleSize += 1
-        } else {
+
+            // State switch after 3 consecutive normal frames
+            if consecutiveFramesWithConstantHoleSize == 3 {
+                tracker.state = BarTrackerStateNormal(tracker: tracker)
+                yCenterData.forEach(tracker.yCenter.add(value:at:))
+            }
+
+            holeSizeWasConstant = true
+        }
+
+        // Hole size doesn't match
+        else {
             constantHoleSize.reset()
+            yCenterData.removeAll()
+            consecutiveFramesWithConstantHoleSize = 0
+            lastInnerAndOuterHeights = nil
+            holeSizeWasConstant = false
         }
 
-        // State switch after 3 consecutive normal frames
-        if consecutiveFramesWithConstantHoleSize == 3 {
-            tracker.state = BarTrackerStateNormal(tracker: tracker)
-        }
-
-        // Don't trigger erroneous integrity check failures
+        // We don't have integrity failures in appearing state
         return true
     }
 
     func update(with bar: Bar, at time: Double) {
         constantHoleSize.add(value: bar.holeSize)
+        lastInnerAndOuterHeights = (bar.innerHeight, bar.outerHeight)
+        if holeSizeWasConstant {
+            yCenterData.append((value: bar.yCenter, time: time))
+        }
     }
 }
 

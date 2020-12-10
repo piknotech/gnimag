@@ -11,7 +11,7 @@ import TestingTools
 
 /// BarTracker bundles trackers for a single bar.
 final class BarTracker {
-    static var momventBoundCollector: BarMovementBoundCollector!
+    static var movementBoundCollector: BarMovementBoundCollector!
 
     /// Orphanage detector to see whether the bar tracker should be removed from the game model.
     let orphanage = BarTrackerOrphanageDetector()
@@ -52,7 +52,7 @@ final class BarTracker {
         self.color = color
         self.debugLogger = debugLogger
 
-        angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(5% * .pi)))
         width = ConstantTracker(tolerance: .relative(20%))
         holeSize = ConstantTracker(tolerance: .relative(5%))
         yCenter = BasicLinearPingPongTracker(
@@ -103,7 +103,7 @@ final class BarTracker {
     /// Update the trackers with the values from the given bar.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with bar: Bar, at time: Double) {
-        // Important: if the color doesn't match, the bar may or may not be the correct one. Definitely don't update and let OrphanageDetector do its thing.
+        // Important: if the color doesn't match, the bar may or may not be the correct one. Definitely don't update, and let OrphanageDetector do its thing.
         // We could already return "false" on integrityCheck, but that would trigger wrong integrityError logging.
         if !color.matches(bar.color) { return }
 
@@ -118,7 +118,7 @@ final class BarTracker {
         state.update(with: bar, at: time)
 
         // Update shared movement bounds
-        BarTracker.momventBoundCollector.update(with: self)
+        BarTracker.movementBoundCollector.update(with: self)
     }
 
     /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.

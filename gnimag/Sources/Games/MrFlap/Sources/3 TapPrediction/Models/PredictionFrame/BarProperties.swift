@@ -54,7 +54,7 @@ struct BarProperties {
         }
 
         // Check if yCenterMovementPortionsForTimeRange is non-nil
-        let guesses = BarTracker.momventBoundCollector.guesses(for: bar)
+        let guesses = BarTracker.movementBoundCollector.guesses(for: bar)
         guard bar.yCenter.segmentPortionsForFutureTimeRangeAvailable(guesses: guesses) else { return nil }
 
         // yCenterMovementPortionsForTimeRange implementation

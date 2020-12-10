@@ -25,6 +25,6 @@ final class GameModel {
 
         // Create shared bar movement bound collector
         let guess = GameProperties.barDirectionReversionPercentageGuess(for: mode)
-        BarTracker.momventBoundCollector = BarMovementBoundCollector(playfield: playfield, guessPercentage: guess)
+        BarTracker.movementBoundCollector = BarMovementBoundCollector(playfield: playfield, guessPercentage: guess)
     }
 }

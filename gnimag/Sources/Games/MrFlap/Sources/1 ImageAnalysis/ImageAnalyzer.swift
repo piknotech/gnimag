@@ -180,13 +180,13 @@ class ImageAnalyzer {
     /// Find all bars.
     private func findBars(in image: Image, with coloring: Coloring, playerOBB: OBB) -> [Bar] {
         // Erase all blue things, execept the bars, from the image
-        let innerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 2)
-        let outerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.fullRadius) - 2)
+        let innerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 1)
+        let outerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.fullRadius) - 1)
         let insetOBB = playerOBB.inset(by: (-2, -2))
         let image = ShapeErasedImage(image: image, shapes: [.shape(innerCircle), .anti(outerCircle), .shape(insetOBB)])
 
         // Find one (or more) point inside each bar
-        let circle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 5)
+        let circle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 3)
         var pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 64)
 
         // Only keep pixels which belong to a bar
@@ -224,7 +224,7 @@ class ImageAnalyzer {
         debug.bars.current.innerOBB = innerOBB
 
         // Find outer edge
-        let upPosition = PolarCoordinates.position(atAngle: angle1, height: CGFloat(playfield.fullRadius - 5), respectiveTo: playfield.center).nearestPixel
+        let upPosition = PolarCoordinates.position(atAngle: angle1, height: CGFloat(playfield.fullRadius - 3), respectiveTo: playfield.center).nearestPixel
         debug.bars.current.upPosition = upPosition
         guard let outerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: upPosition, angle: .east, limit: limit) else {
             return nil & {debug.bars.current.failure = .outerEdge}
