@@ -9,17 +9,24 @@ import GameKit
 /// Before new results from image analysis are added, they are first checked for data integrity.
 class GameModelCollector {
     let model: GameModel
+    let mode: GameMode
 
     let barUpdater: BarUpdater
+    let barPhysicsRecorder: BarPhysicsRecorder
+
+    let points: PointsTracker
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
     private var debug: DebugFrame.GameModelCollection { debugLogger.currentFrame.gameModelCollection }
 
     /// Default initializer.
-    init(playfield: Playfield, initialPlayer: Player, mode: GameMode, debugLogger: DebugLogger) {
-        model = GameModel(playfield: playfield, initialPlayer: initialPlayer, mode: mode, debugLogger: debugLogger)
-        barUpdater = BarUpdater(model: model)
+    init(playfield: Playfield, initialPlayer: Player, mode: GameMode, points: PointsTracker, debugLogger: DebugLogger) {
+        self.points = points
+        self.mode = mode
+        model = GameModel(playfield: playfield, initialPlayer: initialPlayer, debugLogger: debugLogger)
+        barPhysicsRecorder = BarPhysicsRecorder(playfield: playfield, barCharacter: BarMovementCharacter(gameMode: mode, points: points.points))
+        barUpdater = BarUpdater(model: model, recorder: barPhysicsRecorder)
 
         self.debugLogger = debugLogger
     }
@@ -38,6 +45,10 @@ class GameModelCollector {
             // When the player is not integer, bar tracking cannot proceed correctly
             return false
         }
+
+        // Update points tracker and bar physics collector
+        points.update(tracker: model.player, time: time)
+        barPhysicsRecorder.barCharacter = BarMovementCharacter(gameMode: mode, points: points.points)
 
         // Update bars
         // Instead of using the game time, use the player angle for bar-related trackers. This is useful to prevent small lags (which stop both the player and the bars) from destroying all of the tracking.

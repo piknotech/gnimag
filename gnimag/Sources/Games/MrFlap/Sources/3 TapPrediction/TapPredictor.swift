@@ -16,6 +16,9 @@ class TapPredictor: TapPredictorBase {
     /// The game model object which is continuously being updated by the game model collector.
     private var gameModel: GameModel?
 
+    // GameModelCollector is required for guessing the bar movement bounds.
+    private var gmc: GameModelCollector?
+
     /// The strategies which are used to perform the prediction calculation.
     private let strategies: Strategies
     struct Strategies {
@@ -66,14 +69,15 @@ class TapPredictor: TapPredictorBase {
         }
     }
 
-    /// Set the game model. Only call this once.
+    /// Set the game model collector and game model. Only call this once.
     /// Call once the game model collector is ready and has a GameModel object.
-    func set(gameModel: GameModel) {
-        precondition(self.gameModel == nil)
-        self.gameModel = gameModel
+    func set(gmc: GameModelCollector) {
+        precondition(self.gameModel == nil && self.gmc == nil)
+        self.gmc = gmc
+        self.gameModel = gmc.model
 
         // Link player jump for tap delay detection
-        gameModel.player.linkPlayerJump(to: self)
+        gmc.model.player.linkPlayerJump(to: self)
     }
 
     /// Remove all scheduled taps.
@@ -104,9 +108,9 @@ class TapPredictor: TapPredictorBase {
     /// Analyze the game model to schedule taps.
     /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
     override func predictionLogic() -> RelativeTapSequence? {
-        guard let model = gameModel, let delay = scheduler.delay else { return nil }
+        guard let gmc = gmc, let model = gameModel, let delay = scheduler.delay else { return nil }
         let currentTime = timeProvider.currentTime + delay
-        guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return nil }
+        guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return nil }
 
         // Debug logging
         performDebugLogging(with: model, frame: frame, delay: delay)
@@ -128,9 +132,9 @@ class TapPredictor: TapPredictorBase {
 
         // Create PredictionFrame just for debug logging if required
         if !hasPredicted {
-            guard let model = gameModel, let delay = scheduler.delay else { return }
+            guard let gmc = gmc, let model = gameModel, let delay = scheduler.delay else { return }
             let currentTime = timeProvider.currentTime + delay
-            guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return }
+            guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return }
 
             performDebugLogging(with: model, frame: frame, delay: delay)
         }

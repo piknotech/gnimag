@@ -44,6 +44,9 @@ public final class MrFlap {
     /// Also, when the player crashes, image analysis stops.
     public let crashed = Event<Void>()
 
+    /// The points tracker.
+    private let points = PointsTracker()
+
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: SomewhereTapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
@@ -104,8 +107,9 @@ public final class MrFlap {
         // Fill properties from first analyzed image
         state = .waitingForFirstMove(initialPlayerPos: result.player)
         playfield = result.playfield
-        gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, mode: result.mode, debugLogger: debugLogger)
-        tapPredictor.set(gameModel: gameModelCollector.model)
+        gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, mode: result.mode, points: points, debugLogger: debugLogger)
+        tapPredictor.set(gmc: gameModelCollector)
+        points.setInitialAngle(result.player.angle)
 
         // Tap to begin the game
         tapPredictor.tapNow()

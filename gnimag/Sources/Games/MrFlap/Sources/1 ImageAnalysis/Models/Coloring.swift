@@ -51,15 +51,3 @@ struct Coloring {
         }
     }
 }
-
-enum GameMode {
-    case normal
-    case hard
-
-    /// Read the game mode from the given coloring, if possible.
-    static fileprivate func from(secondaryColor: Color) -> GameMode? {
-        if secondaryColor.distance(to: .white) < 0.1 { return .normal }
-        if secondaryColor.distance(to: .black) < 0.1 { return .hard }
-        return nil
-    }
-}

@@ -3,24 +3,25 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
+import Common
 import GameKit
 
-/// An instance of this class stores information about the hole movement bounds (yCenter) of a single bar type.
+/// An instance of this class stores information about the hole switch bounds (yCenter) of a single bar character type.
 /// This allows to retrieve guesses for bar trackers where no lower or upper bound values are existing yet.
-final class BarMovementBoundCollector {
+final class BarSwitchBoundCollector {
     private let playfield: Playfield
 
     /// A guess of what percentage of the playfield free space the shared bound value may be.
-    private let guessPercentageOfPlayfieldFreeSpace: Double
+    private let guess: Double
 
     /// The tracker for the shared bound value.
     /// Shared means that the value is the same for upper and lower bound, up to a reflection at the playfield midpoint (midcircle).
-    private let sharedBoundValueTracker = ConstantTracker()
+    private let sharedBoundValueTracker = ConstantTracker(tolerance: .relative(20%))
 
     /// Default initializer.
-    init(playfield: Playfield, guessPercentage: Double) {
+    init(playfield: Playfield, guess: Double) {
         self.playfield = playfield
-        self.guessPercentageOfPlayfieldFreeSpace = guessPercentage
+        self.guess = guess
     }
 
     /// Provide guesses for a bar's lower and upper bound.
@@ -47,19 +48,23 @@ final class BarMovementBoundCollector {
         }
 
         // Case 4: Use guess percentage
-        let guess = guessPercentageOfPlayfieldFreeSpace * playfield.freeSpace
+        let guess = self.guess * playfield.freeSpace
         return (guess, playfield.freeSpace - guess)
     }
 
     /// Update the shared bound value with values from the bar tracker.
     func update(with bar: BarTracker) {
         if let lowerBound = bar.yCenter.lowerBound {
-            sharedBoundValueTracker.add(value: lowerBound)
+            if sharedBoundValueTracker.isValueValid(lowerBound) {
+                sharedBoundValueTracker.add(value: lowerBound)
+            }
         }
 
         if let upperBound = bar.yCenter.upperBound {
             let value = playfield.freeSpace - upperBound
-            sharedBoundValueTracker.add(value: value)
+            if sharedBoundValueTracker.isValueValid(value) {
+                sharedBoundValueTracker.add(value: value)
+            }
         }
     }
 }
