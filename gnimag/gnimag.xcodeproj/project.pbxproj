@@ -140,6 +140,7 @@
 		632696B123D0CA39009FE1E0 /* PlayerBarInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */; };
 		632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */; };
 		63286EBC2451BDF100392FD8 /* FixedSizeFIFO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63286EBB2451BDF100392FD8 /* FixedSizeFIFO.swift */; };
+		63318AAD2582B04C002CD9A8 /* PointsTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63318AAB2582B049002CD9A8 /* PointsTracker.swift */; };
 		6334C73423674CC500BEF218 /* BasicLinearPingPongTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */; };
 		63351A53234BA2B700E42762 /* CompositeTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A52234BA2B700E42762 /* CompositeTracker.swift */; };
 		63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */; };
@@ -500,6 +501,7 @@
 		632696B023D0CA39009FE1E0 /* PlayerBarInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBarInteraction.swift; sourceTree = "<group>"; };
 		632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerBarInteraction+Conversion.swift"; sourceTree = "<group>"; };
 		63286EBB2451BDF100392FD8 /* FixedSizeFIFO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSizeFIFO.swift; sourceTree = "<group>"; };
+		63318AAB2582B049002CD9A8 /* PointsTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsTracker.swift; sourceTree = "<group>"; };
 		6334C73323674CC500BEF218 /* BasicLinearPingPongTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicLinearPingPongTracker.swift; sourceTree = "<group>"; };
 		63351A52234BA2B700E42762 /* CompositeTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTracker.swift; sourceTree = "<group>"; };
 		63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerSlidingWindow.swift; sourceTree = "<group>"; };
@@ -1493,6 +1495,7 @@
 			children = (
 				631213E223257F4000C126B4 /* MrFlap.swift */,
 				630CE2F4244483E8006017F4 /* GameProperties.swift */,
+				63318AAB2582B049002CD9A8 /* PointsTracker.swift */,
 				631213E823257F4000C126B4 /* 1 ImageAnalysis */,
 				631213E323257F4000C126B4 /* 2 GameModelCollection */,
 				6318966823B4C896002FBD4F /* 3 TapPrediction */,
@@ -3055,6 +3058,7 @@
 				631213F723257F4000C126B4 /* ImageAnalyzer.swift in Sources */,
 				6323F11C23EC5A0C00182D13 /* PredictionFrame.swift in Sources */,
 				6380F772244502F80074AB2A /* SimulationWindow.swift in Sources */,
+				63318AAD2582B04C002CD9A8 /* PointsTracker.swift in Sources */,
 				631213FA23257F4000C126B4 /* Coloring.swift in Sources */,
 				6311E0B523E0E71D0080288D /* Solution.swift in Sources */,
 				6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */,

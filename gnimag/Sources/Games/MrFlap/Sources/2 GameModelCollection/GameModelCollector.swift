@@ -12,14 +12,17 @@ class GameModelCollector {
 
     let barUpdater: BarUpdater
 
+    let points: PointsTracker
+
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
     private var debug: DebugFrame.GameModelCollection { debugLogger.currentFrame.gameModelCollection }
 
     /// Default initializer.
-    init(playfield: Playfield, initialPlayer: Player, mode: GameMode, debugLogger: DebugLogger) {
+    init(playfield: Playfield, initialPlayer: Player, mode: GameMode, points: PointsTracker, debugLogger: DebugLogger) {
         model = GameModel(playfield: playfield, initialPlayer: initialPlayer, mode: mode, debugLogger: debugLogger)
         barUpdater = BarUpdater(model: model)
+        self.points = points
 
         self.debugLogger = debugLogger
     }
@@ -38,6 +41,9 @@ class GameModelCollector {
             // When the player is not integer, bar tracking cannot proceed correctly
             return false
         }
+
+        // Update points tracker
+        points.update(tracker: model.player, time: time)
 
         // Update bars
         // Instead of using the game time, use the player angle for bar-related trackers. This is useful to prevent small lags (which stop both the player and the bars) from destroying all of the tracking.
