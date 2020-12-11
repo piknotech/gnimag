@@ -8,6 +8,7 @@ import Foundation
 /// BarUpdater performs the task of matching and updating the game model with new bars from ImageAnalysis.
 struct BarUpdater {
     let model: GameModel
+    let recorder: BarPhysicsRecorder
 
     /// Match the bars to the bar trackers and update each tracker.
     func matchAndUpdate(bars: [Bar], time: Double, debugLogger: DebugLogger) {
@@ -58,6 +59,7 @@ struct BarUpdater {
 
             if tracker.integrityCheck(with: bar, at: time) {
                 tracker.update(with: bar, at: time)
+                recorder.update(with: tracker)
             }
 
             tracker.performDebugLogging()
@@ -68,6 +70,7 @@ struct BarUpdater {
             let tracker = BarTracker(playfield: model.playfield, color: .color(bar.color, tolerance: 0.1), debugLogger: debugLogger)
             tracker.setupDebugLogging()
             tracker.update(with: bar, at: time)
+            recorder.update(with: tracker)
             tracker.performDebugLogging()
             model.bars.append(tracker)
         }

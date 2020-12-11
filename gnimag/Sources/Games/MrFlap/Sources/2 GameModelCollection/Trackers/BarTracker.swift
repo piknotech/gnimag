@@ -11,8 +11,6 @@ import TestingTools
 
 /// BarTracker bundles trackers for a single bar.
 final class BarTracker {
-    static var movementBoundCollector: BarMovementBoundCollector!
-
     /// Orphanage detector to see whether the bar tracker should be removed from the game model.
     let orphanage = BarTrackerOrphanageDetector()
 
@@ -116,9 +114,6 @@ final class BarTracker {
 
         // State-specific update
         state.update(with: bar, at: time)
-
-        // Update shared movement bounds
-        BarTracker.movementBoundCollector.update(with: self)
     }
 
     /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.

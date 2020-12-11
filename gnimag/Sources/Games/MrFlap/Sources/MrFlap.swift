@@ -108,7 +108,7 @@ public final class MrFlap {
         state = .waitingForFirstMove(initialPlayerPos: result.player)
         playfield = result.playfield
         gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, mode: result.mode, points: points, debugLogger: debugLogger)
-        tapPredictor.set(gameModel: gameModelCollector.model)
+        tapPredictor.set(gmc: gameModelCollector)
         points.setInitialAngle(result.player.angle)
 
         // Tap to begin the game

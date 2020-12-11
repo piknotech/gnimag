@@ -164,7 +164,7 @@ class ImageAnalyzer {
         // Remove player's beak from OBB if it was detected by EdgeDetector
         if obb.width > obb.height + 1 {
             let axes = obb.rightHandedCoordinateAxes(respectiveTo: playfield.center)
-            let clockwise = GameProperties.birdMovesClockwise(in: coloring.mode)
+            let clockwise = coloring.mode.birdMovesClockwise
             let beakDirection = clockwise ? axes.right : -axes.right
             let offsetFromApparentCenterToActualCenter = (obb.width - obb.height) / 2
             let center = obb.center - offsetFromApparentCenterToActualCenter * beakDirection

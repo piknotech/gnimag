@@ -51,7 +51,6 @@ final class BarTrackerStateAppearing: BarTrackerState {
     var holeSizeWasConstant = false
 
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
-        print(time, bar.innerHeight, bar.outerHeight)
         if constantHoleSize.isValueValid(bar.holeSize, fallback: .invalid) {
             consecutiveFramesWithConstantHoleSize += 1
 

@@ -32,7 +32,7 @@ struct BarProperties {
     // MARK: Conversion
 
     /// Create BarProperties from the given bar tracker.
-    init?(bar: BarTracker, with player: PlayerTracker, playfield: PlayfieldProperties, currentTime: Double) {
+    init?(bar: BarTracker, with player: PlayerTracker, playfield: PlayfieldProperties, currentTime: Double, gmc: GameModelCollector) {
         guard let converter = PlayerAngleConverter(player: player) else { return nil }
 
         guard
@@ -54,7 +54,7 @@ struct BarProperties {
         }
 
         // Check if yCenterMovementPortionsForTimeRange is non-nil
-        let guesses = BarTracker.movementBoundCollector.guesses(for: bar)
+        let guesses = gmc.barPhysicsRecorder.switchValues(for: bar)
         guard bar.yCenter.segmentPortionsForFutureTimeRangeAvailable(guesses: guesses) else { return nil }
 
         // yCenterMovementPortionsForTimeRange implementation

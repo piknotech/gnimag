@@ -18,13 +18,9 @@ final class GameModel {
     var bars: [BarTracker]
 
     /// Default initializer.
-    init(playfield: Playfield, initialPlayer: Player, mode: GameMode, debugLogger: DebugLogger) {
+    init(playfield: Playfield, initialPlayer: Player, debugLogger: DebugLogger) {
         self.playfield = playfield
         self.player = PlayerTracker(playfield: playfield, initialPlayer: initialPlayer, debugLogger: debugLogger)
         self.bars = []
-
-        // Create shared bar movement bound collector
-        let guess = GameProperties.barDirectionReversionPercentageGuess(for: mode)
-        BarTracker.movementBoundCollector = BarMovementBoundCollector(playfield: playfield, guessPercentage: guess)
     }
 }
