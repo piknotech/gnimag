@@ -130,6 +130,32 @@ final class BarTracker {
         debug.holeSize.from(tracker: holeSize)
         debug.yCenter.from(tracker: yCenter)
     }
+
+    // MARK: Future yCenter SegmentPortions
+
+    /// When the bar is either appearing or has no yCenter regression yet, construct a sensible dummy segment portion which consists of the current yCenter value or, if the bar is appearing, the predicted yCenter value.
+    func fallbackSegmentPortion(gmc: GameModelCollector, timeRange: SimpleRange<Double>) -> BasicLinearPingPongTracker.LinearSegmentPortion {
+        // 1. There already is a yCenter value, but no regression
+        if let value = yCenter.currentSegment?.tracker.values.last {
+            let line = LinearFunction(slope: 0, intercept: value)
+            print("SWITCH", gmc.barPhysicsRecorder.holeSize(for: self), value)
+            return BasicLinearPingPongTracker.LinearSegmentPortion(index: 0, timeRange: timeRange, line: line)
+        }
+
+        // 2. Use lastInnerAndOuterHeights from appearing state to guess the yCenter
+        let (inner, outer) = (state as! BarTrackerStateAppearing).lastInnerAndOuterHeights
+        let holeSize = gmc.barPhysicsRecorder.holeSize(for: self)
+
+        let f = (playfield.freeSpace - holeSize) / (inner + outer)
+        var yCenter = inner * f + (holeSize / 2)
+
+        // Trim to switch bounds
+        let (lowerBound, upperBound) = gmc.barPhysicsRecorder.switchValues(for: self)
+        yCenter = min(max(yCenter, lowerBound), upperBound)
+
+        let line = LinearFunction(slope: 0, intercept: yCenter)
+        return BasicLinearPingPongTracker.LinearSegmentPortion(index: 0, timeRange: timeRange, line: line)
+    }
 }
 
 extension BarTracker: Hashable {

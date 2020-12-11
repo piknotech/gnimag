@@ -22,8 +22,8 @@ final class BarPhysicsRecorder {
     private lazy var hardFastRecord = BarPhysicsRecord(playfield: playfield, holeSizeGuess: 39%, switchDistanceGuess: 26%)
     private lazy var hardManyRecord = BarPhysicsRecord(playfield: playfield, holeSizeGuess: 42%, switchDistanceGuess: 25%)
 
-    /// The current record, depending on the bar character
-    var currentRecord: BarPhysicsRecord {
+    /// The current record, depending on the bar character.
+    private var currentRecord: BarPhysicsRecord {
         switch barCharacter {
         case .normal: return normalRecord
         case .hardFast: return hardFastRecord

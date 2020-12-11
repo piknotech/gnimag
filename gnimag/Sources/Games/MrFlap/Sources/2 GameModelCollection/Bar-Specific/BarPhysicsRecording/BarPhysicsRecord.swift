@@ -15,7 +15,7 @@ final class BarPhysicsRecord {
     /// Default initializer.
     init(playfield: Playfield, holeSizeGuess: Double, switchDistanceGuess: Double) {
         holeSizeCollector = BarHoleSizeCollector(playfield: playfield, guess: holeSizeGuess)
-        switchBoundCollector = BarSwitchBoundCollector(playfield: playfield, guess: holeSizeGuess)
+        switchBoundCollector = BarSwitchBoundCollector(playfield: playfield, guess: switchDistanceGuess)
     }
 
     /// Return or guess the hole size for a bar.

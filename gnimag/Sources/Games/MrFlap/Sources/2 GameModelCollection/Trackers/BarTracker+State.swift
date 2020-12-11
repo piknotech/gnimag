@@ -46,7 +46,7 @@ final class BarTrackerStateAppearing: BarTrackerState {
     private var yCenterData = [(value: Double, time: Double)]()
 
     /// The last inner and outer height values, for early yCenter guessing.
-    var lastInnerAndOuterHeights: (Double, Double)?
+    var lastInnerAndOuterHeights: (Double, Double)!
 
     var holeSizeWasConstant = false
 
@@ -68,7 +68,6 @@ final class BarTrackerStateAppearing: BarTrackerState {
             constantHoleSize.reset()
             yCenterData.removeAll()
             consecutiveFramesWithConstantHoleSize = 0
-            lastInnerAndOuterHeights = nil
             holeSizeWasConstant = false
         }
 

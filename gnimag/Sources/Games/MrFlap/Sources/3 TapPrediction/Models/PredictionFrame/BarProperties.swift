@@ -38,10 +38,10 @@ struct BarProperties {
         guard
             let playerSize = player.size.average,
             let width = bar.width.average,
-            let holeSize = bar.holeSize.average,
             let angleByPlayerAngle = bar.angle.tracker.regression else { return nil }
 
-        self.holeSize = holeSize - playerSize
+        let barHoleSize = gmc.barPhysicsRecorder.holeSize(for: bar)
+        self.holeSize = barHoleSize - playerSize
 
         // widthAtHeight implementation
         angularWidthAtHeight = { height in
@@ -53,14 +53,12 @@ struct BarProperties {
             0.5 * (width + playerSize) / atan(x / 2)
         }
 
-        // Check if yCenterMovementPortionsForTimeRange is non-nil
-        let guesses = gmc.barPhysicsRecorder.switchValues(for: bar)
-        guard bar.yCenter.segmentPortionsForFutureTimeRangeAvailable(guesses: guesses) else { return nil }
-
         // yCenterMovementPortionsForTimeRange implementation
         yCenterMovementPortionsForTimeRange = { timeRange in
+            let guesses = gmc.barPhysicsRecorder.switchValues(for: bar)
             let angularRange = converter.angleBasedRange(from: timeRange)
-            let result = bar.yCenter.segmentPortionsForFutureTimeRange(angularRange, guesses: guesses) ?? []
+            let result = bar.yCenter.segmentPortionsForFutureTimeRange(angularRange, guesses: guesses) ??
+                [bar.fallbackSegmentPortion(gmc: gmc, timeRange: angularRange)] // yCenter guess
             let timeBasedResult = result.map(converter.timeBasedLinearSegmentPortion)
 
             // Convert into playfield coordinate system
