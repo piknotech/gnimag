@@ -3,7 +3,7 @@
 //  Copyright © 2019 - 2020 Piknotech. All rights reserved.
 //
 
-import Foundation
+import Common
 
 /// BarPhysicsRecorder stores a BarPhysicsRecord for each bar movement character. When the bar movement character changes during the game, the correct BarPhysicsRecord is selected and can be used for bar prediction.
 final class BarPhysicsRecorder {
@@ -18,9 +18,9 @@ final class BarPhysicsRecorder {
         self.barCharacter = barCharacter
     }
 
-    private lazy var normalRecord = BarPhysicsRecord(playfield: playfield, holeSizeGuess: 0.1, switchDistanceGuess: 0.2)
-    private lazy var hardFastRecord = BarPhysicsRecord(playfield: playfield, holeSizeGuess: 0.1, switchDistanceGuess: 0.2)
-    private lazy var hardManyRecord = BarPhysicsRecord(playfield: playfield, holeSizeGuess: 0.1, switchDistanceGuess: 0.2)
+    private lazy var normalRecord = BarPhysicsRecord(playfield: playfield, holeSizeGuess: 35%, switchDistanceGuess: 29.5%)
+    private lazy var hardFastRecord = BarPhysicsRecord(playfield: playfield, holeSizeGuess: 39%, switchDistanceGuess: 26%)
+    private lazy var hardManyRecord = BarPhysicsRecord(playfield: playfield, holeSizeGuess: 42%, switchDistanceGuess: 25%)
 
     /// The current record, depending on the bar character
     var currentRecord: BarPhysicsRecord {
