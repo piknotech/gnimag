@@ -45,8 +45,9 @@ final class BarTrackerStateAppearing: BarTrackerState {
     /// Data points that can immediately be transferred to the yCenter tracker on state switch.
     private var yCenterData = [(value: Double, time: Double)]()
 
-    /// The last inner and outer height values, for early yCenter guessing.
-    var lastInnerAndOuterHeights: (Double, Double)!
+    /// The inner and outer height trackers, for early yCenter guessing.
+    let innerHeightTracker = LinearTracker(tolerance: .absolute(0))
+    let outerHeightTracker = LinearTracker(tolerance: .absolute(0))
 
     var holeSizeWasConstant = false
 
@@ -77,7 +78,9 @@ final class BarTrackerStateAppearing: BarTrackerState {
 
     func update(with bar: Bar, at time: Double) {
         constantHoleSize.add(value: bar.holeSize)
-        lastInnerAndOuterHeights = (bar.innerHeight, bar.outerHeight)
+        innerHeightTracker.add(value: bar.innerHeight, at: time)
+        outerHeightTracker.add(value: bar.outerHeight, at: time)
+        
         if holeSizeWasConstant {
             yCenterData.append((value: bar.yCenter, time: time))
         }

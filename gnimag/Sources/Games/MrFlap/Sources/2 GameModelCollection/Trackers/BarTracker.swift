@@ -135,19 +135,7 @@ final class BarTracker {
 
     /// When the bar is either appearing or has no yCenter regression yet, construct a sensible dummy segment portion which consists of the current yCenter value or, if the bar is appearing, the predicted yCenter value.
     func fallbackSegmentPortion(gmc: GameModelCollector, timeRange: SimpleRange<Double>) -> BasicLinearPingPongTracker.LinearSegmentPortion {
-        // 1. There already is a yCenter value, but no regression
-        if let value = yCenter.currentSegment?.tracker.values.last {
-            let line = LinearFunction(slope: 0, intercept: value)
-            print("SWITCH", gmc.barPhysicsRecorder.holeSize(for: self), value)
-            return BasicLinearPingPongTracker.LinearSegmentPortion(index: 0, timeRange: timeRange, line: line)
-        }
-
-        // 2. Use lastInnerAndOuterHeights from appearing state to guess the yCenter
-        let (inner, outer) = (state as! BarTrackerStateAppearing).lastInnerAndOuterHeights
-        let holeSize = gmc.barPhysicsRecorder.holeSize(for: self)
-
-        let f = (playfield.freeSpace - holeSize) / (inner + outer)
-        var yCenter = inner * f + (holeSize / 2)
+        var yCenter = rawFallbackYCenter(gmc: gmc)
 
         // Trim to switch bounds
         let (lowerBound, upperBound) = gmc.barPhysicsRecorder.switchValues(for: self)
@@ -155,6 +143,28 @@ final class BarTracker {
 
         let line = LinearFunction(slope: 0, intercept: yCenter)
         return BasicLinearPingPongTracker.LinearSegmentPortion(index: 0, timeRange: timeRange, line: line)
+    }
+
+    /// The fallback yCenter, untrimmed.
+    private func rawFallbackYCenter(gmc: GameModelCollector) -> Double {
+        // 1. There already is a yCenter value, but no regression
+        if let value = yCenter.currentSegment?.tracker.values.last {
+            return value
+        }
+
+        // 2. Use inner and outer height regressions from appearing state to guess the yCenter
+        let state = self.state as! BarTrackerStateAppearing
+        let holeSize = gmc.barPhysicsRecorder.holeSize(for: self)
+        if let inner = state.innerHeightTracker.regression, let outer = state.outerHeightTracker.regression {
+            let t = LinearSolver.solve(inner + outer, equals: playfield.freeSpace - holeSize)!
+            return inner.at(t) + holeSize / 2
+        }
+
+        // 3. Use last inner and outer heights from appearing state to guess the yCenter
+        let inner = state.innerHeightTracker.values.last!
+        let outer = state.outerHeightTracker.values.last!
+        let t = (playfield.freeSpace - holeSize) / (inner + outer)
+        return inner * t + holeSize / 2
     }
 }
 
