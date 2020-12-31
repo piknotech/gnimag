@@ -49,8 +49,10 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         let frameDiff = frame.currentTime - (lastFrameTime ?? frame.currentTime)
         lastFrameTime = frame.currentTime
 
+        let isSingleBar = frame.bars.count == 1
+
         var bestSolution = lastSolution.flatMap { $0.shifted(by: frameDiff) }
-        var bestRating = bestSolution.map { verifier.rating(of: $0, requiredMinimum: 0) } ?? 0
+        var bestRating = bestSolution.map { verifier.rating(of: $0, requiredMinimum: 0, considerFinalJump: isSingleBar) } ?? 0
 
         // Discard last solution if a new bar was added after the last frame
         if let unlockDuration = bestSolution?.unlockDuration, unlockDuration + 0.1 < frame.bars.last!.timeUntilLeaving {
@@ -62,7 +64,7 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         func evaluate(_ solution: Solution) {
             // Performance-shortcut: avoid evaluating `rating` if possible
             if verifier.precondition(forValidSolution: solution) {
-                let rating = verifier.rating(of: solution, requiredMinimum: bestRating)
+                let rating = verifier.rating(of: solution, requiredMinimum: bestRating, considerFinalJump: isSingleBar)
                 if rating > bestRating {
                     bestSolution = solution
                     bestRating = rating

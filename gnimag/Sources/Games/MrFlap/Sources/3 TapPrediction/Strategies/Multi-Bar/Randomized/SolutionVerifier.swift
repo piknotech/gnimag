@@ -42,18 +42,29 @@ struct SolutionVerifier {
     /// The tap time rating is just the minimum distance between two consecutive jumps; the safety rating rates the player trajectory, i.e. the distance to playfield and bar hole bounds.
     /// These two factors are multiplied. The safety rating is in [0, 1], 0 meaning a definite crash or contact with the playfield bounds (which is bad for player jump tracking and is therefore avoided).
     /// `requiredMinimum` is used as a performance boost: when, during evaluation, it becomes impossible to beat the required minimum rating, terminate evaluation early and return 0.
-    func rating(of solution: Solution, requiredMinimum: Double) -> Double {
-        // Determine time rating
+    func rating(of solution: Solution, requiredMinimum: Double, considerFinalJump: Bool) -> Double {
+        let timeRating = self.timeRating(of: solution, considerFinalJump: considerFinalJump)
+
+        // Multiply time rating with safety rating
+        let requiredSafetyRating = requiredMinimum / timeRating
+        return timeRating * safetyRating(of: solution, requiredMinimum: requiredSafetyRating)
+    }
+
+    /// The time rating of a solution, in [0, inf).
+    func timeRating(of solution: Solution, considerFinalJump: Bool) -> Double {
         let firstJump = frame.player.timePassedSinceJumpStart + (solution.jumpTimeDistances.first ?? solution.lengthOfLastJump)
         var allTimeDistances = Array(solution.jumpTimeDistances.dropFirst())
         allTimeDistances.append(firstJump)
 
         let maximumTimeRating = frame.jumping.horizontalJumpLength // Limit time rating to avoid perverse results
-        let timeRating = min(maximumTimeRating, allTimeDistances.min()!)
+        var timeRating = min(maximumTimeRating, allTimeDistances.min()!)
 
-        // Multiply with safety rating
-        let requiredSafetyRating = requiredMinimum / timeRating
-        return timeRating * safetyRating(of: solution, requiredMinimum: requiredSafetyRating)
+        // If the final jump is very late (i.e. not relevant), penalize the solution
+        if considerFinalJump, !solution.relativeTapTimes.isEmpty {
+            timeRating = min(timeRating, 3 * solution.lengthOfLastJump)
+        }
+
+        return timeRating
     }
 
     /// The safety rating of a solution, in [0, 1].
