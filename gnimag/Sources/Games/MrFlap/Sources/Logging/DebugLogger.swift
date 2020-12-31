@@ -7,8 +7,8 @@ import Common
 import LoggingKit
 
 final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugFrame> {
-    /// A collection of the last 50 frames. When the player crashes, these are logged so the user can find the cause of the crash.
-    private var lastFrames = FixedSizeFIFO<DebugFrame>(capacity: 50)
+    /// A collection of the last 100 frames. When the player crashes, these are logged so the user can find the cause of the crash.
+    private var lastFrames = FixedSizeFIFO<DebugFrame>(capacity: 100)
 
     /// One-time setup: create the logging directory.
     override func setup() {
@@ -19,7 +19,7 @@ final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugFrame> {
 
     /// When advancing a frame, save it to the `lastFrames` queue for possible logging on a crash.
     override func advance() {
-        if parameters.logLast50FramesOnCrash {
+        if parameters.logLastCoupleFramesOnCrash {
             // Store latest frame and call `prepareSynchronously`
             lastFrames.append(currentFrame)
 
@@ -32,9 +32,9 @@ final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugFrame> {
     }
 
     /// Called when the player crashes.
-    /// Log the 50 last frames synchronously.
+    /// Log the last 100 frames synchronously.
     func playerHasCrashed() {
-        if !parameters.logLast50FramesOnCrash { return }
+        if !parameters.logLastCoupleFramesOnCrash { return }
 
         queue.cancelAllOperations()
 

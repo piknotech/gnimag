@@ -15,7 +15,7 @@ final class BarTracker {
     let orphanage = BarTrackerOrphanageDetector()
 
     /// The state the bar is currently in.
-    /// Only trackers with a "normal" state should be considered by prediction algorithms.
+    /// Only trackers with an "appearing" or "normal" state should be considered by prediction algorithms.
     var state: BarTrackerState!
 
     var isDisappearing: Bool {
@@ -54,8 +54,8 @@ final class BarTracker {
         width = ConstantTracker(tolerance: .relative(20%))
         holeSize = ConstantTracker(tolerance: .relative(5%))
         yCenter = BasicLinearPingPongTracker(
-            tolerance: Self.circularTolerance(dy: 0.75% * playfield.freeSpace, on: playfield),
-            slopeTolerance: .relative(40%),
+            tolerance: Self.circularTolerance(dy: 0.5% * playfield.freeSpace, on: playfield),
+            slopeTolerance: .relative(50%),
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
                 pointsMatchingNextSegment: 6,
