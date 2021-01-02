@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 23.04.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 /// A FixedSizeFIFO wraps an array of fixed size. Once the capacity of the array is surpassed, earliest elements are removed.

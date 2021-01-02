@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 15.04.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 /// A ScheduledTap describes a tap which is scheduled, but not performed yet.

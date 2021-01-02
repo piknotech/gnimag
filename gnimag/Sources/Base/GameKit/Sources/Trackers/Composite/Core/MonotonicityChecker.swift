@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 17.10.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 /// A helper tool which checks whether an incoming value stream is (strictly) monotone.

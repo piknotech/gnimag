@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 09.10.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 // RemoveAtIndices: Taken from https://forums.swift.org/t/removing-elements-at-more-than-one-index-from-an-array/19953/6
 

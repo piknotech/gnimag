@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 15.04.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 /// A PerformedTap describes a tap which was performed, in contrast to RelativeTap which describes a scheduled tap in the future.
