@@ -1,4 +1,5 @@
 import Common
+import Cocoa
 import Foundation
 import QuartzCore
 import Image
