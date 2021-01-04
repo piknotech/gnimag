@@ -12,8 +12,8 @@ public class ConstantTracker: PolyTracker {
     public private(set) var count: Double = 0
 
     /// Default initializer.
-    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 1, tolerance: TrackerTolerance = .absolute(0)) {
-        super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints, tolerance: tolerance)
+    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 1, tolerance: TrackerTolerance = .absolute(0), maxDataPointsForLogging: Int? = nil) {
+        super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints, tolerance: tolerance, maxDataPointsForLogging: maxDataPointsForLogging)
     }
 
     /// Convenience method to check for validity, ignoring the time component.

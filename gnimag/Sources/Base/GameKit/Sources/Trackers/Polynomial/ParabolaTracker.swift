@@ -9,8 +9,8 @@ import TestingTools
 /// ParabolaTracker is a simple tracker providing a parabola regression function.
 public final class ParabolaTracker: SimpleDefaultTracker<Parabola> {
     /// Default initializer.
-    public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1, tolerance: TrackerTolerance) {
-        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: tolerancePoints + 3, tolerance: tolerance)
+    public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1, tolerance: TrackerTolerance, maxDataPointsForLogging: Int? = nil) {
+        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: tolerancePoints + 3, tolerance: tolerance, maxDataPointsForLogging: maxDataPointsForLogging)
     }
 
     /// Calculate the linear regression.

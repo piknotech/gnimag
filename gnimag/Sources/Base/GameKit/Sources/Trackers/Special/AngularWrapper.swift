@@ -31,6 +31,8 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
     public var requiredPointsForCalculatingRegression: Int { tracker.requiredPointsForCalculatingRegression }
     public var regression: F? { tracker.regression }
 
+    public var dataSet: [ScatterDataPoint] { tracker.dataSet }
+
     public func updateRegression() { tracker.updateRegression() }
     public func reset() { tracker.reset() }
     public func removeLast() { tracker.removeLast() }

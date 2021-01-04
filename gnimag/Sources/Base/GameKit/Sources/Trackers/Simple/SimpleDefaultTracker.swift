@@ -22,14 +22,21 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
     public let maxDataPoints: Int
     public let requiredPointsForCalculatingRegression: Int
 
+    /// The tracker can log more data points than it uses for calculating the regression.
+    public let maxDataPointsForLogging: Int
+    private let loggingPoints = SimpleDataSet()
+
+    public var dataSet: [ScatterDataPoint] { loggingPoints.dataSet }
+
     /// The tolerance value which is used for validity checks.
     public var tolerance: TrackerTolerance
 
     /// Defaut initializer.
-    public init(maxDataPoints: Int, requiredPointsForCalculatingRegression: Int, tolerance: TrackerTolerance) {
+    public init(maxDataPoints: Int, requiredPointsForCalculatingRegression: Int, tolerance: TrackerTolerance, maxDataPointsForLogging: Int?) {
         self.maxDataPoints = maxDataPoints
         self.requiredPointsForCalculatingRegression = requiredPointsForCalculatingRegression
         self.tolerance = tolerance
+        self.maxDataPointsForLogging = maxDataPointsForLogging ?? maxDataPoints
     }
 
     /// The current regression function. Can be nil when, for example, the number of data points is insufficient.
@@ -47,6 +54,12 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
             let first = times.removeFirst()
             distinctTimes.remove(first)
             values.removeFirst()
+        }
+
+        // Add point to logging data set
+        loggingPoints.add(value: value, time: time, color: .normal)
+        if loggingPoints.count > maxDataPointsForLogging {
+            loggingPoints.removeFirst()
         }
 
         if updateRegression {
@@ -68,6 +81,7 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
         times.removeAll()
         distinctTimes.removeAll()
         values.removeAll()
+        loggingPoints.removeAll()
         updateRegression()
     }
 
@@ -75,8 +89,11 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
     /// Assumes there is at least one data point.
     public final func removeLast() {
         let last = times.removeLast()
-        distinctTimes.remove(last)
+        if !times.contains(last) {
+            distinctTimes.remove(last)
+        }
         values.removeLast()
+        loggingPoints.removeLast()
         updateRegression()
     }
 

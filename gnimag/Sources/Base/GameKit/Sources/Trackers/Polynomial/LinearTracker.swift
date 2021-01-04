@@ -9,8 +9,8 @@ import TestingTools
 /// LinearTracker is a simple tracker providing a linear regression function.
 public final class LinearTracker: SimpleDefaultTracker<LinearFunction> {
     /// Default initializer.
-    public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1, tolerance: TrackerTolerance) {
-        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: tolerancePoints + 2, tolerance: tolerance)
+    public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1, tolerance: TrackerTolerance, maxDataPointsForLogging: Int? = nil) {
+        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: tolerancePoints + 2, tolerance: tolerance, maxDataPointsForLogging: maxDataPointsForLogging)
     }
 
     /// The slope of the linear regression function.

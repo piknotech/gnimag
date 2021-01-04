@@ -12,7 +12,7 @@ internal class AnyFunctionToleranceChecker<F: Function & ScalarFunctionArithmeti
     /// Default initializer.
     init(function: F, tolerance: TrackerTolerance) {
         self.function = function
-        super.init(maxDataPoints: 0, requiredPointsForCalculatingRegression: 0, tolerance: tolerance)
+        super.init(maxDataPoints: 0, requiredPointsForCalculatingRegression: 0, tolerance: tolerance, maxDataPointsForLogging: nil)
         updateRegression() // Immediately update the regression with the given function
     }
 
