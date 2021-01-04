@@ -110,6 +110,7 @@
 		631214372326678700C126B4 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CD2325740000C126B4 /* Event.swift */; };
 		631214392326686A00C126B4 /* Terminal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Terminal.swift */; };
 		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
+		631555A325A38C620056B8AD /* InputLagTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631555A125A388920056B8AD /* InputLagTracker.swift */; };
 		6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */; };
 		6316BDA723C91BD10062100F /* LinearFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA623C91BD10062100F /* LinearFunction.swift */; };
 		6316BDA923CA49FB0062100F /* JumpTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA823CA49FB0062100F /* JumpTracker+Future.swift */; };
@@ -449,6 +450,7 @@
 		63121411232587E300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631214382326686A00C126B4 /* Terminal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terminal.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
+		631555A125A388920056B8AD /* InputLagTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputLagTracker.swift; sourceTree = "<group>"; };
 		6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAngleConverter.swift; sourceTree = "<group>"; };
 		6316BDA623C91BD10062100F /* LinearFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearFunction.swift; sourceTree = "<group>"; };
 		6316BDA823CA49FB0062100F /* JumpTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JumpTracker+Future.swift"; sourceTree = "<group>"; };
@@ -1510,6 +1512,7 @@
 			children = (
 				631213E223257F4000C126B4 /* MrFlap.swift */,
 				63318AAB2582B049002CD9A8 /* PointsTracker.swift */,
+				631555A125A388920056B8AD /* InputLagTracker.swift */,
 				631213E823257F4000C126B4 /* 1 ImageAnalysis */,
 				631213E323257F4000C126B4 /* 2 GameModelCollection */,
 				6318966823B4C896002FBD4F /* 3 TapPrediction */,
@@ -3079,6 +3082,7 @@
 			files = (
 				63318AB42583AB97002CD9A8 /* BarPhysicsRecord.swift in Sources */,
 				6355B6FD2444EBF700DCAFBB /* SimulatedBar.swift in Sources */,
+				631555A325A38C620056B8AD /* InputLagTracker.swift in Sources */,
 				6345680423BB955700D32053 /* PlayfieldProperties.swift in Sources */,
 				6345680123BB955700D32053 /* BarProperties.swift in Sources */,
 				63C7F6D023F588CF00187840 /* BarUpdater.swift in Sources */,

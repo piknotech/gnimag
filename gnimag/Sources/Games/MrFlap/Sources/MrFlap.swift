@@ -47,6 +47,8 @@ public final class MrFlap {
     /// The points tracker.
     private let points = PointsTracker()
 
+    private let lagTracker = InputLagTracker(warningThreshold: 5)
+
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: SomewhereTapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
@@ -90,7 +92,9 @@ public final class MrFlap {
         
         statsPrinting.perform {
             Terminal.logNewline()
-            Terminal.log(.info, self.queue.timingStats.detailedDescription)
+            Terminal.log(.info, queue.timingStats.detailedDescription)
+            Terminal.logNewline()
+            Terminal.log(.info, lagTracker.detailedInformation)
             Terminal.logNewline()
         }
     }
@@ -132,13 +136,18 @@ public final class MrFlap {
     private func gameplayUpdate(image: Image, time: Double) {
         switch analyze(image: image, time: time) {
         case let .success(result):
+            lagTracker.registerFrame(being: .new)
             _ = gameModelCollector.accept(result: result, time: time)
             tapPredictor.predictionStep()
 
         case .failure(.crashed):
             playerHasCrashed()
 
-        default:
+        case .failure(.samePlayerPosition):
+            lagTracker.registerFrame(being: .irrelevant)
+            tapPredictor.predictionStep()
+
+        case .failure(.error):
             tapPredictor.predictionStep()
         }
     }
