@@ -23,7 +23,7 @@ internal class InputLagTracker {
 
         return """
         InputLag information:
-        • Irrelevant frames: \(irrelevantFrames)
+        • Lagging frames: \(irrelevantFrames)
         • Longest lag: \(longestLag) frames
         • Average lag: \(averageLag) frames
         """

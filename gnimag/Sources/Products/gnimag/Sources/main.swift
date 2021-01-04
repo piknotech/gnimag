@@ -12,27 +12,14 @@ import FlowFree
 import Geometry
 import Tapping
 
-/*
-// Simulation
-let game = MrFlapGameSimulation(fps: 50)
-let imageProvider = game
-let tapper = game
-*/
-
 // Arduino
-let imageProvider = WindowInteractor(appName: "AirServer", windowNameHint: "iPhone").imageProvider
-//let imageProvider = WindowInteractor(appName: "QuickTime Player").imageProvider
-let tapper = MultiTapper(Arduino(), T())
+let imageProvider = airServer
+let tapper = SingleTapArduino(portPath: "/dev/cu.usbmodem14101")
 struct T: SomewhereTapper {
      func tap() {
         print("TAP \(imageProvider.timeProvider.currentTime)")
      }
 }
-
-/* TestRun Hard
-let imageProvider = ImageListProvider(directoryPath: "/Users/David/Desktop/ /gnimag-test/TestRun Hard", framerate: 60)
-let tapper = NoopTapper()
-*/
 
 let mrflap = MrFlap(
     imageProvider: imageProvider,
@@ -50,15 +37,13 @@ Timing.shared.perform(after: 2) {
     mrflap.play()
 }
 
+// Play sound on crash
 mrflap.crashed += {
     print("CRASHED!")
     NSSound(named: "Basso")?.play()
     NSSound(named: "Blow")?.play()
     NSSound(named: "Glass")?.play()
 }
-
-// game.runAsApplication()
-
 
 PowerManager.disableScreenSleep()
 

@@ -7,10 +7,11 @@ import Common
 import Foundation
 import IOKit.pwr_mgt
 
+/// PowerManager can be used to prevent the screen from going to sleep while gnimag is running.
 enum PowerManager {
     private static var assertionID: IOPMAssertionID = 0
 
-    /// Disable the screen from going to sleep.
+    /// Prevent the screen from going to sleep.
     /// This might be required for an instance of gnimag, e.g. when it mirrors the device to the screen and therefore needs the screen to stay on.
     /// Only call once.
     static func disableScreenSleep() {

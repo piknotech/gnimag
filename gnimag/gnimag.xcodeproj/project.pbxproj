@@ -111,6 +111,8 @@
 		631214392326686A00C126B4 /* Terminal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Terminal.swift */; };
 		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
 		631555A325A38C620056B8AD /* InputLagTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631555A125A388920056B8AD /* InputLagTracker.swift */; };
+		631555A525A3D0C20056B8AD /* iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631555A425A3D0C20056B8AD /* iOS.swift */; };
+		631555A925A3D6E30056B8AD /* MultiTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631555A825A3D6E30056B8AD /* MultiTapper.swift */; };
 		6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */; };
 		6316BDA723C91BD10062100F /* LinearFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA623C91BD10062100F /* LinearFunction.swift */; };
 		6316BDA923CA49FB0062100F /* JumpTracker+Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA823CA49FB0062100F /* JumpTracker+Future.swift */; };
@@ -255,7 +257,7 @@
 		63CB1E112428E94B006B7782 /* ConnectedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CB1E102428E94B006B7782 /* ConnectedComponents.swift */; };
 		63CB1E132428EFBF006B7782 /* OCRComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CB1E122428EFBF006B7782 /* OCRComponent.swift */; };
 		63CCCAFF246178E7002605DD /* ORSSerial in Frameworks */ = {isa = PBXBuildFile; productRef = 63CCCAFE246178E7002605DD /* ORSSerial */; };
-		63CCCB01246178F8002605DD /* Arduino.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CCCB00246178F8002605DD /* Arduino.swift */; };
+		63CCCB01246178F8002605DD /* SingleTapArduino.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CCCB00246178F8002605DD /* SingleTapArduino.swift */; };
 		63D002962373037900041069 /* DebugFrame+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugFrame+Data.swift */; };
 		63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9523D89C5D00121F2B /* Point+Position.swift */; };
 		63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9A23D9FFEE00121F2B /* Jump.swift */; };
@@ -451,6 +453,8 @@
 		631214382326686A00C126B4 /* Terminal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terminal.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
 		631555A125A388920056B8AD /* InputLagTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputLagTracker.swift; sourceTree = "<group>"; };
+		631555A425A3D0C20056B8AD /* iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS.swift; sourceTree = "<group>"; };
+		631555A825A3D6E30056B8AD /* MultiTapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTapper.swift; sourceTree = "<group>"; };
 		6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAngleConverter.swift; sourceTree = "<group>"; };
 		6316BDA623C91BD10062100F /* LinearFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearFunction.swift; sourceTree = "<group>"; };
 		6316BDA823CA49FB0062100F /* JumpTracker+Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JumpTracker+Future.swift"; sourceTree = "<group>"; };
@@ -650,7 +654,7 @@
 		63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarTracker+OrphanageDetector.swift"; sourceTree = "<group>"; };
 		63CB1E102428E94B006B7782 /* ConnectedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedComponents.swift; sourceTree = "<group>"; };
 		63CB1E122428EFBF006B7782 /* OCRComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRComponent.swift; sourceTree = "<group>"; };
-		63CCCB00246178F8002605DD /* Arduino.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arduino.swift; sourceTree = "<group>"; };
+		63CCCB00246178F8002605DD /* SingleTapArduino.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTapArduino.swift; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		63D002952373037900041069 /* DebugFrame+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugFrame+Data.swift"; sourceTree = "<group>"; };
 		63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectScatterStrokable.swift; sourceTree = "<group>"; };
@@ -1449,23 +1453,23 @@
 			isa = PBXGroup;
 			children = (
 				631213C823257EB600C126B4 /* main.swift */,
-				63CCCB00246178F8002605DD /* Arduino.swift */,
-				6392A1B225A0F0CB00761241 /* PowerManager.swift */,
-				631213BC23257EB600C126B4 /* IO */,
+				631555A725A3D6C00056B8AD /* More */,
+				631555A625A3D3D90056B8AD /* Robot-Output */,
+				631213BC23257EB600C126B4 /* Screen-IO */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		631213BC23257EB600C126B4 /* IO */ = {
+		631213BC23257EB600C126B4 /* Screen-IO */ = {
 			isa = PBXGroup;
 			children = (
 				630CE2F22440AD31006017F4 /* ScreenInteractor.swift */,
 				634E2C6B2440A383001C2459 /* WindowInteractor.swift */,
 				631213C223257EB600C126B4 /* Components */,
-				631213C523257EB600C126B4 /* Android */,
+				631213C523257EB600C126B4 /* Concrete Programs */,
 				631213BE23257EB600C126B4 /* NoopTapper.swift */,
 			);
-			path = IO;
+			path = "Screen-IO";
 			sourceTree = "<group>";
 		};
 		631213C223257EB600C126B4 /* Components */ = {
@@ -1479,13 +1483,14 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		631213C523257EB600C126B4 /* Android */ = {
+		631213C523257EB600C126B4 /* Concrete Programs */ = {
 			isa = PBXGroup;
 			children = (
 				631213C623257EB600C126B4 /* Android.swift */,
+				631555A425A3D0C20056B8AD /* iOS.swift */,
 				631213C723257EB600C126B4 /* README.md */,
 			);
-			path = Android;
+			path = "Concrete Programs";
 			sourceTree = "<group>";
 		};
 		631213D723257EF600C126B4 /* MrFlap */ = {
@@ -1620,6 +1625,23 @@
 				637494C924366A1700D724F7 /* String+Subscript.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		631555A625A3D3D90056B8AD /* Robot-Output */ = {
+			isa = PBXGroup;
+			children = (
+				63CCCB00246178F8002605DD /* SingleTapArduino.swift */,
+			);
+			path = "Robot-Output";
+			sourceTree = "<group>";
+		};
+		631555A725A3D6C00056B8AD /* More */ = {
+			isa = PBXGroup;
+			children = (
+				6392A1B225A0F0CB00761241 /* PowerManager.swift */,
+				631555A825A3D6E30056B8AD /* MultiTapper.swift */,
+			);
+			path = More;
 			sourceTree = "<group>";
 		};
 		6316BDB223CB8CB90062100F /* Drawing */ = {
@@ -2885,13 +2907,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				6354CECA2409467600A4C3B8 /* main.swift in Sources */,
+				631555A525A3D0C20056B8AD /* iOS.swift in Sources */,
 				63E16AAB24348400005E67ED /* MouseDragger.swift in Sources */,
-				63CCCB01246178F8002605DD /* Arduino.swift in Sources */,
+				63CCCB01246178F8002605DD /* SingleTapArduino.swift in Sources */,
 				6392A1B325A0F0CB00761241 /* PowerManager.swift in Sources */,
 				631213CF23257EB600C126B4 /* Android.swift in Sources */,
 				634E2C6C2440A383001C2459 /* WindowInteractor.swift in Sources */,
 				631213CA23257EB600C126B4 /* MouseTapper.swift in Sources */,
 				631213CB23257EB600C126B4 /* MouseControl.swift in Sources */,
+				631555A925A3D6E30056B8AD /* MultiTapper.swift in Sources */,
 				631213CE23257EB600C126B4 /* DisplayLinkedImageProvider.swift in Sources */,
 				630CE2F32440AD31006017F4 /* ScreenInteractor.swift in Sources */,
 				631213C923257EB600C126B4 /* NoopTapper.swift in Sources */,
