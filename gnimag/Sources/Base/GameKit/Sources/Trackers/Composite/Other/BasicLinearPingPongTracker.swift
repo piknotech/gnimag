@@ -16,6 +16,11 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     /// The tracker for the slope. The slope is always positive.
     private let slopeTracker: PreliminaryTracker
 
+    /// If the first segment is very short (e.g. only 3 frames), the slope value may be corrupted heavily.
+    /// Therefore, if `replacementForFirstSegmentSlopeValue` is non-nil, the first segment's slope is not calculated based on the data points, but simply replaced with this value.
+    /// The sign of this value is irrelevant.
+    private let replacementForFirstSegmentSlopeValue: Value?
+
     public var slope: Value? { slopeTracker.average.map(abs) }
     public var lowerBound: Value? { lowerBoundTracker.average }
     public var upperBound: Value? { upperBoundTracker.average }
@@ -46,12 +51,14 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     public init(
         tolerance: TrackerTolerance,
         slopeTolerance: TrackerTolerance,
+        replacementForFirstSegmentSlopeValue: Value? = nil,
         boundsTolerance: TrackerTolerance,
         decisionCharacteristics: NextSegmentDecisionCharacteristics
     ) {
         lowerBoundTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: boundsTolerance)
         upperBoundTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: boundsTolerance)
         slopeTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: slopeTolerance)
+        self.replacementForFirstSegmentSlopeValue = replacementForFirstSegmentSlopeValue
 
         super.init(tolerance: tolerance, decisionCharacteristics: decisionCharacteristics)
     }
@@ -72,8 +79,12 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
             firstSegmentDirection = (approachingUpperBound == isEvenSegment) ? .up : .down
         }
 
-        // 2.: Update slope tracker (with absolute slope value)
-        slopeTracker.updatePreliminaryValueIfValid(value: abs(line.slope))
+        // 2.: Update slope tracker with absolute slope value (or use replacement in the very first segment)
+        if currentSegment.index == 0, let replacement = replacementForFirstSegmentSlopeValue {
+            slopeTracker.updatePreliminaryValueIfValid(value: abs(replacement))
+        } else {
+            slopeTracker.updatePreliminaryValueIfValid(value: abs(line.slope))
+        }
 
         // 3.: Update lower or upper bound tracker
         guard

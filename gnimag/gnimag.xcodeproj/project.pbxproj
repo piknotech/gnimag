@@ -248,6 +248,7 @@
 		63B40BCE24250C72007A86E9 /* YesNoMathGames.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B40BCC24250C72007A86E9 /* YesNoMathGames.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B40BD624251140007A86E9 /* identiti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B40BD524251140007A86E9 /* identiti.swift */; };
 		63B62B2423DC8D06009B07DF /* Array+Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B62B2323DC8D06009B07DF /* Array+Scan.swift */; };
+		63B62DAB25A4DF8800F668B3 /* BarCenterSlopeGuesses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B62DAA25A4DF8800F668B3 /* BarCenterSlopeGuesses.swift */; };
 		63B64F3423585D95005A5E82 /* CartesianProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3323585D95005A5E82 /* CartesianProduct.swift */; };
 		63B64F3623586642005A5E82 /* MonotonicityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B64F3523586642005A5E82 /* MonotonicityChecker.swift */; };
 		63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
@@ -647,6 +648,7 @@
 		63B40BD424250CB4007A86E9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		63B40BD524251140007A86E9 /* identiti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = identiti.swift; sourceTree = "<group>"; };
 		63B62B2323DC8D06009B07DF /* Array+Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Scan.swift"; sourceTree = "<group>"; };
+		63B62DAA25A4DF8800F668B3 /* BarCenterSlopeGuesses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCenterSlopeGuesses.swift; sourceTree = "<group>"; };
 		63B64F3323585D95005A5E82 /* CartesianProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartesianProduct.swift; sourceTree = "<group>"; };
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63C7F6CF23F588CE00187840 /* BarUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarUpdater.swift; sourceTree = "<group>"; };
@@ -1802,6 +1804,7 @@
 				63318AB32583AB97002CD9A8 /* BarPhysicsRecord.swift */,
 				63318AB52583ABBA002CD9A8 /* BarHoleSizeCollector.swift */,
 				6376A4F023C7BD4700ADF4C2 /* BarSwitchBoundCollector.swift */,
+				63B62DAA25A4DF8800F668B3 /* BarCenterSlopeGuesses.swift */,
 			);
 			path = BarPhysicsRecording;
 			sourceTree = "<group>";
@@ -3121,6 +3124,7 @@
 				637FCB4B2391AA0C0067BBCC /* DebugLogger.swift in Sources */,
 				637B56A723CE7FDE007E51B0 /* BarScatterStrokable.swift in Sources */,
 				632696B123D0CA39009FE1E0 /* PlayerBarInteraction.swift in Sources */,
+				63B62DAB25A4DF8800F668B3 /* BarCenterSlopeGuesses.swift in Sources */,
 				63318AAF2583A3DD002CD9A8 /* BarPhysicsRecorder.swift in Sources */,
 				631213F723257F4000C126B4 /* ImageAnalyzer.swift in Sources */,
 				6323F11C23EC5A0C00182D13 /* PredictionFrame.swift in Sources */,

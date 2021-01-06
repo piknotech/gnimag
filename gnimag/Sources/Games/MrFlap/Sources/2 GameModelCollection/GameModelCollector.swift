@@ -9,12 +9,14 @@ import GameKit
 /// Before new results from image analysis are added, they are first checked for data integrity.
 class GameModelCollector {
     let model: GameModel
-    let mode: GameMode
+    private let mode: GameMode
 
-    let barUpdater: BarUpdater
+    private var barUpdater: BarUpdater!
     let barPhysicsRecorder: BarPhysicsRecorder
 
-    let points: PointsTracker
+    private let points: PointsTracker
+
+    var fineCharacter: FineBarMovementCharacter
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
@@ -25,10 +27,12 @@ class GameModelCollector {
         self.points = points
         self.mode = mode
         model = GameModel(playfield: playfield, initialPlayer: initialPlayer, debugLogger: debugLogger)
-        barPhysicsRecorder = BarPhysicsRecorder(playfield: playfield, barCharacter: BarMovementCharacter(gameMode: mode, points: points.points))
-        barUpdater = BarUpdater(model: model, recorder: barPhysicsRecorder)
+        fineCharacter = FineBarMovementCharacter(gameMode: mode, points: points.points)
+        barPhysicsRecorder = BarPhysicsRecorder(playfield: playfield, barCharacter: BarMovementCharacter(from: fineCharacter))
 
         self.debugLogger = debugLogger
+
+        barUpdater = BarUpdater(gmc: self)
     }
 
     /// Use the AnalysisResult to update the game model.
@@ -48,7 +52,8 @@ class GameModelCollector {
 
         // Update points tracker and bar physics collector
         points.update(tracker: model.player, time: time)
-        barPhysicsRecorder.barCharacter = BarMovementCharacter(gameMode: mode, points: points.points)
+        fineCharacter = FineBarMovementCharacter(gameMode: mode, points: points.points)
+        barPhysicsRecorder.barCharacter = BarMovementCharacter(from: fineCharacter)
 
         // Update bars
         // Instead of using the game time, use the player angle for bar-related trackers. This is useful to prevent small lags (which stop both the player and the bars) from destroying all of the tracking.

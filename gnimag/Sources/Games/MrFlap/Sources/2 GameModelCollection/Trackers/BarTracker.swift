@@ -45,10 +45,12 @@ final class BarTracker {
     var debug: DebugFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
 
     // Default initializer.
-    init(playfield: Playfield, color: ColorMatch, debugLogger: DebugLogger) {
+    init(playfield: Playfield, color: ColorMatch, movement: FineBarMovementCharacter, debugLogger: DebugLogger) {
         self.playfield = playfield
         self.color = color
         self.debugLogger = debugLogger
+
+        let slopeGuess = BarCenterSlopeGuesses.guess(for: movement) * playfield.fullRadius
 
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(5% * .pi)))
         width = ConstantTracker(tolerance: .relative(20%))
@@ -56,6 +58,7 @@ final class BarTracker {
         yCenter = BasicLinearPingPongTracker(
             tolerance: Self.circularTolerance(dy: 0.5% * playfield.freeSpace, on: playfield),
             slopeTolerance: .relative(50%),
+            replacementForFirstSegmentSlopeValue: slopeGuess,
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
                 pointsMatchingNextSegment: 6,
