@@ -57,7 +57,7 @@ final class BarTracker {
         holeSize = ConstantTracker(tolerance: .relative(5%))
         yCenter = BasicLinearPingPongTracker(
             tolerance: Self.circularTolerance(dy: 0.5% * playfield.freeSpace, on: playfield),
-            slopeTolerance: .relative(50%),
+            slopeTolerance: .relative(0%), // Always use the guessed slope
             replacementForFirstSegmentSlopeValue: slopeGuess,
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
