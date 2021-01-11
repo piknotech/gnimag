@@ -15,11 +15,6 @@ import Tapping
 // Arduino
 let imageProvider = airServer
 let tapper = SingleTapArduino(portPath: "/dev/cu.usbmodem14101")
-struct T: SomewhereTapper {
-     func tap() {
-        print("TAP \(imageProvider.timeProvider.currentTime)")
-     }
-}
 
 let mrflap = MrFlap(
     imageProvider: imageProvider,
@@ -27,7 +22,7 @@ let mrflap = MrFlap(
     debugParameters: DebugParameters(
         location: "/Users/David/Desktop/Debug.noSync",
         occasions: [],
-        logEvery: 250,
+        logEvery: 1000,
         content: .all,
         logLastCoupleFramesOnCrash: true
     )

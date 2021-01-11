@@ -15,14 +15,14 @@ public final class GameQueueTimingStats {
     }
 
     /// The average total duration of a frame (1/framerate).
-    public let frameDuration = ConstantTracker(maxDataPoints: .max, tolerancePoints: 0)
+    public let frameDuration = ConstantTracker(maxDataPoints: 1000, tolerancePoints: 0)
 
     /// The average duration to perform image copy/preparation tasks.
     /// This refers to image prepration done by the image provider itself (e.g. creating a NativeImage).
-    public let imageCopyDuration = ConstantTracker(maxDataPoints: .max, tolerancePoints: 0)
+    public let imageCopyDuration = ConstantTracker(maxDataPoints: 1000, tolerancePoints: 0)
 
     /// The average duration of frame analysis which is performed by your specific game. This does not include the image copy duration.
-    public let analysisDuration = ConstantTracker(maxDataPoints: .max, tolerancePoints: 0)
+    public let analysisDuration = ConstantTracker(maxDataPoints: 1000, tolerancePoints: 0)
 
     /// The total number of frames.
     public private(set) var totalFrames = 0

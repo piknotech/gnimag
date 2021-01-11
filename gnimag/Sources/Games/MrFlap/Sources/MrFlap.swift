@@ -49,6 +49,8 @@ public final class MrFlap {
 
     private let lagTracker = InputLagTracker(warningThreshold: 5)
 
+    private let chrono = Chronometer<FramePhase>()
+
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: SomewhereTapper, debugParameters: DebugParameters = .none) {
         self.imageProvider = imageProvider
@@ -96,6 +98,11 @@ public final class MrFlap {
             Terminal.logNewline()
             Terminal.log(.info, lagTracker.detailedInformation)
             Terminal.logNewline()
+
+            for phase in FramePhase.allCases {
+                let ms = (chrono.averageMeasurement(for: phase) ?? 0) * 1000
+                print(String(format: "\(phase) average: %.1f ms", ms))
+            }
         }
     }
 
@@ -134,21 +141,35 @@ public final class MrFlap {
     /// Normal update method while in-game.
     /// Perform TapPrediction each frame, i.e. no matter what the outcome of ImageAnalysis and GameModelCollection is.
     private func gameplayUpdate(image: Image, time: Double) {
-        switch analyze(image: image, time: time) {
+        let analysis = chrono.measure(.imageAnalysis) {
+            analyze(image: image, time: time)
+        }
+
+        switch analysis {
         case let .success(result):
             lagTracker.registerFrame(being: .new)
-            _ = gameModelCollector.accept(result: result, time: time)
-            tapPredictor.predictionStep()
+
+            chrono.measure(.gameModelCollection) {
+                gameModelCollector.accept(result: result, time: time)
+            }
+
+            chrono.measure(.tapPrediction) {
+                tapPredictor.predictionStep()
+            }
 
         case .failure(.crashed):
             playerHasCrashed()
 
         case .failure(.samePlayerPosition):
             lagTracker.registerFrame(being: .irrelevant)
-            tapPredictor.predictionStep()
+            chrono.measure(.tapPrediction) {
+                tapPredictor.predictionStep()
+            }
 
         case .failure(.error):
-            tapPredictor.predictionStep()
+            chrono.measure(.tapPrediction) {
+                tapPredictor.predictionStep()
+            }
         }
     }
 
