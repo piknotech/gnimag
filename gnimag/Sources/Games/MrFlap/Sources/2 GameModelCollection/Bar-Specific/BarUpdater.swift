@@ -9,7 +9,7 @@ import Foundation
 struct BarUpdater {
     let gmc: GameModelCollector
     let model: GameModel
-    let recorder: BarPhysicsRecorder
+    let recorder: BarMovementRecorder
 
     init(gmc: GameModelCollector) {
         self.gmc = gmc

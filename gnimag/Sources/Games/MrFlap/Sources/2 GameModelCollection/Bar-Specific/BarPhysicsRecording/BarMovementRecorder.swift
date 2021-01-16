@@ -18,10 +18,10 @@ final class BarMovementRecorder {
         self.barCharacter = barCharacter
     }
 
-    private lazy var normalBeginRecord = BarMovementRecord(playfield: playfield, holeSizeGuess: 35%, switchDistanceGuess: 29.5%)
-    private lazy var normalEndRecord = BarMovementRecord(playfield: playfield, holeSizeGuess: 35%, switchDistanceGuess: 30.5%)
-    private lazy var hardFastRecord = BarMovementRecord(playfield: playfield, holeSizeGuess: 39%, switchDistanceGuess: 27%)
-    private lazy var hardManyRecord = BarMovementRecord(playfield: playfield, holeSizeGuess: 42%, switchDistanceGuess: 26.5%)
+    private lazy var normalBeginRecord = BarMovementRecord(playfield: playfield, holeSizeGuess: 35.5%, switchDistanceGuess: 29.5%)
+    private lazy var normalEndRecord = BarMovementRecord(playfield: playfield, holeSizeGuess: 39%, switchDistanceGuess: 30.5%)
+    private lazy var hardFastRecord = BarMovementRecord(playfield: playfield, holeSizeGuess: 40%, switchDistanceGuess: 27%)
+    private lazy var hardManyRecord = BarMovementRecord(playfield: playfield, holeSizeGuess: 44%, switchDistanceGuess: 26.5%)
 
     /// The current record, depending on the bar character.
     private var currentRecord: BarMovementRecord {
@@ -41,8 +41,7 @@ final class BarMovementRecorder {
 
     /// Return or guess the switch values for a bar.
     func switchValues(for bar: BarTracker) -> (lowerBound: Double, upperBound: Double) {
-        print(barCharacter)
-        return currentRecord.switchValues(for: bar)
+        currentRecord.switchValues(for: bar)
     }
 
     func update(with bar: BarTracker) {

@@ -29,14 +29,15 @@ enum FineBarMovementCharacter {
 /// In normal mode, there is only a single character: the bars are thin and move slowly.
 /// In hard mode, there are two characters which change every three points (i.e. every section).
 enum BarMovementCharacter {
-    case normal
+    case normalBegin // 0 - 19
+    case normalEnd // 20 - 34
     case hardFast // Fast movement, thick bars
     case hardMany // Many, thin, slower moving bars
 
     init(from fineCharacter: FineBarMovementCharacter) {
         switch fineCharacter {
-        case .normal:
-            self = .normal
+        case .normal(let section):
+            self = section < 4 ? .normalBegin : .normalEnd
 
         case .hard(let section):
             self = section.isMultiple(of: 2) ? .hardFast : .hardMany

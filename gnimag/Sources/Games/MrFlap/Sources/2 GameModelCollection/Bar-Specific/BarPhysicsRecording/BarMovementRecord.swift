@@ -5,10 +5,10 @@
 
 import Foundation
 
-/// A BarPhysicsRecord records various properties of bars, in particular their hole size and their switch distance.
-/// If these properties are required for a bar where it is not yet known, they can be taken from the BarPhysicsRecord.
-/// Also, BarPhysicsRecord provides good guesses for these properties, for the beginning where there are no recorded values yet.
-final class BarPhysicsRecord {
+/// A BarMovementRecord records various properties of bars, in particular their hole size and their switch distance.
+/// If these properties are required for a bar where it is not yet known, they can be taken from the BarMovementRecord.
+/// Also, BarMovementRecord provides good guesses for these properties, for the beginning where there are no recorded values yet.
+final class BarMovementRecord {
     private let holeSizeCollector: BarHoleSizeCollector
     private let switchBoundCollector: BarSwitchBoundCollector
 

@@ -12,7 +12,7 @@ class GameModelCollector {
     private let mode: GameMode
 
     private var barUpdater: BarUpdater!
-    let barPhysicsRecorder: BarPhysicsRecorder
+    let barPhysicsRecorder: BarMovementRecorder
 
     private let points: PointsTracker
 
@@ -28,7 +28,7 @@ class GameModelCollector {
         self.mode = mode
         model = GameModel(playfield: playfield, initialPlayer: initialPlayer, debugLogger: debugLogger)
         fineCharacter = FineBarMovementCharacter(gameMode: mode, points: points.points)
-        barPhysicsRecorder = BarPhysicsRecorder(playfield: playfield, barCharacter: BarMovementCharacter(from: fineCharacter))
+        barPhysicsRecorder = BarMovementRecorder(playfield: playfield, barCharacter: BarMovementCharacter(from: fineCharacter))
 
         self.debugLogger = debugLogger
 
