@@ -57,7 +57,7 @@ class TapPredictor: TapPredictorBase {
     init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
         strategies = Strategies(
             default: OptimalSolutionViaRandomizedSearchStrategy(minimumJumpDistance: 0.2), // ...?
-            fallback: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2)
+            fallback: IdleStrategy(relativeIdleHeight: 0.4, minimumJumpDistance: 0.2)
         )
 
         self.debugLogger = debugLogger
@@ -195,9 +195,9 @@ class TapPredictor: TapPredictorBase {
 
     /// Check if a prediction lock should be applied.
     override func shouldLock(scheduledSequence: RelativeTapSequence) -> Bool {
-         // When sequence is empty, lock and wait until the sequence unlocks (via unlockDuration)
+         // When sequence is empty, don't lock
         guard let nextTap = scheduledSequence.nextTap, let referenceTime = referenceTimeForTapSequence else {
-            return scheduledSequence.unlockDuration != nil
+            return false
         }
 
         // Get relative duration from now
