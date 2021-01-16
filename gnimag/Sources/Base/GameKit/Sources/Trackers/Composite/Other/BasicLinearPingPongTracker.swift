@@ -112,7 +112,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// Create a linear tracker for the next segment.
     public override func trackerForNextSegment() -> LinearTracker {
-        LinearTracker(tolerancePoints: 3, tolerance: tolerance)
+        LinearTracker(tolerancePoints: 4, tolerance: tolerance)
     }
 
     /// Make a guess for a segment beginning at (`time`, `value`).

@@ -18,7 +18,7 @@ internal class InputLagTracker {
 
     /// A human-readable, detailed description of the lagging statistics.
     var detailedInformation: String {
-        let irrelevantFrames = String(format: "%.2f%%", irrelevantFrameRatio)
+        let irrelevantFrames = String(format: "%.1f%%", 100 * irrelevantFrameRatio)
         let averageLag = String(format: "%.1f", averageLaggingDuration)
 
         return """
