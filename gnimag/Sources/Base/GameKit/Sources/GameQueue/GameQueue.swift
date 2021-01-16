@@ -69,8 +69,10 @@ public final class GameQueue {
     /// This method schedules frame analysis in the background.
     /// This method is called from the `imageProvider` event thread / queue.
     private func newFrame(frame: Frame) {
+        let incomingTime = imageProvider.timeProvider.currentTime
+
         synchronized(self) {
-            timingStats.newFrame(frame: frame)
+            timingStats.newFrame(frame: frame, at: incomingTime)
 
             // Note if the previous frame was dropped
             if nextFrameToAnalyze != nil { timingStats.frameDropped() }

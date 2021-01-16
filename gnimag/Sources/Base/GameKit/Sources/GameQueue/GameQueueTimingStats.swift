@@ -89,19 +89,19 @@ public final class GameQueueTimingStats {
     }
 
     /// Call when a new frame arrives.
-    internal func newFrame(frame: GameQueue.Frame) {
+    internal func newFrame(frame: GameQueue.Frame, at incomingTime: Double) {
         guard !paused else { return }
         totalFrames += 1
 
         // Update average image copy duration
-        let time = timeProvider.currentTime
-        imageCopyDuration.add(value: time - frame.1)
+        let frameTime = frame.1
+        imageCopyDuration.add(value: incomingTime - frameTime)
 
         // Update average frame duration
         if let last = lastFrameArrivalTime {
-            frameDuration.add(value: time - last)
+            frameDuration.add(value: frameTime - last)
         }
-        lastFrameArrivalTime = time
+        lastFrameArrivalTime = frameTime
     }
 
     /// Call when a frame was dropped.
