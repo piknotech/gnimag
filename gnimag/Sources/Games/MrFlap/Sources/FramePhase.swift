@@ -6,6 +6,7 @@
 import Foundation
 
 enum FramePhase: CaseIterable, Hashable {
+    case frame
     case imageAnalysis
     case gameModelCollection
     case tapPrediction

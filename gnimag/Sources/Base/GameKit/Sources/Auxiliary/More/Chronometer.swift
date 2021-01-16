@@ -15,6 +15,9 @@ public class Chronometer<Event: CaseIterable & Hashable> {
     /// The absolute start time values of running measurements.
     private var measurementStartTimes = [Event: Double]()
 
+    /// The measured event duration in this frame.
+    private var currentFrameDurations = [Event: Double]()
+
     /// Default initializer.
     public init(maxMeasurementsPerEvent: Int = 1000) {
         CFAbsoluteTimeGetCurrent()
@@ -47,6 +50,7 @@ public class Chronometer<Event: CaseIterable & Hashable> {
             let difference = CACurrentMediaTime() - startTime
             measurementTrackers[event]!.add(value: difference)
             measurementStartTimes[event] = nil
+            currentFrameDurations[event] = difference
             return difference
         }
         else if logWarning {
@@ -68,5 +72,15 @@ public class Chronometer<Event: CaseIterable & Hashable> {
     /// Get the average value for an event. If there is no finished measurement for this event yet, return nil.
     public func averageMeasurement(for event: Event) -> Double? {
         measurementTrackers[event]?.average
+    }
+
+    /// Reset the current-frame event measurements.
+    public func newFrame() {
+        currentFrameDurations.removeAll()
+    }
+
+    /// Return the current-frame measurement for a given event, or nil if the event was not yet measured during this frame.
+    public func currentMeasurement(for event: Event) -> Double? {
+        currentFrameDurations[event]
     }
 }

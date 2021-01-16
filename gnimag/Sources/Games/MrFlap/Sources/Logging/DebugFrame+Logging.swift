@@ -43,14 +43,8 @@ extension DebugFrame {
     }
 
     /// States if the frame is interesting from a tap prediction perspective.
-    /// This includes each frame where a lock was set.
     var interestingForTapPrediction: Bool {
-        if tapPrediction.fellBackToIdleStrategy { return true }
-        if let wasLocked = tapPrediction.wasLocked, let isLocked = tapPrediction.isLocked {
-            return !wasLocked && isLocked
-        }
-
-        return false
+        tapPrediction.fellBackToIdleStrategy
     }
 
     /// States if the player was detected to have crashed.
@@ -227,8 +221,18 @@ extension DebugFrame {
     /// Create the full text that should be logged.
     private var fullLoggingText: String {
         let header = "FRAME \(index)\n" + "time: \(time ??? "nil")"
-        let texts = [header, logTextForHints, logTextForImageAnalysis, logTextForGameModelCollection, logTextForTapPrediction]
+        let texts = [header, logTextForDuration, logTextForHints, logTextForImageAnalysis, logTextForGameModelCollection, logTextForTapPrediction]
         return texts.joined(separator: "\n\n\n")
+    }
+
+    /// The log text summarizing the frame analysis duration.
+    private var logTextForDuration: String {
+        """
+        Frame took \(String(format: "%.2f", 1000 * (duration ?? 0))) ms
+        • Image Analysis: \(String(format: "%.2f", 1000 * (imageAnalysis.duration ?? 0))) ms
+        • Game Model Collection: \(String(format: "%.2f", 1000 * (gameModelCollection.duration ?? 0))) ms
+        • Tap Prediction: \(String(format: "%.2f", 1000 * (tapPrediction.duration ?? 0))) ms
+        """
     }
 
     /// The log text describing the image analysis hints.

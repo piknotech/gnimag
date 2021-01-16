@@ -30,6 +30,7 @@ public final class MrFlap {
 
     // The debug logger.
     private let debugLogger: DebugLogger
+    private var frame: DebugFrame { debugLogger.currentFrame }
 
     /// The current analysis state.
     private var state = State.beforeGame
@@ -73,7 +74,7 @@ public final class MrFlap {
 
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
-        debugLogger.currentFrame.time = time
+        frame.time = time
 
         // State-specific update
         switch state {
@@ -141,6 +142,9 @@ public final class MrFlap {
     /// Normal update method while in-game.
     /// Perform TapPrediction each frame, i.e. no matter what the outcome of ImageAnalysis and GameModelCollection is.
     private func gameplayUpdate(image: Image, time: Double) {
+        chrono.newFrame()
+        chrono.start(.frame)
+
         let analysis = chrono.measure(.imageAnalysis) {
             analyze(image: image, time: time)
         }
@@ -171,6 +175,14 @@ public final class MrFlap {
                 tapPredictor.predictionStep()
             }
         }
+
+        chrono.stop(.frame)
+
+        // Log analysis durations
+        frame.duration = chrono.currentMeasurement(for: .frame)
+        frame.imageAnalysis.duration = chrono.currentMeasurement(for: .imageAnalysis)
+        frame.gameModelCollection.duration = chrono.currentMeasurement(for: .gameModelCollection)
+        frame.tapPrediction.duration = chrono.currentMeasurement(for: .tapPrediction)
     }
 
     /// Calculate the pixel distance between two players.
@@ -195,7 +207,7 @@ public final class MrFlap {
     private func analyze(image: Image, time: Double) -> Result<AnalysisResult, AnalysisError> {
         let hints = hintsForCurrentFrame(image: image, time: time)
         let result = imageAnalyzer.analyze(image: image, hints: hints)
-        debugLogger.currentFrame.hints.hints = hints
+        frame.hints.hints = hints
 
         return result
     }
