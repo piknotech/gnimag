@@ -9,12 +9,12 @@ import GameKit
 /// Before new results from image analysis are added, they are first checked for data integrity.
 class GameModelCollector {
     let model: GameModel
-    private let mode: GameMode
+    let mode: GameMode
 
     private var barUpdater: BarUpdater!
     let barPhysicsRecorder: BarMovementRecorder
 
-    private let points: PointsTracker
+    let points: PointsTracker
 
     var fineCharacter: FineBarMovementCharacter
 

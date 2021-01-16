@@ -6,7 +6,6 @@
 import Common
 import Foundation
 import GameKit
-import ImageAnalysisKit
 import TestingTools
 
 /// BarTracker bundles trackers for a single bar.
@@ -18,8 +17,9 @@ final class BarTracker {
     /// Only trackers with an "appearing" or "normal" state should be considered by prediction algorithms.
     var state: BarTrackerState!
 
+    private var movementTypeHasChanged = false
     var isDisappearing: Bool {
-        state is BarTrackerStateDisappearing
+        state is BarTrackerStateDisappearing || movementTypeHasChanged
     }
 
     /// Triggered when the bar switches to disappearing state, or when it was detected to be orphaned.
@@ -36,18 +36,18 @@ final class BarTracker {
     /// The shared playfield.
     private let playfield: Playfield
 
-    /// The colors that this bar has. The color does not change.
-    /// This is used to distinguish bars when the theme color changes, i.e. old bars disappear and new bars appear.
-    private let color: ColorMatch
+    /// The movement character (i.e. section) with which this bar is active.
+    /// If the movement character of this game changes, this bar is marked disappearing.
+    private let movementCharacter: FineBarMovementCharacter
 
     /// The debug logger and a shorthand form for the current debug frame.
     let debugLogger: DebugLogger
     var debug: DebugFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
 
     // Default initializer.
-    init(playfield: Playfield, color: ColorMatch, movement: FineBarMovementCharacter, debugLogger: DebugLogger) {
+    init(playfield: Playfield, movement: FineBarMovementCharacter, debugLogger: DebugLogger) {
         self.playfield = playfield
-        self.color = color
+        self.movementCharacter = movement
         self.debugLogger = debugLogger
 
         let slopeGuess = BarCenterSlopeGuesses.guess(for: movement) * playfield.fullRadius
@@ -82,17 +82,24 @@ final class BarTracker {
 
     /// Check if all given values match the trackers.
     /// NOTE: This changes the state if necessary.
-    func integrityCheck(with bar: Bar, at time: Double) -> Bool {
-        guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
-        guard width.isValueValid(bar.width, &debug.width) else { return false }
-
-        // Trigger disappearing event after the state has possibly changed in the state-specific integrityCheck
+    func integrityCheck(with bar: Bar, at time: Double, gameMovementCharacter: FineBarMovementCharacter) -> Bool {
+        // Trigger disappearing event when "isDisappearing" changes during this method
         let wasDisappearing = isDisappearing
         defer {
             if !wasDisappearing && isDisappearing {
                 disappearedOrOrphaned.trigger()
             }
         }
+
+        // If the movement character of the game has changed, don't update the bar.
+        // Return "true" on integrityCheck to prohibit triggering wrong integrityError logging.
+        if gameMovementCharacter != movementCharacter {
+            movementTypeHasChanged = true
+            return true
+        }
+
+        guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
+        guard width.isValueValid(bar.width, &debug.width) else { return false }
 
         // State-specific integrityCheck
         // Extend lifetime as state may be changed (i.e. dereferenced) within its own integrityCheck
@@ -104,9 +111,7 @@ final class BarTracker {
     /// Update the trackers with the values from the given bar.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with bar: Bar, at time: Double) {
-        // Important: if the color doesn't match, the bar may or may not be the correct one. Definitely don't update, and let OrphanageDetector do its thing.
-        // We could already return "false" on integrityCheck, but that would trigger wrong integrityError logging.
-        if !color.matches(bar.color) { return }
+        if movementTypeHasChanged { return }
 
         debug.integrityCheckSuccessful = true
 

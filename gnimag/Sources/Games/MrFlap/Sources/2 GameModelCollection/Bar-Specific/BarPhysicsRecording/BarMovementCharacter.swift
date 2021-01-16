@@ -7,7 +7,7 @@ import Foundation
 
 /// FineBarMovementCharacter enumerates all the different options of bar movement during a MrFlap game.
 /// This enumeration is very fine. In normal mode, the character changes every 5 points, while in hard mode the character changes every 3 points.
-enum FineBarMovementCharacter {
+enum FineBarMovementCharacter: Equatable {
     /// Normal modes. The section is the integral value of the points divided by 5, modulo 7.
     case normal(section: Int)
 

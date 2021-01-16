@@ -64,7 +64,8 @@ struct BarUpdater {
         for (tracker, bar) in pairs {
             tracker.setupDebugLogging()
 
-            if tracker.integrityCheck(with: bar, at: time) {
+            let character = FineBarMovementCharacter(gameMode: gmc.mode, points: gmc.points.points)
+            if tracker.integrityCheck(with: bar, at: time, gameMovementCharacter: character) {
                 tracker.update(with: bar, at: time)
                 recorder.update(with: tracker)
             }
@@ -74,7 +75,7 @@ struct BarUpdater {
 
         // Create trackers from new bars
         for bar in newBars {
-            let tracker = BarTracker(playfield: model.playfield, color: .color(bar.color, tolerance: 0.1), movement: gmc.fineCharacter, debugLogger: debugLogger)
+            let tracker = BarTracker(playfield: model.playfield, movement: gmc.fineCharacter, debugLogger: debugLogger)
             tracker.setupDebugLogging()
             tracker.update(with: bar, at: time)
             recorder.update(with: tracker)
