@@ -48,7 +48,7 @@ class IdleStrategy: InteractionSolutionStrategy {
         // Use larger of both solutions to jump as late as possible
         let timeFromJumpStart = max(solutions.0, solutions.1)
         var timeFromNow = timeFromJumpStart - player.timePassedSinceJumpStart
-        timeFromNow = max(timeFromNow, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
+        timeFromNow = max(0, timeFromNow, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
         return Solution(relativeTimes: [timeFromNow], unlockDuration: nil)
     }
 

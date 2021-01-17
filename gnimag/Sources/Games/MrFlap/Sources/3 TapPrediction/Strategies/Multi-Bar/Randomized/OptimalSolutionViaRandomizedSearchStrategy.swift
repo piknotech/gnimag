@@ -50,31 +50,30 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         let generator = SolutionGenerator(frame: frame)
         let verifier = SolutionVerifier(frame: frame)
 
-        // Shift last solution and use it as starting point
-        let frameDiff = frame.currentTime - (lastFrameTime ?? frame.currentTime)
-        lastFrameTime = frame.currentTime
-
+        var bestSolution: Solution? = nil
+        var bestRating: Double = 0
         let isSingleBar = frame.bars.count == 1
 
-        var bestSolution = lastSolution.flatMap { $0.shifted(by: frameDiff) }
-        var bestRating = bestSolution.map { verifier.rating(of: $0, requiredMinimum: 0, considerFinalJump: isSingleBar) } ?? 0
-
-        // Discard last solution if a new bar was added after the last frame
-        if let unlockDuration = bestSolution?.unlockDuration, unlockDuration + 0.1 < frame.bars.last!.timeUntilLeaving {
-            bestSolution = nil
-            bestRating = 0
-        }
-
-        // Evaluate a solution and update the best solution if required.
+        // Function to evaluate a solution and update the best solution if required.
         func evaluate(_ solution: Solution) {
             // Performance-shortcut: avoid evaluating `rating` if possible
             if verifier.precondition(forValidSolution: solution) {
-                let rating = verifier.rating(of: solution, requiredMinimum: bestRating, considerFinalJump: isSingleBar)
+                let rating = verifier.rating(of: solution, requiredMinimum: 1.01 * bestRating, considerFinalJump: isSingleBar)
                 if rating > bestRating {
                     bestSolution = solution
                     bestRating = rating
                 }
             }
+        }
+
+        // Try reusing last solution
+        let frameDiff = frame.currentTime - (lastFrameTime ?? frame.currentTime)
+        lastFrameTime = frame.currentTime
+
+        if var last = (lastSolution.flatMap { $0.shifted(by: frameDiff) }) {
+            let duration = generator.zeroSolution.unlockDuration
+            last = Solution(relativeTimes: last.relativeTapTimes, unlockDuration: duration)
+            evaluate(last)
         }
 
         // Try 0-solution

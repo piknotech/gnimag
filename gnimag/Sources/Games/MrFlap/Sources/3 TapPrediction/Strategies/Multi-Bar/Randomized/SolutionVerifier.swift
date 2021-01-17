@@ -57,13 +57,13 @@ struct SolutionVerifier {
 
         // Left side. Attention: we assume the direction of the bounds curve (as it is always shaped like this)
         let leftSide = interaction.holeMovement.intersectionsWithBoundsCurves.left
-        if solution.height(at: leftSide.xRange.lower, for: player, with: jumping) <= leftSide.yRange.lower { return false }
-        if solution.height(at: leftSide.xRange.upper, for: player, with: jumping) >= leftSide.yRange.upper { return false }
+        if leftSide.xRange.lower > 0 && solution.height(at: leftSide.xRange.lower, for: player, with: jumping) <= leftSide.yRange.lower { return false }
+        if leftSide.xRange.upper > 0 && solution.height(at: leftSide.xRange.upper, for: player, with: jumping) >= leftSide.yRange.upper { return false }
 
         // Right side (same assumptions)
         let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right
-        if solution.height(at: rightSide.xRange.lower, for: player, with: jumping) >= rightSide.yRange.upper { return false }
-        if solution.height(at: rightSide.xRange.upper, for: player, with: jumping) <= rightSide.yRange.lower { return false }
+        if rightSide.xRange.lower > 0 && solution.height(at: rightSide.xRange.lower, for: player, with: jumping) >= rightSide.yRange.upper { return false }
+        if rightSide.xRange.upper > 0 && solution.height(at: rightSide.xRange.upper, for: player, with: jumping) <= rightSide.yRange.lower { return false }
 
         return true
     }
@@ -82,7 +82,7 @@ struct SolutionVerifier {
     }
 
     /// The time rating of a solution, in [0, inf).
-    func timeRating(of solution: Solution, considerFinalJump: Bool) -> Double {
+    func  timeRating(of solution: Solution, considerFinalJump: Bool) -> Double {
         let firstJump = frame.player.timePassedSinceJumpStart + (solution.jumpTimeDistances.first ?? solution.lengthOfLastJump)
         var allTimeDistances = Array(solution.jumpTimeDistances.dropFirst())
         allTimeDistances.append(firstJump)
@@ -132,7 +132,7 @@ struct SolutionVerifier {
 
         for interaction in frame.bars {
             let distance = interaction.holeMovement.distance(to: jumps)
-            let desiredValue = 30% * interaction.holeMovement.holeSize
+            let desiredValue = 40% * interaction.holeMovement.holeSize
             let score = min(1, distance / desiredValue)
             if score < requiredMinimum { return 0 }
             rating = min(score, rating)
@@ -159,7 +159,7 @@ struct SolutionVerifier {
     /// The rating respective the distance to the playfield bounds.
     /// Inside [0, 1].
     private func playfieldRating(for jumps: [Jump]) -> Double {
-        let desiredValue = 30% * frame.playfield.size
+        let desiredValue = 20% * frame.playfield.size
         let distance = frame.playfield.distance(to: jumps)
         return min(1, distance / desiredValue)
     }
@@ -168,9 +168,9 @@ struct SolutionVerifier {
     /// Inside [0, 1].
     private func descendRating(for jumps: [Jump]) -> Double {
         let descends = jumps.map { -$0.parabola.derivative(at: $0.endPoint.time) }
-        guard let steepestDescend = descends.max() else { return 1 }
-        if steepestDescend < frame.jumping.jumpVelocity { return 1 }
-        return frame.jumping.jumpVelocity / steepestDescend
+        let steepestDescend = ([0.01] + descends).max()!
+        let desiredValue = 1.2 * frame.jumping.jumpVelocity
+        return min(1, desiredValue / steepestDescend)
     }
 }
 
