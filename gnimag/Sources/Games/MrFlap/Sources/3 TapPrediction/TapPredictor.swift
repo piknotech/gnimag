@@ -87,7 +87,7 @@ class TapPredictor: TapPredictorBase {
 
     /// Calculate AnalysisHints for the given time, i.e. predict where the player will be located at the given (future) time.
     func analysisHints(for time: Double) -> AnalysisHints? {
-        let expectedDetectionTimes = scheduler.allExpectedDetectionTimes.filter { $0 <= time }
+        let expectedDetectionTimes = scheduler.lastExpectedDetectionTimes(num: 20).filter { $0 <= time }
 
         guard
             let model = gameModel,
@@ -110,7 +110,7 @@ class TapPredictor: TapPredictorBase {
     override func predictionLogic() -> RelativeTapSequence? {
         guard let gmc = gmc, let model = gameModel, let delay = scheduler.delay else { return nil }
         let currentTime = timeProvider.currentTime + delay
-        guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return nil }
+        guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.lastExpectedDetectionTimes(num: 20), currentTime: currentTime, maxBars: 2) else { return nil }
 
         // Debug logging
         performDebugLogging(with: model, frame: frame, delay: delay)
@@ -134,7 +134,7 @@ class TapPredictor: TapPredictorBase {
         if !hasPredicted {
             guard let gmc = gmc, let model = gameModel, let delay = scheduler.delay else { return }
             let currentTime = timeProvider.currentTime + delay
-            guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return }
+            guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.lastExpectedDetectionTimes(num: 20), currentTime: currentTime, maxBars: 2) else { return }
 
             performDebugLogging(with: model, frame: frame, delay: delay)
         }

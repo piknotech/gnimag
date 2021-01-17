@@ -31,8 +31,8 @@ public final class TapScheduler {
     public private(set) var performedTaps = [PerformedTap]()
 
     /// The expected detection times of the taps at the CURRENT timepoint, i.e. using the CURRENT delay.
-    public var allExpectedDetectionTimes: [Double] {
-        performedTaps.compactMap { tap in
+    public func lastExpectedDetectionTimes(num: Int) -> [Double] {
+        performedTaps.suffix(num).compactMap { tap in
             delay.flatMap { tap.performedAt + $0 } ?? tap.expectedDetectionTime
         }
     }
