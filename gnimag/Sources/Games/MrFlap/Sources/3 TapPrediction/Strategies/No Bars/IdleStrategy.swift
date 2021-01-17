@@ -39,7 +39,7 @@ class IdleStrategy: InteractionSolutionStrategy {
         let yDistance = startHeight - player.currentJumpStart.y
 
         // Calculate time until reaching start height.
-        // If player is too low, jump immediately (as early as possible
+        // If player is too low, jump immediately (as early as possible)
         guard let solutions = QuadraticSolver.solve(frame.jumping.parabola, equals: yDistance) else {
             let tapDistance = max(0, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
             return Solution(relativeTimes: [tapDistance], unlockDuration: nil)

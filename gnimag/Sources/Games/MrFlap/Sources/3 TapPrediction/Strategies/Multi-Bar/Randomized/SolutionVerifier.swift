@@ -7,10 +7,41 @@ import Common
 import Foundation
 import GameKit
 
+/// The fine-grained rating of a solution, only for logging.
+struct FineGrainedRating {
+    let considerFinalJump: Bool
+    let meetsPrecondition: Bool
+    let total: Double
+    let timeRating: Double
+    let playfieldRating: Double
+    let descendRating: Double
+    let horizontalHoleRating: Double
+    let verticalHoleRating: Double
+}
+
 /// SolutionVerifier assigns a rating to solutions for a given frame.
 /// This class considers all bars in the frame.
 struct SolutionVerifier {
     let frame: PredictionFrame
+
+    /// Get the fine-grained rating for a solution without using any shortcuts.
+    func fineGrainedRating(for solution: Solution, considerFinalJump: Bool) -> FineGrainedRating {
+        // All jumps (starting at current time)
+        let player = frame.player, jumping = frame.jumping
+        let firstJump = solution.currentJump(for: player, with: jumping, startingAt: .currentTime)
+        var allJumps = solution.jumps(for: player, with: jumping)
+        allJumps.insert(firstJump, at: 0)
+
+        let meetsPrecondition = precondition(forValidSolution: solution)
+        let timeRating = self.timeRating(of: solution, considerFinalJump: considerFinalJump)
+        let playfield = playfieldRating(for: allJumps)
+        let descend = descendRating(for: allJumps)
+        let horizontal = horizontalHoleRating(for: allJumps, requiredMinimum: 0)
+        let vertical = verticalHoleRating(for: allJumps, requiredMinimum: 0)
+        let total = timeRating * min(playfield, descend, horizontal, vertical)
+
+        return FineGrainedRating(considerFinalJump: considerFinalJump, meetsPrecondition: meetsPrecondition, total: total, timeRating: timeRating, playfieldRating: playfield, descendRating: descend, horizontalHoleRating: horizontal, verticalHoleRating: vertical)
+    }
 
     /// Checks if the given solution fulfills a precondition. If not, the solution can immediately be discarded because it will probably not solve the interaction (and would receive a rating of 0).
     /// The precondition is a simple check whether the player passes through the left and right hole bounds.

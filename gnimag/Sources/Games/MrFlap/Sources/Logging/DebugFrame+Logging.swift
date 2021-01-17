@@ -347,6 +347,9 @@ extension DebugFrame {
         \(tapPrediction.fellBackToIdleStrategy ? "– Fell back to idle strategy because chosenStrategy didn't yield a solution!\n" : "")
         All interactions in most recent solution's frame:
         \(tapPrediction.mostRecentSolution?.associatedPredictionFrame.bars.map(barToString).joined(separator: "\n") ??? "nil")
+
+        Fine-grained solution rating:
+        \(tapPrediction.fineGrainedRating ??? "nil")
         """
     }
 }

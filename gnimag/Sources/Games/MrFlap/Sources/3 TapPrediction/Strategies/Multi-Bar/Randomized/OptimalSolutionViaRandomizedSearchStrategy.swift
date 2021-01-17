@@ -19,9 +19,14 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
     /// If it is not possible to create solutions with this jump distance, it is ignored.
     private let minimumJumpDistance: Double
 
+    /// The debug logger and a shorthand form for the current debug frame.
+    private let debugLogger: DebugLogger
+    private var debug: DebugFrame.TapPrediction { debugLogger.currentFrame.tapPrediction }
+
     /// Default initializer.
-    init(minimumJumpDistance: Double) {
+    init(minimumJumpDistance: Double, logger: DebugLogger) {
         self.minimumJumpDistance = minimumJumpDistance
+        self.debugLogger = logger
     }
 
     /// State whether produced solutions should be locked directly before executing a tap.
@@ -92,6 +97,11 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
             // Only ignore minimum jump distance if it didn't yield a valid solution
             if bestRating > 0 { break }
         }
+
+        // Log solution or, if idle strategy is chosen, zero solution
+        let solution = bestSolution ?? generator.zeroSolution
+        let fineGrainedRating = verifier.fineGrainedRating(for: solution, considerFinalJump: isSingleBar)
+        debug.fineGrainedRating = fineGrainedRating
 
         lastSolution = bestSolution
         return (bestRating == 0) ? nil : bestSolution

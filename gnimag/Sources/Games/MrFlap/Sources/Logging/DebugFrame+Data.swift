@@ -180,11 +180,13 @@ final class DebugFrame: DebugFrameProtocol {
     class TapPrediction {
         var duration: Double?
 
+        // Solution
         var wasLocked: Bool?
         var isLocked: Bool?
         var delay: Double?
         var chosenStrategy: InteractionSolutionStrategy.Type?
         var fellBackToIdleStrategy = false
+        var fineGrainedRating: FineGrainedRating?
 
         // Properties for FullFramePlot
         var playerHeight = CompositeTrackerDebugInfo<ParabolaTracker>()
