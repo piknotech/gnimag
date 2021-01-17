@@ -17,19 +17,17 @@ open class TapPredictorBase {
     /// The lock will be reassessed each time a new tap is performed.
     public private(set) var lockIsActive = false
 
-    /// The currently scheduled tap sequence, consisting of all future taps.
-    /// Performed taps will be removed from this sequence.
-    public private(set) var tapSequence: RelativeTapSequence?
-    public private(set) var referenceTimeForTapSequence: Double?
+    /// The currently scheduled tap sequence, consisting of all still-to-be-executed taps.
+    /// Use it for locking assessment. Use `scheduler.performedTaps` and `scheduler.scheduledTaps` otherwise.
+    public private(set) var tapSequence: AbsoluteTapSequence?
 
     /// Default initializer.
     public init(tapper: SomewhereTapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
         self.timeProvider = timeProvider
         scheduler = TapScheduler(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: tapDelayTolerance)
-
         // Reassess lock each time a tap has been performed
         scheduler.tapPerformed.subscribe { tap in
-            self.tapSequence?.remove(tap: tap.scheduledTap.relativeTap)
+            self.tapSequence?.relativeTapSequence.remove(tap: tap.scheduledTap.relativeTap)
             self.reassessLock()
         }
     }
@@ -61,9 +59,9 @@ open class TapPredictorBase {
         frameFinished(hasPredicted: true)
     }
 
-    /// Override to create a predicted tap sequence for the current frame, relative to the current frame's timepoint.
+    /// Override to create a predicted tap sequence for the current frame.
     /// When returning nil, nothing happens (i.e. no taps and no lock), and predictionLogic will be called again next frame.
-    open func predictionLogic() -> RelativeTapSequence? {
+    open func predictionLogic() -> AbsoluteTapSequence? {
         nil
     }
 
@@ -78,12 +76,13 @@ open class TapPredictorBase {
     }
 
     /// Schedule a tap sequence, including its completion time for locking reassessment.
-    private func schedule(sequence: RelativeTapSequence) {
+    private func schedule(sequence: AbsoluteTapSequence) {
         tapSequence = sequence
-        referenceTimeForTapSequence = timeProvider.currentTime
 
         // Schedule new taps
-        sequence.taps.forEach(scheduler.schedule(tap:))
+        for tap in sequence.relativeTapSequence.taps {
+            scheduler.schedule(tap: tap, referencePoint: sequence.referencePoint)
+        }
     }
 
     // MARK: Locking
@@ -91,7 +90,7 @@ open class TapPredictorBase {
     /// Reassess if locking should still be active. Then, schedule unlocking of the lock.
     /// When the current sequence has no unlockTime, no lock will be applied.
     private func reassessLock() {
-        guard let sequence = tapSequence, let unlockTime = sequence.unlockDuration else {
+        guard let sequence = tapSequence, let unlockTime = sequence.relativeTapSequence.unlockDuration else {
             lockIsActive = false
             return
         }
@@ -106,14 +105,13 @@ open class TapPredictorBase {
     private func scheduleUnlocking(in distance: Double) {
         Timing.shared.perform(after: distance, identification: .object(self)) {
             self.tapSequence = nil
-            self.referenceTimeForTapSequence = nil
             self.lockIsActive = false
         }
     }
 
-    /// Called each time the locking is reassessed. `scheduledSequence` contains the tap sequence which is currently scheduled, relative to the current time.
+    /// Called each time the locking is reassessed. `scheduledSequence` consists of all currently scheduled taps.
     /// Override to enable specific locking.
-    open func shouldLock(scheduledSequence: RelativeTapSequence) -> Bool {
+    open func shouldLock(scheduledSequence: AbsoluteTapSequence) -> Bool {
         false
     }
 

@@ -7,18 +7,12 @@ import Common
 
 /// A RelativeTap describes a scheduled tap relative to a non-specified reference point in time.
 public class RelativeTap {
-    /// The duration until when the tap will be performed.
-    /// Is always non-negative.
+    /// The duration until when the tap will be performed. May be negative.
     public let relativeTime: Double
 
     /// Default initializer.
-    /// If `relativeTime` is negative, it will be set to zero.
     public init(scheduledIn relativeTime: Double) {
-        if relativeTime < 0 {
-            Terminal.log(.warning, "RelativeTap – tap has negative relativeTime \(relativeTime).")
-        }
-
-        self.relativeTime = max(0, relativeTime)
+        self.relativeTime = relativeTime
     }
 }
 
@@ -63,10 +57,21 @@ public struct RelativeTapSequence {
     }
 }
 
-
 extension RelativeTapSequence: CustomStringConvertible {
     public var description: String {
         let sortedTaps = taps.sorted { $0.relativeTime < $1.relativeTime }
         return "RelativeTapSequence(taps: \(sortedTaps), unlockDuration: \(String(describing: unlockDuration)))"
     }
+}
+
+/// An AbsoluteTapSequence is a RelativeTapSequence equipped with an absolute reference point.
+public struct AbsoluteTapSequence {
+    public internal(set) var relativeTapSequence: RelativeTapSequence
+    public let referencePoint: Double
+
+    public init(_ relativeTapSequence: RelativeTapSequence, relativeTo referencePoint: Double) {
+        self.relativeTapSequence = relativeTapSequence
+        self.referencePoint = referencePoint
+    }
+
 }

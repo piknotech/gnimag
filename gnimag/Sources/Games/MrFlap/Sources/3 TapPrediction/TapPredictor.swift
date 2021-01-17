@@ -107,9 +107,10 @@ class TapPredictor: TapPredictorBase {
 
     /// Analyze the game model to schedule taps.
     /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
-    override func predictionLogic() -> RelativeTapSequence? {
+    override func predictionLogic() -> AbsoluteTapSequence? {
         guard let gmc = gmc, let model = gameModel, let delay = scheduler.delay else { return nil }
-        let currentTime = timeProvider.currentTime + delay
+        let actualTime = timeProvider.currentTime // Used only for scheduling
+        let currentTime = actualTime + delay // Used for prediction
         guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.lastExpectedDetectionTimes(num: 20), currentTime: currentTime, maxBars: 2) else { return nil }
 
         // Debug logging
@@ -119,7 +120,9 @@ class TapPredictor: TapPredictorBase {
         let (solution, strategy) = self.solution(for: frame)
         mostRecentSolution = MostRecentSolution(solution: solution, strategy: strategy, associatedPredictionFrame: frame)
 
-        return solution.convertToRelativeTapSequence(in: frame)
+        // Use frame time as reference as all calculations were relative to it (instead of the current time)
+        let relativeSequence = solution.convertToRelativeTapSequence(in: frame)
+        return AbsoluteTapSequence(relativeSequence, relativeTo: actualTime)
     }
 
     /// Called after each frame, no matter whether predictionLogic was called or not.
@@ -194,18 +197,15 @@ class TapPredictor: TapPredictorBase {
     }
 
     /// Check if a prediction lock should be applied.
-    override func shouldLock(scheduledSequence: RelativeTapSequence) -> Bool {
+    override func shouldLock(scheduledSequence: AbsoluteTapSequence) -> Bool {
          // When sequence is empty, don't lock
-        guard let nextTap = scheduledSequence.nextTap, let referenceTime = referenceTimeForTapSequence else {
-            return false
-        }
+        guard let nextTap = scheduledSequence.relativeTapSequence.nextTap else { return false }
 
-        // Get relative duration from now
-        let referenceShift = timeProvider.currentTime - referenceTime
-        let time = nextTap.relativeTime - referenceShift
+        let nextTapTime = nextTap.relativeTime + scheduledSequence.referencePoint
+        let diff = nextTapTime - timeProvider.currentTime
 
         if let shouldLock = mostRecentSolution?.strategy.shouldLockSolution, shouldLock {
-            return time < 0.05
+            return diff < 0.05
         }
 
         return false

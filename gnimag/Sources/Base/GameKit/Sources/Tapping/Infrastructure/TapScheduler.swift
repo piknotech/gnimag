@@ -50,23 +50,32 @@ public final class TapScheduler {
 
     /// Create a new RelativeTap object and tap immediately.
     public func tapNow() {
-        schedule(tap: RelativeTap(scheduledIn: 0))
+        schedule(tap: RelativeTap(scheduledIn: 0), referencePoint: nil)
     }
 
-    /// Schedule a single tap in the future.
-    public func schedule(tap: RelativeTap) {
+    /// Schedule a single tap in the future, specific to a certain reference point.
+    /// If the absolute timepoint is now or in the past, execute the tap immediately.
+    /// Specify "nil" for referencePoint to use the current time.
+    public func schedule(tap: RelativeTap, referencePoint: Double?) {
+        let now = timeProvider.currentTime
+        let referenceTime = referencePoint ?? now
+        let executionTime = max(now, referenceTime + tap.relativeTime)
+
         // Create ScheduledTap from RelativeTap
-        let t = timeProvider.currentTime
         let scheduledTap = ScheduledTap(
             relativeTap: tap,
-            referenceTime: t,
-            expectedDetectionTime: delay.map { t + tap.relativeTime + $0 }
+            referenceTime: referenceTime,
+            expectedDetectionTime: delay.map { executionTime + $0 }
         )
         scheduledTaps.append(scheduledTap)
 
         // Perform tap either immediately or schedule it
-        if tap.relativeTime == 0 {
+        if executionTime == now {
             self.actuallyPerform(scheduledTap)
+            if referenceTime + tap.relativeTime < now {
+                let diff = now - (referenceTime + tap.relativeTime)
+                Terminal.log(.warning, "Tap was scheduled for \(diff)s in the past - executing now")
+            }
         } else {
             timing.perform(after: tap.relativeTime, identification: .object(scheduledTap)) {
                 self.actuallyPerform(scheduledTap)
@@ -92,9 +101,11 @@ public final class TapScheduler {
 
     /// Perform a tap at the current moment.
     private func actuallyPerform(_ tap: ScheduledTap) {
+        let time = timeProvider.currentTime
+
         tapper.tap()
 
-        let performedTap = PerformedTap(scheduledTap: tap)
+        let performedTap = PerformedTap(scheduledTap: tap, performedAt: time)
         delayTracker.tapPerformed(performedTap)
 
         // Update arrays and trigger event
