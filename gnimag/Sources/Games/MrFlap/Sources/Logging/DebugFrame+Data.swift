@@ -16,8 +16,9 @@ final class DebugFrame: DebugFrameProtocol {
     var index: Int
     var time: Double?
 
-    /// Full analysis duration.
-    var duration: Double?
+    /// Duration of frame analysis, and duration of logging preparation.
+    var analysisDuration: Double?
+    var loggingPreparationDuration: Double?
     
     /// Default initializer.
     init(index: Int) {

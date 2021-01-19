@@ -228,10 +228,11 @@ extension DebugFrame {
     /// The log text summarizing the frame analysis duration.
     private var logTextForDuration: String {
         """
-        Frame took \(String(format: "%.2f", 1000 * (duration ?? 0))) ms
+        Analysis took \(String(format: "%.2f", 1000 * (analysisDuration ?? 0))) ms
         • Image Analysis: \(String(format: "%.2f", 1000 * (imageAnalysis.duration ?? 0))) ms
         • Game Model Collection: \(String(format: "%.2f", 1000 * (gameModelCollection.duration ?? 0))) ms
         • Tap Prediction: \(String(format: "%.2f", 1000 * (tapPrediction.duration ?? 0))) ms
+        Logging Preparation took \(String(format: "%.2f", 1000 * (loggingPreparationDuration ?? 0))) ms
         """
     }
 

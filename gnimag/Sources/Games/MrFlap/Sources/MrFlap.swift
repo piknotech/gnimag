@@ -91,8 +91,25 @@ public final class MrFlap {
             ()
         }
 
-        debugLogger.advance()
-        
+        logFrame()
+    }
+
+    /// Perform logging preparation and debug printing for this frame.
+    private func logFrame() {
+        let lastFrame = frame
+
+        chrono.measure(.loggingPreparation) {
+            debugLogger.advance()
+        }
+
+        // Store analysis durations
+        lastFrame.analysisDuration = chrono.currentMeasurement(for: .frame)
+        lastFrame.loggingPreparationDuration = chrono.currentMeasurement(for: .loggingPreparation)
+        lastFrame.imageAnalysis.duration = chrono.currentMeasurement(for: .imageAnalysis)
+        lastFrame.gameModelCollection.duration = chrono.currentMeasurement(for: .gameModelCollection)
+        lastFrame.tapPrediction.duration = chrono.currentMeasurement(for: .tapPrediction)
+
+        // Print timing statistics every few seconds
         statsPrinting.perform {
             Terminal.logNewline()
             Terminal.log(.info, queue.timingStats.detailedDescription)
@@ -177,12 +194,6 @@ public final class MrFlap {
         }
 
         chrono.stop(.frame)
-
-        // Log analysis durations
-        frame.duration = chrono.currentMeasurement(for: .frame)
-        frame.imageAnalysis.duration = chrono.currentMeasurement(for: .imageAnalysis)
-        frame.gameModelCollection.duration = chrono.currentMeasurement(for: .gameModelCollection)
-        frame.tapPrediction.duration = chrono.currentMeasurement(for: .tapPrediction)
     }
 
     /// Calculate the pixel distance between two players.
