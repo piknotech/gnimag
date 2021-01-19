@@ -73,6 +73,9 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     /// The points are then received via delegate callbacks.
     internal let window: CompositeTrackerSlidingWindow<SegmentTrackerType>
 
+    /// The maximal count of `finalizedSegments`.
+    private let maxStoredSegments: Int
+
     /// All segments, i.e. all finalized segments and the current segment.
     public var allSegments: [Segment] {
         finalizedSegments + [currentSegment!]
@@ -96,7 +99,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     public var assumeNoInvalidDataPoints: Bool = false
 
     /// This dataset contains both valid and invalid points (but no points that are currently in the decision window)
-    internal var allDataPoints = CompositeTrackerDataSet()
+    internal var allDataPoints: CompositeTrackerDataSet
 
     /// The tolerance region info from the last data point, applied on the current tracker.
     /// Nil if the current tracker has no regression.
@@ -124,8 +127,10 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
     internal let monotonicityChecker = MonotonicityChecker<Time>(direction: .both, strict: true)
     
     /// Default initializer.
-    public init(tolerance: TrackerTolerance, decisionCharacteristics: NextSegmentDecisionCharacteristics) {
+    public init(tolerance: TrackerTolerance, maxStoredSegments: Int = 50, maxStoredDataPoints: Int = 1000, decisionCharacteristics: NextSegmentDecisionCharacteristics) {
         self.tolerance = tolerance
+        self.maxStoredSegments = maxStoredSegments
+        self.allDataPoints = CompositeTrackerDataSet(maxDataPoints: maxStoredDataPoints)
         self.window = CompositeTrackerSlidingWindow(characteristics: decisionCharacteristics)
 
         // Create initial tracker
@@ -314,6 +319,7 @@ open class CompositeTracker<SegmentTrackerType: SimpleTrackerProtocol>: Composit
         updateAllDataPoints(withSet: discardedDataPoints)
         willFinalizeCurrentSegmentAndAdvanceToNextSegment()
         finalizedSegments.append(currentSegment)
+        finalizedSegments.trim(maxCount: maxStoredSegments)
 
         // Trigger next segment event
         let startTimeGuess = (currentSegment.tracker.times.last! + dataPoints.first!.time) / 2

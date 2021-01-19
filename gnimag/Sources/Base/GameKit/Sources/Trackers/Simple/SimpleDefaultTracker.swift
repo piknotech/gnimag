@@ -24,7 +24,7 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
 
     /// The tracker can log more data points than it uses for calculating the regression.
     public let maxDataPointsForLogging: Int
-    private let loggingPoints = SimpleDataSet()
+    private lazy var loggingPoints = SimpleDataSet(maxDataPoints: maxDataPointsForLogging)
 
     public var dataSet: [ScatterDataPoint] { loggingPoints.dataSet }
 
@@ -58,9 +58,6 @@ open /*abstract*/ class SimpleDefaultTracker<F: Function & ScalarFunctionArithme
 
         // Add point to logging data set
         loggingPoints.add(value: value, time: time, color: .normal)
-        if loggingPoints.count > maxDataPointsForLogging {
-            loggingPoints.removeFirst()
-        }
 
         if updateRegression {
             self.updateRegression()
