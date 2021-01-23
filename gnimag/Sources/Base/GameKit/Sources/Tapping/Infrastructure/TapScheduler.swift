@@ -15,7 +15,7 @@ public final class TapScheduler {
     private let tapper: SomewhereTapper
     private let timeProvider: TimeProvider
 
-    /// The delay tracker which is used to calculate the average total input+output delay.
+    /// The delay tracker which is used to calculate the average total input+output delay plus the average NSTimer delay.
     /// When you detect a tap, you must inform the delay tracker.
     public let delayTracker: TapDelayTracker
 
