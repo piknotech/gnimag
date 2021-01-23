@@ -27,11 +27,6 @@ public extension BasicLinearPingPongTracker {
         }
     }
 
-    /// States if all conditions are met so that `segmentPortionsForFutureTimeRange` will not return an optional value.
-    func segmentPortionsForFutureTimeRangeAvailable(guesses: (lowerBound: Double, upperBound: Double)) -> Bool {
-        requiredProperties(guesses: guesses) != nil
-    }
-
     /// Calculate the segment portions that will be passed during a given time range in the future.
     /// When time is inverted, the time range should also be inverted, i.e. `lower > upper`.
     /// The range must not be singular!
@@ -92,15 +87,15 @@ public extension BasicLinearPingPongTracker {
         let segmentDuration = (upperBound - lowerBound) / slope
 
         // Get starting point and time direction
-        guard let startingPoint = startingPoint(lowerBound: lowerBound, upperBound: upperBound),
-            let timeDirection = monotonicityChecker.direction.intValue else { return nil }
+        guard let timeDirection = monotonicityChecker.direction.intValue,
+            let startingPoint = startingPoint(slope: slope, timeDirection: timeDirection, lowerBound: lowerBound, upperBound: upperBound) else { return nil }
 
         // Collect everything
         return RequiredProperties(slope: slope, lowerBound: lowerBound, upperBound: upperBound, segmentDuration: segmentDuration, timeDirection: timeDirection, startingPoint: startingPoint)
     }
 
     /// Create a starting point for the following calculations; i.e. find the last useful segment.
-    private func startingPoint(lowerBound: Double, upperBound: Double) -> RequiredProperties.StartingPointForFutureCalculations? {
+    private func startingPoint(slope: Double, timeDirection: Int, lowerBound: Double, upperBound: Double) -> RequiredProperties.StartingPointForFutureCalculations? {
         // Try finding a good segment with a start time
         var goodSegment: Segment?
         var supposedStartTime: Double?
@@ -112,11 +107,20 @@ public extension BasicLinearPingPongTracker {
         }
 
         // Plan B: use last segment with regression and approximate the start time by intersecting with the upper or lower bound
+        // Attention: do not use the segment's slope but use the tracker's slope here - construct a line which goes through the latest point of the tracker, but has the tracker's slope.
         else if let lastSegment = (allSegments.last { $0.tracker.hasRegression }), let direction = direction(for: lastSegment.index), let line = lastSegment.tracker.regression {
-            // Solve line(x) = upperBound (or lowerBound)
-            let bound = (direction == .up) ? lowerBound : upperBound
+            let t = lastSegment.tracker.times.last!
+            let f_t = line(t)
 
-            if let startTime = LinearSolver.solve(line, equals: bound) {
+            // Construct function through (t|f_t) with given slope
+            let sign = Double(timeDirection) * (direction == .up ? +1 : -1)
+            let slope = slope * sign
+            let g = LinearFunction(slope: slope, intercept: f_t - slope * t)
+
+            // Solve g(x) = upperBound (or lowerBound)
+            // This is equivalent to `startTime = t + (bound - f_t) / slope`
+            let bound = (direction == .up) ? lowerBound : upperBound
+            if let startTime = LinearSolver.solve(g, equals: bound) {
                 goodSegment = lastSegment
                 supposedStartTime = startTime
             }
