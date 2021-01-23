@@ -52,6 +52,11 @@ extension DebugFrame {
         imageAnalysis.outcome == .some(.crashed)
     }
 
+    /// States if the frame is identical to the last frame.
+    var samePlayerPosition: Bool {
+        imageAnalysis.outcome == .some(.samePlayerPosition)
+    }
+
     /// Check if the frame should be logged given the severity.
     func isValidForLogging(with parameters: DebugParameters) -> Bool {
         if let num = parameters.controlFramerate, index.isMultiple(of: num) { return true }
@@ -78,18 +83,17 @@ extension DebugFrame {
     func createSubdirectory(parameters: ParameterType) -> String? {
         // Create folder name, consisting of frame index and type
         let prefix = String(format: "%06d", index)
-        var suffix: String
+        let infix = "_"
+        let suffix =
+            samePlayerPosition ? "Same" :
+            playerCrashed ? "Crashed" :
+            hasIntegrityError ? "IntegrityError" :
+            hasImageAnalysisError ? "AnalysisError" :
+            hasBarLocationError ? "LocateBarError" :
+            tapPrediction.fellBackToIdleStrategy ? "FallbackToIdle" :
+            "Okay"
 
-        switch (playerCrashed, hasIntegrityError, hasImageAnalysisError, hasBarLocationError, tapPrediction.fellBackToIdleStrategy) {
-        case (true, _, _, _, _): suffix = "_Crashed"
-        case (_, true, _, _, _): suffix = "_IntegrityError"
-        case (_, _, true, _, _): suffix = "_AnalysisError"
-        case (_, _, _, true, _): suffix = "_LocateBarError"
-        case (_, _, _, _, true): suffix = "_FallbackToIdle"
-        default: suffix = "_Okay"
-        }
-
-        let directory = parameters.location +/ (prefix + suffix)
+        let directory = parameters.location +/ (prefix + infix + suffix)
 
         // Try creating directory
         do {
