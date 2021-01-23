@@ -20,7 +20,6 @@ public class Chronometer<Event: CaseIterable & Hashable> {
 
     /// Default initializer.
     public init(maxMeasurementsPerEvent: Int = 1000) {
-        CFAbsoluteTimeGetCurrent()
         for event in Event.allCases {
             measurementTrackers[event] = ConstantTracker(maxDataPoints: maxMeasurementsPerEvent, tolerancePoints: 0)
         }
@@ -40,6 +39,7 @@ public class Chronometer<Event: CaseIterable & Hashable> {
             start(event, restart: restart)
         }
     }
+
 
     /// Finish a running measurement for an event.
     /// If there is no running measurement, ignore this call, but log a warning.

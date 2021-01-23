@@ -15,4 +15,6 @@ let scrcpy = WindowInteractor(appName: "scrcpy").with {
 }
 
 /// Vysor provides input and output classes if you want to use the Vysor application to communicate with an Android device.
-let vysor = WindowInteractor(appName: "Vysor")
+func vysor(hint: String? = nil) -> WindowInteractor {
+    WindowInteractor(appName: "Vysor", windowNameHint: hint)
+}

@@ -17,7 +17,7 @@ void click() {
   delay(50);
   digitalWrite(8, LOW);
   digitalWrite(13, LOW);
-  delay(80);
+  delay(50);
 }
 
 void test() {
