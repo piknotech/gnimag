@@ -4,12 +4,15 @@
 //
 
 import Common
+import Dispatch
 import Image
 import Tapping
 
 /// Use TapScheduler from within your tap prediction logic to schedule and reschedule future taps.
 public final class TapScheduler {
-    private let timing = Timing()
+    private let timing = GCDTiming(
+        queue: DispatchQueue(label: "com.gnimag.tapscheduling.timing", qos: .userInitiated, autoreleaseFrequency: .never)
+    )
 
     /// Required instances for tapping and time obtainment.
     private let tapper: SomewhereTapper

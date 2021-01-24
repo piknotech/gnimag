@@ -1,32 +1,41 @@
 //
-//  Created by David Knothe on 25.01.20.
+//  Created by David Knothe on 24.01.21.
 //  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
+import Dispatch
 import Foundation
 
-/// Timing provides the possibility to perform a task after a certain amount of time.
+/// GCDTiming provides the possibility to perform a task after a certain amount of time.
 /// Tasks can be tagged with an identification to be cancelled at a later point.
-public class Timing {
-    /// Create a new instance of Timing.
-    public init() {
+public class GCDTiming {
+    private let queue: DispatchQueue
+
+    /// Create a new instance of GCDTiming. All timer callbacks are executed on the given queue.
+    public init(queue: DispatchQueue) {
+        self.queue = queue
     }
 
-    /// The shared Timing instance. You can use it as a shortcut if you don't need a custom Timing instance.
-    public static let shared = Timing()
+    /// The shared GCDTiming instance. You can use it as a shortcut if you don't need a custom GCDTiming instance.
+    public static let shared = GCDTiming(
+        queue: DispatchQueue(label: "com.gnimag.gcd-timing", qos: .userInitiated, autoreleaseFrequency: .never)
+    )
 
     /// All running timers.
     private var timers = [Timer]()
 
-    /// Schedule the timer with the given callback to be performed on the given runLoop (default = main).
+    /// Schedule the timer with the given callback.
     /// You can provide an identification for later cancellation.
-    /// If `delay <= 0`, the block is executed (quasi) immediately.
-    public func perform(after delay: TimeInterval, identification: Identification = .empty, runLoop: RunLoop = .main, block: @escaping () -> Void) {
+    /// If `delay <= 0`, the block is executed (quasi) immediately (not necessarily in the same thread).
+    public func perform(after delay: TimeInterval, identification: Identification = .empty, block: @escaping () -> Void) {
+        let deadline = DispatchTime.now() + delay
         synchronized(self) {
-            let userInfo = UserInfo(block: block, identification: identification)
-            let timer = Timer(timeInterval: delay, target: self, selector: #selector(fire(timer:)), userInfo: userInfo, repeats: false)
-            timers.append(timer)
-            runLoop.add(timer, forMode: .common)
+            let timer = DispatchSource.makeTimerSource(flags: .strict, queue: queue)
+            let wrapper = Timer(block: block, identification: identification, dispatchTimer: timer)
+            timers.append(wrapper)
+            timer.schedule(deadline: deadline, repeating: .never, leeway: .nanoseconds(0))
+            timer.setEventHandler { self.fire(timer: wrapper) }
+            timer.activate()
         }
     }
 
@@ -40,8 +49,7 @@ public class Timing {
     @discardableResult
     public func cancelTasks(matching identification: Identification) -> Bool {
         cancelTasks {
-            let userInfo = $0.userInfo as! UserInfo
-            return userInfo.identification.exactlyMatches(other: identification)
+            return $0.identification.exactlyMatches(other: identification)
         }
     }
 
@@ -50,8 +58,7 @@ public class Timing {
     @discardableResult
     public func cancelTasks(withObject object: AnyObject) -> Bool {
         cancelTasks {
-            let userInfo = $0.userInfo as! UserInfo
-            return Identification.object(object).contains(other: userInfo.identification)
+            return Identification.object(object).contains(other: $0.identification)
         }
     }
 
@@ -62,7 +69,7 @@ public class Timing {
 
             timers.removeAll {
                 let matches = shouldCancelTimer($0)
-                if matches { $0.invalidate() }
+                if matches { $0.dispatchTimer.cancel() }
                 cancelled = cancelled || matches
                 return matches
             }
@@ -72,28 +79,28 @@ public class Timing {
     }
 
     /// Perform the callback and remove the timer.
-    @objc
     private func fire(timer: Timer) {
         synchronized(self) {
-            if !timer.isValid { return } // Timer may just have been cancelled from another thread
+            if timer.dispatchTimer.isCancelled { return } // Timer may just have been cancelled from another thread
 
             // Remove timer from dictionary
             guard let index = (timers.firstIndex { $0 === timer }) else { return }
             timers.remove(at: index)
 
-            let userInfo = (timer.userInfo as! UserInfo)
-            userInfo.block()
+            timer.block()
         }
     }
 
-    /// A simple class providing user info that is used in conjunction with a timer.
-    private class UserInfo {
+    /// A simple class wrapping a GCD timer and providing user info that is used in conjunction with it.
+    private class Timer {
         let block: () -> Void
         let identification: Identification
+        let dispatchTimer: DispatchSourceTimer
 
-        init(block: @escaping () -> Void, identification: Identification) {
+        init(block: @escaping () -> Void, identification: Identification, dispatchTimer: DispatchSourceTimer) {
             self.block = block
             self.identification = identification
+            self.dispatchTimer = dispatchTimer
         }
     }
 

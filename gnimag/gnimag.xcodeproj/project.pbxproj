@@ -145,6 +145,7 @@
 		63286EBC2451BDF100392FD8 /* FixedSizeFIFO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63286EBB2451BDF100392FD8 /* FixedSizeFIFO.swift */; };
 		6330D39725AC7CD300D28639 /* Chronometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6330D39525AC7B9700D28639 /* Chronometer.swift */; };
 		6330D39A25AC80B100D28639 /* FramePhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6330D39825AC80A400D28639 /* FramePhase.swift */; };
+		6330D39E25BDE6AE00D28639 /* GCDTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6330D39D25BDE6AD00D28639 /* GCDTiming.swift */; };
 		63318AAD2582B04C002CD9A8 /* PointsTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63318AAB2582B049002CD9A8 /* PointsTracker.swift */; };
 		63318AAF2583A3DD002CD9A8 /* BarMovementRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63318AAE2583A3DD002CD9A8 /* BarMovementRecorder.swift */; };
 		63318AB12583A656002CD9A8 /* BarMovementCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63318AB02583A656002CD9A8 /* BarMovementCharacter.swift */; };
@@ -518,6 +519,7 @@
 		63286EBB2451BDF100392FD8 /* FixedSizeFIFO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSizeFIFO.swift; sourceTree = "<group>"; };
 		6330D39525AC7B9700D28639 /* Chronometer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chronometer.swift; sourceTree = "<group>"; };
 		6330D39825AC80A400D28639 /* FramePhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FramePhase.swift; sourceTree = "<group>"; };
+		6330D39D25BDE6AD00D28639 /* GCDTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDTiming.swift; sourceTree = "<group>"; };
 		63318AAB2582B049002CD9A8 /* PointsTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsTracker.swift; sourceTree = "<group>"; };
 		63318AAE2583A3DD002CD9A8 /* BarMovementRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarMovementRecorder.swift; sourceTree = "<group>"; };
 		63318AB02583A656002CD9A8 /* BarMovementCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarMovementCharacter.swift; sourceTree = "<group>"; };
@@ -1134,6 +1136,7 @@
 				6364934423270ABA00FEF664 /* SimpleRange.swift */,
 				631214382326686A00C126B4 /* Terminal.swift */,
 				6377C85F23DC76D40084772F /* Timing.swift */,
+				6330D39D25BDE6AD00D28639 /* GCDTiming.swift */,
 				63184282244A1AA4006AF53A /* Withable.swift */,
 				6312143423258A2600C126B4 /* Extensions */,
 				631BE25623EF53C4008DDEE1 /* Miscellaneous */,
@@ -2971,6 +2974,7 @@
 				63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */,
 				631BE25823EF53EE008DDEE1 /* CwlRandom.swift in Sources */,
 				6340B175243DFD63003E6EA7 /* RandomPoints.swift in Sources */,
+				6330D39E25BDE6AE00D28639 /* GCDTiming.swift in Sources */,
 				63997EE92434959C005473A0 /* Promise+Await.swift in Sources */,
 				636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */,
 				6377C86023DC76D40084772F /* Timing.swift in Sources */,
