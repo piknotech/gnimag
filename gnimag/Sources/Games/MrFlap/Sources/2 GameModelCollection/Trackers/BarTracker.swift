@@ -17,13 +17,13 @@ final class BarTracker {
     /// Only trackers with an "appearing" or "normal" state should be considered by prediction algorithms.
     var state: BarTrackerState!
 
-    private var movementTypeHasChanged = false
     var isDisappearing: Bool {
-        state is BarTrackerStateDisappearing || movementTypeHasChanged
+        state is BarTrackerStateDisappearing
     }
 
     /// Triggered when the bar switches to disappearing state, or when it was detected to be orphaned.
-    let disappearedOrOrphaned = Event<Void>()
+    /// This event could be triggered multiple times – once when the bar switches to disappearing, and once when it is orphaned via OrphanageDetector.
+    let disappearingOrOrphaned = Event<Void>()
 
     // The angle and the center of the hole. yCenter is only used in state "normal".
     let angle: AngularWrapper<LinearTracker>
@@ -87,15 +87,13 @@ final class BarTracker {
         let wasDisappearing = isDisappearing
         defer {
             if !wasDisappearing && isDisappearing {
-                disappearedOrOrphaned.trigger()
+                disappearingOrOrphaned.trigger()
             }
         }
 
-        // If the movement character of the game has changed, don't update the bar.
-        // Return "true" on integrityCheck to prohibit triggering wrong integrityError logging.
-        if gameMovementCharacter != movementCharacter {
-            movementTypeHasChanged = true
-            return true
+        // If the movement character of the game has changed, set bar to disappearing
+        if !isDisappearing && gameMovementCharacter != movementCharacter {
+            state = BarTrackerStateDisappearing()
         }
 
         guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
@@ -111,10 +109,6 @@ final class BarTracker {
     /// Update the trackers with the values from the given bar.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with bar: Bar, at time: Double) {
-        if movementTypeHasChanged { return }
-
-        debug.integrityCheckSuccessful = true
-
         orphanage.markBarAsValid()
 
         angle.add(value: bar.angle, at: time)
@@ -127,6 +121,12 @@ final class BarTracker {
     /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.
     func setupDebugLogging() {
         debugLogger.currentFrame.gameModelCollection.bars.nextBar()
+    }
+
+    /// Mark the integrity check as unsuccessful in this bar's debug frame.
+    /// Per default (i.e. without calling this method), the integrity check is marked as successful.
+    func integrityCheckUnsuccessful() {
+        debug.integrityCheckSuccessful = false
     }
 
     /// Write information about the trackers into the current debug logger frame.

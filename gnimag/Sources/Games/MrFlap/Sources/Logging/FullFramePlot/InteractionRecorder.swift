@@ -35,8 +35,8 @@ final class InteractionRecorder {
         mostRecentInteraction = interaction
 
         // Remove most recent interaction when bar disappears
-        interaction.barTracker.disappearedOrOrphaned.unsubscribe(self)
-        interaction.barTracker.disappearedOrOrphaned += self • {
+        interaction.barTracker.disappearingOrOrphaned.unsubscribe(self)
+        interaction.barTracker.disappearingOrOrphaned += self • {
             if self.mostRecentInteraction?.barTracker == interaction.barTracker {
                 self.mostRecentInteraction = nil
             }

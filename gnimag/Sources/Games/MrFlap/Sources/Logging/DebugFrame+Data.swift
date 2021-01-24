@@ -158,7 +158,7 @@ final class DebugFrame: DebugFrameProtocol {
         /// A single bar tracker.
         class _Bar {
             var state: BarTrackerState?
-            var integrityCheckSuccessful = false
+            var integrityCheckSuccessful = true
 
             var numberOfAngleDataPoints: Int?
             var angle = SimpleTrackerDebugInfo<AngularWrapper<LinearTracker>>()
