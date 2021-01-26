@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 07.10.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 /// Describes a function whose domain and codomain are both the real numbers (represented by `Double`).

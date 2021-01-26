@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 09.04.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Surge
@@ -12,8 +12,8 @@ public class ConstantTracker: PolyTracker {
     public private(set) var count: Double = 0
 
     /// Default initializer.
-    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 1, tolerance: TrackerTolerance = .absolute(0)) {
-        super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints, tolerance: tolerance)
+    public init(maxDataPoints: Int = 50, tolerancePoints: Int = 1, tolerance: TrackerTolerance = .absolute(0), maxDataPointsForLogging: Int? = nil) {
+        super.init(maxDataPoints: maxDataPoints, degree: 0, tolerancePoints: tolerancePoints, tolerance: tolerance, maxDataPointsForLogging: maxDataPointsForLogging)
     }
 
     /// Convenience method to check for validity, ignoring the time component.

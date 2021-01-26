@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 07.04.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 // Attention: For usage with Scrcpy via the macOS mouse, most of these shortcuts don't work and are therefore commented.

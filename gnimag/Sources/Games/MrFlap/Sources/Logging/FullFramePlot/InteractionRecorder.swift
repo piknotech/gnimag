@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 19.04.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -35,8 +35,8 @@ final class InteractionRecorder {
         mostRecentInteraction = interaction
 
         // Remove most recent interaction when bar disappears
-        interaction.barTracker.disappearedOrOrphaned.unsubscribe(self)
-        interaction.barTracker.disappearedOrOrphaned += self • {
+        interaction.barTracker.disappearingOrOrphaned.unsubscribe(self)
+        interaction.barTracker.disappearingOrOrphaned += self • {
             if self.mostRecentInteraction?.barTracker == interaction.barTracker {
                 self.mostRecentInteraction = nil
             }

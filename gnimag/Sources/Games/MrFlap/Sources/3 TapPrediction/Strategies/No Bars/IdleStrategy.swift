@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 25.02.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -35,24 +35,20 @@ class IdleStrategy: InteractionSolutionStrategy {
     func solution(for frame: PredictionFrame) -> Solution? {
         let startHeight = jumpStartHeight(for: frame), player = frame.player
 
-        // Jump immediately (as early as possible) if player is too low
-        if player.currentPosition.y < startHeight {
-            let tapDistance = max(0, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
-            return Solution(relativeTimes: [tapDistance], unlockDuration: nil)
-        }
-
         // Else: Jump exactly when the player reaches the idle jump start height
         let yDistance = startHeight - player.currentJumpStart.y
 
-        // Calculate time until reaching start height
+        // Calculate time until reaching start height.
+        // If player is too low, jump immediately (as early as possible)
         guard let solutions = QuadraticSolver.solve(frame.jumping.parabola, equals: yDistance) else {
-            exit(withMessage: "IdleStrategy – This cannot happen!")
+            let tapDistance = max(0, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
+            return Solution(relativeTimes: [tapDistance], unlockDuration: nil)
         }
 
         // Use larger of both solutions to jump as late as possible
         let timeFromJumpStart = max(solutions.0, solutions.1)
         var timeFromNow = timeFromJumpStart - player.timePassedSinceJumpStart
-        timeFromNow = max(timeFromNow, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
+        timeFromNow = max(0, timeFromNow, minimumJumpDistance - player.timePassedSinceJumpStart) // Respect minimumJumpDistance
         return Solution(relativeTimes: [timeFromNow], unlockDuration: nil)
     }
 

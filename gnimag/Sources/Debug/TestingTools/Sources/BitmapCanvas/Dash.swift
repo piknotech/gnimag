@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 27.11.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Foundation

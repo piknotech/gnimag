@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 06.02.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 /// A polynomial of degree 2, defined by the equation f(x) = ax^2 + bx + c.

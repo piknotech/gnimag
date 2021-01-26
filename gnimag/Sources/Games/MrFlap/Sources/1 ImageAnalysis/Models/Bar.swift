@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Image
@@ -25,7 +25,4 @@ struct Bar {
     /// The y-center, in bar coordinates (ignoring the playfield radius).
     /// This means, yCenter is in [0, playfield.freeSpace].
     var yCenter: Double { innerHeight + holeSize / 2 }
-
-    /// The color of the bar.
-    let color: Color
 }

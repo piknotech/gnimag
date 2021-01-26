@@ -1,4 +1,5 @@
 import Common
+import Cocoa
 import Foundation
 import QuartzCore
 import Image
@@ -11,26 +12,34 @@ import FlowFree
 import Geometry
 import Tapping
 
-// let a = ScreenInteractor(frame: CGRect(x: 332, y: 68, width: 778, height: 767))
-// let a = ImageListProvider(directoryPath: "/Users/David/Desktop/I", framerate: 50)
-// let game = MrFlapGameSimulation(fps: 50)
+// Arduino
+let imageProvider = airServer
+let tapper = SingleTapArduino(portPath: "/dev/cu.usbmodem14101")
 
 let mrflap = MrFlap(
-    imageProvider: vysor.imageProvider,
-    tapper: vysor.tapper,
+    imageProvider: imageProvider,
+    tapper: tapper,
     debugParameters: DebugParameters(
         location: "/Users/David/Desktop/Debug.noSync",
         occasions: [],
-        logEvery: nil,
+        logEvery: 1000,
         content: .all,
-        logLast50FramesOnCrash: true
+        logLastCoupleFramesOnCrash: true
     )
 )
 
-mrflap.play()
+Timing.shared.perform(after: 2) {
+    mrflap.play()
+}
 
+// Play sound on crash
 mrflap.crashed += {
     print("CRASHED!")
+    NSSound(named: "Basso")?.play()
+    NSSound(named: "Blow")?.play()
+    NSSound(named: "Glass")?.play()
 }
+
+PowerManager.disableScreenSleep()
 
 RunLoop.main.run()

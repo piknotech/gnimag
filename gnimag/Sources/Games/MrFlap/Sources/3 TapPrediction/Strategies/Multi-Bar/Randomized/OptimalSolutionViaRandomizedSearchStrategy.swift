@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 28.01.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -19,9 +19,14 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
     /// If it is not possible to create solutions with this jump distance, it is ignored.
     private let minimumJumpDistance: Double
 
+    /// The debug logger and a shorthand form for the current debug frame.
+    private let debugLogger: DebugLogger
+    private var debug: DebugFrame.TapPrediction { debugLogger.currentFrame.tapPrediction }
+
     /// Default initializer.
-    init(minimumJumpDistance: Double) {
+    init(minimumJumpDistance: Double, logger: DebugLogger) {
         self.minimumJumpDistance = minimumJumpDistance
+        self.debugLogger = logger
     }
 
     /// State whether produced solutions should be locked directly before executing a tap.
@@ -45,23 +50,30 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         let generator = SolutionGenerator(frame: frame)
         let verifier = SolutionVerifier(frame: frame)
 
-        // Shift last solution and use it as starting point
-        let frameDiff = frame.currentTime - (lastFrameTime ?? frame.currentTime)
-        lastFrameTime = frame.currentTime
+        var bestSolution: Solution? = nil
+        var bestRating: Double = 0
+        let isSingleBar = frame.bars.count == 1
 
-        var bestSolution = lastSolution.flatMap { $0.shifted(by: frameDiff) }
-        var bestRating = bestSolution.map { verifier.rating(of: $0, requiredMinimum: 0) } ?? 0
-
-        // Evaluate a solution and update the best solution if required.
+        // Function to evaluate a solution and update the best solution if required.
         func evaluate(_ solution: Solution) {
             // Performance-shortcut: avoid evaluating `rating` if possible
             if verifier.precondition(forValidSolution: solution) {
-                let rating = verifier.rating(of: solution, requiredMinimum: bestRating)
+                let rating = verifier.rating(of: solution, requiredMinimum: 1.01 * bestRating, considerFinalJump: isSingleBar)
                 if rating > bestRating {
                     bestSolution = solution
                     bestRating = rating
                 }
             }
+        }
+
+        // Try reusing last solution
+        let frameDiff = frame.currentTime - (lastFrameTime ?? frame.currentTime)
+        lastFrameTime = frame.currentTime
+
+        if var last = (lastSolution.flatMap { $0.shifted(by: frameDiff) }) {
+            let duration = generator.zeroSolution.unlockDuration
+            last = Solution(relativeTimes: last.relativeTapTimes, unlockDuration: duration)
+            evaluate(last)
         }
 
         // Try 0-solution
@@ -84,6 +96,11 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
             // Only ignore minimum jump distance if it didn't yield a valid solution
             if bestRating > 0 { break }
         }
+
+        // Log solution or, if idle strategy is chosen, zero solution
+        let solution = bestSolution ?? generator.zeroSolution
+        let fineGrainedRating = verifier.fineGrainedRating(for: solution, considerFinalJump: isSingleBar)
+        debug.fineGrainedRating = fineGrainedRating
 
         lastSolution = bestSolution
         return (bestRating == 0) ? nil : bestSolution

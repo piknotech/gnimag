@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 17.09.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import GameKit
@@ -9,19 +9,30 @@ import GameKit
 /// Before new results from image analysis are added, they are first checked for data integrity.
 class GameModelCollector {
     let model: GameModel
+    let mode: GameMode
 
-    let barUpdater: BarUpdater
+    private var barUpdater: BarUpdater!
+    let barPhysicsRecorder: BarMovementRecorder
+
+    let points: PointsTracker
+
+    var fineCharacter: FineBarMovementCharacter
 
     /// The debug logger and a shorthand form for the current debug frame.
     private let debugLogger: DebugLogger
     private var debug: DebugFrame.GameModelCollection { debugLogger.currentFrame.gameModelCollection }
 
     /// Default initializer.
-    init(playfield: Playfield, initialPlayer: Player, mode: GameMode, debugLogger: DebugLogger) {
-        model = GameModel(playfield: playfield, initialPlayer: initialPlayer, mode: mode, debugLogger: debugLogger)
-        barUpdater = BarUpdater(model: model)
+    init(playfield: Playfield, initialPlayer: Player, mode: GameMode, points: PointsTracker, debugLogger: DebugLogger) {
+        self.points = points
+        self.mode = mode
+        model = GameModel(playfield: playfield, initialPlayer: initialPlayer, debugLogger: debugLogger)
+        fineCharacter = FineBarMovementCharacter(gameMode: mode, points: points.points)
+        barPhysicsRecorder = BarMovementRecorder(playfield: playfield, barCharacter: BarMovementCharacter(from: fineCharacter))
 
         self.debugLogger = debugLogger
+
+        barUpdater = BarUpdater(gmc: self)
     }
 
     /// Use the AnalysisResult to update the game model.
@@ -38,6 +49,11 @@ class GameModelCollector {
             // When the player is not integer, bar tracking cannot proceed correctly
             return false
         }
+
+        // Update points tracker and bar physics collector
+        points.update(tracker: model.player, time: time)
+        fineCharacter = FineBarMovementCharacter(gameMode: mode, points: points.points)
+        barPhysicsRecorder.barCharacter = BarMovementCharacter(from: fineCharacter)
 
         // Update bars
         // Instead of using the game time, use the player angle for bar-related trackers. This is useful to prevent small lags (which stop both the player and the bars) from destroying all of the tracking.

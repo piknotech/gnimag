@@ -1,23 +1,20 @@
 //
 //  Created by David Knothe on 23.06.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
 import Foundation
 import GameKit
-import ImageAnalysisKit
 import TestingTools
 
 /// BarTracker bundles trackers for a single bar.
 final class BarTracker {
-    static var momventBoundCollector: BarMovementBoundCollector!
-
     /// Orphanage detector to see whether the bar tracker should be removed from the game model.
     let orphanage = BarTrackerOrphanageDetector()
 
     /// The state the bar is currently in.
-    /// Only trackers with a "normal" state should be considered by prediction algorithms.
+    /// Only trackers with an "appearing" or "normal" state should be considered by prediction algorithms.
     var state: BarTrackerState!
 
     var isDisappearing: Bool {
@@ -25,7 +22,8 @@ final class BarTracker {
     }
 
     /// Triggered when the bar switches to disappearing state, or when it was detected to be orphaned.
-    let disappearedOrOrphaned = Event<Void>()
+    /// This event could be triggered multiple times – once when the bar switches to disappearing, and once when it is orphaned via OrphanageDetector.
+    let disappearingOrOrphaned = Event<Void>()
 
     // The angle and the center of the hole. yCenter is only used in state "normal".
     let angle: AngularWrapper<LinearTracker>
@@ -38,26 +36,29 @@ final class BarTracker {
     /// The shared playfield.
     private let playfield: Playfield
 
-    /// The colors that this bar has. The color does not change.
-    /// This is used to distinguish bars when the theme color changes, i.e. old bars disappear and new bars appear.
-    private let color: ColorMatch
+    /// The movement character (i.e. section) with which this bar is active.
+    /// If the movement character of this game changes, this bar is marked disappearing.
+    private let movementCharacter: FineBarMovementCharacter
 
     /// The debug logger and a shorthand form for the current debug frame.
     let debugLogger: DebugLogger
     var debug: DebugFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
 
     // Default initializer.
-    init(playfield: Playfield, color: ColorMatch, debugLogger: DebugLogger) {
+    init(playfield: Playfield, movement: FineBarMovementCharacter, debugLogger: DebugLogger) {
         self.playfield = playfield
-        self.color = color
+        self.movementCharacter = movement
         self.debugLogger = debugLogger
 
-        angle = AngularWrapper(LinearTracker(tolerance: .absolute(3% * .pi)))
+        let slopeGuess = BarCenterSlopeGuesses.guess(for: movement) * playfield.fullRadius
+
+        angle = AngularWrapper(LinearTracker(tolerance: .absolute(5% * .pi)))
         width = ConstantTracker(tolerance: .relative(20%))
         holeSize = ConstantTracker(tolerance: .relative(5%))
         yCenter = BasicLinearPingPongTracker(
-            tolerance: Self.circularTolerance(dy: 0.75% * playfield.freeSpace, on: playfield),
-            slopeTolerance: .relative(40%),
+            tolerance: Self.circularTolerance(dy: 1% * playfield.freeSpace, on: playfield),
+            slopeTolerance: .relative(0%), // Always use the guessed slope
+            replacementForFirstSegmentSlopeValue: slopeGuess,
             boundsTolerance: .absolute(5% * playfield.freeSpace),
             decisionCharacteristics: .init(
                 pointsMatchingNextSegment: 6,
@@ -81,17 +82,22 @@ final class BarTracker {
 
     /// Check if all given values match the trackers.
     /// NOTE: This changes the state if necessary.
-    func integrityCheck(with bar: Bar, at time: Double) -> Bool {
-        guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
-        guard width.isValueValid(bar.width, &debug.width) else { return false }
-
-        // Trigger disappearing event after the state has possibly changed in the state-specific integrityCheck
+    func integrityCheck(with bar: Bar, at time: Double, gameMovementCharacter: FineBarMovementCharacter) -> Bool {
+        // Trigger disappearing event when "isDisappearing" changes during this method
         let wasDisappearing = isDisappearing
         defer {
             if !wasDisappearing && isDisappearing {
-                disappearedOrOrphaned.trigger()
+                disappearingOrOrphaned.trigger()
             }
         }
+
+        // If the movement character of the game has changed, set bar to disappearing
+        if !isDisappearing && gameMovementCharacter != movementCharacter {
+            state = BarTrackerStateDisappearing()
+        }
+
+        guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
+        guard width.isValueValid(bar.width, &debug.width) else { return false }
 
         // State-specific integrityCheck
         // Extend lifetime as state may be changed (i.e. dereferenced) within its own integrityCheck
@@ -103,12 +109,6 @@ final class BarTracker {
     /// Update the trackers with the values from the given bar.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with bar: Bar, at time: Double) {
-        // Important: if the color doesn't match, the bar may or may not be the correct one. Definitely don't update and let OrphanageDetector do its thing.
-        // We could already return "false" on integrityCheck, but that would trigger wrong integrityError logging.
-        if !color.matches(bar.color) { return }
-
-        debug.integrityCheckSuccessful = true
-
         orphanage.markBarAsValid()
 
         angle.add(value: bar.angle, at: time)
@@ -116,14 +116,17 @@ final class BarTracker {
 
         // State-specific update
         state.update(with: bar, at: time)
-
-        // Update shared movement bounds
-        BarTracker.momventBoundCollector.update(with: self)
     }
 
     /// Call before calling `integrityCheck` to prepare the debug logger for receiving debug information for this tracker.
     func setupDebugLogging() {
         debugLogger.currentFrame.gameModelCollection.bars.nextBar()
+    }
+
+    /// Mark the integrity check as unsuccessful in this bar's debug frame.
+    /// Per default (i.e. without calling this method), the integrity check is marked as successful.
+    func integrityCheckUnsuccessful() {
+        debug.integrityCheckSuccessful = false
     }
 
     /// Write information about the trackers into the current debug logger frame.
@@ -134,6 +137,42 @@ final class BarTracker {
         debug.width.from(tracker: width)
         debug.holeSize.from(tracker: holeSize)
         debug.yCenter.from(tracker: yCenter)
+    }
+
+    // MARK: Future yCenter SegmentPortions
+
+    /// When the bar is either appearing or has no yCenter regression yet, construct a sensible dummy segment portion which consists of the current yCenter value or, if the bar is appearing, the predicted yCenter value.
+    func fallbackSegmentPortion(gmc: GameModelCollector, timeRange: SimpleRange<Double>) -> BasicLinearPingPongTracker.LinearSegmentPortion {
+        var yCenter = rawFallbackYCenter(gmc: gmc)
+
+        // Trim to switch bounds
+        let (lowerBound, upperBound) = gmc.barPhysicsRecorder.switchValues(for: self)
+        yCenter = min(max(yCenter, lowerBound), upperBound)
+
+        let line = LinearFunction(slope: 0, intercept: yCenter)
+        return BasicLinearPingPongTracker.LinearSegmentPortion(index: 0, timeRange: timeRange, line: line)
+    }
+
+    /// The fallback yCenter, untrimmed.
+    private func rawFallbackYCenter(gmc: GameModelCollector) -> Double {
+        // 1. There already is a yCenter value, but no regression
+        if let value = yCenter.currentSegment?.tracker.values.last {
+            return value
+        }
+
+        // 2. Use inner and outer height regressions from appearing state to guess the yCenter
+        let state = self.state as! BarTrackerStateAppearing
+        let holeSize = gmc.barPhysicsRecorder.holeSize(for: self)
+        if let inner = state.innerHeightTracker.regression, let outer = state.outerHeightTracker.regression {
+            let t = LinearSolver.solve(inner + outer, equals: playfield.freeSpace - holeSize)!
+            return inner.at(t) + holeSize / 2
+        }
+
+        // 3. Use last inner and outer heights from appearing state to guess the yCenter
+        let inner = state.innerHeightTracker.values.last!
+        let outer = state.outerHeightTracker.values.last!
+        let t = (playfield.freeSpace - holeSize) / (inner + outer)
+        return inner * t + holeSize / 2
     }
 }
 

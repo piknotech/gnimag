@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 09.10.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 // RemoveAtIndices: Taken from https://forums.swift.org/t/removing-elements-at-more-than-one-index-from-an-array/19953/6
 
@@ -9,6 +9,14 @@ import Foundation
 // MARK: DropWhile
 
 extension Array {
+    /// If `self` has more than `maxCount` elements, remove the first `count - maxCount` elements.
+    @_transparent
+    public mutating func trim(maxCount: Int) {
+        if count > maxCount {
+            removeFirst(count - maxCount)
+        }
+    }
+
     /// Drop elements, beginning at the start of the array, while `predicate` is fulfilled.
     /// This is done in-place. Return the elements which have been dropped.
     @_transparent

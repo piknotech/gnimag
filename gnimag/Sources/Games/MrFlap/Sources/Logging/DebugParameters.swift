@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 14.11.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import LoggingKit
@@ -45,20 +45,20 @@ public struct DebugParameters: DebugParameterType {
     /// When set, every `controlFramerate` frames the current frame is logged, independent of whether it matches one of the occasions.
     public let controlFramerate: Int?
 
-    /// When set, the most recent 50 frames will be logged when the player crashes.
+    /// When set, the most recent frames will be logged when the player crashes.
     /// Attention: Because this requires every frame to call `prepareSynchronously`, this slows down performance.
-    public let logLast50FramesOnCrash: Bool
+    public let logLastCoupleFramesOnCrash: Bool
 
     /// Default initializer.
-    public init(location: String, occasions: Occasions, logEvery controlFramerate: Int? = nil, content: LoggingContent = .all, logLast50FramesOnCrash: Bool) {
+    public init(location: String, occasions: Occasions, logEvery controlFramerate: Int? = nil, content: LoggingContent = .all, logLastCoupleFramesOnCrash: Bool) {
         self.location = location
         self.occasions = occasions
         self.controlFramerate = controlFramerate
         self.content = content
-        self.logLast50FramesOnCrash = logLast50FramesOnCrash
+        self.logLastCoupleFramesOnCrash = logLastCoupleFramesOnCrash
     }
 
     /// Shorthand for no logging.
-    public static let none = DebugParameters(location: "", occasions: [], logLast50FramesOnCrash: false)
+    public static let none = DebugParameters(location: "", occasions: [], logLastCoupleFramesOnCrash: false)
     internal var isNone: Bool { location.isEmpty }
 }

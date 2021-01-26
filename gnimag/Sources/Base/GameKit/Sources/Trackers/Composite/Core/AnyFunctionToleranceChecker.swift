@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 23.12.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Foundation
@@ -12,7 +12,7 @@ internal class AnyFunctionToleranceChecker<F: Function & ScalarFunctionArithmeti
     /// Default initializer.
     init(function: F, tolerance: TrackerTolerance) {
         self.function = function
-        super.init(maxDataPoints: 0, requiredPointsForCalculatingRegression: 0, tolerance: tolerance)
+        super.init(maxDataPoints: 0, requiredPointsForCalculatingRegression: 0, tolerance: tolerance, maxDataPointsForLogging: nil)
         updateRegression() // Immediately update the regression with the given function
     }
 

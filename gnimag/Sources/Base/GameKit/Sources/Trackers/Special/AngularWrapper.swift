@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -30,6 +30,8 @@ public final class AngularWrapper<Other: SimpleTrackerProtocol>: SimpleTrackerPr
     public var maxDataPoints: Int { tracker.maxDataPoints }
     public var requiredPointsForCalculatingRegression: Int { tracker.requiredPointsForCalculatingRegression }
     public var regression: F? { tracker.regression }
+
+    public var dataSet: [ScatterDataPoint] { tracker.dataSet }
 
     public func updateRegression() { tracker.updateRegression() }
     public func reset() { tracker.reset() }

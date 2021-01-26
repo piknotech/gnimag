@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 03.08.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -15,4 +15,6 @@ let scrcpy = WindowInteractor(appName: "scrcpy").with {
 }
 
 /// Vysor provides input and output classes if you want to use the Vysor application to communicate with an Android device.
-let vysor = WindowInteractor(appName: "Vysor")
+func vysor(hint: String? = nil) -> WindowInteractor {
+    WindowInteractor(appName: "Vysor", windowNameHint: hint)
+}

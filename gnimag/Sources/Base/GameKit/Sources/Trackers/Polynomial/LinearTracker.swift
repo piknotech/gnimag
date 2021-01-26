@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 09.04.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -9,8 +9,8 @@ import TestingTools
 /// LinearTracker is a simple tracker providing a linear regression function.
 public final class LinearTracker: SimpleDefaultTracker<LinearFunction> {
     /// Default initializer.
-    public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1, tolerance: TrackerTolerance) {
-        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: tolerancePoints + 2, tolerance: tolerance)
+    public init(maxDataPoints: Int = 500, tolerancePoints: Int = 1, tolerance: TrackerTolerance, maxDataPointsForLogging: Int? = nil) {
+        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: tolerancePoints + 2, tolerance: tolerance, maxDataPointsForLogging: maxDataPointsForLogging)
     }
 
     /// The slope of the linear regression function.

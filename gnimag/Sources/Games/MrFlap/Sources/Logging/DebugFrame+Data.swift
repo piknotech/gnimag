@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 06.11.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Foundation
@@ -15,6 +15,10 @@ final class DebugFrame: DebugFrameProtocol {
 
     var index: Int
     var time: Double?
+
+    /// Duration of frame analysis, and duration of logging preparation.
+    var analysisDuration: Double?
+    var loggingPreparationDuration: Double?
     
     /// Default initializer.
     init(index: Int) {
@@ -34,6 +38,7 @@ final class DebugFrame: DebugFrameProtocol {
 
     /// Properties of the Image Analysis step.
     class ImageAnalysis {
+        var duration: Double?
         var image: Image!
 
         var outcome: Outcome!
@@ -114,6 +119,7 @@ final class DebugFrame: DebugFrameProtocol {
 
     /// Properties of the Game Model Collection step.
     class GameModelCollection {
+        var duration: Double?
         var wasPerformed = false
 
         var player = _Player()
@@ -152,8 +158,9 @@ final class DebugFrame: DebugFrameProtocol {
         /// A single bar tracker.
         class _Bar {
             var state: BarTrackerState?
-            var integrityCheckSuccessful = false
+            var integrityCheckSuccessful = true
 
+            var numberOfAngleDataPoints: Int?
             var angle = SimpleTrackerDebugInfo<AngularWrapper<LinearTracker>>()
             var width = SimpleTrackerDebugInfo<ConstantTracker>()
             var holeSize = SimpleTrackerDebugInfo<ConstantTracker>()
@@ -172,11 +179,15 @@ final class DebugFrame: DebugFrameProtocol {
 
     /// Properties of the Tap Prediction step.
     class TapPrediction {
+        var duration: Double?
+
+        // Solution
         var wasLocked: Bool?
         var isLocked: Bool?
         var delay: Double?
         var chosenStrategy: InteractionSolutionStrategy.Type?
         var fellBackToIdleStrategy = false
+        var fineGrainedRating: FineGrainedRating?
 
         // Properties for FullFramePlot
         var playerHeight = CompositeTrackerDebugInfo<ParabolaTracker>()

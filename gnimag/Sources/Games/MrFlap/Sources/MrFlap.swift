@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 20.08.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -30,6 +30,7 @@ public final class MrFlap {
 
     // The debug logger.
     private let debugLogger: DebugLogger
+    private var frame: DebugFrame { debugLogger.currentFrame }
 
     /// The current analysis state.
     private var state = State.beforeGame
@@ -43,6 +44,13 @@ public final class MrFlap {
     /// An Event that is triggered a single time once the player crashes.
     /// Also, when the player crashes, image analysis stops.
     public let crashed = Event<Void>()
+
+    /// The points tracker.
+    private let points = PointsTracker()
+
+    private let lagTracker = InputLagTracker(warningThreshold: 5)
+
+    private let chrono = Chronometer<FramePhase>()
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: SomewhereTapper, debugParameters: DebugParameters = .none) {
@@ -66,7 +74,7 @@ public final class MrFlap {
 
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
-        debugLogger.currentFrame.time = time
+        frame.time = time
 
         // State-specific update
         switch state {
@@ -83,12 +91,36 @@ public final class MrFlap {
             ()
         }
 
-        debugLogger.advance()
-        
+        logFrame()
+    }
+
+    /// Perform logging preparation and debug printing for this frame.
+    private func logFrame() {
+        let lastFrame = frame
+
+        chrono.measure(.loggingPreparation) {
+            debugLogger.advance()
+        }
+
+        // Store analysis durations
+        lastFrame.analysisDuration = chrono.currentMeasurement(for: .frame)
+        lastFrame.loggingPreparationDuration = chrono.currentMeasurement(for: .loggingPreparation)
+        lastFrame.imageAnalysis.duration = chrono.currentMeasurement(for: .imageAnalysis)
+        lastFrame.gameModelCollection.duration = chrono.currentMeasurement(for: .gameModelCollection)
+        lastFrame.tapPrediction.duration = chrono.currentMeasurement(for: .tapPrediction)
+
+        // Print timing statistics every few seconds
         statsPrinting.perform {
             Terminal.logNewline()
-            Terminal.log(.info, self.queue.timingStats.detailedDescription)
+            Terminal.log(.info, queue.timingStats.detailedDescription)
             Terminal.logNewline()
+            Terminal.log(.info, lagTracker.detailedInformation)
+            Terminal.logNewline()
+
+            for phase in FramePhase.allCases {
+                let ms = (chrono.averageMeasurement(for: phase) ?? 0) * 1000
+                print(String(format: "\(phase) average: %.1f ms", ms))
+            }
         }
     }
 
@@ -104,8 +136,9 @@ public final class MrFlap {
         // Fill properties from first analyzed image
         state = .waitingForFirstMove(initialPlayerPos: result.player)
         playfield = result.playfield
-        gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, mode: result.mode, debugLogger: debugLogger)
-        tapPredictor.set(gameModel: gameModelCollector.model)
+        gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, mode: result.mode, points: points, debugLogger: debugLogger)
+        tapPredictor.set(gmc: gameModelCollector)
+        points.setInitialAngle(result.player.angle)
 
         // Tap to begin the game
         tapPredictor.tapNow()
@@ -126,17 +159,41 @@ public final class MrFlap {
     /// Normal update method while in-game.
     /// Perform TapPrediction each frame, i.e. no matter what the outcome of ImageAnalysis and GameModelCollection is.
     private func gameplayUpdate(image: Image, time: Double) {
-        switch analyze(image: image, time: time) {
+        chrono.newFrame()
+        chrono.start(.frame)
+
+        let analysis = chrono.measure(.imageAnalysis) {
+            analyze(image: image, time: time)
+        }
+
+        switch analysis {
         case let .success(result):
-            _ = gameModelCollector.accept(result: result, time: time)
-            tapPredictor.predictionStep()
+            lagTracker.registerFrame(being: .new)
+
+            chrono.measure(.gameModelCollection) {
+                gameModelCollector.accept(result: result, time: time)
+            }
+
+            chrono.measure(.tapPrediction) {
+                tapPredictor.predictionStep()
+            }
 
         case .failure(.crashed):
             playerHasCrashed()
 
-        default:
-            tapPredictor.predictionStep()
+        case .failure(.samePlayerPosition):
+            lagTracker.registerFrame(being: .irrelevant)
+            chrono.measure(.tapPrediction) {
+                tapPredictor.predictionStep()
+            }
+
+        case .failure(.error):
+            chrono.measure(.tapPrediction) {
+                tapPredictor.predictionStep()
+            }
         }
+
+        chrono.stop(.frame)
     }
 
     /// Calculate the pixel distance between two players.
@@ -161,7 +218,7 @@ public final class MrFlap {
     private func analyze(image: Image, time: Double) -> Result<AnalysisResult, AnalysisError> {
         let hints = hintsForCurrentFrame(image: image, time: time)
         let result = imageAnalyzer.analyze(image: image, hints: hints)
-        debugLogger.currentFrame.hints.hints = hints
+        frame.hints.hints = hints
 
         return result
     }

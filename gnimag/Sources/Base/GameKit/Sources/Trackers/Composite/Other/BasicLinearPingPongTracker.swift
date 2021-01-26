@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 28.10.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -15,6 +15,11 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// The tracker for the slope. The slope is always positive.
     private let slopeTracker: PreliminaryTracker
+
+    /// If the first segment is very short (e.g. only 3 frames), the slope value may be corrupted heavily.
+    /// Therefore, if `replacementForFirstSegmentSlopeValue` is non-nil, the first segment's slope is not calculated based on the data points, but simply replaced with this value.
+    /// The sign of this value is irrelevant.
+    private let replacementForFirstSegmentSlopeValue: Value?
 
     public var slope: Value? { slopeTracker.average.map(abs) }
     public var lowerBound: Value? { lowerBoundTracker.average }
@@ -46,12 +51,14 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
     public init(
         tolerance: TrackerTolerance,
         slopeTolerance: TrackerTolerance,
+        replacementForFirstSegmentSlopeValue: Value? = nil,
         boundsTolerance: TrackerTolerance,
         decisionCharacteristics: NextSegmentDecisionCharacteristics
     ) {
         lowerBoundTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: boundsTolerance)
         upperBoundTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: boundsTolerance)
         slopeTracker = PreliminaryTracker(tolerancePoints: 0, tolerance: slopeTolerance)
+        self.replacementForFirstSegmentSlopeValue = replacementForFirstSegmentSlopeValue
 
         super.init(tolerance: tolerance, decisionCharacteristics: decisionCharacteristics)
     }
@@ -72,8 +79,12 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
             firstSegmentDirection = (approachingUpperBound == isEvenSegment) ? .up : .down
         }
 
-        // 2.: Update slope tracker (with absolute slope value)
-        slopeTracker.updatePreliminaryValueIfValid(value: abs(line.slope))
+        // 2.: Update slope tracker with absolute slope value (or use replacement in the very first segment)
+        if currentSegment.index == 0, let replacement = replacementForFirstSegmentSlopeValue {
+            slopeTracker.updatePreliminaryValueIfValid(value: abs(replacement))
+        } else {
+            slopeTracker.updatePreliminaryValueIfValid(value: abs(line.slope))
+        }
 
         // 3.: Update lower or upper bound tracker
         guard
@@ -101,7 +112,7 @@ public final class BasicLinearPingPongTracker: CompositeTracker<LinearTracker> {
 
     /// Create a linear tracker for the next segment.
     public override func trackerForNextSegment() -> LinearTracker {
-        LinearTracker(tolerancePoints: 3, tolerance: tolerance)
+        LinearTracker(tolerancePoints: 4, tolerance: tolerance)
     }
 
     /// Make a guess for a segment beginning at (`time`, `value`).

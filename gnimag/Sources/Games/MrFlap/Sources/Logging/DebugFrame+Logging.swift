@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 14.11.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -43,19 +43,18 @@ extension DebugFrame {
     }
 
     /// States if the frame is interesting from a tap prediction perspective.
-    /// This includes each frame where a lock was set.
     var interestingForTapPrediction: Bool {
-        if tapPrediction.fellBackToIdleStrategy { return true }
-        if let wasLocked = tapPrediction.wasLocked, let isLocked = tapPrediction.isLocked {
-            return !wasLocked && isLocked
-        }
-
-        return false
+        tapPrediction.fellBackToIdleStrategy
     }
 
     /// States if the player was detected to have crashed.
     var playerCrashed: Bool {
         imageAnalysis.outcome == .some(.crashed)
+    }
+
+    /// States if the frame is identical to the last frame.
+    var samePlayerPosition: Bool {
+        imageAnalysis.outcome == .some(.samePlayerPosition)
     }
 
     /// Check if the frame should be logged given the severity.
@@ -84,18 +83,17 @@ extension DebugFrame {
     func createSubdirectory(parameters: ParameterType) -> String? {
         // Create folder name, consisting of frame index and type
         let prefix = String(format: "%06d", index)
-        var suffix: String
+        let infix = "_"
+        let suffix =
+            samePlayerPosition ? "Same" :
+            playerCrashed ? "Crashed" :
+            hasIntegrityError ? "IntegrityError" :
+            hasImageAnalysisError ? "AnalysisError" :
+            hasBarLocationError ? "LocateBarError" :
+            tapPrediction.fellBackToIdleStrategy ? "FallbackToIdle" :
+            "Okay"
 
-        switch (playerCrashed, hasIntegrityError, hasImageAnalysisError, hasBarLocationError, tapPrediction.fellBackToIdleStrategy) {
-        case (true, _, _, _, _): suffix = "_Crashed"
-        case (_, true, _, _, _): suffix = "_IntegrityError"
-        case (_, _, true, _, _): suffix = "_AnalysisError"
-        case (_, _, _, true, _): suffix = "_LocateBarError"
-        case (_, _, _, _, true): suffix = "_FallbackToIdle"
-        default: suffix = "_Okay"
-        }
-
-        let directory = parameters.location +/ (prefix + suffix)
+        let directory = parameters.location +/ (prefix + infix + suffix)
 
         // Try creating directory
         do {
@@ -227,8 +225,19 @@ extension DebugFrame {
     /// Create the full text that should be logged.
     private var fullLoggingText: String {
         let header = "FRAME \(index)\n" + "time: \(time ??? "nil")"
-        let texts = [header, logTextForHints, logTextForImageAnalysis, logTextForGameModelCollection, logTextForTapPrediction]
+        let texts = [header, logTextForDuration, logTextForHints, logTextForImageAnalysis, logTextForGameModelCollection, logTextForTapPrediction]
         return texts.joined(separator: "\n\n\n")
+    }
+
+    /// The log text summarizing the frame analysis duration.
+    private var logTextForDuration: String {
+        """
+        Analysis took \(String(format: "%.2f", 1000 * (analysisDuration ?? 0))) ms
+        • Image Analysis: \(String(format: "%.2f", 1000 * (imageAnalysis.duration ?? 0))) ms
+        • Game Model Collection: \(String(format: "%.2f", 1000 * (gameModelCollection.duration ?? 0))) ms
+        • Tap Prediction: \(String(format: "%.2f", 1000 * (tapPrediction.duration ?? 0))) ms
+        Logging Preparation took \(String(format: "%.2f", 1000 * (loggingPreparationDuration ?? 0))) ms
+        """
     }
 
     /// The log text describing the image analysis hints.
@@ -343,6 +352,9 @@ extension DebugFrame {
         \(tapPrediction.fellBackToIdleStrategy ? "– Fell back to idle strategy because chosenStrategy didn't yield a solution!\n" : "")
         All interactions in most recent solution's frame:
         \(tapPrediction.mostRecentSolution?.associatedPredictionFrame.bars.map(barToString).joined(separator: "\n") ??? "nil")
+
+        Fine-grained solution rating:
+        \(tapPrediction.fineGrainedRating ??? "nil")
         """
     }
 }

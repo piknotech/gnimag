@@ -31,6 +31,8 @@ let package = Package(
 
         /// Beautiful charts for iOS/tvOS/OSX! The Apple side of the crossplatform MPAndroidChart.
         .package(url: "https://github.com/danielgindi/Charts", .upToNextMajor(from: "3.4.0")),
+
+        .package(url: "https://github.com/armadsen/ORSSerialPort", .upToNextMajor(from: "2.1.0"))
     ],
     targets: [
         // BASE
@@ -147,6 +149,7 @@ let package = Package(
                 "KingOfMath",
                 "MrFlap",
                 "YesNoMathGames",
+                "ORSSerial"
             ],
             path: "Sources/Products/gnimag"
         ),

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 02.04.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 /// SolutionExecution describes the order and exact way of how the different paths of a Solution should be drawn on the device.

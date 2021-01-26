@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -80,8 +80,8 @@ class ImageAnalyzer {
     /// Find the coloring of the game.
     private func findColoring(in image: Image) -> Coloring? {
         // Step 1: use static pixel to find the main (theme) color
-        let bottomLeft = Pixel(10, 10)
-        let theme = image.color(at: bottomLeft)
+        let topLeft = Pixel(10, image.bounds.height - 10)
+        let theme = image.color(at: topLeft)
 
         // Step 2: consider 21 pixels and determine their most frequent color to find the secondary color
         let circle = Circle(center: image.bounds.center.CGPoint, radius: CGFloat(image.width) / 4)
@@ -164,7 +164,7 @@ class ImageAnalyzer {
         // Remove player's beak from OBB if it was detected by EdgeDetector
         if obb.width > obb.height + 1 {
             let axes = obb.rightHandedCoordinateAxes(respectiveTo: playfield.center)
-            let clockwise = GameProperties.birdMovesClockwise(in: coloring.mode)
+            let clockwise = coloring.mode.birdMovesClockwise
             let beakDirection = clockwise ? axes.right : -axes.right
             let offsetFromApparentCenterToActualCenter = (obb.width - obb.height) / 2
             let center = obb.center - offsetFromApparentCenterToActualCenter * beakDirection
@@ -180,13 +180,13 @@ class ImageAnalyzer {
     /// Find all bars.
     private func findBars(in image: Image, with coloring: Coloring, playerOBB: OBB) -> [Bar] {
         // Erase all blue things, execept the bars, from the image
-        let innerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 2)
-        let outerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.fullRadius) - 2)
+        let innerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 1)
+        let outerCircle = Circle(center: playfield.center, radius: CGFloat(playfield.fullRadius) - 1)
         let insetOBB = playerOBB.inset(by: (-2, -2))
         let image = ShapeErasedImage(image: image, shapes: [.shape(innerCircle), .anti(outerCircle), .shape(insetOBB)])
 
         // Find one (or more) point inside each bar
-        let circle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 5)
+        let circle = Circle(center: playfield.center, radius: CGFloat(playfield.innerRadius) + 3)
         var pixels = CirclePath.equidistantPixels(on: circle, numberOfPixels: 64)
 
         // Only keep pixels which belong to a bar
@@ -224,7 +224,7 @@ class ImageAnalyzer {
         debug.bars.current.innerOBB = innerOBB
 
         // Find outer edge
-        let upPosition = PolarCoordinates.position(atAngle: angle1, height: CGFloat(playfield.fullRadius - 5), respectiveTo: playfield.center).nearestPixel
+        let upPosition = PolarCoordinates.position(atAngle: angle1, height: CGFloat(playfield.fullRadius - 3), respectiveTo: playfield.center).nearestPixel
         debug.bars.current.upPosition = upPosition
         guard let outerEdge = EdgeDetector.search(in: image, shapeColor: blue, from: upPosition, angle: .east, limit: limit) else {
             return nil & {debug.bars.current.failure = .outerEdge}
@@ -255,8 +255,7 @@ class ImageAnalyzer {
             angle: Angle(angle1).midpoint(between: Angle(angle2)).value,
             innerHeight: correctInnerHeight,
             outerHeight: Double(outerOBB.height), // Does not need to be corrected
-            holeSize: playfield.freeSpace - Double(innerOBB.height + outerOBB.height),
-            color: coloring.theme
+            holeSize: playfield.freeSpace - Double(innerOBB.height + outerOBB.height)
         )
 
         debug.bars.current.result = bar

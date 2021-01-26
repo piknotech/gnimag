@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 30.11.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Foundation
@@ -15,14 +15,14 @@ public final class GameQueueTimingStats {
     }
 
     /// The average total duration of a frame (1/framerate).
-    public let frameDuration = ConstantTracker(maxDataPoints: .max, tolerancePoints: 0)
+    public let frameDuration = ConstantTracker(maxDataPoints: 1000, tolerancePoints: 0)
 
     /// The average duration to perform image copy/preparation tasks.
     /// This refers to image prepration done by the image provider itself (e.g. creating a NativeImage).
-    public let imageCopyDuration = ConstantTracker(maxDataPoints: .max, tolerancePoints: 0)
+    public let imageCopyDuration = ConstantTracker(maxDataPoints: 1000, tolerancePoints: 0)
 
     /// The average duration of frame analysis which is performed by your specific game. This does not include the image copy duration.
-    public let analysisDuration = ConstantTracker(maxDataPoints: .max, tolerancePoints: 0)
+    public let analysisDuration = ConstantTracker(maxDataPoints: 1000, tolerancePoints: 0)
 
     /// The total number of frames.
     public private(set) var totalFrames = 0
@@ -89,19 +89,19 @@ public final class GameQueueTimingStats {
     }
 
     /// Call when a new frame arrives.
-    internal func newFrame(frame: GameQueue.Frame) {
+    internal func newFrame(frame: GameQueue.Frame, at incomingTime: Double) {
         guard !paused else { return }
         totalFrames += 1
 
         // Update average image copy duration
-        let time = timeProvider.currentTime
-        imageCopyDuration.add(value: time - frame.1)
+        let frameTime = frame.1
+        imageCopyDuration.add(value: incomingTime - frameTime)
 
         // Update average frame duration
         if let last = lastFrameArrivalTime {
-            frameDuration.add(value: time - last)
+            frameDuration.add(value: frameTime - last)
         }
-        lastFrameArrivalTime = time
+        lastFrameArrivalTime = frameTime
     }
 
     /// Call when a frame was dropped.

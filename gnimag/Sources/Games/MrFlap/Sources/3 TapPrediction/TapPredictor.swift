@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 26.12.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -15,6 +15,9 @@ import Tapping
 class TapPredictor: TapPredictorBase {
     /// The game model object which is continuously being updated by the game model collector.
     private var gameModel: GameModel?
+
+    // GameModelCollector is required for guessing the bar movement bounds.
+    private var gmc: GameModelCollector?
 
     /// The strategies which are used to perform the prediction calculation.
     private let strategies: Strategies
@@ -53,8 +56,8 @@ class TapPredictor: TapPredictorBase {
     /// Default initializer.
     init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
         strategies = Strategies(
-            default: OptimalSolutionViaRandomizedSearchStrategy(minimumJumpDistance: 0.2), // ...?
-            fallback: IdleStrategy(relativeIdleHeight: 0.5, minimumJumpDistance: 0.2)
+            default: OptimalSolutionViaRandomizedSearchStrategy(minimumJumpDistance: 0.2, logger: debugLogger),
+            fallback: IdleStrategy(relativeIdleHeight: 0.4, minimumJumpDistance: 0.2)
         )
 
         self.debugLogger = debugLogger
@@ -66,14 +69,15 @@ class TapPredictor: TapPredictorBase {
         }
     }
 
-    /// Set the game model. Only call this once.
+    /// Set the game model collector and game model. Only call this once.
     /// Call once the game model collector is ready and has a GameModel object.
-    func set(gameModel: GameModel) {
-        precondition(self.gameModel == nil)
-        self.gameModel = gameModel
+    func set(gmc: GameModelCollector) {
+        precondition(self.gameModel == nil && self.gmc == nil)
+        self.gmc = gmc
+        self.gameModel = gmc.model
 
         // Link player jump for tap delay detection
-        gameModel.player.linkPlayerJump(to: self)
+        gmc.model.player.linkPlayerJump(to: self)
     }
 
     /// Remove all scheduled taps.
@@ -83,7 +87,7 @@ class TapPredictor: TapPredictorBase {
 
     /// Calculate AnalysisHints for the given time, i.e. predict where the player will be located at the given (future) time.
     func analysisHints(for time: Double) -> AnalysisHints? {
-        let expectedDetectionTimes = scheduler.allExpectedDetectionTimes.filter { $0 <= time }
+        let expectedDetectionTimes = scheduler.lastExpectedDetectionTimes(num: 20).filter { $0 <= time }
 
         guard
             let model = gameModel,
@@ -103,10 +107,11 @@ class TapPredictor: TapPredictorBase {
 
     /// Analyze the game model to schedule taps.
     /// Instead of using the current time, input+output delay is added so the calculators can calculate using simulated real-time.
-    override func predictionLogic() -> RelativeTapSequence? {
-        guard let model = gameModel, let delay = scheduler.delay else { return nil }
-        let currentTime = timeProvider.currentTime + delay
-        guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return nil }
+    override func predictionLogic() -> AbsoluteTapSequence? {
+        guard let gmc = gmc, let model = gameModel, let delay = scheduler.delay else { return nil }
+        let actualTime = timeProvider.currentTime // Used only for scheduling
+        let currentTime = actualTime + delay // Used for prediction
+        guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.lastExpectedDetectionTimes(num: 20), currentTime: currentTime, maxBars: 2) else { return nil }
 
         // Debug logging
         performDebugLogging(with: model, frame: frame, delay: delay)
@@ -115,7 +120,9 @@ class TapPredictor: TapPredictorBase {
         let (solution, strategy) = self.solution(for: frame)
         mostRecentSolution = MostRecentSolution(solution: solution, strategy: strategy, associatedPredictionFrame: frame)
 
-        return solution.convertToRelativeTapSequence(in: frame)
+        // Use frame time as reference as all calculations were relative to it (instead of the current time)
+        let relativeSequence = solution.convertToRelativeTapSequence(in: frame)
+        return AbsoluteTapSequence(relativeSequence, relativeTo: actualTime)
     }
 
     /// Called after each frame, no matter whether predictionLogic was called or not.
@@ -128,9 +135,9 @@ class TapPredictor: TapPredictorBase {
 
         // Create PredictionFrame just for debug logging if required
         if !hasPredicted {
-            guard let model = gameModel, let delay = scheduler.delay else { return }
+            guard let gmc = gmc, let model = gameModel, let delay = scheduler.delay else { return }
             let currentTime = timeProvider.currentTime + delay
-            guard let frame = PredictionFrame.from(model: model, performedTapTimes: scheduler.allExpectedDetectionTimes, currentTime: currentTime, maxBars: 2) else { return }
+            guard let frame = PredictionFrame.from(gmc: gmc, performedTapTimes: scheduler.lastExpectedDetectionTimes(num: 20), currentTime: currentTime, maxBars: 2) else { return }
 
             performDebugLogging(with: model, frame: frame, delay: delay)
         }
@@ -190,18 +197,15 @@ class TapPredictor: TapPredictorBase {
     }
 
     /// Check if a prediction lock should be applied.
-    override func shouldLock(scheduledSequence: RelativeTapSequence) -> Bool {
-         // When sequence is empty, lock and wait until the sequence unlocks (via unlockDuration)
-        guard let nextTap = scheduledSequence.nextTap, let referenceTime = referenceTimeForTapSequence else {
-            return scheduledSequence.unlockDuration != nil
-        }
+    override func shouldLock(scheduledSequence: AbsoluteTapSequence) -> Bool {
+         // When sequence is empty, don't lock
+        guard let nextTap = scheduledSequence.relativeTapSequence.nextTap else { return false }
 
-        // Get relative duration from now
-        let referenceShift = timeProvider.currentTime - referenceTime
-        let time = nextTap.relativeTime - referenceShift
+        let nextTapTime = nextTap.relativeTime + scheduledSequence.referencePoint
+        let diff = nextTapTime - timeProvider.currentTime
 
         if let shouldLock = mostRecentSolution?.strategy.shouldLockSolution, shouldLock {
-            return time < 0.05
+            return diff < 0.05
         }
 
         return false

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 27.11.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -13,7 +13,7 @@ public extension CompositeTracker {
     /// - Invalid points that failed the `integrityCheck`,
     /// - Points that are currently in the decision window and therefore probably belong to the next segment.
     func dataSet(forMostRecentSegments numSegments: Int) -> [ScatterDataPoint] {
-        let firstSegment = allSegments.count - numSegments
+        let firstSegment = (allSegments.last?.index ?? 0) + 1 - numSegments
         return allDataPoints.dataPoints(forSegmentIndicesInRange: firstSegment...) +
         window.dataPoints.map { ScatterDataPoint(x: $0.time, y: $0.value, color: .inDecisionWindow) }
     }

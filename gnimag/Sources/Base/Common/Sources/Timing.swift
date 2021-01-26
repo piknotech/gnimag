@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 25.01.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Foundation
@@ -8,7 +8,7 @@ import Foundation
 /// Timing provides the possibility to perform a task after a certain amount of time.
 /// Tasks can be tagged with an identification to be cancelled at a later point.
 public class Timing {
-    /// Create a new private instance of Timing.
+    /// Create a new instance of Timing.
     public init() {
     }
 
@@ -18,15 +18,15 @@ public class Timing {
     /// All running timers.
     private var timers = [Timer]()
 
-    /// Schedule the timer with the given callback.
+    /// Schedule the timer with the given callback to be performed on the given runLoop (default = main).
     /// You can provide an identification for later cancellation.
-    /// If `delay <= 0`, the block is executed (quasi) immediately (not necessarily in the same thread).
-    public func perform(after delay: TimeInterval, identification: Identification = .empty, block: @escaping () -> Void) {
+    /// If `delay <= 0`, the block is executed (quasi) immediately.
+    public func perform(after delay: TimeInterval, identification: Identification = .empty, runLoop: RunLoop = .main, block: @escaping () -> Void) {
         synchronized(self) {
             let userInfo = UserInfo(block: block, identification: identification)
             let timer = Timer(timeInterval: delay, target: self, selector: #selector(fire(timer:)), userInfo: userInfo, repeats: false)
             timers.append(timer)
-            RunLoop.main.add(timer, forMode: .common)
+            runLoop.add(timer, forMode: .common)
         }
     }
 

@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 09.04.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
@@ -9,9 +9,9 @@ import TestingTools
 /// PolyTracker is a simple tracker providing a polynomial regression function.
 public class PolyTracker: SimpleDefaultTracker<Polynomial> {
     /// Default initializer.
-    public init(maxDataPoints: Int = 500, degree: Int, tolerancePoints: Int = 1, tolerance: TrackerTolerance) {
+    public init(maxDataPoints: Int = 500, degree: Int, tolerancePoints: Int = 1, tolerance: TrackerTolerance, maxDataPointsForLogging: Int? = nil) {
         self.degree = degree
-        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: degree + tolerancePoints + 1, tolerance: tolerance)
+        super.init(maxDataPoints: maxDataPoints, requiredPointsForCalculatingRegression: degree + tolerancePoints + 1, tolerance: tolerance, maxDataPointsForLogging: maxDataPointsForLogging)
     }
 
     /// The degree of the polynomial regression.

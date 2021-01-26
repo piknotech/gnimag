@@ -1,16 +1,47 @@
 //
 //  Created by David Knothe on 31.01.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Common
 import Foundation
 import GameKit
 
+/// The fine-grained rating of a solution, only for logging.
+struct FineGrainedRating {
+    let considerFinalJump: Bool
+    let meetsPrecondition: Bool
+    let total: Double
+    let timeRating: Double
+    let playfieldRating: Double
+    let descendRating: Double
+    let horizontalHoleRating: Double
+    let verticalHoleRating: Double
+}
+
 /// SolutionVerifier assigns a rating to solutions for a given frame.
 /// This class considers all bars in the frame.
 struct SolutionVerifier {
     let frame: PredictionFrame
+
+    /// Get the fine-grained rating for a solution without using any shortcuts.
+    func fineGrainedRating(for solution: Solution, considerFinalJump: Bool) -> FineGrainedRating {
+        // All jumps (starting at current time)
+        let player = frame.player, jumping = frame.jumping
+        let firstJump = solution.currentJump(for: player, with: jumping, startingAt: .currentTime)
+        var allJumps = solution.jumps(for: player, with: jumping)
+        allJumps.insert(firstJump, at: 0)
+
+        let meetsPrecondition = precondition(forValidSolution: solution)
+        let timeRating = self.timeRating(of: solution, considerFinalJump: considerFinalJump)
+        let playfield = playfieldRating(for: allJumps)
+        let descend = descendRating(for: allJumps)
+        let horizontal = horizontalHoleRating(for: allJumps, requiredMinimum: 0)
+        let vertical = verticalHoleRating(for: allJumps, requiredMinimum: 0)
+        let total = timeRating * min(playfield, descend, horizontal, vertical)
+
+        return FineGrainedRating(considerFinalJump: considerFinalJump, meetsPrecondition: meetsPrecondition, total: total, timeRating: timeRating, playfieldRating: playfield, descendRating: descend, horizontalHoleRating: horizontal, verticalHoleRating: vertical)
+    }
 
     /// Checks if the given solution fulfills a precondition. If not, the solution can immediately be discarded because it will probably not solve the interaction (and would receive a rating of 0).
     /// The precondition is a simple check whether the player passes through the left and right hole bounds.
@@ -26,13 +57,13 @@ struct SolutionVerifier {
 
         // Left side. Attention: we assume the direction of the bounds curve (as it is always shaped like this)
         let leftSide = interaction.holeMovement.intersectionsWithBoundsCurves.left
-        if solution.height(at: leftSide.xRange.lower, for: player, with: jumping) <= leftSide.yRange.lower { return false }
-        if solution.height(at: leftSide.xRange.upper, for: player, with: jumping) >= leftSide.yRange.upper { return false }
+        if leftSide.xRange.lower > 0 && solution.height(at: leftSide.xRange.lower, for: player, with: jumping) <= leftSide.yRange.lower { return false }
+        if leftSide.xRange.upper > 0 && solution.height(at: leftSide.xRange.upper, for: player, with: jumping) >= leftSide.yRange.upper { return false }
 
         // Right side (same assumptions)
         let rightSide = interaction.holeMovement.intersectionsWithBoundsCurves.right
-        if solution.height(at: rightSide.xRange.lower, for: player, with: jumping) >= rightSide.yRange.upper { return false }
-        if solution.height(at: rightSide.xRange.upper, for: player, with: jumping) <= rightSide.yRange.lower { return false }
+        if rightSide.xRange.lower > 0 && solution.height(at: rightSide.xRange.lower, for: player, with: jumping) >= rightSide.yRange.upper { return false }
+        if rightSide.xRange.upper > 0 && solution.height(at: rightSide.xRange.upper, for: player, with: jumping) <= rightSide.yRange.lower { return false }
 
         return true
     }
@@ -42,18 +73,29 @@ struct SolutionVerifier {
     /// The tap time rating is just the minimum distance between two consecutive jumps; the safety rating rates the player trajectory, i.e. the distance to playfield and bar hole bounds.
     /// These two factors are multiplied. The safety rating is in [0, 1], 0 meaning a definite crash or contact with the playfield bounds (which is bad for player jump tracking and is therefore avoided).
     /// `requiredMinimum` is used as a performance boost: when, during evaluation, it becomes impossible to beat the required minimum rating, terminate evaluation early and return 0.
-    func rating(of solution: Solution, requiredMinimum: Double) -> Double {
-        // Determine time rating
+    func rating(of solution: Solution, requiredMinimum: Double, considerFinalJump: Bool) -> Double {
+        let timeRating = self.timeRating(of: solution, considerFinalJump: considerFinalJump)
+
+        // Multiply time rating with safety rating
+        let requiredSafetyRating = requiredMinimum / timeRating
+        return timeRating * safetyRating(of: solution, requiredMinimum: requiredSafetyRating)
+    }
+
+    /// The time rating of a solution, in [0, inf).
+    func  timeRating(of solution: Solution, considerFinalJump: Bool) -> Double {
         let firstJump = frame.player.timePassedSinceJumpStart + (solution.jumpTimeDistances.first ?? solution.lengthOfLastJump)
         var allTimeDistances = Array(solution.jumpTimeDistances.dropFirst())
         allTimeDistances.append(firstJump)
 
         let maximumTimeRating = frame.jumping.horizontalJumpLength // Limit time rating to avoid perverse results
-        let timeRating = min(maximumTimeRating, allTimeDistances.min()!)
+        var timeRating = min(maximumTimeRating, allTimeDistances.min()!)
 
-        // Multiply with safety rating
-        let requiredSafetyRating = requiredMinimum / timeRating
-        return timeRating * safetyRating(of: solution, requiredMinimum: requiredSafetyRating)
+        // If the final jump is very late (i.e. not relevant), penalize the solution
+        if considerFinalJump, !solution.relativeTapTimes.isEmpty {
+            timeRating = min(timeRating, 3 * solution.lengthOfLastJump)
+        }
+
+        return timeRating
     }
 
     /// The safety rating of a solution, in [0, 1].
@@ -90,7 +132,7 @@ struct SolutionVerifier {
 
         for interaction in frame.bars {
             let distance = interaction.holeMovement.distance(to: jumps)
-            let desiredValue = 30% * interaction.holeMovement.holeSize
+            let desiredValue = 40% * interaction.holeMovement.holeSize
             let score = min(1, distance / desiredValue)
             if score < requiredMinimum { return 0 }
             rating = min(score, rating)
@@ -117,7 +159,7 @@ struct SolutionVerifier {
     /// The rating respective the distance to the playfield bounds.
     /// Inside [0, 1].
     private func playfieldRating(for jumps: [Jump]) -> Double {
-        let desiredValue = 30% * frame.playfield.size
+        let desiredValue = 20% * frame.playfield.size
         let distance = frame.playfield.distance(to: jumps)
         return min(1, distance / desiredValue)
     }
@@ -126,9 +168,9 @@ struct SolutionVerifier {
     /// Inside [0, 1].
     private func descendRating(for jumps: [Jump]) -> Double {
         let descends = jumps.map { -$0.parabola.derivative(at: $0.endPoint.time) }
-        guard let steepestDescend = descends.max() else { return 1 }
-        if steepestDescend < frame.jumping.jumpVelocity { return 1 }
-        return frame.jumping.jumpVelocity / steepestDescend
+        let steepestDescend = ([0.01] + descends).max()!
+        let desiredValue = 1.2 * frame.jumping.jumpVelocity
+        return min(1, desiredValue / steepestDescend)
     }
 }
 

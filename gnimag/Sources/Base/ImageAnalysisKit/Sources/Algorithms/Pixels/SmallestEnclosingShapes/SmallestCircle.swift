@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 27.07.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 // Taken from https://www.nayuki.io/res/smallest-enclosing-circle/SmallestEnclosingCircle.cs
 

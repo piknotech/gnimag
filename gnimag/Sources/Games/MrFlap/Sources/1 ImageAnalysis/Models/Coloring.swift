@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 22.06.19.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import Image
@@ -49,17 +49,5 @@ struct Coloring {
             crashColor = .color(.white, tolerance: 0.1)
             safeLoggingColor = Color(0.5, 0.5, 1) // light blue
         }
-    }
-}
-
-enum GameMode {
-    case normal
-    case hard
-
-    /// Read the game mode from the given coloring, if possible.
-    static fileprivate func from(secondaryColor: Color) -> GameMode? {
-        if secondaryColor.distance(to: .white) < 0.1 { return .normal }
-        if secondaryColor.distance(to: .black) < 0.1 { return .hard }
-        return nil
     }
 }

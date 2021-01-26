@@ -1,6 +1,6 @@
 //
 //  Created by David Knothe on 13.02.20.
-//  Copyright © 2019 - 2020 Piknotech. All rights reserved.
+//  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
 import GameKit
@@ -42,24 +42,48 @@ final class BarTrackerStateAppearing: BarTrackerState {
     private let constantHoleSize: ConstantTracker
     private var consecutiveFramesWithConstantHoleSize = 0
 
+    /// Data points that can immediately be transferred to the yCenter tracker on state switch.
+    private var yCenterData = [(value: Double, time: Double)]()
+
+    /// The inner and outer height trackers, for early yCenter guessing.
+    let innerHeightTracker = LinearTracker(tolerance: .absolute(0))
+    let outerHeightTracker = LinearTracker(tolerance: .absolute(0))
+
+    var holeSizeWasConstant = false
+
     func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         if constantHoleSize.isValueValid(bar.holeSize, fallback: .invalid) {
             consecutiveFramesWithConstantHoleSize += 1
-        } else {
+
+            // State switch after 3 consecutive normal frames
+            if consecutiveFramesWithConstantHoleSize == 3 {
+                tracker.state = BarTrackerStateNormal(tracker: tracker)
+                yCenterData.forEach(tracker.yCenter.add(value:at:))
+            }
+
+            holeSizeWasConstant = true
+        }
+
+        // Hole size doesn't match
+        else {
             constantHoleSize.reset()
+            yCenterData.removeAll()
+            consecutiveFramesWithConstantHoleSize = 0
+            holeSizeWasConstant = false
         }
 
-        // State switch after 3 consecutive normal frames
-        if consecutiveFramesWithConstantHoleSize == 3 {
-            tracker.state = BarTrackerStateNormal(tracker: tracker)
-        }
-
-        // Don't trigger erroneous integrity check failures
+        // We don't have integrity failures in appearing state
         return true
     }
 
     func update(with bar: Bar, at time: Double) {
         constantHoleSize.add(value: bar.holeSize)
+        innerHeightTracker.add(value: bar.innerHeight, at: time)
+        outerHeightTracker.add(value: bar.outerHeight, at: time)
+        
+        if holeSizeWasConstant {
+            yCenterData.append((value: bar.yCenter, time: time))
+        }
     }
 }
 
