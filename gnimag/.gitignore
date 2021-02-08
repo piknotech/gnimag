@@ -1,5 +1,6 @@
 # Building via make
 .build/
+.swiftpm/
 Package.resolved
 
 # User settings
