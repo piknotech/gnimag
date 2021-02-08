@@ -38,7 +38,7 @@ let package = Package(
         // BASE
         .target(
             name: "Common",
-            path: "Sources/Base/Common"
+            path: "Modules/Base/Common"
         ),
 
         .target(
@@ -46,7 +46,7 @@ let package = Package(
             dependencies: [
                 "Common"
             ],
-            path: "Sources/Base/Image"
+            path: "Modules/Base/Image"
         ),
 
         .target(
@@ -54,7 +54,7 @@ let package = Package(
             dependencies: [
                 "Common"
             ],
-            path: "Sources/Base/Tapping"
+            path: "Modules/Base/Tapping"
         ),
 
         .target(
@@ -62,7 +62,7 @@ let package = Package(
             dependencies: [
                 "Common"
             ],
-            path: "Sources/Base/Geometry"
+            path: "Modules/Base/Geometry"
         ),
 
         .target(
@@ -72,7 +72,7 @@ let package = Package(
                 "Image",
                 "TestingTools"
             ],
-            path: "Sources/Base/ImageAnalysisKit"
+            path: "Modules/Base/ImageAnalysisKit"
         ),
 
         .target(
@@ -82,7 +82,7 @@ let package = Package(
                 "TestingTools",
                 "Surge"
             ],
-            path: "Sources/Base/GameKit"
+            path: "Modules/Base/GameKit"
         ),
 
         // DEBUG
@@ -94,7 +94,7 @@ let package = Package(
                 "Geometry",
                 "Image"
             ],
-            path: "Sources/Debug/TestingTools"
+            path: "Modules/Debug/TestingTools"
         ),
 
         .target(
@@ -104,7 +104,7 @@ let package = Package(
                 "GameKit",
                 "TestingTools",
             ],
-            path: "Sources/Debug/LoggingKit"
+            path: "Modules/Debug/LoggingKit"
         ),
 
         // GAMES
@@ -113,35 +113,35 @@ let package = Package(
             dependencies: allLibraries + [
                 "FlowFreeC"
             ],
-            path: "Sources/Games/FlowFree",
+            path: "Modules/Games/FlowFree",
             exclude: ["FlowFreeC"]
         ),
 
         // C code used in FlowFree. Must be in a separate target due to swift build limitations
         .target(
             name: "FlowFreeC",
-            path: "Sources/Games/FlowFree/FlowFreeC"
+            path: "Modules/Games/FlowFree/FlowFreeC"
         ),
 
         .target(
             name: "KingOfMath",
             dependencies: allLibraries,
-            path: "Sources/Games/KingOfMath"
+            path: "Modules/Games/KingOfMath"
         ),
 
         .target(
             name: "MrFlap",
             dependencies: allLibraries,
-            path: "Sources/Games/MrFlap"
+            path: "Modules/Games/MrFlap"
         ),
 
         .target(
             name: "YesNoMathGames",
             dependencies: allLibraries,
-            path: "Sources/Games/YesNoMathGames"
+            path: "Modules/Games/YesNoMathGames"
         ),
 
-        // PRODUCTS
+        // EXECUTABLES
         .target(
             name: "gnimag",
             dependencies: allLibraries + [
@@ -151,7 +151,7 @@ let package = Package(
                 "YesNoMathGames",
                 "ORSSerial"
             ],
-            path: "Sources/Products/gnimag"
+            path: "Modules/Executables/gnimag"
         ),
     ]
 )

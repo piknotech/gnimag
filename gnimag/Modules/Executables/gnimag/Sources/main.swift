@@ -14,7 +14,7 @@ import Tapping
 
 // Arduino
 let imageProvider = airServer
-let tapper = SingleTapArduino(portPath: "/dev/cu.usbmodem14101")
+let tapper = SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
 
 let mrflap = MrFlap(
     imageProvider: imageProvider,

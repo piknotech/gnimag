@@ -8,8 +8,8 @@ import Foundation
 import ORSSerial
 import Tapping
 
-/// A SingleTapArduino sends a single byte to a connected Arduino via USB each time when a tap shall be performed.
-struct SingleTapArduino: SomewhereTapper {
+/// A SingleByteArduino sends a single byte to a connected Arduino via USB each time when a tap shall be performed.
+struct SingleByteArduino: SomewhereTapper {
     let port: ORSSerialPort
 
     /// Default initializer.
