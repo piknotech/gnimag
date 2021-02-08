@@ -229,6 +229,7 @@
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
 		6380F772244502F80074AB2A /* SimulationWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6380F770244502F40074AB2A /* SimulationWindow.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
+		638CAEF125D1890B00EFE503 /* GameTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CAEF025D1890B00EFE503 /* GameTemplate.swift */; };
 		6392A1B125A0C9B400761241 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6392A1B025A0C9B400761241 /* IOKit.framework */; };
 		6392A1B325A0F0CB00761241 /* PowerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392A1B225A0F0CB00761241 /* PowerManager.swift */; };
 		63997EE92434959C005473A0 /* Promise+Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EE82434959C005473A0 /* Promise+Await.swift */; };
@@ -237,7 +238,7 @@
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
 		63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */; };
 		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
-		63B05579243CC19C00DD741C /* KingOfMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B05577243CC19C00DD741C /* KingOfMath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63B05579243CC19C00DD741C /* GameTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B05577243CC19C00DD741C /* GameTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B05584243DBEC400DD741C /* Term.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C59242C057D008FCDFC /* Term.swift */; };
 		63B05585243DBEC400DD741C /* RationalNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C625242DE52500DF41CE /* RationalNumber.swift */; };
 		63B05586243DBEC400DD741C /* ArrayScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78C9242CDB84009674E8 /* ArrayScanner.swift */; };
@@ -627,6 +628,7 @@
 		637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameQueueTimingStats.swift; sourceTree = "<group>"; };
 		6380F770244502F40074AB2A /* SimulationWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationWindow.swift; sourceTree = "<group>"; };
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
+		638CAEF025D1890B00EFE503 /* GameTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTemplate.swift; sourceTree = "<group>"; };
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		6392A1B025A0C9B400761241 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		6392A1B225A0F0CB00761241 /* PowerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerManager.swift; sourceTree = "<group>"; };
@@ -640,8 +642,8 @@
 		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
 		63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AllShortcuts+String.swift"; sourceTree = "<group>"; };
 		63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDataSet.swift; sourceTree = "<group>"; };
-		63B05575243CC19C00DD741C /* KingOfMath.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KingOfMath.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		63B05577243CC19C00DD741C /* KingOfMath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KingOfMath.h; sourceTree = "<group>"; };
+		63B05575243CC19C00DD741C /* GameTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GameTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63B05577243CC19C00DD741C /* GameTemplate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameTemplate.h; sourceTree = "<group>"; };
 		63B05578243CC19C00DD741C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63B05581243CC3AF00DD741C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		63B05599243DD32E00DD741C /* FreakingMathImageAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreakingMathImageAnalyzer.swift; sourceTree = "<group>"; };
@@ -992,7 +994,7 @@
 				63B40BCA24250C72007A86E9 /* YesNoMathGames.framework */,
 				630682C82430CE4C00C5B28E /* FlowFree.framework */,
 				637494A62435ECE600D724F7 /* FlowFreeC.framework */,
-				63B05575243CC19C00DD741C /* KingOfMath.framework */,
+				63B05575243CC19C00DD741C /* GameTemplate.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1065,7 +1067,7 @@
 			children = (
 				631213DF23257F1F00C126B4 /* README.md */,
 				630682C92430CE4D00C5B28E /* FlowFree */,
-				63B05576243CC19C00DD741C /* KingOfMath */,
+				63B05576243CC19C00DD741C /* GameTemplate */,
 				63B40BCB24250C72007A86E9 /* YesNoMathGames */,
 				631213D723257EF600C126B4 /* MrFlap */,
 			);
@@ -2042,6 +2044,14 @@
 			path = "Top-Level Utilities";
 			sourceTree = "<group>";
 		};
+		638CAEEF25D188FC00EFE503 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				638CAEF025D1890B00EFE503 /* GameTemplate.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
 		6392A1AF25A0C9B300761241 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2080,30 +2090,23 @@
 			path = Infrastructure;
 			sourceTree = "<group>";
 		};
-		63B05576243CC19C00DD741C /* KingOfMath */ = {
+		63B05576243CC19C00DD741C /* GameTemplate */ = {
 			isa = PBXGroup;
 			children = (
 				63B05581243CC3AF00DD741C /* README.md */,
-				63B0557E243CC24300DD741C /* Sources */,
+				638CAEEF25D188FC00EFE503 /* Sources */,
 				63B0557D243CC23800DD741C /* SupportingFiles */,
 			);
-			path = KingOfMath;
+			path = GameTemplate;
 			sourceTree = "<group>";
 		};
 		63B0557D243CC23800DD741C /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				63B05577243CC19C00DD741C /* KingOfMath.h */,
+				63B05577243CC19C00DD741C /* GameTemplate.h */,
 				63B05578243CC19C00DD741C /* Info.plist */,
 			);
 			path = SupportingFiles;
-			sourceTree = "<group>";
-		};
-		63B0557E243CC24300DD741C /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Sources;
 			sourceTree = "<group>";
 		};
 		63B05595243DCF5B00DD741C /* identiti */ = {
@@ -2396,7 +2399,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B05579243CC19C00DD741C /* KingOfMath.h in Headers */,
+				63B05579243CC19C00DD741C /* GameTemplate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2630,9 +2633,9 @@
 			productReference = 637494A62435ECE600D724F7 /* FlowFreeC.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		63B05574243CC19C00DD741C /* KingOfMath */ = {
+		63B05574243CC19C00DD741C /* GameTemplate */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 63B0557C243CC19C00DD741C /* Build configuration list for PBXNativeTarget "KingOfMath" */;
+			buildConfigurationList = 63B0557C243CC19C00DD741C /* Build configuration list for PBXNativeTarget "GameTemplate" */;
 			buildPhases = (
 				63B05570243CC19C00DD741C /* Headers */,
 				63B05571243CC19C00DD741C /* Sources */,
@@ -2643,9 +2646,9 @@
 			);
 			dependencies = (
 			);
-			name = KingOfMath;
+			name = GameTemplate;
 			productName = FreakingMath;
-			productReference = 63B05575243CC19C00DD741C /* KingOfMath.framework */;
+			productReference = 63B05575243CC19C00DD741C /* GameTemplate.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		63B40BC924250C72007A86E9 /* YesNoMathGames */ = {
@@ -2731,7 +2734,7 @@
 					};
 					63B05574243CC19C00DD741C = {
 						CreatedOnToolsVersion = 11.4;
-						LastSwiftMigration = 1140;
+						LastSwiftMigration = 1160;
 					};
 					63B40BC924250C72007A86E9 = {
 						CreatedOnToolsVersion = 11.4;
@@ -2773,7 +2776,7 @@
 				630682C72430CE4C00C5B28E /* FlowFree */,
 				637494A52435ECE600D724F7 /* FlowFreeC */,
 				63B40BC924250C72007A86E9 /* YesNoMathGames */,
-				63B05574243CC19C00DD741C /* KingOfMath */,
+				63B05574243CC19C00DD741C /* GameTemplate */,
 			);
 		};
 /* End PBXProject section */
@@ -3217,6 +3220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				638CAEF125D1890B00EFE503 /* GameTemplate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4951,7 +4955,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Modules/Games/KingOfMath/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Modules/Games/GameTemplate/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4962,7 +4966,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.KingOfMath;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.GameTemplate;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -5002,7 +5006,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = Modules/Games/KingOfMath/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Modules/Games/GameTemplate/SupportingFiles/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5013,7 +5017,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.KingOfMath;
+				PRODUCT_BUNDLE_IDENTIFIER = com.piknotech.gnimag.GameTemplate;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -5347,7 +5351,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		63B0557C243CC19C00DD741C /* Build configuration list for PBXNativeTarget "KingOfMath" */ = {
+		63B0557C243CC19C00DD741C /* Build configuration list for PBXNativeTarget "GameTemplate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63B0557A243CC19C00DD741C /* Debug */,

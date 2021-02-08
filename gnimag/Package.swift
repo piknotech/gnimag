@@ -124,12 +124,6 @@ let package = Package(
         ),
 
         .target(
-            name: "KingOfMath",
-            dependencies: allLibraries,
-            path: "Modules/Games/KingOfMath"
-        ),
-
-        .target(
             name: "MrFlap",
             dependencies: allLibraries,
             path: "Modules/Games/MrFlap"
@@ -146,7 +140,6 @@ let package = Package(
             name: "gnimag",
             dependencies: allLibraries + [
                 "FlowFree",
-                "KingOfMath",
                 "MrFlap",
                 "YesNoMathGames",
                 "ORSSerial"

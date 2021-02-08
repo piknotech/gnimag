@@ -182,20 +182,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63B05574243CC19C00DD741C"
-               BuildableName = "KingOfMath.framework"
-               BlueprintName = "KingOfMath"
-               ReferencedContainer = "container:gnimag.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "631212AC23253DC700C126B4"
                BuildableName = "gnimag"
                BlueprintName = "gnimag"
