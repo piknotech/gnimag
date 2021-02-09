@@ -1,45 +1,57 @@
-# gnimag - Gaming Reversed
+<img src="Documentation/Resources/gnimag.pdf" width="400">
 
-Have you ever wanted to beat your friends' highscores in mobile games? Maybe without playing the game for hours and hours?
 
-Well now you can! `gnimag` is a game-auto-player. It takes screen input from your mobile device, analyses it and simulates touches to play the game as far as possible.
 
-Only a few games are implemented at the moment. You can help extending by [contributing](gnimag/Sources/Games)! As there is an [uncountable infinity](https://www.statista.com/statistics/268251/number-of-apps-in-the-itunes-app-store-since-2008/) of mobile games out there, you can contribute very easily – just pick any game and start coding! See [here](gnimag/Sources/Games) on how to start.
+_gnimag_ is an intelligent game auto-player. It is the _software_ component in this multi-part, real-time game autoplaying system:
 
-## Project Structure
 
-The project consists of the following parts:
 
-- Six base libraries ([Common](gnimag/Sources/Base/Common), [Geometry](gnimag/Sources/Base/Geometry), [Image](gnimag/Sources/Base/Image), [Tapping](gnimag/Sources/Base/Tapping), [ImageAnalysisKit](gnimag/Sources/Base/ImageAnalysisKit) and [GameKit](gnimag/Sources/Base/GameKit)). These provide required and useful tools for implementing your own game.
-- Two debugging and logging libraries ([TestingTools](gnimag/Sources/Debug/TestingTools) and [LoggingKit](gnimag/Sources/Debug/LoggingKit).) They provide tools for manual and automated testing and logging while implementing a game.
-- [The games](gnimag/Sources/Games). Each game is a library which provides a public entry point to start auto-playing the game.
-- [gnimag](gnimag/Sources/Products/gnimag). The executable which allow running gnimag. Also, the actual Mac-specific input and output methods are defined here.
+<img src="Documentation/Resources/FunctionalDiagram.png" width="500">
 
----
 
-## Game Structure
 
-See [here](gnimag/Sources/Games) for how a game is built and how you can easily implement your own game.
+- The smartphone runs a game, say _MrFlap_. It shares its screen with the computer.
+- _gnimag_ is running on the computer. It continuously analyses the smartphone screen and calculates when exactly the robot should tap on the screen to try surviving as long as possible.
+- Every tap that _gnimag_ schedules is performed by the tapping robot.
 
----
+In this process, _gnimag_ considers every little detail. For example, there is a noticeable delay between the real-time game on the smartphone and the video stream that is received by the screen sharing program. There is a small additional delay involved between telling the robot to perform a tap and the tap actually being performed on the smartphone. _gnimag_ measures, and continuously updates, these delays and considers them when calculating the perfect moments for tapping.
 
-### How do I install and run gnimag on my Mac?
 
-Call `make install` to build and install gnimag. After gnimag was successfully built, call `gnimag` to start gnimag.
 
-### What about iPhones?
+_gnimag_ currently holds the **world record** in the following games:
 
-Currently, there is no possibility to trigger touches on non-jailbroken iPhones. You could, however, build a tapping robot and use it as the `Tapper` that is provided to the specific games. Have fun building!
+- Todo.
 
-### Which games are currently implemented?
 
-Fully implemented:
 
-- [Flow Free](gnimag/Sources/Games/FlowFree) ([App Store Link](https://apps.apple.com/us/app/flow-free/id526641427); [Play Store Link](https://play.google.com/store/apps/details?id=com.bigduckgames.flow))
-- [Freaking Math](gnimag/Sources/Games/YesNoMathGames) ([App Store Link](https://apps.apple.com/us/app/freaking-math/id846439108); [Play Store Link](https://play.google.com/store/apps/details?id=com.bangdev.freakingmath))
-- [identiti](gnimag/Sources/Games/YesNoMathGames) ([App Store Link](https://apps.apple.com/de/app/identiti/id909914922); [Play Store Link](https://play.google.com/store/apps/details?id=de.chipsapps.ca.identiti))
+If you've read this far and now want to try _gnimag_ for yourself: ***You do NOT need a robot in order to run _gnimag_**. If you own an Android device, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone.
 
-In progress:
 
-- [MrFlap](gnimag/Sources/Games/MrFlap) ([App Store Link](https://apps.apple.com/at/app/mr-flap/id822206495); [APK Link](https://apkpure.com/de/mr-flap/com.mrflap))
 
+## TLDR: How Do I Run _gnimag_ on My Computer?
+
+See here: [Tutorial: 5 Simple Steps]
+
+
+
+## Documentation
+
+If you're new to _gnimag_, you can read on how it works or how you execute it:
+
+- ❓ Tutorial
+- 💡 How Does Gnimag Work
+
+If you want to contribute to _gnimag_ (for example, implement an auto-player for a new game), have a look here:
+
+- ⚙️ Technical Documentation
+- 👩‍💻 Developing
+- (🐦 Explaining the _MrFlap_ Implementation ?)
+
+Finally, here is a list of world records which are held by _gnimag_ and a list of all games which are implemented or currently in progress:
+
++ 🏆 World Records
++ 🎳 Implemented Games.md
+
+
+
+Enjoy!
