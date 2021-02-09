@@ -1,13 +1,16 @@
-<img src="Documentation/Resources/gnimag.pdf" width="400">
+<p align="center">
+	<img src="Documentation/Resources/Subtitled gnimag.png" width="605">
+</p>
 
 
 
-_gnimag_ is an intelligent game auto-player. It is the _software_ component in this multi-part, real-time game autoplaying system:
+**_gnimag_ is an intelligent game auto-player**. It is the _software_ component in this multi-part, real-time _game autoplaying system_:
 
 
 
-<img src="Documentation/Resources/FunctionalDiagram.png" width="500">
-
+<p align="center">
+	<img src="Documentation/Resources/FunctionalDiagram.png" width="700">
+</p>
 
 
 - The smartphone runs a game, say _MrFlap_. It shares its screen with the computer.
@@ -24,7 +27,7 @@ _gnimag_ currently holds the **world record** in the following games:
 
 
 
-If you've read this far and now want to try _gnimag_ for yourself: ***You do NOT need a robot in order to run _gnimag_**. If you own an Android device, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone.
+Do you want to try _gnimag_ for yourself? Go through the [Tutorial]. **You do NOT need a robot in order to run _gnimag_**. If you own an Android device, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone, however.
 
 
 
@@ -39,9 +42,9 @@ See here: [Tutorial: 5 Simple Steps]
 If you're new to _gnimag_, you can read on how it works or how you execute it:
 
 - ❓ Tutorial
-- 💡 How Does Gnimag Work
+- 💡 How Does _gnimag_ Work
 
-If you want to contribute to _gnimag_ (for example, implement an auto-player for a new game), have a look here:
+If you want to contribute to _gnimag_ (for example, implement _gnimag_ for a new game, or fix existing bugs), have a look here:
 
 - ⚙️ Technical Documentation
 - 👩‍💻 Developing
@@ -50,7 +53,11 @@ If you want to contribute to _gnimag_ (for example, implement an auto-player for
 Finally, here is a list of world records which are held by _gnimag_ and a list of all games which are implemented or currently in progress:
 
 + 🏆 World Records
-+ 🎳 Implemented Games.md
++ 🎳 Implemented Games
+
+
+
+Also, if you discover a bug or have a question or game idea, [write an issue](https://github.com/piknotech/gnimag/issues/new) or [contact me](https://github.com/knothed).
 
 
 
