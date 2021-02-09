@@ -27,7 +27,7 @@ _gnimag_ currently holds the **world record** in the following games:
 
 
 
-Do you want to try _gnimag_ for yourself? Go through the [Tutorial]. **You do NOT need a robot in order to run _gnimag_**. If you own an Android device, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone, however.
+Do you want to try _gnimag_ for yourself? Go through the [Tutorial]. **You do NOT need a robot in order to run _gnimag_**. If you own an Android device or Windows Phone, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone, however.
 
 
 
