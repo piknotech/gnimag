@@ -35,7 +35,7 @@ class ImageAnalyzer {
     }
 
     /// Analyze the image. Use the hints to accomplish more performant or better analysis.
-    func analyze(image: Image, hints: AnalysisHints) -> Result<AnalysisResult, AnalysisError> {
+    func analyze(image: Image, hints: AnalysisHints, ignoreBars: Bool) -> Result<AnalysisResult, AnalysisError> {
         debug.image = image
 
         // Find coloring
@@ -70,7 +70,7 @@ class ImageAnalyzer {
         }
 
         // Find bars
-        let bars = findBars(in: image, with: coloring, playerOBB: playerOBB)
+        let bars = ignoreBars ? [] : findBars(in: image, with: coloring, playerOBB: playerOBB)
         debug.bars.result = bars
 
         debug.outcome = .success

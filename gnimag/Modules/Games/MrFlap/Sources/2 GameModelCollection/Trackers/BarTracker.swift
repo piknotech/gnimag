@@ -14,16 +14,10 @@ final class BarTracker {
     let orphanage = BarTrackerOrphanageDetector()
 
     /// The state the bar is currently in.
-    /// Only trackers with an "appearing" or "normal" state should be considered by prediction algorithms.
     var state: BarTrackerState!
 
-    var isDisappearing: Bool {
-        state is BarTrackerStateDisappearing
-    }
-
-    /// Triggered when the bar switches to disappearing state, or when it was detected to be orphaned.
-    /// This event could be triggered multiple times – once when the bar switches to disappearing, and once when it is orphaned via OrphanageDetector.
-    let disappearingOrOrphaned = Event<Void>()
+    /// The bar's character. This is currently not used.
+    let character: FineBarMovementCharacter
 
     // The angle and the center of the hole. yCenter is only used in state "normal".
     let angle: AngularWrapper<LinearTracker>
@@ -36,21 +30,17 @@ final class BarTracker {
     /// The shared playfield.
     private let playfield: Playfield
 
-    /// The movement character (i.e. section) with which this bar is active.
-    /// If the movement character of this game changes, this bar is marked disappearing.
-    private let movementCharacter: FineBarMovementCharacter
-
     /// The debug logger and a shorthand form for the current debug frame.
     let debugLogger: DebugLogger
     var debug: DebugFrame.GameModelCollection._Bar { debugLogger.currentFrame.gameModelCollection.bars.current }
 
     // Default initializer.
-    init(playfield: Playfield, movement: FineBarMovementCharacter, debugLogger: DebugLogger) {
+    init(playfield: Playfield, character: FineBarMovementCharacter, debugLogger: DebugLogger) {
         self.playfield = playfield
-        self.movementCharacter = movement
         self.debugLogger = debugLogger
+        self.character = character
 
-        let slopeGuess = BarCenterSlopeGuesses.guess(for: movement) * playfield.fullRadius
+        let slopeGuess = BarCenterSlopeGuesses.guess(for: character) * playfield.fullRadius
 
         angle = AngularWrapper(LinearTracker(tolerance: .absolute(5% * .pi)))
         width = ConstantTracker(tolerance: .relative(20%))
@@ -82,20 +72,7 @@ final class BarTracker {
 
     /// Check if all given values match the trackers.
     /// NOTE: This changes the state if necessary.
-    func integrityCheck(with bar: Bar, at time: Double, gameMovementCharacter: FineBarMovementCharacter) -> Bool {
-        // Trigger disappearing event when "isDisappearing" changes during this method
-        let wasDisappearing = isDisappearing
-        defer {
-            if !wasDisappearing && isDisappearing {
-                disappearingOrOrphaned.trigger()
-            }
-        }
-
-        // If the movement character of the game has changed, set bar to disappearing
-        if !isDisappearing && gameMovementCharacter != movementCharacter {
-            state = BarTrackerStateDisappearing()
-        }
-
+    func integrityCheck(with bar: Bar, at time: Double) -> Bool {
         guard angle.isDataPointValid(value: bar.angle, time: time, &debug.angle) else { return false }
         guard width.isValueValid(bar.width, &debug.width) else { return false }
 

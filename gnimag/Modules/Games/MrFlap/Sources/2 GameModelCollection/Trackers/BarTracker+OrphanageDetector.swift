@@ -3,11 +3,11 @@
 //  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
-/// BarTrackerOrphanageDetector detects whether a BarTracker is either not visible on the screen anymore or triggering too many integrity errors.
-/// This can happen in two cases: either the bar has fully disappeared, or it was detected and created erroneously.
+/// BarTrackerOrphanageDetector detects whether a BarTracker is triggering too many integrity errors.
+/// This happens when a bar is created erroneously.
 final class BarTrackerOrphanageDetector {
     /// The number of frames the tracker has not been updated for.
-    /// After 5 frames, the bar is marked as orphaned.
+    /// After 3 frames, the bar is marked as orphaned.
     private var consecutiveNumberOfFramesWithoutUpdate = 0
 
     var isOrphaned: Bool {

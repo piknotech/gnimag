@@ -24,6 +24,16 @@ final class InteractionRecorder {
         passedInteractions = FixedSizeFIFO<PlayerBarInteraction>(capacity: maximumStoredInteractions)
     }
 
+    /// Subscribe to the `barsRemoved` callback from GameModel.
+    func link(to model: GameModel) {
+        // Remove most recent interaction when it disappears
+        model.barsRemoved += { removedBars in
+            if let mostRecent = self.mostRecentInteraction, removedBars.contains(mostRecent.barTracker)  {
+                self.mostRecentInteraction = nil
+            }
+        }
+    }
+
     /// Call each frame with the upcoming interaction.
     /// If this interaction is new, i.e. does not match the previous one, the previous interaction will be marked as completed.
     func add(interaction: PlayerBarInteraction) {
@@ -33,14 +43,6 @@ final class InteractionRecorder {
         }
 
         mostRecentInteraction = interaction
-
-        // Remove most recent interaction when bar disappears
-        interaction.barTracker.disappearingOrOrphaned.unsubscribe(self)
-        interaction.barTracker.disappearingOrOrphaned += self • {
-            if self.mostRecentInteraction?.barTracker == interaction.barTracker {
-                self.mostRecentInteraction = nil
-            }
-        }
     }
 
     /// Return all interactions whose reference time is smaller than a given time.

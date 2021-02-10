@@ -49,11 +49,3 @@ public enum BisectionSolver {
         return (min + max) / 2
     }
 }
-
-/// The sign of the value, either +1 or -1.
-/// Returns 0 when the value is zero or NaN.
-private func sign(_ x: Double) -> Double {
-    if x < 0 { return -1 }
-    if x > 0 { return 1 }
-    return 0
-}

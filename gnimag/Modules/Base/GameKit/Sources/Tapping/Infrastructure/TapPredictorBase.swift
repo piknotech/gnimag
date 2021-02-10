@@ -25,6 +25,7 @@ open class TapPredictorBase {
     public init(tapper: SomewhereTapper, timeProvider: TimeProvider, tapDelayTolerance: TrackerTolerance) {
         self.timeProvider = timeProvider
         scheduler = TapScheduler(tapper: tapper, timeProvider: timeProvider, tapDelayTolerance: tapDelayTolerance)
+
         // Reassess lock each time a tap has been performed
         scheduler.tapPerformed.subscribe { tap in
             self.tapSequence?.relativeTapSequence.remove(tap: tap.scheduledTap.relativeTap)

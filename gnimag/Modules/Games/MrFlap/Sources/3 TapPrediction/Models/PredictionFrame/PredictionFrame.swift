@@ -33,7 +33,6 @@ extension PredictionFrame {
     private static func convertBars(gmc: GameModelCollector, player: PlayerProperties, playfield:
         PlayfieldProperties, currentTime: Double) -> [PlayerBarInteraction] {
         gmc.model.bars.compactMap { tracker in
-            if tracker.isDisappearing { return nil }
             guard let bar = BarProperties(bar: tracker, with: gmc.model.player, playfield: playfield, currentTime: currentTime, gmc: gmc) else { return nil }
             return PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime, barTracker: tracker)
         }.sorted {

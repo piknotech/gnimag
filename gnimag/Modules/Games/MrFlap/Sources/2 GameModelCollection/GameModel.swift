@@ -17,6 +17,9 @@ final class GameModel {
     /// All tracked bar objects.
     var bars: [BarTracker]
 
+    /// Triggered when one or multiple bars are removed from the model. This happens on bar character transitions, or when a bar is orphaned because it is non-integer.
+    let barsRemoved = Event<[BarTracker]>()
+
     /// Default initializer.
     init(playfield: Playfield, initialPlayer: Player, debugLogger: DebugLogger) {
         self.playfield = playfield

@@ -5,7 +5,6 @@
 
 import Common
 import GameKit
-import simd
 
 extension PlayerBarInteraction {
     private typealias Portion = BasicLinearPingPongTracker.LinearSegmentPortion

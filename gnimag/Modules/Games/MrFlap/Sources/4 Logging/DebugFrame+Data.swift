@@ -15,6 +15,7 @@ final class DebugFrame: DebugFrameProtocol {
 
     var index: Int
     var time: Double?
+    var points: Int?
 
     /// Duration of frame analysis, and duration of logging preparation.
     var analysisDuration: Double?
@@ -124,6 +125,8 @@ final class DebugFrame: DebugFrameProtocol {
 
         var player = _Player()
         var bars = _Bars()
+
+        var transitioningState: GameModelCollector.BarCharacterTransitionState?
 
         /// Properties of the player tracking.
         class _Player {

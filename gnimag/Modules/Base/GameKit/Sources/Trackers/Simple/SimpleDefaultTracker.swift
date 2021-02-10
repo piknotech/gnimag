@@ -4,7 +4,6 @@
 //
 
 import Common
-import simd
 import Surge
 import TestingTools
 

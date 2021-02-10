@@ -78,6 +78,9 @@ class TapPredictor: TapPredictorBase {
 
         // Link player jump for tap delay detection
         gmc.model.player.linkPlayerJump(to: self)
+
+        // Link interaction recorder to gameModel callback
+        interactionRecorder.link(to: gmc.model)
     }
 
     /// Remove all scheduled taps.

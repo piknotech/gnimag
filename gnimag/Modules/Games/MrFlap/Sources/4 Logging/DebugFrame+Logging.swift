@@ -224,7 +224,7 @@ extension DebugFrame {
     // MARK: Log Texts
     /// Create the full text that should be logged.
     private var fullLoggingText: String {
-        let header = "FRAME \(index)\n" + "time: \(time ??? "nil")"
+        let header = "FRAME \(index)\n" + "time: \(time ??? "nil")\n" + "points: \(points ??? "nil")"
         let texts = [header, logTextForDuration, logTextForHints, logTextForImageAnalysis, logTextForGameModelCollection, logTextForTapPrediction]
         return texts.joined(separator: "\n\n\n")
     }
@@ -322,6 +322,8 @@ extension DebugFrame {
         • Height: \(gameModelCollection.player.height ??? "nil")
 
         ––– Bars –––
+        transitioningState: \(gameModelCollection.transitioningState ??? "nil")
+
         \(barsText)
         """
     }

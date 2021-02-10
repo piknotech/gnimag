@@ -18,7 +18,7 @@ public final class MrFlap {
 
     /// The three great actors – one for each step.
     private let imageAnalyzer: ImageAnalyzer
-    private var gameModelCollector: GameModelCollector!
+    private var gameModelCollector: GameModelCollector?
     private let tapPredictor: TapPredictor
 
     /// The queue where all steps are performed on.
@@ -96,6 +96,7 @@ public final class MrFlap {
 
     /// Perform logging preparation and debug printing for this frame.
     private func logFrame() {
+        frame.points = points.points
         let lastFrame = frame
 
         chrono.measure(.loggingPreparation) {
@@ -137,7 +138,7 @@ public final class MrFlap {
         state = .waitingForFirstMove(initialPlayerPos: result.player)
         playfield = result.playfield
         gameModelCollector = GameModelCollector(playfield: playfield, initialPlayer: result.player, mode: result.mode, points: points, debugLogger: debugLogger)
-        tapPredictor.set(gmc: gameModelCollector)
+        tapPredictor.set(gmc: gameModelCollector!)
         points.setInitialAngle(result.player.angle)
 
         // Tap to begin the game
@@ -152,7 +153,7 @@ public final class MrFlap {
         if distance(between: result.player, and: initialPlayerPos) > 1 {
             state = .inGame
             tapPredictor.tapDetected(at: time)
-            _ = gameModelCollector.accept(result: result, time: time)
+            _ = gameModelCollector!.accept(result: result, time: time)
         }
     }
 
@@ -171,7 +172,7 @@ public final class MrFlap {
             lagTracker.registerFrame(being: .new)
 
             chrono.measure(.gameModelCollection) {
-                gameModelCollector.accept(result: result, time: time)
+                gameModelCollector!.accept(result: result, time: time)
             }
 
             chrono.measure(.tapPrediction) {
@@ -217,7 +218,8 @@ public final class MrFlap {
     /// Analyze an image using the ImageAnalyzer and the hints.
     private func analyze(image: Image, time: Double) -> Result<AnalysisResult, AnalysisError> {
         let hints = hintsForCurrentFrame(image: image, time: time)
-        let result = imageAnalyzer.analyze(image: image, hints: hints)
+        let ignoreBars = gameModelCollector?.ignoreBars ?? false
+        let result = imageAnalyzer.analyze(image: image, hints: hints, ignoreBars: ignoreBars)
         frame.hints.hints = hints
 
         return result

@@ -57,8 +57,6 @@ struct BarUpdater {
 
     /// Update the bar trackers with the matching result.
     private func updateTrackers(with pairs: [BarTracker: Bar], newBars: [Bar], time: Double, debugLogger: DebugLogger) {
-        let character = FineBarMovementCharacter(gameMode: gmc.mode, points: gmc.points.points)
-
         // Update all trackers
         for tracker in model.bars {
             tracker.orphanage.newFrame()
@@ -66,7 +64,7 @@ struct BarUpdater {
 
             // If tracker is associated with a bar from image analysis, update the tracker
             if let bar = pairs[tracker] {
-                if tracker.integrityCheck(with: bar, at: time, gameMovementCharacter: character) {
+                if tracker.integrityCheck(with: bar, at: time) {
                     tracker.update(with: bar, at: time)
                     recorder.update(with: tracker)
                 } else {
@@ -79,7 +77,7 @@ struct BarUpdater {
 
         // Create trackers from new bars
         for bar in newBars {
-            let tracker = BarTracker(playfield: model.playfield, movement: gmc.fineCharacter, debugLogger: debugLogger)
+            let tracker = BarTracker(playfield: model.playfield, character: gmc.fineCharacter, debugLogger: debugLogger)
             tracker.setupDebugLogging()
             tracker.update(with: bar, at: time)
             recorder.update(with: tracker)
@@ -87,14 +85,9 @@ struct BarUpdater {
             model.bars.append(tracker)
         }
 
-        // Remove orphaned trackers and trigger orphaned events
-        model.bars.removeAll { tracker in
-            if tracker.orphanage.isOrphaned {
-                tracker.disappearingOrOrphaned.trigger()
-                return true
-            } else {
-                return false
-            }
-        }
+        // Remove orphaned trackers
+        let removeBars = model.bars.filter(\.orphanage.isOrphaned)
+        model.bars.removeAll(where: removeBars.contains)
+        if !removeBars.isEmpty { model.barsRemoved.trigger(with: removeBars) }
     }
 }

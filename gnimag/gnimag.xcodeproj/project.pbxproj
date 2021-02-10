@@ -110,7 +110,6 @@
 		631214372326678700C126B4 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631212CD2325740000C126B4 /* Event.swift */; };
 		631214392326686A00C126B4 /* Terminal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631214382326686A00C126B4 /* Terminal.swift */; };
 		6312143B232669B900C126B4 /* AsyncTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6312143A232669B800C126B4 /* AsyncTools.swift */; };
-		631555A325A38C620056B8AD /* InputLagTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631555A125A388920056B8AD /* InputLagTracker.swift */; };
 		631555A525A3D0C20056B8AD /* iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631555A425A3D0C20056B8AD /* iOS.swift */; };
 		631555A925A3D6E30056B8AD /* MultiTapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631555A825A3D6E30056B8AD /* MultiTapper.swift */; };
 		6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */; };
@@ -144,9 +143,7 @@
 		632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */; };
 		63286EBC2451BDF100392FD8 /* FixedSizeFIFO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63286EBB2451BDF100392FD8 /* FixedSizeFIFO.swift */; };
 		6330D39725AC7CD300D28639 /* Chronometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6330D39525AC7B9700D28639 /* Chronometer.swift */; };
-		6330D39A25AC80B100D28639 /* FramePhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6330D39825AC80A400D28639 /* FramePhase.swift */; };
 		6330D39E25BDE6AE00D28639 /* GCDTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6330D39D25BDE6AD00D28639 /* GCDTiming.swift */; };
-		63318AAD2582B04C002CD9A8 /* PointsTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63318AAB2582B049002CD9A8 /* PointsTracker.swift */; };
 		63318AAF2583A3DD002CD9A8 /* BarMovementRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63318AAE2583A3DD002CD9A8 /* BarMovementRecorder.swift */; };
 		63318AB12583A656002CD9A8 /* BarMovementCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63318AB02583A656002CD9A8 /* BarMovementCharacter.swift */; };
 		63318AB42583AB97002CD9A8 /* BarMovementRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63318AB32583AB97002CD9A8 /* BarMovementRecord.swift */; };
@@ -156,6 +153,7 @@
 		63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A59234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift */; };
 		63351A5D234DD11E00E42762 /* Array+RemovingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5B234DD11700E42762 /* Array+RemovingRelated.swift */; };
 		63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5E234DE23E00E42762 /* SimpleDataSet.swift */; };
+		633EE10125D4672800725155 /* Sign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633EE0FF25D4671800725155 /* Sign.swift */; };
 		6340B174243DF828003E6EA7 /* MovingLineSegmentPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340B173243DF828003E6EA7 /* MovingLineSegmentPath.swift */; };
 		6340B175243DFD63003E6EA7 /* RandomPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E4EE023E9CEAD00B389FA /* RandomPoints.swift */; };
 		63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */; };
@@ -274,6 +272,9 @@
 		63E16AA72433E16F005E67ED /* Dragger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AA62433E16F005E67ED /* Dragger.swift */; };
 		63E16AA92433E4BF005E67ED /* PathTracer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AA82433E4BF005E67ED /* PathTracer.swift */; };
 		63E16AAB24348400005E67ED /* MouseDragger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E16AAA24348400005E67ED /* MouseDragger.swift */; };
+		63E390C525D3D3410017C825 /* FramePhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E390C225D3D3410017C825 /* FramePhase.swift */; };
+		63E390C625D3D3410017C825 /* InputLagTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E390C325D3D3410017C825 /* InputLagTracker.swift */; };
+		63E390C725D3D3410017C825 /* PointsTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E390C425D3D3410017C825 /* PointsTracker.swift */; };
 		63E5A06E23FC1D360082E910 /* TimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06D23FC1D350082E910 /* TimeProvider.swift */; };
 		63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */; };
 		63F01932238B3B3E00E380CB /* ScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F0193023885BE100E380CB /* ScatterStrokable.swift */; };
@@ -457,7 +458,6 @@
 		63121411232587E300C126B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		631214382326686A00C126B4 /* Terminal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terminal.swift; sourceTree = "<group>"; };
 		6312143A232669B800C126B4 /* AsyncTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTools.swift; sourceTree = "<group>"; };
-		631555A125A388920056B8AD /* InputLagTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InputLagTracker.swift; path = ../InputLagTracker.swift; sourceTree = "<group>"; };
 		631555A425A3D0C20056B8AD /* iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS.swift; sourceTree = "<group>"; };
 		631555A825A3D6E30056B8AD /* MultiTapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTapper.swift; sourceTree = "<group>"; };
 		6316BDA423C8FF510062100F /* PlayerAngleConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAngleConverter.swift; sourceTree = "<group>"; };
@@ -519,9 +519,7 @@
 		632696B323D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerBarInteraction+Conversion.swift"; sourceTree = "<group>"; };
 		63286EBB2451BDF100392FD8 /* FixedSizeFIFO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSizeFIFO.swift; sourceTree = "<group>"; };
 		6330D39525AC7B9700D28639 /* Chronometer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chronometer.swift; sourceTree = "<group>"; };
-		6330D39825AC80A400D28639 /* FramePhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FramePhase.swift; path = ../FramePhase.swift; sourceTree = "<group>"; };
 		6330D39D25BDE6AD00D28639 /* GCDTiming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDTiming.swift; sourceTree = "<group>"; };
-		63318AAB2582B049002CD9A8 /* PointsTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PointsTracker.swift; path = ../PointsTracker.swift; sourceTree = "<group>"; };
 		63318AAE2583A3DD002CD9A8 /* BarMovementRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarMovementRecorder.swift; sourceTree = "<group>"; };
 		63318AB02583A656002CD9A8 /* BarMovementCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarMovementCharacter.swift; sourceTree = "<group>"; };
 		63318AB32583AB97002CD9A8 /* BarMovementRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarMovementRecord.swift; sourceTree = "<group>"; };
@@ -532,6 +530,7 @@
 		63351A5B234DD11700E42762 /* Array+RemovingRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+RemovingRelated.swift"; sourceTree = "<group>"; };
 		63351A5E234DE23E00E42762 /* SimpleDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDataSet.swift; sourceTree = "<group>"; };
 		633E4EE023E9CEAD00B389FA /* RandomPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomPoints.swift; sourceTree = "<group>"; };
+		633EE0FF25D4671800725155 /* Sign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sign.swift; sourceTree = "<group>"; };
 		6340B173243DF828003E6EA7 /* MovingLineSegmentPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovingLineSegmentPath.swift; sourceTree = "<group>"; };
 		63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyFunctionToleranceChecker.swift; sourceTree = "<group>"; };
 		63440B4123B388B30091A012 /* TapDelayTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapDelayTracker.swift; sourceTree = "<group>"; };
@@ -678,6 +677,9 @@
 		63E16AA62433E16F005E67ED /* Dragger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dragger.swift; sourceTree = "<group>"; };
 		63E16AA82433E4BF005E67ED /* PathTracer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathTracer.swift; sourceTree = "<group>"; };
 		63E16AAA24348400005E67ED /* MouseDragger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseDragger.swift; sourceTree = "<group>"; };
+		63E390C225D3D3410017C825 /* FramePhase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FramePhase.swift; sourceTree = "<group>"; };
+		63E390C325D3D3410017C825 /* InputLagTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputLagTracker.swift; sourceTree = "<group>"; };
+		63E390C425D3D3410017C825 /* PointsTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointsTracker.swift; sourceTree = "<group>"; };
 		63E5A06D23FC1D350082E910 /* TimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeProvider.swift; sourceTree = "<group>"; };
 		63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+PixelFormat.swift"; sourceTree = "<group>"; };
 		63F0193023885BE100E380CB /* ScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScatterStrokable.swift; sourceTree = "<group>"; };
@@ -1708,6 +1710,7 @@
 			isa = PBXGroup;
 			children = (
 				631BE25723EF53EE008DDEE1 /* CwlRandom.swift */,
+				633EE0FF25D4671800725155 /* Sign.swift */,
 			);
 			path = Miscellaneous;
 			sourceTree = "<group>";
@@ -2037,9 +2040,9 @@
 		638CAEEC25D186ED00EFE503 /* Top-Level Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				6330D39825AC80A400D28639 /* FramePhase.swift */,
-				63318AAB2582B049002CD9A8 /* PointsTracker.swift */,
-				631555A125A388920056B8AD /* InputLagTracker.swift */,
+				63E390C225D3D3410017C825 /* FramePhase.swift */,
+				63E390C325D3D3410017C825 /* InputLagTracker.swift */,
+				63E390C425D3D3410017C825 /* PointsTracker.swift */,
 			);
 			path = "Top-Level Utilities";
 			sourceTree = "<group>";
@@ -2988,6 +2991,7 @@
 				6340B175243DFD63003E6EA7 /* RandomPoints.swift in Sources */,
 				6330D39E25BDE6AE00D28639 /* GCDTiming.swift in Sources */,
 				63997EE92434959C005473A0 /* Promise+Await.swift in Sources */,
+				633EE10125D4672800725155 /* Sign.swift in Sources */,
 				636BCC1B23BF953B00A3BE26 /* Angle.swift in Sources */,
 				6377C86023DC76D40084772F /* Timing.swift in Sources */,
 				63351A5D234DD11E00E42762 /* Array+RemovingRelated.swift in Sources */,
@@ -3132,7 +3136,6 @@
 			files = (
 				63318AB42583AB97002CD9A8 /* BarMovementRecord.swift in Sources */,
 				6355B6FD2444EBF700DCAFBB /* SimulatedBar.swift in Sources */,
-				631555A325A38C620056B8AD /* InputLagTracker.swift in Sources */,
 				6345680423BB955700D32053 /* PlayfieldProperties.swift in Sources */,
 				6345680123BB955700D32053 /* BarProperties.swift in Sources */,
 				63C7F6D023F588CF00187840 /* BarUpdater.swift in Sources */,
@@ -3146,13 +3149,13 @@
 				63184285244C6E88006AF53A /* InteractionRecorder.swift in Sources */,
 				637FCB4B2391AA0C0067BBCC /* DebugLogger.swift in Sources */,
 				637B56A723CE7FDE007E51B0 /* BarScatterStrokable.swift in Sources */,
+				63E390C525D3D3410017C825 /* FramePhase.swift in Sources */,
 				632696B123D0CA39009FE1E0 /* PlayerBarInteraction.swift in Sources */,
 				63B62DAB25A4DF8800F668B3 /* BarCenterSlopeGuesses.swift in Sources */,
 				63318AAF2583A3DD002CD9A8 /* BarMovementRecorder.swift in Sources */,
 				631213F723257F4000C126B4 /* ImageAnalyzer.swift in Sources */,
 				6323F11C23EC5A0C00182D13 /* PredictionFrame.swift in Sources */,
 				6380F772244502F80074AB2A /* SimulationWindow.swift in Sources */,
-				63318AAD2582B04C002CD9A8 /* PointsTracker.swift in Sources */,
 				631213FA23257F4000C126B4 /* Coloring.swift in Sources */,
 				6311E0B523E0E71D0080288D /* Solution.swift in Sources */,
 				6311E0B223E0E5F80080288D /* InteractionSolutionStrategy.swift in Sources */,
@@ -3162,6 +3165,7 @@
 				6311E0B723E0E7990080288D /* OptimalSolutionViaRandomizedSearchStrategy.swift in Sources */,
 				631213F423257F4000C126B4 /* PlayerTracker.swift in Sources */,
 				6306BDB12405298800C26C08 /* IdleStrategy.swift in Sources */,
+				63E390C725D3D3410017C825 /* PointsTracker.swift in Sources */,
 				630CE2F5244483E8006017F4 /* GameMode.swift in Sources */,
 				6318427C2449D20E006AF53A /* FullFramePlotData.swift in Sources */,
 				631213F923257F4000C126B4 /* Playfield.swift in Sources */,
@@ -3177,12 +3181,12 @@
 				6316BDA523C8FF510062100F /* PlayerAngleConverter.swift in Sources */,
 				63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */,
 				632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */,
-				6330D39A25AC80B100D28639 /* FramePhase.swift in Sources */,
 				63D002962373037900041069 /* DebugFrame+Data.swift in Sources */,
 				631213FB23257F4000C126B4 /* Player.swift in Sources */,
 				63C7F6D423F5A12A00187840 /* BarTracker+OrphanageDetector.swift in Sources */,
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,
 				63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */,
+				63E390C625D3D3410017C825 /* InputLagTracker.swift in Sources */,
 				6316BDB523CB8D430062100F /* SolutionPlot.swift in Sources */,
 				630CE2FA2444C890006017F4 /* SimulatedPlayer.swift in Sources */,
 				6375AFBB237DE6090019981E /* DebugFrame+Logging.swift in Sources */,
