@@ -54,7 +54,7 @@ internal enum ConnectedComponents {
     /// Extract connected components from an image using depth-first search.
     private static func connectedComponents(from image: Image, color: ColorMatch, connectivity: ConnectivityType) -> [OCRComponent] {
         // Convert image to boolean bitmap
-        var bitmap = (0 ..< image.width).map { x in
+        let bitmap = (0 ..< image.width).map { x in
             (0 ..< image.height).map { y in
                 color.matches(image.color(at: Pixel(x, y)))
             }

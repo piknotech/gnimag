@@ -44,12 +44,12 @@ struct BarProperties {
         self.holeSize = barHoleSize - playerSize
 
         // widthAtHeight implementation
-        angularWidthAtHeight = { height in
+        angularWidthAtHeight = { (height: Double) -> Double in
             2 * tan(0.5 * (width + playerSize) / height) // Extend bar width by player size
         }
 
         // Inverse of widthAtHeight
-        heightAtAngularWidth = { x in
+        heightAtAngularWidth = { (x: Double) -> Double in
             0.5 * (width + playerSize) / atan(x / 2)
         }
 

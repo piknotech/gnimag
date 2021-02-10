@@ -54,7 +54,7 @@ extension OBB: Shape {
     /// This is NOT the same as `self.aabb`!
     public var boundingBox: AABB {
         let c: [(CGFloat, CGFloat)] = [(1.0, 1.0), (-1.0, 1.0), (1.0, -1.0), (-1.0, -1.0)]
-        let corners = c.map { (x, y) in
+        let corners: [CGPoint] = c.map { (x: CGFloat, y: CGFloat) -> CGPoint in
             center + CGPoint(x: x * width / 2, y: y * width / 2)
         }
 
