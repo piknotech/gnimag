@@ -27,13 +27,13 @@ _gnimag_ currently holds the **world record** in the following games:
 
 
 
-Do you want to try _gnimag_ for yourself? Go through the [Tutorial]. **You do NOT need a robot in order to run _gnimag_**. If you own an Android device or Windows Phone, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone, however.
+Do you want to try _gnimag_ for yourself? Go through the [Tutorial](Documentation/Tutorial.md). **You do NOT need a robot in order to run _gnimag_**. If you own an Android device or Windows Phone, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone, however.
 
 
 
 ## TLDR: How Do I Run _gnimag_ on My Computer?
 
-See here: [Tutorial: 5 Simple Steps]
+See here: [Tutorial](Documentation/Tutorial.md)
 
 
 
@@ -41,19 +41,18 @@ See here: [Tutorial: 5 Simple Steps]
 
 If you're new to _gnimag_, you can read on how it works or how you execute it:
 
-- ❓ Tutorial
-- 💡 How Does _gnimag_ Work
+- ❓ [Tutorial](Documentation/Tutorial.md)
+- 💡 [How Does _gnimag_ Work](Documentation/HowDoesGnimagWork.md)
 
 If you want to contribute to _gnimag_ (for example, implement _gnimag_ for a new game, or fix existing bugs), have a look here:
 
-- ⚙️ Technical Documentation
-- 👩‍💻 Developing
-- (🐦 Explaining the _MrFlap_ Implementation ?)
+- ⚙️ [Modularisation](Documentation/Modularisation.md)
+- 👩‍💻 [Developing](Documentation/Developing.md)
+- 🐦 Explaining the _MrFlap_ Implementation
 
 Finally, here is a list of world records which are held by _gnimag_ and a list of all games which are implemented or currently in progress:
 
-+ 🏆 World Records
-+ 🎳 Implemented Games
++ 🎳 [Implemented Games And World Records](Documentation/ImplementedGames.md) 🏆
 
 
 

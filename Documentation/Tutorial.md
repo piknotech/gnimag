@@ -22,7 +22,7 @@ _How to get, setup and run gnimag_
 
 
 
-## 2. Setup the enivronment
+## 2. Setting up the enivronment
 
 You need a program for mirroring your smartphone to your computer.
 
@@ -67,9 +67,10 @@ Stop _gnimag_ by pressing `alt+c` in the Terminal.
 
 ### Why is _MrFlap_ crashing so early?
 
-This has to do with the screen sharing application. _MrFlap_ is a highly real-time game and requires very accurate timing of tap execution – tapping 50ms too late or too early often results in an immediate crash.
+If you are using your Mac actively while _gnimag_ is running, that is one reason.
+
+Otherwise, this has to do with the screen sharing application. _MrFlap_ is a highly real-time game and requires very accurate timing of tap execution – tapping 50ms too late or too early often results in an immediate crash.
 
 `scrcpy` simulates touches and injects them into the phone via `adb`. This is sometimes quick, sometimes not. When the delay between telling `scrcpy` to perform a tap and the tap actually being performed on the smartphone varies greatly, _gnimag_ cannot reliably execute the taps at the optimal points in time.
 
 This problem does not happen with a tapping robot, however. Because `scrcpy` (and other screen mirroring applications) are very reliably **input**-wise (just not output-wise), replacing `scrcpy`'s tapping mechanism with a physical one (like a robot) often suffices to play MrFlap ad infinitum (in theory).
-
