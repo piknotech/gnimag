@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="Documentation/Resources/Subtitled gnimag.png" width="605">
+	<img src="Documentation/Resources/Header.png" width="605">
 </p>
 
 
