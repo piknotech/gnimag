@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 import Surge
 import TestingTools
 

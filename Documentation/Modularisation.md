@@ -28,7 +28,7 @@ In addition to the just mentioned six base libraries, there are two libraries ju
 
 
 
-The _gnimag_ Xcode project contains a target for each of these frameworks. Also, every game is implemented as a single target. At the top of the dependency chain is the _gnimag_ executable which is a command-line tool target.
+The _gnimag_ Xcode project contains a target for each of these frameworks. Also, every game is implemented as a single target. At the top of the dependency chain is the _gnimag-cli_ command-line executable.
 
 Here is the module/target dependency graph:
 
@@ -38,7 +38,7 @@ Here is the module/target dependency graph:
 
 A game is high-level module which has access to all the aforementioned frameworks provided by the _gnimag_ project.
 
-_gnimag_ itself is a command-line tool which just calls the entry point of whatever game it wants to play. In addition, _gnimag_ provides actual implementations for the interfaces that `Image` and `Tapping` are defining: _gnimag_ contains components that interact with the Mac screen and with the mouse. For example, `WindowInteractor`s let _gnimag_ read content from and perform taps on specific windows, like screen-sharing applications.
+_gnimag-cli_ is a command-line tool which just calls the entry point of whatever game it wants to play. In addition, _gnimag-cli_ provides actual implementations for the interfaces that `Image` and `Tapping` are defining: _gnimag-cli_ contains components that interact with the Mac screen and with the mouse. For example, `WindowInteractor`s let _gnimag-cli_ read content from and perform taps on specific windows, like screen-sharing applications.
 
 
 

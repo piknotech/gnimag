@@ -1,4 +1,4 @@
-# gnimag
+# gnimag-cli
 
 gnimag is a simple command line tool to allow testing and executing games. It provides macOS-specific implementations for `ImageProvider` and `Tapper`.
 

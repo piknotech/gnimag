@@ -23,7 +23,7 @@ let package = Package(
         .macOS(.v10_14),
     ],
     products: [
-        .executable(name: "gnimag", targets: ["gnimag"]),
+        .executable(name: "gnimag", targets: ["gnimag-cli"]),
     ],
     dependencies: [
         /// A Swift library that uses the Accelerate framework to provide high-performance functions for matrix math, digital signal processing, and image manipulation.
@@ -137,14 +137,14 @@ let package = Package(
 
         // EXECUTABLES
         .target(
-            name: "gnimag",
+            name: "gnimag-cli",
             dependencies: allLibraries + [
                 "FlowFree",
                 "MrFlap",
                 "YesNoMathGames",
                 "ORSSerial"
             ],
-            path: "Modules/Executables/gnimag"
+            path: "Modules/Executables/gnimag-cli"
         ),
     ]
 )

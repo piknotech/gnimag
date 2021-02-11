@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "631212AC23253DC700C126B4"
-               BuildableName = "gnimag"
-               BlueprintName = "gnimag"
+               BuildableName = "gnimag-cli"
+               BlueprintName = "gnimag-cli"
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631212AC23253DC700C126B4"
-            BuildableName = "gnimag"
-            BlueprintName = "gnimag"
+            BuildableName = "gnimag-cli"
+            BlueprintName = "gnimag-cli"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,8 +63,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631212AC23253DC700C126B4"
-            BuildableName = "gnimag"
-            BlueprintName = "gnimag"
+            BuildableName = "gnimag-cli"
+            BlueprintName = "gnimag-cli"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

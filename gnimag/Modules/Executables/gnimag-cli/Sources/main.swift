@@ -13,7 +13,7 @@ import Geometry
 import Tapping
 
 // Arduino
-let imageProvider = airServer
+let imageProvider = scrcpy.imageProvider // airServer
 let tapper = SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
 
 let mrflap = MrFlap(
