@@ -27,7 +27,7 @@ _How to get, setup and run gnimag_
 You need a program for mirroring your smartphone to your computer.
 
 - For Android devices, we recommend [_scrcpy_](https://github.com/Genymobile/scrcpy).
-- For iPhones, we recommend [AirServer](https://www.airserver.com/Mac). It is paid but has a free trial version.
+- For iPhones, we recommend [AirServer](https://www.airserver.com/Mac). It is paid but has a free trial version. Free alternative: QuickTime Player.
 
 After installing the screen mirroring program, connect your smartphone **via cable** to your Mac and start mirroring the screen.
 
@@ -41,6 +41,13 @@ After installing the screen mirroring program, connect your smartphone **via cab
 
 ## 3. Running _gnimag_
 
+Which game do you want to play?
+
+- _MrFlap_: perform `gnimag run mrflap`.
+- _..._ TODO
+
+
+
 After `make` has finished successfully, press _play_ in MrFlap. Then start `gnimag`:
 
 ```
@@ -48,10 +55,21 @@ gnimag run mrflap -android
 gnimag run mrflap -ios
 ```
 
-See here (or run `gnimag`) for all supported games.
+See [here](ImplementedGames.md) (or run `gnimag`) for all supported games.
 
 ---
 
 Stop _gnimag_ by pressing `alt+c` in the Terminal.
 
 **Attention:** While running `gnimag`, use your Mac as little as possible. _gnimag_ takes plenty of resources as it continuously fetches new images from the screen mirroring application (at the Mac screen refresh rate) and analyzes them. In fact, closing, hiding or moving the screen mirroring application's window may adversely affect or stop _gnimag_.
+
+
+
+### Why is _MrFlap_ crashing so early?
+
+This has to do with the screen sharing application. _MrFlap_ is a highly real-time game and requires very accurate timing of tap execution – tapping 50ms too late or too early often results in an immediate crash.
+
+`scrcpy` simulates touches and injects them into the phone via `adb`. This is sometimes quick, sometimes not. When the delay between telling `scrcpy` to perform a tap and the tap actually being performed on the smartphone varies greatly, _gnimag_ cannot reliably execute the taps at the optimal points in time.
+
+This problem does not happen with a tapping robot, however. Because `scrcpy` (and other screen mirroring applications) are very reliably **input**-wise (just not output-wise), replacing `scrcpy`'s tapping mechanism with a physical one (like a robot) often suffices to play MrFlap ad infinitum (in theory).
+
