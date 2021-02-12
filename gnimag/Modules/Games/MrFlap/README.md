@@ -4,4 +4,4 @@ MrFlap is a simple single-tap game where the player navigates a fast moving obje
 
 As such, MrFlap is a real-time game and requires highly time-precise real-time tapping.
 
-[App Store Link](https://apps.apple.com/at/app/mr-flap/id822206495); [Android APK](https://apkpure.com/de/mr-flap/com.mrflap).
+[App Store](https://apps.apple.com/at/app/mr-flap/id822206495); [Android APK](https://apkpure.com/de/mr-flap/com.mrflap).

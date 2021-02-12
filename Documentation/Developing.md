@@ -32,7 +32,7 @@ When you add a dependency or create a new module in Xcode, be sure to also updat
 
 ## Creating a New Module
 
-You create a new module when creating a new game or creating a new library. In these cases, there is a ModuleTemplate module which you can duplicate and rename. Then, you still have to:
+You create a new module when creating a new game or creating a new library. In these cases, there is a GameTemplate module which you can duplicate and rename. Then, you still have to:
 
 + Change the bundle identifier (to `com.piknotech.gnimag.module_name`)
 + Create a scheme for the module **and** add the module to the `All` scheme

@@ -1,11 +1,3 @@
 # gnimag-cli
 
-gnimag is a simple command line tool to allow testing and executing games. It provides macOS-specific implementations for `ImageProvider` and `Tapper`.
-
-Use gnimag for the development of your game or just to start a game that you would like to play.
-
-To start a game, just import the according game library into main.swift, create an instance of the game and call `play()` (or something like that)!
-
-To play a game on an android device, you need [scrcpy or vysor](Modules/IO/Android). Use them to mirror the device to your Mac. Open the game and you can start playing as described above.
-
-iOS devices are not supported.
+_gnimag-cli_ is the target which produces the `gnimag` executable. In addition to providing a command-line interface, _gnimag-cli_ provides actual implementations for the interfaces that `Image` and `Tapping` are defining: _gnimag-cli_ contains components that interact with the Mac screen and with the mouse. For example, `WindowInteractor`s let _gnimag-cli_ read content from and perform taps on specific windows, like screen-sharing applications.

@@ -33,7 +33,7 @@ Do you want to try _gnimag_ for yourself? Go through the [Tutorial](Documentatio
 
 ## TLDR: How Do I Run _gnimag_ on My Computer?
 
-See here: [Tutorial](Documentation/Tutorial.md)
+Read through the [Tutorial](Documentation/Tutorial.md).
 
 
 
@@ -48,7 +48,7 @@ If you want to contribute to _gnimag_ (for example, implement _gnimag_ for a new
 
 - ⚙️ [Modularisation](Documentation/Modularisation.md)
 - 👩‍💻 [Developing](Documentation/Developing.md)
-- 🐦 Explaining the _MrFlap_ Implementation
+- 🐦 [Explaining the _MrFlap_ Implementation](Documentation/ExplainingMrFlap.md)
 
 Finally, here is a list of world records which are held by _gnimag_ and a list of all games which are implemented or currently in progress:
 

@@ -10,7 +10,6 @@
 		63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302243E234B45C00021F7FA /* SimpleTrackerProtocol.swift */; };
 		630682CC2430CE4D00C5B28E /* FlowFree.h in Headers */ = {isa = PBXBuildFile; fileRef = 630682CA2430CE4D00C5B28E /* FlowFree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		630682D32430CEB400C5B28E /* FlowFreeSingleLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682D22430CEB400C5B28E /* FlowFreeSingleLevel.swift */; };
-		630682D72430EE8000C5B28E /* OnOffImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682D52430EE7D00C5B28E /* OnOffImageProvider.swift */; };
 		630682D92430F13600C5B28E /* ValueStreamDamper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630873F3242E6633000ECE47 /* ValueStreamDamper.swift */; };
 		630682DC2430F59000C5B28E /* ScreenLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682DB2430F59000C5B28E /* ScreenLayout.swift */; };
 		630682DE2430F59900C5B28E /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682DD2430F59900C5B28E /* Level.swift */; };
@@ -154,6 +153,7 @@
 		63351A5D234DD11E00E42762 /* Array+RemovingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5B234DD11700E42762 /* Array+RemovingRelated.swift */; };
 		63351A61234DE30B00E42762 /* SimpleDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63351A5E234DE23E00E42762 /* SimpleDataSet.swift */; };
 		633EE10125D4672800725155 /* Sign.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633EE0FF25D4671800725155 /* Sign.swift */; };
+		633EE10225D68D1200725155 /* OnOffImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630682D52430EE7D00C5B28E /* OnOffImageProvider.swift */; };
 		6340B174243DF828003E6EA7 /* MovingLineSegmentPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6340B173243DF828003E6EA7 /* MovingLineSegmentPath.swift */; };
 		6340B175243DFD63003E6EA7 /* RandomPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633E4EE023E9CEAD00B389FA /* RandomPoints.swift */; };
 		63440B4023B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63440B3F23B0FBCC0091A012 /* AnyFunctionToleranceChecker.swift */; };
@@ -839,6 +839,7 @@
 				6330D39525AC7B9700D28639 /* Chronometer.swift */,
 				6318428924506CB0006AF53A /* ActionStreamDamper.swift */,
 				630873F3242E6633000ECE47 /* ValueStreamDamper.swift */,
+				630682D52430EE7D00C5B28E /* OnOffImageProvider.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -1972,7 +1973,6 @@
 				6375953E233A53D900ACA969 /* ShapeErasedImage.swift */,
 				63759540233A63CB00ACA969 /* ShapeErasureType.swift */,
 				63DF005824263747001D81B3 /* CroppedImage.swift */,
-				630682D52430EE7D00C5B28E /* OnOffImageProvider.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -3013,7 +3013,6 @@
 				631213502325785000C126B4 /* SmallestAABB.swift in Sources */,
 				6312134B2325785000C126B4 /* FindSinglePixel.swift in Sources */,
 				63759541233A63CC00ACA969 /* ShapeErasureType.swift in Sources */,
-				630682D72430EE8000C5B28E /* OnOffImageProvider.swift in Sources */,
 				63073E60242AA2A4002C4593 /* GrayscaleImage.swift in Sources */,
 				631213662325785000C126B4 /* ColorMatch.swift in Sources */,
 				631213642325785000C126B4 /* ExpandingCirclePath.swift in Sources */,
@@ -3108,6 +3107,7 @@
 				6318966D23B621B9002FBD4F /* TapScheduler.swift in Sources */,
 				6312138E2325793C00C126B4 /* Regression.swift in Sources */,
 				6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */,
+				633EE10225D68D1200725155 /* OnOffImageProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

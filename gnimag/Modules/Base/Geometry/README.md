@@ -1,8 +1,9 @@
 # Geometry
 
-Geometry contains simple geometric tools that are used throught gnimag. Geometry is built solely on a `CGFloat` & `CGPoint` basis.
+Geometry contains some basic geometric tools that are used throught _gnimag_. Geometry bases on `CoreGraphic`, i.e. mainly uses `CGPoint` and `CGFloat`.
 
-Currently, these tools are:
+Geometry provides:
 
-- A set of simple Shapes and Lines, each with sensible methods like `contains(_ point: CGPoint) -> Bool` etc.
-- `CGPoint` geometry: simple arithmetic operations, distance, length and rotation methods, dot and cross product, and conversion between cartesian and polar coordinates.
+- Lines, rays and various shapes, like polygons and circles. These lines and shapes can be drawn by [`TestingTools`](../../Debug/TestingTools).
+- Distance calculation from `CGPoint`s to any of the lines or shapes.
+- `CGPoint` geometry: arithmetic operations, distance, length and rotation methods, dot and cross product, and conversion between cartesian and polar coordinates.

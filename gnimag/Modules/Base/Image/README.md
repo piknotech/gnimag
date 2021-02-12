@@ -1,5 +1,5 @@
 # Image
 
-Image both defines base classes like `Image`, `Pixel` and `Color` and exposes an `ImageProvider` protocol. This protocol must be implemented by your hosting application – all games need a concrete instance of `ImageProvider` which updates them with live images from the mobile device.
+Image defines base classes like `Image`, `Pixel` and `Color` and exposes an `ImageProvider` protocol.
 
-For example, `gnimag` provides an `AppWindowImageProvider`, which just continuously fetches and forwards the contents of a macOS window, at a framerate of 60fps.
+While concrete image sources like a window content source implement the `ImageProvider` protocol, games only communicate with abstract `ImageProvider`s. The _gnimag_ user can then use their `ImageProvider` of choice for any game they like.

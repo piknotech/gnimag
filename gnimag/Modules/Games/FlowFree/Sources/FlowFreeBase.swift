@@ -6,7 +6,6 @@
 import Common
 import GameKit
 import Image
-import ImageAnalysisKit
 import Tapping
 
 /// FlowFreeBase bundles common functionality of different FlowFree game modes.
