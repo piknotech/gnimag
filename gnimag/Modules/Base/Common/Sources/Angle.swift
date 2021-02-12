@@ -6,7 +6,7 @@
 import Foundation
 
 /// Angle describes a value in [0, 2pi). Angle defines a useful distance function.
-public struct Angle: Equatable {
+public struct Angle: Equatable, HasDistance {
     /// The value, which is always in [0, 2pi).
     public let value: Double
 

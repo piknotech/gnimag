@@ -3,8 +3,11 @@
 //  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
+import Common
+
 /// Pixel represents a point on an image, only consisting of integral values.
-public struct Pixel {
+/// (0, 0) is the lower left corner.
+public struct Pixel: HasDistance {
     public var x: Int
     public var y: Int
     
@@ -13,6 +16,12 @@ public struct Pixel {
     public init(_ x: Int, _ y: Int) {
         self.x = x
         self.y = y
+    }
+
+    /// The euclidean distance between this pixel and another pixel.
+    @_transparent
+    public func distance(to other: Pixel) -> Double {
+        sqrt(Double((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y)))
     }
 }
 

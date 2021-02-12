@@ -3,9 +3,15 @@
 //  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
+public protocol HasDistance {
+    /// Calculate the distance to another object of the same type.
+    /// This distance must always be >= 0.
+    func distance(to other: Self) -> Double
+}
+
 public enum SimpleClustering {
     /// Defines a cluster of objects.
-    public class Cluster<T: DistanceMeasurable>: CustomStringConvertible {
+    public class Cluster<T: HasDistance>: CustomStringConvertible {
         public private(set) var objects: [T]
 
         /// The number of objects in the cluster.
@@ -50,7 +56,7 @@ public enum SimpleClustering {
 
     /// The result of a split-into-connected-clusters algorithm.
     /// Until calling `calculateClusterDiameters`, the cluster diameters are nil.
-    public struct Result<T: DistanceMeasurable> {
+    public struct Result<T: HasDistance> {
         public let clusters: [Cluster<T>] // The clusters, sorted by size.
         public var largestCluster: Cluster<T> { clusters.first! }
         public var largestDiameter: Double? { clusters.compactMap(\.diameter).max() }
@@ -66,7 +72,7 @@ public enum SimpleClustering {
     /// In each cluster, any two objects are connected via a path; in this path, all two consecutive objects are apart by not more than "maxDistance".
     /// This means that, in any cluster, there could be objects with an arbitrary distance – as long as they are connected with a path as described above.
     /// This function runs in O(n).
-    public static func from<T: DistanceMeasurable>(_ input: [T], maxDistance: Double) -> Result<T> {
+    public static func from<T: HasDistance>(_ input: [T], maxDistance: Double) -> Result<T> {
         var clusters = [Cluster<T>]()
 
         for object in input {

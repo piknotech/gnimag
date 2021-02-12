@@ -14,6 +14,9 @@ public final class GameQueue {
     /// The timing stats which give you information about frame durations, frame dismissal rates and more.
     public let timingStats: GameQueueTimingStats
 
+    /// More sophisticated detector regarding exact frame durations.
+    public let framerateDetector: FramerateDetector
+
     private let imageProvider: ImageProvider
 
     /// High-priority queue where frame analysis and further calculation is performed on.
@@ -34,6 +37,7 @@ public final class GameQueue {
         self.imageProvider = imageProvider
         self.synchronousFrameCallback = synchronousFrameCallback
         self.timingStats = GameQueueTimingStats(timeProvider: imageProvider.timeProvider)
+        self.framerateDetector = FramerateDetector()
     }
 
     /// Begin receiving images.
@@ -72,6 +76,7 @@ public final class GameQueue {
         let incomingTime = imageProvider.timeProvider.currentTime
 
         synchronized(self) {
+            framerateDetector.newFrame(time: frame.1)
             timingStats.newFrame(frame: frame, at: incomingTime)
 
             // Note if the previous frame was dropped

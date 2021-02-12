@@ -3,11 +3,12 @@
 //  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
+import Common
 import Foundation
 
 /// Color represents a simple RGB color.
 /// The channel values are in the range [0, 1].
-public struct Color {
+public struct Color: HasDistance {
     public let red: Double
     public let green: Double
     public let blue: Double

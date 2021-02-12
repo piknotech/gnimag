@@ -138,7 +138,7 @@ class ImageAnalyzer {
 }
 
 /// Helper struct for level-color clustering.
-struct PositionAndColor: DistanceMeasurable {
+struct PositionAndColor: HasDistance {
     let position: Position
     let color: Color
 
