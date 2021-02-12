@@ -14,7 +14,7 @@ import Tapping
 
 // Arduino
 let imageProvider = scrcpy.imageProvider // airServer
-let tapper = SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
+let tapper = scrcpy.tapper // SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
 
 let mrflap = MrFlap(
     imageProvider: imageProvider,
@@ -32,12 +32,8 @@ Timing.shared.perform(after: 2) {
     mrflap.play()
 }
 
-// Play sound on crash
 mrflap.crashed += {
     print("CRASHED!")
-    NSSound(named: "Basso")?.play()
-    NSSound(named: "Blow")?.play()
-    NSSound(named: "Glass")?.play()
 }
 
 PowerManager.disableScreenSleep()

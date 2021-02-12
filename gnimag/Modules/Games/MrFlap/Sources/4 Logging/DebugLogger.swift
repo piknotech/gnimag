@@ -33,20 +33,22 @@ final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugFrame> {
 
     /// Called when the player crashes.
     /// Log the last 100 frames synchronously.
+    /// This is the last thing which is done by MrFlap.
     func playerHasCrashed() {
-        if !parameters.logLastCoupleFramesOnCrash { return }
+        guard parameters.logLastCoupleFramesOnCrash else {
+            exit(0)
+        }
 
         queue.cancelAllOperations()
 
         // Log in background, but with high priority
         queue.qualityOfService = .userInteractive
 
-        Timing.shared.perform(after: 0) { // Wait until the current frame has been added to lastFrames
-            self.queue.addOperation {
-                for frame in self.lastFrames.elements {
-                    frame.log(with: self.parameters)
-                }
+        self.queue.addOperation {
+            for frame in self.lastFrames.elements {
+                frame.log(with: self.parameters)
             }
+            exit(0)
         }
     }
 }

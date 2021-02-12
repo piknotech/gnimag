@@ -209,8 +209,11 @@ public final class MrFlap {
     private func playerHasCrashed() {
         queue.stop()
         tapPredictor.removeScheduledTaps()
-        debugLogger.playerHasCrashed()
         crashed.trigger()
+
+        Timing.shared.perform(after: 0) { // First log the current frame, then call playerHasCrashed
+            self.debugLogger.playerHasCrashed()
+        }
     }
 
     // MARK: Analysis & Hints
