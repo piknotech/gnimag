@@ -75,7 +75,7 @@ public final class TapScheduler {
         // Perform tap either immediately or schedule it
         if executionTime == now {
             self.actuallyPerform(scheduledTap)
-            if referenceTime + tap.relativeTime < now {
+            if referenceTime + tap.relativeTime < now - 0.005 {
                 let diff = now - (referenceTime + tap.relativeTime)
                 Terminal.log(.warning, "Tap was scheduled for \(diff)s in the past - executing now")
             }

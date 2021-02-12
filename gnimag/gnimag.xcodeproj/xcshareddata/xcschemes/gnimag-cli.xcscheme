@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1140"
+   LastUpgradeVersion = "1160"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "631212AC23253DC700C126B4"
-               BuildableName = "gnimag-cli"
+               BuildableName = "gnimag"
                BlueprintName = "gnimag-cli"
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631212AC23253DC700C126B4"
-            BuildableName = "gnimag-cli"
+            BuildableName = "gnimag"
             BlueprintName = "gnimag-cli"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
@@ -63,7 +63,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631212AC23253DC700C126B4"
-            BuildableName = "gnimag-cli"
+            BuildableName = "gnimag"
             BlueprintName = "gnimag-cli"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
