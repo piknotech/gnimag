@@ -1,7 +1,17 @@
 <p align="center">
 	<img src="Documentation/Resources/Header.png" width="605">
 </p>
-
+<p align="center">
+    <a href="https://app.bitrise.io/app/96a20053e956487f">
+        <img src="https://app.bitrise.io/app/96a20053e956487f/status.svg?token=3SNRMW-1h3lduzPAtF00AA"
+             alt="Build Status">
+    </a>
+    <img src="https://img.shields.io/badge/Swift-5.2-FFAC45.svg"
+         alt="Swift: 5.2">
+    <img src="https://img.shields.io/badge/Platforms-macOS-3369FF.svg"
+        alt="Platforms: macOS">
+    </a>
+</p>
 
 
 **_gnimag_ is an intelligent game auto-player**. It is the _software_ component in this multi-part, real-time _game autoplaying system_:
