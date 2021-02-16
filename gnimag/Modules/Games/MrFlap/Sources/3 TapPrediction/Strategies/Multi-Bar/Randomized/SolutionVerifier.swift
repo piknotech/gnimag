@@ -38,7 +38,7 @@ struct SolutionVerifier {
         let descend = descendRating(for: allJumps)
         let horizontal = horizontalHoleRating(for: allJumps, requiredMinimum: 0)
         let vertical = verticalHoleRating(for: allJumps, requiredMinimum: 0)
-        let total = timeRating * min(playfield, descend, horizontal, vertical)
+        let total = timeRating * playfield * descend * horizontal * vertical
 
         return FineGrainedRating(considerFinalJump: considerFinalJump, meetsPrecondition: meetsPrecondition, total: total, timeRating: timeRating, playfieldRating: playfield, descendRating: descend, horizontalHoleRating: horizontal, verticalHoleRating: vertical)
     }
@@ -82,7 +82,7 @@ struct SolutionVerifier {
     }
 
     /// The time rating of a solution, in [0, inf).
-    func  timeRating(of solution: Solution, considerFinalJump: Bool) -> Double {
+    func timeRating(of solution: Solution, considerFinalJump: Bool) -> Double {
         let firstJump = frame.player.timePassedSinceJumpStart + (solution.jumpTimeDistances.first ?? solution.lengthOfLastJump)
         var allTimeDistances = Array(solution.jumpTimeDistances.dropFirst())
         allTimeDistances.append(firstJump)
@@ -111,18 +111,20 @@ struct SolutionVerifier {
         var allJumps = solution.jumps(for: player, with: jumping)
         allJumps.insert(firstJump, at: 0)
 
-        // Calculate safety ratings
-        let playfield = playfieldRating(for: allJumps)
-        if playfield <= requiredMinimum { return 0 } // Shortcut
-        let descend = descendRating(for: allJumps)
-        if descend <= requiredMinimum { return 0 } // Shortcut
-        let horizontal = horizontalHoleRating(for: allJumps, requiredMinimum: requiredMinimum)
-        if horizontal <= requiredMinimum { return 0 } // Shortcut
-        let vertical = verticalHoleRating(for: allJumps, requiredMinimum: requiredMinimum)
-        if vertical <= requiredMinimum { return 0 } // Shortcut
+        // Calculate and multiply safety ratings
+        var total = 1.0
+        for eval in [
+            { playfieldRating(for: allJumps) },
+            { descendRating(for: allJumps) },
+            { horizontalHoleRating(for: allJumps, requiredMinimum: requiredMinimum / total) },
+            { verticalHoleRating(for: allJumps, requiredMinimum: requiredMinimum / total) }
+        ] {
+            // Multiply all ratings together
+            total *= eval()
+            if total < requiredMinimum { return 0 } // Shortcut
+        }
 
-        // Return weakest rating
-        return min(horizontal, vertical, playfield, descend)
+        return total
     }
 
     /// The rating respective the vertical distance to the bar hole.
