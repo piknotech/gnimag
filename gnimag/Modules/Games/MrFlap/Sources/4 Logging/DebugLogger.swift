@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 import LoggingKit
 
 final class DebugLogger: LoggingKit.DebugLogger<DebugParameters, DebugFrame> {

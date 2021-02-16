@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 
 /// Pixel represents a point on an image, only consisting of integral values.
 /// (0, 0) is the lower left corner.

@@ -114,10 +114,10 @@ struct SolutionVerifier {
         // Calculate and multiply safety ratings
         var total = 1.0
         for eval in [
-            { playfieldRating(for: allJumps) },
-            { descendRating(for: allJumps) },
-            { horizontalHoleRating(for: allJumps, requiredMinimum: requiredMinimum / total) },
-            { verticalHoleRating(for: allJumps, requiredMinimum: requiredMinimum / total) }
+            { self.playfieldRating(for: allJumps) },
+            { self.descendRating(for: allJumps) },
+            { self.horizontalHoleRating(for: allJumps, requiredMinimum: requiredMinimum / total) },
+            { self.verticalHoleRating(for: allJumps, requiredMinimum: requiredMinimum / total) }
         ] {
             // Multiply all ratings together
             total *= eval()
