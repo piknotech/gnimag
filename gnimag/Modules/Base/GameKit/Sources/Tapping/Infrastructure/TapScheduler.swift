@@ -80,7 +80,7 @@ public final class TapScheduler {
                 Terminal.log(.warning, "Tap was scheduled for \(diff)s in the past - executing now")
             }
         } else {
-            timing.perform(after: executionTime - now, identification: .object(scheduledTap)) {
+            timing.perform(after: executionTime - timeProvider.currentTime, identification: .object(scheduledTap)) {
                 self.actuallyPerform(scheduledTap)
             }
         }

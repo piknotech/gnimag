@@ -56,7 +56,7 @@ public class FramerateDetector {
                 let clusters = SimpleClustering.from(distances, maxDistance: distances.min()! / 3)
                 let averages = clusters.clusters.map { mean($0.objects) }.sorted()
                 let distance = averages.first!
-                print(averages.map { $0 / distance }, distance)
+                Terminal.log(.info, String(format: "Approximated frame duration: %.1f ms", 1000 * distance))
 
                 // Move to stage 2
                 state = .hasDetectedApproximateFramerate
@@ -103,9 +103,10 @@ public class FramerateDetector {
         return (Int(ceil(from)) ... Int(floor(to))).map(Double.init).map(regression.at)
     }
 
-    /// Round the value to the nearest frame time around it.
-    public func roundToNearestFrame(time: Double) -> Double? {
-        guard let regression = tracker.regression else { return nil }
+    /// Round the value to the nearest frame time around it. If there is no regression yet, return the input value.
+    @inline(__always)
+    public func tryRoundingToNearestFrame(time: Double) -> Double {
+        guard let regression = tracker.regression else { return time }
         let frame = LinearSolver.solve(regression, equals: time)!
         return regression.at(round(frame))
     }
