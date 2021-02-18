@@ -234,6 +234,9 @@
 		63997EEB2434A1AD005473A0 /* FlowFreeTimeTrial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */; };
 		63997EED2434A290005473A0 /* FlowFreeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEC2434A290005473A0 /* FlowFreeBase.swift */; };
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
+		63A2942025DE879400A44DA4 /* ResizedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A2941F25DE879400A44DA4 /* ResizedImage.swift */; };
+		63A2942225DE8D8A00A44DA4 /* CGImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A2942125DE8D8900A44DA4 /* CGImage+Resize.swift */; };
+		63A2942425DE8EFB00A44DA4 /* ResizedImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A2942325DE8EFB00A44DA4 /* ResizedImageProvider.swift */; };
 		63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */; };
 		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
 		63B05579243CC19C00DD741C /* GameTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B05577243CC19C00DD741C /* GameTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -639,6 +642,9 @@
 		639B78CD242CDD9C009674E8 /* Expressions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expressions.swift; sourceTree = "<group>"; };
 		639C745423BB66DF005FD354 /* JumpingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingProperties.swift; sourceTree = "<group>"; };
 		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
+		63A2941F25DE879400A44DA4 /* ResizedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizedImage.swift; sourceTree = "<group>"; };
+		63A2942125DE8D8900A44DA4 /* CGImage+Resize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImage+Resize.swift"; sourceTree = "<group>"; };
+		63A2942325DE8EFB00A44DA4 /* ResizedImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizedImageProvider.swift; sourceTree = "<group>"; };
 		63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AllShortcuts+String.swift"; sourceTree = "<group>"; };
 		63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTrackerDataSet.swift; sourceTree = "<group>"; };
 		63B05575243CC19C00DD741C /* GameTemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GameTemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1031,6 +1037,8 @@
 				631212CF2325740000C126B4 /* ImageProvider.swift */,
 				63E5A06D23FC1D350082E910 /* TimeProvider.swift */,
 				631213C323257EB600C126B4 /* NativeImage.swift */,
+				63A2941F25DE879400A44DA4 /* ResizedImage.swift */,
+				63A2942325DE8EFB00A44DA4 /* ResizedImageProvider.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1624,6 +1632,7 @@
 				63B62B2323DC8D06009B07DF /* Array+Scan.swift */,
 				63073E61242AAB8E002C4593 /* CGImage+IO.swift */,
 				63E5A06F23FCA1B80082E910 /* CGImage+PixelFormat.swift */,
+				63A2942125DE8D8900A44DA4 /* CGImage+Resize.swift */,
 				6323F11023EB2C7200182D13 /* Int+TimesMake.swift */,
 				6375953B233963D400ACA969 /* FloatingPoint+IsAlmostEqual.swift */,
 				6312133A2325785000C126B4 /* Sequence+Extensions.swift */,
@@ -2948,7 +2957,9 @@
 				63073E63242AAD27002C4593 /* NativeImage.swift in Sources */,
 				631212D52325740000C126B4 /* ImageProvider.swift in Sources */,
 				631212D82325740000C126B4 /* Bounds.swift in Sources */,
+				63A2942425DE8EFB00A44DA4 /* ResizedImageProvider.swift in Sources */,
 				631212D62325740000C126B4 /* Pixel.swift in Sources */,
+				63A2942025DE879400A44DA4 /* ResizedImage.swift in Sources */,
 				63E5A06E23FC1D360082E910 /* TimeProvider.swift in Sources */,
 				631212D42325740000C126B4 /* Image.swift in Sources */,
 				631212D72325740000C126B4 /* Color.swift in Sources */,
@@ -2976,6 +2987,7 @@
 				6312143B232669B900C126B4 /* AsyncTools.swift in Sources */,
 				63179AD72433C42A00DA492E /* Promise.swift in Sources */,
 				63B64F3423585D95005A5E82 /* CartesianProduct.swift in Sources */,
+				63A2942225DE8D8A00A44DA4 /* CGImage+Resize.swift in Sources */,
 				6312143523258A3200C126B4 /* Sequence+Extensions.swift in Sources */,
 				63073E62242AAB8E002C4593 /* CGImage+IO.swift in Sources */,
 				63E5A07023FCA1B80082E910 /* CGImage+PixelFormat.swift in Sources */,
