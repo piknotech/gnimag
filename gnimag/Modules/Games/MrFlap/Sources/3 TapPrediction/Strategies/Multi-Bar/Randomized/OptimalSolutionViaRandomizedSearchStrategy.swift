@@ -4,6 +4,8 @@
 //
 
 import Common
+import GameKit
+import Image
 
 /// This InteractionSolutionStrategy finds an optimal solution (respective to a rating method) by intelligently trying a large amount of random tap sequences and choosing the best one.
 /// This class considers all bars in the frame.
@@ -23,10 +25,16 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
     private let debugLogger: DebugLogger
     private var debug: DebugFrame.TapPrediction { debugLogger.currentFrame.tapPrediction }
 
+    /// FramerateDetector limiting the total tap prediction duration.
+    private var framerateDetector: FramerateDetector
+    private var timeProvider: TimeProvider
+
     /// Default initializer.
-    init(minimumJumpDistance: Double, logger: DebugLogger) {
+    init(minimumJumpDistance: Double, logger: DebugLogger, framerate: FramerateDetector, timeProvider: TimeProvider) {
         self.minimumJumpDistance = minimumJumpDistance
         self.debugLogger = logger
+        self.framerateDetector = framerate
+        self.timeProvider = timeProvider
     }
 
     /// State whether produced solutions should be locked directly before executing a tap.
@@ -46,6 +54,8 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
 
     /// Calculate the solution for the given frame.
     func solution(for frame: PredictionFrame) -> Solution? {
+        let startTime = timeProvider.currentTime
+
         // Create generator and verifier
         let generator = SolutionGenerator(frame: frame)
         let verifier = SolutionVerifier(frame: frame)
@@ -84,17 +94,34 @@ class OptimalSolutionViaRandomizedSearchStrategy: InteractionSolutionStrategy {
         // Combined with the fact that the best solution from the last frame is used as a starting point, this leads to an immensely good final solution after (60fps * 1000solutions/frame) = 60,000 solutions generated in e.g. 1 second.
         let numTries = 1000
 
-        for respectMinimumTapDistance in [true, false] {
-            numTries.repeat {
-                let minTapDistance = respectMinimumTapDistance ? max(minimumJumpDistance, bestRating) : bestRating
+        let endTime = startTime + (framerateDetector.frameDistance ?? .greatestFiniteMagnitude) / 2
 
-                if let solution = generator.randomSolution(minimumConsecutiveTapDistance: minTapDistance, increaseMinimumTapDistanceForLargeNumberOfTaps: false) {
-                    evaluate(solution)
-                }
+        var currentTry = 0
+        var respectMinimumTapDistance = true
+        var hasToggledMinimumTapDistance = false
+
+        while true {
+            if timeProvider.currentTime > endTime || (currentTry > numTries && hasToggledMinimumTapDistance) { break }
+
+            // Generate and evaluate solution
+            let minTapDistance = respectMinimumTapDistance ? max(minimumJumpDistance, bestRating) : bestRating
+            if let solution = generator.randomSolution(minimumConsecutiveTapDistance: minTapDistance, increaseMinimumTapDistanceForLargeNumberOfTaps: false) {
+                evaluate(solution)
             }
 
-            // Only ignore minimum jump distance if it didn't yield a valid solution
-            if bestRating > 0 { break }
+            // Increase currentTry
+            currentTry += 1
+
+            if currentTry > numTries && !hasToggledMinimumTapDistance {
+                // Only ignore minimum jump distance if it didn't yield a valid solution
+                if bestRating > 0 {
+                    break
+                } else {
+                    currentTry = 0
+                    respectMinimumTapDistance.toggle()
+                    hasToggledMinimumTapDistance = true
+                }
+            }
         }
 
         // Log solution or, if idle strategy is chosen, zero solution

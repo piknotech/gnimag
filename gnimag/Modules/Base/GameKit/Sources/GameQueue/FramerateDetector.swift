@@ -15,6 +15,10 @@ extension Double: HasDistance {
 
 /// Beneath detecting the framerate, FramerateDetector also determines the offset, which allows predicting the exact timepoints of future frames.
 public class FramerateDetector {
+    public var frameDistance: Double? {
+        tracker.slope ?? distanceGuess
+    }
+
     private var state: State = .detectingApproximateFramerate
     enum State {
         /// Before starting to create a linear regression, it is important to calculate the approximate frame distance.
@@ -34,9 +38,6 @@ public class FramerateDetector {
     public let tracker = LinearTracker(maxDataPoints: 50, tolerance: .absolute(0), maxDataPointsForLogging: 1000)
     private var nextIndex = 0.0
 
-    private var frameDistance: Double! {
-        tracker.slope ?? distanceGuess
-    }
 
     /// Default initializer.
     public init() {
@@ -80,7 +81,7 @@ public class FramerateDetector {
             // Calculate how many frames were skipped
             var skipped: Double = 0
             if let last = tracker.values.last {
-                skipped = (time - last) / frameDistance - 1
+                skipped = (time - last) / frameDistance! - 1
             }
             if abs(skipped - round(skipped)) < 0.25 {
                 // Add value, considering the number of skipped frames

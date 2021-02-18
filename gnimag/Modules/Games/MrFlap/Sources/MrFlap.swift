@@ -19,7 +19,7 @@ public final class MrFlap {
     /// The three great actors – one for each step.
     private let imageAnalyzer: ImageAnalyzer
     private var gameModelCollector: GameModelCollector?
-    private let tapPredictor: TapPredictor
+    private var tapPredictor: TapPredictor!
 
     /// The queue where all steps are performed on.
     private var queue: GameQueue!
@@ -60,9 +60,10 @@ public final class MrFlap {
         debugLogger = DebugLogger(parameters: debugParameters)
         
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
-        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider, debugLogger: debugLogger)
 
         queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
+
+        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider, debugLogger: debugLogger, framerate: queue.framerateDetector)
     }
 
     /// Begin receiving images and play the game.

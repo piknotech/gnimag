@@ -54,9 +54,9 @@ class TapPredictor: TapPredictorBase {
     }
 
     /// Default initializer.
-    init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger) {
+    init(tapper: SomewhereTapper, timeProvider: TimeProvider, debugLogger: DebugLogger, framerate: FramerateDetector) {
         strategies = Strategies(
-            default: OptimalSolutionViaRandomizedSearchStrategy(minimumJumpDistance: 0.2, logger: debugLogger),
+            default: OptimalSolutionViaRandomizedSearchStrategy(minimumJumpDistance: 0.2, logger: debugLogger, framerate: framerate, timeProvider: timeProvider),
             fallback: IdleStrategy(relativeIdleHeight: 0.4, minimumJumpDistance: 0.2)
         )
 
