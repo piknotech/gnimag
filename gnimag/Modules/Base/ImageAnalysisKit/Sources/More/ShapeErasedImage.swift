@@ -46,8 +46,8 @@ public final class ShapeErasedImage: Image {
     }
 
     /// Convert the image into a CGImage by drawing all shapes, pixel by pixel, onto the image.
-    public override var CGImage: CGImage? {
-        guard let canvas = BitmapCanvas(image: image) else { return nil }
+    public override var CGImage: CGImage {
+        let canvas = BitmapCanvas(image: image)
 
         for shape in shapes {
             draw(shape: shape, onto: canvas, with: color, imageBounds: bounds)

@@ -31,9 +31,9 @@ open class Image {
         fatalError("Image is an abstract class – please override this method.")
     }
 
-    /// Images may or may not be backed (or can be converted to) CGImage instances.
-    /// Return a matching CGImage, if available.
-    open var CGImage: CGImage? {
+    /// Return a CGImage which represents this image as good as possible.
+    /// These CGImages should only be used for logging and debugging purposes.
+    open var CGImage: CGImage {
         fatalError("Image is an abstract class – please override this property getter.")
     }
 }

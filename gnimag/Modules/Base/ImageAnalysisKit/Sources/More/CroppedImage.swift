@@ -35,13 +35,13 @@ public final class CroppedImage: Image {
         return image.color(at: translated)
     }
 
-    /// Crop the original CGImage (if existing) to the specified crop rectangle.
-    public override var CGImage: CGImage? {
+    /// Crop the original CGImage to the specified crop rectangle.
+    public override var CGImage: CGImage {
         // Convert rectange to ULO coordinate system
         var rectangle = cropRectangle.CGRect
         rectangle.origin.y = CGFloat(image.height) - rectangle.maxY
 
-        return image.CGImage?.cropping(to: rectangle)
+        return image.CGImage.cropping(to: rectangle)!
     }
 }
 

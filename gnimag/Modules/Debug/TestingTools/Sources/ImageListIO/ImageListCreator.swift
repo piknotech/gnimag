@@ -40,12 +40,8 @@ public final class ImageListCreator {
             if self.nextImage > self.maxImages { return }
             if !self.i.isMultiple(of: self.skipRate) { self.i += 1; return } // Only save every `skipRate`th image
 
-            guard let cgImage = image.CGImage else {
-                return Terminal.log(.error, "ImageListCreator – incoming image doesn't have a CGImage and therefore cannot be written to disk.")
-            }
-
             let path = self.directoryPath +/ "\(self.nextImage).png"
-            cgImage.write(to: path)
+            image.CGImage.write(to: path)
             self.i += 1
         }
     }

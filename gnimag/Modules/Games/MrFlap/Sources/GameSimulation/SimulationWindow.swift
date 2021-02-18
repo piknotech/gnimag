@@ -45,6 +45,6 @@ private class AppDelegate: NSObject, NSApplicationDelegate {
 
     /// Show an image on the window.
     func set(image: Image) {
-        window.contentView?.layer!.contents = image.CGImage!
+        window.contentView?.layer!.contents = image.CGImage
     }
 }

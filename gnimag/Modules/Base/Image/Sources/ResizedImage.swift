@@ -41,8 +41,8 @@ public final class ResizedImage: Image {
     }
 
     /// Resize the original CGImage.
-    public override var CGImage: CGImage? {
-        image.CGImage?.resize(to: resizedSize, interpolationQuality: .none)
+    public override var CGImage: CGImage {
+        image.CGImage.resize(to: resizedSize, interpolationQuality: .none)
     }
 }
 

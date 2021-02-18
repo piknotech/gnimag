@@ -129,7 +129,7 @@ extension DebugFrame {
         guard let image = imageAnalysis.image, let coloring = imageAnalysis.coloring.result else { return }
 
         // Add player to canvas
-        let canvas = BitmapCanvas(image: image)!
+        let canvas = BitmapCanvas(image: image)
         if let searchCenter = imageAnalysis.player.searchCenter {
             canvas.fill(searchCenter, with: coloring.safeLoggingColor, alpha: 0.5, width: 3)
         }
@@ -150,7 +150,7 @@ extension DebugFrame {
 
         // All unsuccessful "locateBar" calls
         for (i, location) in imageAnalysis.bars.locations.enumerated() where location.failure != nil {
-            let canvas = BitmapCanvas(image: image)!
+            let canvas = BitmapCanvas(image: image)
             _ = location.innerOBB.map { canvas.stroke($0, with: .white - coloring.secondary) }
             _ = location.outerOBB.map { canvas.stroke($0, with: .white - coloring.secondary) }
             _ = location.startPixel.map { canvas.fill($0, with: .white - coloring.theme, alpha: 0.5, width: 3) }
