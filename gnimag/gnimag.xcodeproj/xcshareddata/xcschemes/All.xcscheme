@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1140"
+   LastUpgradeVersion = "1160"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "NO"
@@ -182,23 +182,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63B05574243CC19C00DD741C"
-               BuildableName = "KingOfMath.framework"
-               BlueprintName = "KingOfMath"
-               ReferencedContainer = "container:gnimag.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "631212AC23253DC700C126B4"
                BuildableName = "gnimag"
-               BlueprintName = "gnimag"
+               BlueprintName = "gnimag-cli"
                ReferencedContainer = "container:gnimag.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -229,7 +215,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631212AC23253DC700C126B4"
             BuildableName = "gnimag"
-            BlueprintName = "gnimag"
+            BlueprintName = "gnimag-cli"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -246,7 +232,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "631212AC23253DC700C126B4"
             BuildableName = "gnimag"
-            BlueprintName = "gnimag"
+            BlueprintName = "gnimag-cli"
             ReferencedContainer = "container:gnimag.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

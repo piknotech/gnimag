@@ -3,16 +3,15 @@ SHELL = /bin/bash
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
 libdir ?= $(prefix)/lib
-srcdir = Sources
 
 REPODIR = $(shell pwd)
 BUILDDIR = $(REPODIR)/.build
-SOURCES = $(wildcard $(srcdir)/**/*.swift)
 
 .DEFAULT_GOAL = install
+.PHONY: gnimag install uninstall clean
 
-gnimag: $(SOURCES)
-	@./CopyResources.sh
+gnimag:
+	@scripts/CopyResources.sh
 	@swift build \
 		-c release \
 		-Xswiftc "-whole-module-optimization" \
@@ -26,9 +25,9 @@ install: gnimag
 	@install "$(BUILDDIR)/release/gnimag" "$(bindir)"
 
 uninstall:
-	@./CopyResources.sh clean
+	@scripts/CopyResources.sh clean
 	@rm -rf "$(bindir)/gnimag"
 
 clean:
-	@./CopyResources.sh clean
+	@scripts/CopyResources.sh clean
 	@rm -rf $(BUILDDIR)

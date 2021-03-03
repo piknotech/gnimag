@@ -1,45 +1,74 @@
-# gnimag - Gaming Reversed
+<p align="center">
+	<img src="Documentation/Resources/Header.png" width="605">
+</p>
+<p align="center">
+    <a href="https://app.bitrise.io/app/96a20053e956487f">
+        <img src="https://app.bitrise.io/app/96a20053e956487f/status.svg?token=3SNRMW-1h3lduzPAtF00AA"
+             alt="Build Status">
+    </a>
+    <img src="https://img.shields.io/badge/Swift-5.3-FFAC45.svg"
+         alt="Swift: 5.3">
+    <img src="https://img.shields.io/badge/Platforms-macOS-3369FF.svg"
+        alt="Platforms: macOS">
+    </a>
+</p>
 
-Have you ever wanted to beat your friends' highscores in mobile games? Maybe without playing the game for hours and hours?
 
-Well now you can! `gnimag` is a game-auto-player. It takes screen input from your mobile device, analyses it and simulates touches to play the game as far as possible.
+**_gnimag_ is an intelligent game auto-player**. It is the _software_ component in this multi-part, real-time _game autoplaying system_:
 
-Only a few games are implemented at the moment. You can help extending by [contributing](gnimag/Sources/Games)! As there is an [uncountable infinity](https://www.statista.com/statistics/268251/number-of-apps-in-the-itunes-app-store-since-2008/) of mobile games out there, you can contribute very easily – just pick any game and start coding! See [here](gnimag/Sources/Games) on how to start.
 
-## Project Structure
 
-The project consists of the following parts:
+<p align="center">
+	<img src="Documentation/Resources/FunctionalDiagram.png" width="700">
+</p>
 
-- Six base libraries ([Common](gnimag/Sources/Base/Common), [Geometry](gnimag/Sources/Base/Geometry), [Image](gnimag/Sources/Base/Image), [Tapping](gnimag/Sources/Base/Tapping), [ImageAnalysisKit](gnimag/Sources/Base/ImageAnalysisKit) and [GameKit](gnimag/Sources/Base/GameKit)). These provide required and useful tools for implementing your own game.
-- Two debugging and logging libraries ([TestingTools](gnimag/Sources/Debug/TestingTools) and [LoggingKit](gnimag/Sources/Debug/LoggingKit).) They provide tools for manual and automated testing and logging while implementing a game.
-- [The games](gnimag/Sources/Games). Each game is a library which provides a public entry point to start auto-playing the game.
-- [gnimag](gnimag/Sources/Products/gnimag). The executable which allow running gnimag. Also, the actual Mac-specific input and output methods are defined here.
 
----
+- The smartphone runs a game, say _MrFlap_. It shares its screen with the computer.
+- _gnimag_ is running on the computer. It continuously analyses the smartphone screen and calculates exactly when and how the robot should tap on the screen to try surviving as long as possible.
+- Every tap that _gnimag_ schedules is performed by the tapping robot.
 
-## Game Structure
+In this process, _gnimag_ considers every little detail. For example, there is a noticeable delay between the real-time game on the smartphone and the video stream that is received by the screen sharing program. There is a small additional delay involved between telling the robot to perform a tap and the tap actually being performed on the smartphone. _gnimag_ measures, and continuously updates, these delays and considers them when calculating the perfect moments for tapping.
 
-See [here](gnimag/Sources/Games) for how a game is built and how you can easily implement your own game.
 
----
 
-### How do I install and run gnimag on my Mac?
+_gnimag_ currently holds the **world record** in the following games:
 
-Call `make install` to build and install gnimag. After gnimag was successfully built, call `gnimag` to start gnimag.
+- MrFlap
+- More coming very soon.
 
-### What about iPhones?
 
-Currently, there is no possibility to trigger touches on non-jailbroken iPhones. You could, however, build a tapping robot and use it as the `Tapper` that is provided to the specific games. Have fun building!
 
-### Which games are currently implemented?
+Do you want to try _gnimag_ for yourself? Go through the [Tutorial](Documentation/Tutorial.md). **You do NOT need a robot in order to run _gnimag_**. If you own an Android device or Windows Phone, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone, however.
 
-Fully implemented:
 
-- [Flow Free](gnimag/Sources/Games/FlowFree) ([App Store Link](https://apps.apple.com/us/app/flow-free/id526641427); [Play Store Link](https://play.google.com/store/apps/details?id=com.bigduckgames.flow))
-- [Freaking Math](gnimag/Sources/Games/YesNoMathGames) ([App Store Link](https://apps.apple.com/us/app/freaking-math/id846439108); [Play Store Link](https://play.google.com/store/apps/details?id=com.bangdev.freakingmath))
-- [identiti](gnimag/Sources/Games/YesNoMathGames) ([App Store Link](https://apps.apple.com/de/app/identiti/id909914922); [Play Store Link](https://play.google.com/store/apps/details?id=de.chipsapps.ca.identiti))
 
-In progress:
+## TLDR: How Do I Run _gnimag_ on My Computer?
 
-- [MrFlap](gnimag/Sources/Games/MrFlap) ([App Store Link](https://apps.apple.com/at/app/mr-flap/id822206495); [APK Link](https://apkpure.com/de/mr-flap/com.mrflap))
+Read through the [Tutorial](Documentation/Tutorial.md).
 
+
+
+## Documentation
+
+If you're new to _gnimag_, you can read on how it works or how you execute it:
+
+- ❓ [Tutorial](Documentation/Tutorial.md)
+- 💡 [How Does _gnimag_ Work](Documentation/HowDoesGnimagWork.md)
+
+If you want to contribute to _gnimag_ (for example, implement _gnimag_ for a new game, or fix existing bugs), have a look here:
+
+- ⚙️ [Modularisation](Documentation/Modularisation.md)
+- 👩‍💻 [Developing](Documentation/Developing.md)
+- 🐦 [Explaining the _MrFlap_ Implementation](Documentation/ExplainingMrFlap.md)
+
+Finally, here is a list of world records which are held by _gnimag_ and a list of all games which are implemented or currently in progress:
+
++ 🎳 [Implemented Games And World Records](Documentation/ImplementedGames.md) 🏆
+
+
+
+Also, if you discover a bug or have a question or game idea, [write an issue](https://github.com/piknotech/gnimag/issues/new) or [contact us](http://piknotech.com/contact.html).
+
+
+
+Enjoy!
