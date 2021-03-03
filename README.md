@@ -6,8 +6,8 @@
         <img src="https://app.bitrise.io/app/96a20053e956487f/status.svg?token=3SNRMW-1h3lduzPAtF00AA"
              alt="Build Status">
     </a>
-    <img src="https://img.shields.io/badge/Swift-5.2-FFAC45.svg"
-         alt="Swift: 5.2">
+    <img src="https://img.shields.io/badge/Swift-5.3-FFAC45.svg"
+         alt="Swift: 5.3">
     <img src="https://img.shields.io/badge/Platforms-macOS-3369FF.svg"
         alt="Platforms: macOS">
     </a>
@@ -33,7 +33,8 @@ In this process, _gnimag_ considers every little detail. For example, there is a
 
 _gnimag_ currently holds the **world record** in the following games:
 
-- Todo.
+- MrFlap
+- More coming very soon.
 
 
 
@@ -66,7 +67,7 @@ Finally, here is a list of world records which are held by _gnimag_ and a list o
 
 
 
-Also, if you discover a bug or have a question or game idea, [write an issue](https://github.com/piknotech/gnimag/issues/new) or [contact me](https://github.com/knothed).
+Also, if you discover a bug or have a question or game idea, [write an issue](https://github.com/piknotech/gnimag/issues/new) or [contact us](http://piknotech.com/contact.html).
 
 
 
