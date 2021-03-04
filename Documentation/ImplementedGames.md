@@ -15,5 +15,10 @@ The following is a full list of games which are playable by _gnimag_, or which a
 
 Here we showcase some of the world records _gnimag_ is currently holding.
 
-todo
 
+
+## Mr Flap:
+
+<p align="center">
+	<img src="Resources/MrFlap-Hardcore.png" height="500">
+</p>
