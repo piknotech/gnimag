@@ -12,6 +12,8 @@ import FlowFree
 import Geometry
 import Tapping
 
+Permissions.checkOnStartup()
+
 // Arduino
 let imageProvider = scrcpy.imageProvider.resizingImages(factor: 0.5)
 let tapper = SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
@@ -20,7 +22,7 @@ let mrflap = MrFlap(
     imageProvider: imageProvider,
     tapper: tapper,
     debugParameters: DebugParameters(
-        location: "/Users/David/Desktop/Debug.noSync",
+        location: NSHomeDirectory() +/ "Desktop/Debug.noSync",
         occasions: [],
         logEvery: 1000,
         content: .all,
