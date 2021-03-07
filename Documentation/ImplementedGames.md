@@ -19,6 +19,6 @@ Here we showcase some of the world records _gnimag_ is currently holding.
 
 ## Mr Flap:
 
-<p align="center">
-	<img src="Resources/MrFlap-Hardcore.png" height="500">
-</p>
+Normal mode (iOS)          | Harcode mode (iOS)
+:-------------------------:|:-------------------------:
+![](Resources/MrFlap-Normal.png)  |  ![](Resources/MrFlap-Hardcore.png)
