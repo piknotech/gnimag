@@ -17,12 +17,12 @@ void click() {
   delay(50);
   digitalWrite(8, LOW);
   digitalWrite(13, LOW);
-  delay(50);
+  delay(25);
 }
 
 void test() {
   int i = 0;
-  while (i < 250) {
+  while (i < 100) {
     click();
     i++;
   }
