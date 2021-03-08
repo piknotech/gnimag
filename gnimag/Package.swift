@@ -135,6 +135,12 @@ let package = Package(
             path: "Modules/Games/YesNoMathGames"
         ),
 
+        .target(
+            name: "ThreePoints",
+            dependencies: allLibraries,
+            path: "Modules/Games/ThreePoints"
+        ),
+
         // EXECUTABLES
         .target(
             name: "gnimag-cli",
@@ -142,6 +148,7 @@ let package = Package(
                 "FlowFree",
                 "MrFlap",
                 "YesNoMathGames",
+                "ThreePoints",
                 "ORSSerial"
             ],
             path: "Modules/Executables/gnimag-cli"
