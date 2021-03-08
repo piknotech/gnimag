@@ -14,7 +14,7 @@
 </p>
 
 
-**_gnimag_ is an intelligent game auto-player**. It is the _software_ component in this multi-part, real-time _game autoplaying system_:
+**_gnimag_ is an intelligent game auto-player. It holds world records in multiple smartphone games**. _gnimag_ is the software component in this multi-part, real-time _game autoplaying system_:
 
 
 
@@ -31,20 +31,15 @@ In this process, _gnimag_ considers every little detail. For example, there is a
 
 
 
-_gnimag_ currently holds the **world record** in the following games:
-
-- MrFlap
-- More coming very soon.
+_gnimag_ holds active world records in various games. Click [here](Documentation/WorldRecords.md) to see them all! 🏆
 
 
 
-Do you want to try _gnimag_ for yourself? Go through the [Tutorial](Documentation/Tutorial.md). **You do NOT need a robot in order to run _gnimag_**. If you own an Android device or Windows Phone, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone, however.
+## How Do I Run _gnimag_ Myself?
 
+Go through the [Tutorial](Documentation/Tutorial.md).
 
-
-## TLDR: How Do I Run _gnimag_ on My Computer?
-
-Read through the [Tutorial](Documentation/Tutorial.md).
+**You do NOT need a robot in order to run _gnimag_**. If you own an Android device or Windows Phone, the screen sharing program can simulate tapping your smartphone, so there is no need for a robot. You DO need a robot if you want to run _gnimag_ on an iPhone, however.
 
 
 
@@ -63,7 +58,9 @@ If you want to contribute to _gnimag_ (for example, implement _gnimag_ for a new
 
 Finally, here is a list of world records which are held by _gnimag_ and a list of all games which are implemented or currently in progress:
 
-+ 🎳 [Implemented Games And World Records](Documentation/ImplementedGames.md) 🏆
+- 🏆 [World Record Collection](Documentation/WorldRecords.md)
+
++ 🎳 [Implemented Games](Documentation/ImplementedGames.md)
 
 
 

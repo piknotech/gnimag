@@ -11,14 +11,5 @@ The following is a full list of games which are playable by _gnimag_, or which a
 
 
 
-# World Record Collection
+Also see the **[world record collection](WorldRecords.md)**.
 
-Here we showcase some of the world records _gnimag_ is currently holding.
-
-
-
-## Mr Flap:
-
-Normal mode (iOS)          | Harcode mode (iOS)
-:-------------------------:|:-------------------------:
-![](Resources/MrFlap-Normal.png)  |  ![](Resources/MrFlap-Hardcore.png)
