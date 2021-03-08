@@ -227,22 +227,19 @@
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
 		6380F772244502F80074AB2A /* SimulationWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6380F770244502F40074AB2A /* SimulationWindow.swift */; };
 		63876E662356093500132A21 /* JumpTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63876E652356093500132A21 /* JumpTracker.swift */; };
-		638CAEF125D1890B00EFE503 /* GameTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CAEF025D1890B00EFE503 /* GameTemplate.swift */; };
 		6392A1B125A0C9B400761241 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6392A1B025A0C9B400761241 /* IOKit.framework */; };
 		6392A1B325A0F0CB00761241 /* PowerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6392A1B225A0F0CB00761241 /* PowerManager.swift */; };
 		63997EE92434959C005473A0 /* Promise+Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EE82434959C005473A0 /* Promise+Await.swift */; };
 		63997EEB2434A1AD005473A0 /* FlowFreeTimeTrial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEA2434A1AD005473A0 /* FlowFreeTimeTrial.swift */; };
 		63997EED2434A290005473A0 /* FlowFreeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63997EEC2434A290005473A0 /* FlowFreeBase.swift */; };
-		639C338C25F68998005D0B6D /* GameTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B05577243CC19C00DD741C /* GameTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		639C338E25F68998005D0B6D /* GameTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CAEF025D1890B00EFE503 /* GameTemplate.swift */; };
 		639C339B25F68BA5005D0B6D /* ThreePoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639C339A25F68BA5005D0B6D /* ThreePoints.swift */; };
+		639C339E25F68D21005D0B6D /* ThreePoints.h in Headers */ = {isa = PBXBuildFile; fileRef = 639C339D25F68CEB005D0B6D /* ThreePoints.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		639EA37023DC658F00B880B7 /* TapPredictorBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */; };
 		63A2942025DE879400A44DA4 /* ResizedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A2941F25DE879400A44DA4 /* ResizedImage.swift */; };
 		63A2942225DE8D8A00A44DA4 /* CGImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A2942125DE8D8900A44DA4 /* CGImage+Resize.swift */; };
 		63A2942425DE8EFB00A44DA4 /* ResizedImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A2942325DE8EFB00A44DA4 /* ResizedImageProvider.swift */; };
 		63AAF4A2243BE4F000C36F3E /* AllShortcuts+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AAF4A1243BE4F000C36F3E /* AllShortcuts+String.swift */; };
 		63B018FC23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B018FB23FD5BAA00EBDA70 /* CompositeTrackerDataSet.swift */; };
-		63B05579243CC19C00DD741C /* GameTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B05577243CC19C00DD741C /* GameTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B05584243DBEC400DD741C /* Term.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C59242C057D008FCDFC /* Term.swift */; };
 		63B05585243DBEC400DD741C /* RationalNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358C625242DE52500DF41CE /* RationalNumber.swift */; };
 		63B05586243DBEC400DD741C /* ArrayScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639B78C9242CDB84009674E8 /* ArrayScanner.swift */; };
@@ -632,7 +629,6 @@
 		637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameQueueTimingStats.swift; sourceTree = "<group>"; };
 		6380F770244502F40074AB2A /* SimulationWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationWindow.swift; sourceTree = "<group>"; };
 		63876E652356093500132A21 /* JumpTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpTracker.swift; sourceTree = "<group>"; };
-		638CAEF025D1890B00EFE503 /* GameTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTemplate.swift; sourceTree = "<group>"; };
 		638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTrackerDebugInfo.swift; sourceTree = "<group>"; };
 		6392A1B025A0C9B400761241 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		6392A1B225A0F0CB00761241 /* PowerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerManager.swift; sourceTree = "<group>"; };
@@ -646,6 +642,8 @@
 		639C339725F68A9A005D0B6D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		639C339A25F68BA5005D0B6D /* ThreePoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreePoints.swift; sourceTree = "<group>"; };
 		639C339C25F68BEA005D0B6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		639C339D25F68CEB005D0B6D /* ThreePoints.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreePoints.h; sourceTree = "<group>"; };
+		639C339F25F68D6D005D0B6D /* .keep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .keep; sourceTree = "<group>"; };
 		639C745423BB66DF005FD354 /* JumpingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingProperties.swift; sourceTree = "<group>"; };
 		639EA36F23DC658F00B880B7 /* TapPredictorBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictorBase.swift; sourceTree = "<group>"; };
 		63A2941F25DE879400A44DA4 /* ResizedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizedImage.swift; sourceTree = "<group>"; };
@@ -2067,7 +2065,7 @@
 		638CAEEF25D188FC00EFE503 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				638CAEF025D1890B00EFE503 /* GameTemplate.swift */,
+				639C339F25F68D6D005D0B6D /* .keep */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -2110,6 +2108,7 @@
 		639C339925F68AC5005D0B6D /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				639C339D25F68CEB005D0B6D /* ThreePoints.h */,
 				639C339C25F68BEA005D0B6D /* Info.plist */,
 			);
 			path = SupportingFiles;
@@ -2444,7 +2443,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				639C338C25F68998005D0B6D /* GameTemplate.h in Headers */,
+				639C339E25F68D21005D0B6D /* ThreePoints.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2452,7 +2451,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B05579243CC19C00DD741C /* GameTemplate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3304,7 +3302,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				639C338E25F68998005D0B6D /* GameTemplate.swift in Sources */,
 				639C339B25F68BA5005D0B6D /* ThreePoints.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3313,7 +3310,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				638CAEF125D1890B00EFE503 /* GameTemplate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
