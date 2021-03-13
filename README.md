@@ -24,7 +24,7 @@
 
 
 - The smartphone runs a game, say _MrFlap_. It shares its screen with the computer.
-- _gnimag_ is running on the computer. It continuously analyses the smartphone screen and calculates exactly when and how the robot should tap on the screen to try surviving as long as possible.
+- _gnimag_ is running on the computer. It continuously analyses the smartphone screen, deduces the game's physics parameters and calculates exactly when the screen must be tapped to survive as long as possible.
 - Every tap that _gnimag_ schedules is performed by the tapping robot.
 
 In this process, _gnimag_ considers every little detail. For example, there is a noticeable delay between the real-time game on the smartphone and the video stream that is received by the screen sharing program. There is a small additional delay involved between telling the robot to perform a tap and the tap actually being performed on the smartphone. _gnimag_ measures, and continuously updates, these delays and considers them when calculating the perfect moments for tapping.
