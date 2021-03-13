@@ -4,7 +4,7 @@ Here we showcase some of the world records _gnimag_ is currently holding.
 
 
 
-## Mr Flap: #1
+## Mr Flap: 🥇
 
 Normal mode (iOS)          | Harcode mode (iOS)
 :-------------------------:|:-------------------------:
@@ -12,7 +12,7 @@ Normal mode (iOS)          | Harcode mode (iOS)
 
 
 
-## Math Games: #1
+## Math Games: 🥇
 
 identiti (iOS) | Freaking Math+ (iOS)
 :-------------------------:|:-------------------------:
