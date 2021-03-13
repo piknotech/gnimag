@@ -290,6 +290,9 @@
 		63FABDC12391811F0088FD77 /* DebugFrameProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FABDC02391811F0088FD77 /* DebugFrameProtocol.swift */; };
 		63FABDC4239181640088FD77 /* SimpleTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638F407C2382F3A5009C7826 /* SimpleTrackerDebugInfo.swift */; };
 		63FABDC6239186DB0088FD77 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
+		63FBD9B525FCCA820026954F /* AnalysisResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FBD9B225FCCA820026954F /* AnalysisResult.swift */; };
+		63FBD9B625FCCA820026954F /* ImageAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FBD9B325FCCA820026954F /* ImageAnalyzer.swift */; };
+		63FBD9B925FCCAC00026954F /* ScreenLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FBD9B825FCCAC00026954F /* ScreenLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -701,6 +704,10 @@
 		63FABDB423917D6F0088FD77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63FABDBD23917F6C0088FD77 /* DebugParameterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugParameterType.swift; sourceTree = "<group>"; };
 		63FABDC02391811F0088FD77 /* DebugFrameProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugFrameProtocol.swift; sourceTree = "<group>"; };
+		63FBD9AE25FCCA690026954F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		63FBD9B225FCCA820026954F /* AnalysisResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
+		63FBD9B325FCCA820026954F /* ImageAnalyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAnalyzer.swift; sourceTree = "<group>"; };
+		63FBD9B825FCCAC00026954F /* ScreenLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2091,6 +2098,7 @@
 		639C339625F68A0A005D0B6D /* ThreePoints */ = {
 			isa = PBXGroup;
 			children = (
+				63FBD9AE25FCCA690026954F /* README.md */,
 				639C339825F68AC0005D0B6D /* Sources */,
 				639C339925F68AC5005D0B6D /* SupportingFiles */,
 			);
@@ -2101,6 +2109,9 @@
 			isa = PBXGroup;
 			children = (
 				639C339A25F68BA5005D0B6D /* ThreePoints.swift */,
+				63FBD9B125FCCA820026954F /* 1 ImageAnalysis */,
+				63FBD9B025FCCA810026954F /* 2 Physics */,
+				63FBD9AF25FCCA810026954F /* 3 Tapping */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -2352,6 +2363,30 @@
 				63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */,
 			);
 			path = Trackers;
+			sourceTree = "<group>";
+		};
+		63FBD9AF25FCCA810026954F /* 3 Tapping */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "3 Tapping";
+			sourceTree = "<group>";
+		};
+		63FBD9B025FCCA810026954F /* 2 Physics */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "2 Physics";
+			sourceTree = "<group>";
+		};
+		63FBD9B125FCCA820026954F /* 1 ImageAnalysis */ = {
+			isa = PBXGroup;
+			children = (
+				63FBD9B325FCCA820026954F /* ImageAnalyzer.swift */,
+				63FBD9B225FCCA820026954F /* AnalysisResult.swift */,
+				63FBD9B825FCCAC00026954F /* ScreenLayout.swift */,
+			);
+			path = "1 ImageAnalysis";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3302,7 +3337,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63FBD9B525FCCA820026954F /* AnalysisResult.swift in Sources */,
+				63FBD9B625FCCA820026954F /* ImageAnalyzer.swift in Sources */,
 				639C339B25F68BA5005D0B6D /* ThreePoints.swift in Sources */,
+				63FBD9B925FCCAC00026954F /* ScreenLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

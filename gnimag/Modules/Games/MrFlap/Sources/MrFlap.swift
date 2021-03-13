@@ -67,8 +67,7 @@ public final class MrFlap {
     }
 
     /// Begin receiving images and play the game.
-    /// Only call this once.
-    /// If you want to play a new game, create a new instance of MrFlap.
+    /// Only call this once. If you want to play a new game, create a new instance of MrFlap.
     public func play() {
         queue.begin()
     }

@@ -11,9 +11,16 @@ import YesNoMathGames
 import FlowFree
 import Geometry
 import Tapping
+import ThreePoints
 
 Permissions.checkOnStartup()
 
+let imageProvider = ImageListProvider(directoryPath: NSHomeDirectory() +/ "Desktop/TP", framerate: 60, startingAt: 166)
+let tapper = NoopTapper()
+let threePoints = ThreePoints(imageProvider: imageProvider, tapper: tapper)
+threePoints.play()
+
+/*
 // Arduino
 let imageProvider = scrcpy.imageProvider.resizingImages(factor: 0.5)
 let tapper = SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
@@ -37,6 +44,7 @@ Timing.shared.perform(after: 2) {
 mrflap.crashed += {
     print("CRASHED!")
 }
+*/
 
 PowerManager.disableScreenSleep()
 
