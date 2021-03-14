@@ -8,7 +8,6 @@ import Foundation
 import GameKit
 import Image
 import Tapping
-import TestingTools
 
 /// Each instance of ThreePoints can play a single game of ThreePoints.
 public class ThreePoints {

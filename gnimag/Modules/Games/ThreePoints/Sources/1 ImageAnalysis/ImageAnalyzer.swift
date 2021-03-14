@@ -18,17 +18,20 @@ class ImageAnalyzer {
     private var screen: ScreenLayout!
 
     /// Initialize the ImageAnalyzer by detecting the ScreenLayout using the first image.
+    /// Also returns the current top color of the prism.
     /// Returns nil if the screen layout couldn't be detected.
-    func initialize(with image: Image) -> ScreenLayout? {
+    func initialize(with image: Image) -> (ScreenLayout, DotColor)? {
         precondition(!isInitialized)
 
-        // Find prism
+        // Find prism and top color
         guard let prism = findPrism(in: image) else { return nil }
+        guard let color = topColor(of: prism, in: image) else { return nil }
+
         let xCenter = Double(image.width) / 2
         screen = ScreenLayout(dotCenterX: xCenter, prism: prism)
 
         isInitialized = true
-        return screen
+        return (screen, color)
     }
 
     /// Detect the prism in an image.
@@ -54,5 +57,24 @@ class ImageAnalyzer {
         }
 
         return ScreenLayout.Prism(circumcircle: circumcircle)
+    }
+
+    /// Find the top color in a prism, given its circumcircle.
+    /// Thereby, check whether the other colors match.
+    private func topColor(of prism: ScreenLayout.Prism, in image: Image) -> DotColor? {
+        let angles: [Angle] = [0, 1, 2].map { i -> Angle in
+            Angle(Double.pi/2 - Double(i) * 2/3 * Double.pi)
+        }
+
+        let smallCircle = Circle(center: prism.circumcircle.center, radius: prism.circumcircle.radius / 4)
+        let colors = angles.compactMap {
+            DotColor(color: image.color(at: smallCircle.point(at: $0).nearestPixel))
+        }
+
+        // Validate that the colors match togehter
+        guard colors.count == 3,
+            colors[0].next == colors[1], colors[1].next == colors[2], colors[2].next == colors[0] else { return nil }
+
+        return colors[0]
     }
 }
