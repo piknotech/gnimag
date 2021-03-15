@@ -34,6 +34,7 @@ public class ThreePoints {
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
         performFirstImageSetupIfRequired(with: image)
+        imageAnalyzer.analyze(image: image)
     }
 
     /// Initialize the imageAnalyzer on the very first image.

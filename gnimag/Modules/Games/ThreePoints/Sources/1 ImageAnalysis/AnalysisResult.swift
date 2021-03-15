@@ -16,5 +16,6 @@ struct AnalysisResult {
     struct Dot {
         let color: DotColor
         let yCenter: Double
+        let radius: Double
     }
 }

@@ -22,7 +22,7 @@ class ImageAnalyzer {
     func initialize(with image: Image) -> ScreenLayout? {
         precondition(!isInitialized)
 
-        // Find prism and top color
+        // Find and validate prism
         guard let prism = findPrism(in: image) else { return nil }
         guard validate(prism, in: image) else { return nil }
 
@@ -36,8 +36,9 @@ class ImageAnalyzer {
     /// Find all dots and determine the prism state.
     func analyze(image: Image) -> AnalysisResult? {
         guard let prism = state(of: screen.prism, in: image) else { return nil }
+        let dots = findDots(in: image)
 
-        return AnalysisResult(prismState: prism, dots: [])
+        return AnalysisResult(prismState: prism, dots: dots)
     }
 
     /// Detect the prism in an image.
@@ -56,7 +57,7 @@ class ImageAnalyzer {
         let circumcircle = SmallestCircle.containing(edge)
         let aabb = SmallestAABB.containing(edge)
 
-        guard circumcircle.center.x.isAlmostEqual(to: CGFloat(pixel.x), tolerance: 2),
+        guard circumcircle.center.x.isAlmostEqual(to: CGFloat(pixel.x), tolerance: 5),
             circumcircle.point(at: .south).y.isAlmostEqual(to: aabb.rect.minY, tolerance: 2),
             (2 * circumcircle.center.x).isAlmostEqual(to: aabb.rect.minX + aabb.rect.maxX, tolerance: 3) else {
                 return nil
@@ -81,15 +82,19 @@ class ImageAnalyzer {
     }
 
     /// Determine whether the prism is rotating and find its top color.
-    /// This won't work when an orange dot is currently entering the prism.
     private func state(of prism: ScreenLayout.Prism, in image: Image) -> AnalysisResult.PrismState? {
-        // Find orange pixel inside prism
-        let orange = DotColor.orange.referenceColor.withTolerance(0.15)
+        return DotColor.allCases.lazy.compactMap { self.state(of: prism, in: image, using: $0) }.first
+    }
+
+    /// Determine whether the prism is rotating and find its top color using one specific color.
+    private func state(of prism: ScreenLayout.Prism, in image: Image, using color: DotColor) -> AnalysisResult.PrismState? {
+        // Find pixel inside prism
+        let match = color.referenceColor.withTolerance(0.15)
         let path = ExpandingCirclePath(center: prism.circumcircle.center.nearestPixel, bounds: image.bounds).limited(by: 100)
-        guard let pixel = image.findFirstPixel(matching: orange, on: path) else { return nil }
+        guard let pixel = image.findFirstPixel(matching: match, on: path) else { return nil }
 
         // Detect orange edge
-        guard let edge = EdgeDetector.search(in: image, shapeColor: orange, from: pixel, angle: .zero) else { return nil }
+        guard let edge = EdgeDetector.search(in: image, shapeColor: match, from: pixel, angle: .zero) else { return nil }
         let obb = SmallestOBB.containing(edge)
 
         // Integrity tests
@@ -119,5 +124,48 @@ class ImageAnalyzer {
             let color = iterate(DotColor.orange, \.next, p)
             return .rotating(towards: color)
         }
+    }
+
+    /// Find all dots in the image.
+    private func findDots(in image: Image) -> [AnalysisResult.Dot] {
+        DotColor.allCases.flatMap { findDots(of: $0, in: image) }
+    }
+
+    /// Find all dots of a specific color.
+    private func findDots(of color: DotColor, in image: Image) -> [AnalysisResult.Dot] {
+        let start = Pixel(Int(screen.dotCenterX), image.bounds.height - 1)
+        let length = Int(ceil(CGFloat(start.y) - screen.prism.circumcircle.point(at: .north).y))
+        let path = StraightPath(start: start, angle: .south, bounds: image.bounds, speed: 2).limited(by: length / 2)
+
+        // Cluster orange pixels into dots; each cluster corresponds to one dot
+        let match = color.referenceColor.withTolerance(0.15)
+        let pixels = path.filter { match.matches(image.color(at: $0)) }
+        let clusters = SimpleClustering.from(pixels, maxDistance: 10)
+
+        // Convert clusters into dots
+        var dots = [AnalysisResult.Dot]()
+
+        for cluster in clusters.clusters {
+            var polygons = [Geometry.Polygon]()
+
+            // Each pixel either belongs to an existing polygon or creates a new one
+            for pixel in cluster.objects {
+                if (polygons.any { $0.contains(pixel.CGPoint) }) { continue }
+                guard let edge = EdgeDetector.search(in: image, shapeColor: match, from: pixel, angle: .zero) else { continue }
+                polygons.append(ConvexHull.from(edge))
+            }
+
+            // Calculate aabb and enclosing circle of all polygons
+            let points = polygons.flatMap(\.points)
+            let circle = SmallestCircle.containing(points)
+            let aabb = SmallestAABB.containing(points)
+
+            guard Double(circle.center.x).isAlmostEqual(to: screen.dotCenterX, tolerance: 3),
+                (aabb.width / aabb.height).isAlmostEqual(to: 1, tolerance: 0.1) else { continue }
+
+            dots.append(AnalysisResult.Dot(color: color, yCenter: Double(circle.center.y), radius: Double(circle.radius)))
+        }
+
+        return dots
     }
 }
