@@ -188,6 +188,7 @@
 		6366618625FF96F900B6BAF2 /* DotTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618525FF96F900B6BAF2 /* DotTracker.swift */; };
 		6366618825FF98D000B6BAF2 /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618725FF98D000B6BAF2 /* GameModelCollector.swift */; };
 		6366618A25FF990A00B6BAF2 /* PrismStateTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618925FF990A00B6BAF2 /* PrismStateTracker.swift */; };
+		6366618B25FFAA5600B6BAF2 /* OrphanageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6D323F5A12A00187840 /* OrphanageDetector.swift */; };
 		63672C15242B5CC6008FCDFC /* OCRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C14242B5CC6008FCDFC /* OCRConfig.swift */; };
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
 		6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D901238D666400477AD9 /* LinearScatterStrokable.swift */; };
@@ -264,7 +265,6 @@
 		63BCB344239188F8004CFCD9 /* CompositeTrackerDebugInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63048E0923842FB10076442C /* CompositeTrackerDebugInfo.swift */; };
 		63C7F6D023F588CF00187840 /* BarUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6CF23F588CE00187840 /* BarUpdater.swift */; };
 		63C7F6D223F58AD100187840 /* BarTracker+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6D123F58AD100187840 /* BarTracker+State.swift */; };
-		63C7F6D423F5A12A00187840 /* BarTracker+OrphanageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */; };
 		63CB1E112428E94B006B7782 /* ConnectedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CB1E102428E94B006B7782 /* ConnectedComponents.swift */; };
 		63CB1E132428EFBF006B7782 /* OCRComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CB1E122428EFBF006B7782 /* OCRComponent.swift */; };
 		63CCCAFF246178E7002605DD /* ORSSerial in Frameworks */ = {isa = PBXBuildFile; productRef = 63CCCAFE246178E7002605DD /* ORSSerial */; };
@@ -683,7 +683,7 @@
 		63B64F3523586642005A5E82 /* MonotonicityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonotonicityChecker.swift; sourceTree = "<group>"; };
 		63C7F6CF23F588CE00187840 /* BarUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarUpdater.swift; sourceTree = "<group>"; };
 		63C7F6D123F58AD100187840 /* BarTracker+State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarTracker+State.swift"; sourceTree = "<group>"; };
-		63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BarTracker+OrphanageDetector.swift"; sourceTree = "<group>"; };
+		63C7F6D323F5A12A00187840 /* OrphanageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrphanageDetector.swift; sourceTree = "<group>"; };
 		63CB1E102428E94B006B7782 /* ConnectedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedComponents.swift; sourceTree = "<group>"; };
 		63CB1E122428EFBF006B7782 /* OCRComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRComponent.swift; sourceTree = "<group>"; };
 		63CCCB00246178F8002605DD /* SingleByteArduino.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleByteArduino.swift; sourceTree = "<group>"; };
@@ -875,6 +875,7 @@
 				6318428924506CB0006AF53A /* ActionStreamDamper.swift */,
 				630873F3242E6633000ECE47 /* ValueStreamDamper.swift */,
 				630682D52430EE7D00C5B28E /* OnOffImageProvider.swift */,
+				63C7F6D323F5A12A00187840 /* OrphanageDetector.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -1587,7 +1588,6 @@
 				631213E623257F4000C126B4 /* PlayerTracker.swift */,
 				631213E523257F4000C126B4 /* BarTracker.swift */,
 				63C7F6D123F58AD100187840 /* BarTracker+State.swift */,
-				63C7F6D323F5A12A00187840 /* BarTracker+OrphanageDetector.swift */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -3195,6 +3195,7 @@
 				63351A5A234CCF8D00E42762 /* CompositeTrackerSlidingWindow.swift in Sources */,
 				63022440234B45F20021F7FA /* SimpleTrackerProtocol.swift in Sources */,
 				6367D90A238EBC3B00477AD9 /* CompositeTracker+DebugInfos.swift in Sources */,
+				6366618B25FFAA5600B6BAF2 /* OrphanageDetector.swift in Sources */,
 				6318428A24506CB0006AF53A /* ActionStreamDamper.swift in Sources */,
 				63876E662356093500132A21 /* JumpTracker.swift in Sources */,
 				6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */,
@@ -3311,7 +3312,6 @@
 				632696B423D21993009FE1E0 /* PlayerBarInteraction+Conversion.swift in Sources */,
 				63D002962373037900041069 /* DebugFrame+Data.swift in Sources */,
 				631213FB23257F4000C126B4 /* Player.swift in Sources */,
-				63C7F6D423F5A12A00187840 /* BarTracker+OrphanageDetector.swift in Sources */,
 				631213F223257F4000C126B4 /* MrFlap.swift in Sources */,
 				63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */,
 				63E390C625D3D3410017C825 /* InputLagTracker.swift in Sources */,

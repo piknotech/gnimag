@@ -8,6 +8,8 @@ import GameKit
 
 /// DotTracker tracks the movement of a single dot.
 final class DotTracker {
+    let orphanage = OrphanageDetector(maxFramesWithoutUpdate: 3)
+
     let yCenter: LinearTracker
     let radius: ConstantTracker
 
@@ -25,6 +27,8 @@ final class DotTracker {
     /// Update the trackers with the values from the given dot.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with dot: AnalysisResult.Dot, at time: Double) {
+        orphanage.markAsValid()
+
         yCenter.add(value: dot.yCenter, at: time)
         radius.add(value: dot.radius)
     }

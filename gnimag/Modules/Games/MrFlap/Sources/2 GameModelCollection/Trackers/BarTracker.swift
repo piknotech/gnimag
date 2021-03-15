@@ -11,7 +11,7 @@ import TestingTools
 /// BarTracker bundles trackers for a single bar.
 final class BarTracker {
     /// Orphanage detector to see whether the bar tracker should be removed from the game model.
-    let orphanage = BarTrackerOrphanageDetector()
+    let orphanage = OrphanageDetector(maxFramesWithoutUpdate: 2)
 
     /// The state the bar is currently in.
     var state: BarTrackerState!
@@ -86,7 +86,7 @@ final class BarTracker {
     /// Update the trackers with the values from the given bar.
     /// Only call this AFTER a successful `integrityCheck`.
     func update(with bar: Bar, at time: Double) {
-        orphanage.markBarAsValid()
+        orphanage.markAsValid()
 
         angle.add(value: bar.angle, at: time)
         width.add(value: bar.width)

@@ -11,12 +11,12 @@ final class GameModelCollector {
     /// Use the AnalysisResult to update the game model.
     /// Before actually updating the game model, the integrity of the result is checked.
     func accept(result: AnalysisResult, time: Double) {
+        // Match dots to trackers and update
         let (pairs, new) = match(dots: result.dots, to: model.dots, time: time)
         updateDotTrackers(with: pairs, new: new, time: time)
 
-        for tracker in model.dots {
-            print(tracker.yCenter.regression)
-        }
+        // Remove orphaned trackers
+        model.dots.removeAll(where: \.orphanage.isOrphaned)
     }
 
     /// Match dots from image analysis to their corresponding trackers.
@@ -43,6 +43,10 @@ final class GameModelCollector {
 
     /// Update the trackers with the result from `match`.
     private func updateDotTrackers(with pairs: [DotTracker: AnalysisResult.Dot], new: [AnalysisResult.Dot], time: Double) {
+        for tracker in model.dots {
+            tracker.orphanage.newFrame()
+        }
+
         // Update existing trackers
         for (tracker, dot) in pairs {
             if tracker.integrityCheck(with: dot, at: time) {
