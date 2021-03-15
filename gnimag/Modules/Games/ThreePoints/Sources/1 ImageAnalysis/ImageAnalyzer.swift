@@ -82,12 +82,12 @@ final class ImageAnalyzer {
     }
 
     /// Determine whether the prism is rotating and find its top color.
-    private func state(of prism: ScreenLayout.Prism, in image: Image) -> AnalysisResult.PrismState? {
+    private func state(of prism: ScreenLayout.Prism, in image: Image) -> PrismState? {
         return DotColor.allCases.lazy.compactMap { self.state(of: prism, in: image, using: $0) }.first
     }
 
     /// Determine whether the prism is rotating and find its top color using one specific color.
-    private func state(of prism: ScreenLayout.Prism, in image: Image, using color: DotColor) -> AnalysisResult.PrismState? {
+    private func state(of prism: ScreenLayout.Prism, in image: Image, using color: DotColor) -> PrismState? {
         // Find pixel inside prism
         let match = color.referenceColor.withTolerance(0.15)
         let path = ExpandingCirclePath(center: prism.circumcircle.center.nearestPixel, bounds: image.bounds).limited(by: 100)
@@ -127,12 +127,12 @@ final class ImageAnalyzer {
     }
 
     /// Find all dots in the image.
-    private func findDots(in image: Image) -> [AnalysisResult.Dot] {
+    private func findDots(in image: Image) -> [Dot] {
         DotColor.allCases.flatMap { findDots(of: $0, in: image) }
     }
 
     /// Find all dots of a specific color.
-    private func findDots(of color: DotColor, in image: Image) -> [AnalysisResult.Dot] {
+    private func findDots(of color: DotColor, in image: Image) -> [Dot] {
         let start = Pixel(Int(screen.dotCenterX), image.bounds.height - 1)
         let length = Int(ceil(CGFloat(start.y) - screen.prism.circumcircle.point(at: .north).y))
         let path = StraightPath(start: start, angle: .south, bounds: image.bounds, speed: 2).limited(by: length / 2)
@@ -143,7 +143,7 @@ final class ImageAnalyzer {
         let clusters = SimpleClustering.from(pixels, maxDistance: 10)
 
         // Convert clusters into dots
-        var dots = [AnalysisResult.Dot]()
+        var dots = [Dot]()
 
         for cluster in clusters.clusters {
             var polygons = [Geometry.Polygon]()
@@ -163,7 +163,7 @@ final class ImageAnalyzer {
             guard Double(circle.center.x).isAlmostEqual(to: screen.dotCenterX, tolerance: 3),
                 (aabb.width / aabb.height).isAlmostEqual(to: 1, tolerance: 0.1) else { continue }
 
-            dots.append(AnalysisResult.Dot(color: color, yCenter: Double(circle.center.y), radius: Double(circle.radius)))
+            dots.append(Dot(color: color, yCenter: Double(circle.center.y), radius: Double(circle.radius)))
         }
 
         return dots

@@ -17,12 +17,15 @@ final class GameModelCollector {
 
         // Remove orphaned trackers
         model.dots.removeAll(where: \.orphanage.isOrphaned)
+
+        // Update prism state tracker
+        model.prism.update(with: result.prismState)
     }
 
     /// Match dots from image analysis to their corresponding trackers.
-    private func match(dots: [AnalysisResult.Dot], to trackers: [DotTracker], time: Double) -> (pairs: [DotTracker: AnalysisResult.Dot], new: [AnalysisResult.Dot]) {
-        var pairs = [DotTracker: AnalysisResult.Dot]()
-        var new = [AnalysisResult.Dot]()
+    private func match(dots: [Dot], to trackers: [DotTracker], time: Double) -> (pairs: [DotTracker: Dot], new: [Dot]) {
+        var pairs = [DotTracker: Dot]()
+        var new = [Dot]()
 
         for dot in dots {
             let matching = trackers.filter {
@@ -42,7 +45,7 @@ final class GameModelCollector {
     }
 
     /// Update the trackers with the result from `match`.
-    private func updateDotTrackers(with pairs: [DotTracker: AnalysisResult.Dot], new: [AnalysisResult.Dot], time: Double) {
+    private func updateDotTrackers(with pairs: [DotTracker: Dot], new: [Dot], time: Double) {
         for tracker in model.dots {
             tracker.orphanage.newFrame()
         }

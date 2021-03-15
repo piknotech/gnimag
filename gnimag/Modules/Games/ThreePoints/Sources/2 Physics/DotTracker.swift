@@ -14,19 +14,19 @@ final class DotTracker {
     let radius: ConstantTracker
 
     /// Default initializer.
-    init(dot: AnalysisResult.Dot) {
+    init(dot: Dot) {
         yCenter = LinearTracker(tolerancePoints: 2, tolerance: .absolute(20% * dot.radius))
         radius = ConstantTracker(tolerancePoints: 1, tolerance: .absolute(20% * dot.radius))
     }
 
     /// Check if all given values match the trackers.
-    func integrityCheck(with dot: AnalysisResult.Dot, at time: Double) -> Bool {
+    func integrityCheck(with dot: Dot, at time: Double) -> Bool {
         yCenter.isDataPointValid(value: dot.yCenter, time: time) && radius.isValueValid(dot.radius)
     }
 
     /// Update the trackers with the values from the given dot.
     /// Only call this AFTER a successful `integrityCheck`.
-    func update(with dot: AnalysisResult.Dot, at time: Double) {
+    func update(with dot: Dot, at time: Double) {
         orphanage.markAsValid()
 
         yCenter.add(value: dot.yCenter, at: time)
