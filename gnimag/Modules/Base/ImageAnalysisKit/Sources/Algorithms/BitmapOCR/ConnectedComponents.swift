@@ -44,10 +44,7 @@ internal enum ConnectedComponents {
         combine(components: &components, using: combineComponents)
 
         // Sort left-to-right
-        components.sort { a, b in
-            a.region.xRange.center < b.region.xRange.center
-        }
-
+        components.sort(by: \.region.xRange.center)
         return components
     }
 

@@ -104,7 +104,7 @@ public enum SimpleClustering {
         }
 
         // Sort clusters by size and return result
-        clusters.sort { $0.objects.count > $1.objects.count }
+        clusters.sort(by: \.objects.count)
         return Result(clusters: clusters)
     }
 }

@@ -28,7 +28,7 @@ public final class ScatterPlot {
         yRange: SimpleRange<Double>? = nil,
         rangeAugmentation: Double = 5%
     ) {
-        let dataPoints = dataPoints.sorted { $0.x < $1.x }
+        let dataPoints = dataPoints.sorted(by: \.x)
 
         // Map sorted values to ChartDataEntries
         let entries = dataPoints.map { ChartDataEntry(x: $0.x, y: $0.y) }

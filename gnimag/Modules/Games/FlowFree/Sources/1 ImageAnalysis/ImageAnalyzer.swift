@@ -58,7 +58,7 @@ class ImageAnalyzer {
         }
 
         let result = SimpleClustering.from(elements, maxDistance: 0.1)
-        let clusters = result.clusters.sorted { $0.size < $1.size }
+        let clusters = result.clusters.sorted(by: \.size)
 
         // Check cluster validity: all clusters (except the background color) must have 2 elements
         if (clusters.dropLast().any { $0.size != 2 }) {

@@ -45,7 +45,7 @@ public struct RelativeTapSequence {
         if isAlreadySorted {
             self.taps = taps
         } else {
-            self.taps = taps.sorted { $0.relativeTime < $1.relativeTime }
+            self.taps = taps.sorted(by: \.relativeTime)
         }
 
         self.unlockDuration = unlockDuration
@@ -59,7 +59,7 @@ public struct RelativeTapSequence {
 
 extension RelativeTapSequence: CustomStringConvertible {
     public var description: String {
-        let sortedTaps = taps.sorted { $0.relativeTime < $1.relativeTime }
+        let sortedTaps = taps.sorted(by: \.relativeTime)
         return "RelativeTapSequence(taps: \(sortedTaps), unlockDuration: \(String(describing: unlockDuration)))"
     }
 }
