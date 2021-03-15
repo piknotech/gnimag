@@ -17,6 +17,9 @@ public final class ThreePoints {
     private var queue: GameQueue!
     private let imageAnalyzer = ImageAnalyzer()
     private let gameModelCollector = GameModelCollector()
+    private var tapPredictor: TapPredictor!
+
+    private var playfield: Playfield!
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: SomewhereTapper) {
@@ -37,6 +40,7 @@ public final class ThreePoints {
         performFirstImageSetupIfRequired(with: image)
         if let result = imageAnalyzer.analyze(image: image) {
             gameModelCollector.accept(result: result, time: time)
+            tapPredictor.predictionStep()
         }
     }
 
@@ -45,7 +49,9 @@ public final class ThreePoints {
     internal func performFirstImageSetupIfRequired(with image: Image) {
         guard !imageAnalyzer.isInitialized else { return }
 
-        guard let _ = imageAnalyzer.initialize(with: image) else {
+        playfield = imageAnalyzer.initialize(with: image)
+        tapPredictor = TapPredictor(playfield: playfield, tapper: tapper, timeProvider: imageProvider.timeProvider)
+        guard playfield != nil else {
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }
     }

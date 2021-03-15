@@ -6,7 +6,8 @@
 import Foundation
 import Geometry
 
-struct ScreenLayout {
+/// Playfield describes the position and the dimensions of the playfield on the screen.
+struct Playfield {
     /// The center of the line where the dots fall down.
     let dotCenterX: Double
 

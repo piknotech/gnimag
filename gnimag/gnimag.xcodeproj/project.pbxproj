@@ -189,6 +189,8 @@
 		6366618825FF98D000B6BAF2 /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618725FF98D000B6BAF2 /* GameModelCollector.swift */; };
 		6366618A25FF990A00B6BAF2 /* PrismStateTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618925FF990A00B6BAF2 /* PrismStateTracker.swift */; };
 		6366618B25FFAA5600B6BAF2 /* OrphanageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6D323F5A12A00187840 /* OrphanageDetector.swift */; };
+		6366619025FFB25800B6BAF2 /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618F25FFB25800B6BAF2 /* TapPredictor.swift */; };
+		6366619225FFF2D000B6BAF2 /* DotProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366619125FFF2D000B6BAF2 /* DotProperties.swift */; };
 		63672C15242B5CC6008FCDFC /* OCRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C14242B5CC6008FCDFC /* OCRConfig.swift */; };
 		6367D900238D4FE900477AD9 /* QuadCurveScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D8FF238D4FE900477AD9 /* QuadCurveScatterStrokable.swift */; };
 		6367D902238D666400477AD9 /* LinearScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6367D901238D666400477AD9 /* LinearScatterStrokable.swift */; };
@@ -297,7 +299,7 @@
 		63FABDC6239186DB0088FD77 /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002932373024600041069 /* DebugLogger.swift */; };
 		63FBD9B525FCCA820026954F /* AnalysisResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FBD9B225FCCA820026954F /* AnalysisResult.swift */; };
 		63FBD9B625FCCA820026954F /* ImageAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FBD9B325FCCA820026954F /* ImageAnalyzer.swift */; };
-		63FBD9B925FCCAC00026954F /* ScreenLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FBD9B825FCCAC00026954F /* ScreenLayout.swift */; };
+		63FBD9B925FCCAC00026954F /* Playfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FBD9B825FCCAC00026954F /* Playfield.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -571,6 +573,8 @@
 		6366618525FF96F900B6BAF2 /* DotTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotTracker.swift; sourceTree = "<group>"; };
 		6366618725FF98D000B6BAF2 /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
 		6366618925FF990A00B6BAF2 /* PrismStateTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrismStateTracker.swift; sourceTree = "<group>"; };
+		6366618F25FFB25800B6BAF2 /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
+		6366619125FFF2D000B6BAF2 /* DotProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotProperties.swift; sourceTree = "<group>"; };
 		63672C14242B5CC6008FCDFC /* OCRConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRConfig.swift; sourceTree = "<group>"; };
 		63672C18242B9DC2008FCDFC /* ocr.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ocr.json; sourceTree = "<group>"; };
 		63672C19242B9DC2008FCDFC /* +.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "+.png"; sourceTree = "<group>"; };
@@ -717,7 +721,7 @@
 		63FBD9AE25FCCA690026954F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		63FBD9B225FCCA820026954F /* AnalysisResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalysisResult.swift; sourceTree = "<group>"; };
 		63FBD9B325FCCA820026954F /* ImageAnalyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAnalyzer.swift; sourceTree = "<group>"; };
-		63FBD9B825FCCAC00026954F /* ScreenLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLayout.swift; sourceTree = "<group>"; };
+		63FBD9B825FCCAC00026954F /* Playfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playfield.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2378,6 +2382,8 @@
 		63FBD9AF25FCCA810026954F /* 3 Tapping */ = {
 			isa = PBXGroup;
 			children = (
+				6366618F25FFB25800B6BAF2 /* TapPredictor.swift */,
+				6366619125FFF2D000B6BAF2 /* DotProperties.swift */,
 			);
 			path = "3 Tapping";
 			sourceTree = "<group>";
@@ -2397,8 +2403,8 @@
 			isa = PBXGroup;
 			children = (
 				63FBD9B325FCCA820026954F /* ImageAnalyzer.swift */,
-				63FBD9B825FCCAC00026954F /* ScreenLayout.swift */,
 				63FBD9B225FCCA820026954F /* AnalysisResult.swift */,
+				63FBD9B825FCCAC00026954F /* Playfield.swift */,
 				6366618125FCFD0600B6BAF2 /* DotColor.swift */,
 			);
 			path = "1 ImageAnalysis";
@@ -3357,7 +3363,9 @@
 				63FBD9B625FCCA820026954F /* ImageAnalyzer.swift in Sources */,
 				639C339B25F68BA5005D0B6D /* ThreePoints.swift in Sources */,
 				6366618A25FF990A00B6BAF2 /* PrismStateTracker.swift in Sources */,
-				63FBD9B925FCCAC00026954F /* ScreenLayout.swift in Sources */,
+				6366619225FFF2D000B6BAF2 /* DotProperties.swift in Sources */,
+				63FBD9B925FCCAC00026954F /* Playfield.swift in Sources */,
+				6366619025FFB25800B6BAF2 /* TapPredictor.swift in Sources */,
 				6366618825FF98D000B6BAF2 /* GameModelCollector.swift in Sources */,
 				6366618425FF966B00B6BAF2 /* GameModel.swift in Sources */,
 				6366618625FF96F900B6BAF2 /* DotTracker.swift in Sources */,

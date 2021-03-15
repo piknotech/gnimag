@@ -15,11 +15,11 @@ private let adHeight = 100
 final class ImageAnalyzer {
     /// States whether the ImageAnalyzer has been initialized by `initialize`.
     var isInitialized = false
-    private var screen: ScreenLayout!
+    private var playfield: Playfield!
 
-    /// Initialize the ImageAnalyzer by detecting the ScreenLayout using the first image.
-    /// Returns nil if the screen layout couldn't be detected.
-    func initialize(with image: Image) -> ScreenLayout? {
+    /// Initialize the ImageAnalyzer by detecting the Playfield in the first image.
+    /// Returns nil if the playfield couldn't be detected.
+    func initialize(with image: Image) -> Playfield? {
         precondition(!isInitialized)
 
         // Find and validate prism
@@ -27,22 +27,22 @@ final class ImageAnalyzer {
         guard validate(prism, in: image) else { return nil }
 
         let xCenter = Double(image.width) / 2
-        screen = ScreenLayout(dotCenterX: xCenter, prism: prism)
+        playfield = Playfield(dotCenterX: xCenter, prism: prism)
 
         isInitialized = true
-        return screen
+        return playfield
     }
 
     /// Find all dots and determine the prism state.
     func analyze(image: Image) -> AnalysisResult? {
-        guard let prism = state(of: screen.prism, in: image) else { return nil }
+        guard let prism = state(of: playfield.prism, in: image) else { return nil }
         let dots = findDots(in: image)
 
         return AnalysisResult(prismState: prism, dots: dots)
     }
 
     /// Detect the prism in an image.
-    private func findPrism(in image: Image) -> ScreenLayout.Prism? {
+    private func findPrism(in image: Image) -> Playfield.Prism? {
         let downmost = Pixel(image.width / 2, adHeight + 5)
         let path = StraightPath(start: downmost, angle: .north, bounds: image.bounds)
         let white = Color.white.withTolerance(0.1)
@@ -63,11 +63,11 @@ final class ImageAnalyzer {
                 return nil
         }
 
-        return ScreenLayout.Prism(circumcircle: circumcircle)
+        return Playfield.Prism(circumcircle: circumcircle)
     }
 
     /// Validate whether the prism colors match together.
-    private func validate(_ prism: ScreenLayout.Prism, in image: Image) -> Bool {
+    private func validate(_ prism: Playfield.Prism, in image: Image) -> Bool {
         let angles: [Angle] = [0, 1, 2].map { i -> Angle in
             Angle(Double.pi/2 - Double(i) * 2/3 * Double.pi)
         }
@@ -82,12 +82,12 @@ final class ImageAnalyzer {
     }
 
     /// Determine whether the prism is rotating and find its top color.
-    private func state(of prism: ScreenLayout.Prism, in image: Image) -> PrismState? {
+    private func state(of prism: Playfield.Prism, in image: Image) -> PrismState? {
         return DotColor.allCases.lazy.compactMap { self.state(of: prism, in: image, using: $0) }.first
     }
 
     /// Determine whether the prism is rotating and find its top color using one specific color.
-    private func state(of prism: ScreenLayout.Prism, in image: Image, using color: DotColor) -> PrismState? {
+    private func state(of prism: Playfield.Prism, in image: Image, using color: DotColor) -> PrismState? {
         // Find pixel inside prism
         let match = color.referenceColor.withTolerance(0.15)
         let path = ExpandingCirclePath(center: prism.circumcircle.center.nearestPixel, bounds: image.bounds).limited(by: 100)
@@ -133,8 +133,8 @@ final class ImageAnalyzer {
 
     /// Find all dots of a specific color.
     private func findDots(of color: DotColor, in image: Image) -> [Dot] {
-        let start = Pixel(Int(screen.dotCenterX), image.bounds.height - 1)
-        let length = Int(ceil(CGFloat(start.y) - screen.prism.circumcircle.point(at: .north).y))
+        let start = Pixel(Int(playfield.dotCenterX), image.bounds.height - 1)
+        let length = Int(ceil(CGFloat(start.y) - playfield.prism.circumcircle.point(at: .north).y))
         let path = StraightPath(start: start, angle: .south, bounds: image.bounds, speed: 2).limited(by: length / 2)
 
         // Cluster orange pixels into dots; each cluster corresponds to one dot
@@ -160,7 +160,7 @@ final class ImageAnalyzer {
             let circle = SmallestCircle.containing(points)
             let aabb = SmallestAABB.containing(points)
 
-            guard Double(circle.center.x).isAlmostEqual(to: screen.dotCenterX, tolerance: 3),
+            guard Double(circle.center.x).isAlmostEqual(to: playfield.dotCenterX, tolerance: 3),
                 (aabb.width / aabb.height).isAlmostEqual(to: 1, tolerance: 0.1) else { continue }
 
             dots.append(Dot(color: color, yCenter: Double(circle.center.y), radius: Double(circle.radius)))

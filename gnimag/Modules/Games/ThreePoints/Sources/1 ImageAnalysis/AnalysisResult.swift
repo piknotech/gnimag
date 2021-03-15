@@ -17,7 +17,7 @@ struct Dot {
     let radius: Double
 }
 
-enum PrismState {
+enum PrismState: Equatable {
     case idle(top: DotColor)
     case rotating(towards: DotColor)
 }
