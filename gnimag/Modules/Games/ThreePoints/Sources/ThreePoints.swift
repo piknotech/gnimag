@@ -10,12 +10,13 @@ import Image
 import Tapping
 
 /// Each instance of ThreePoints can play a single game of ThreePoints.
-public class ThreePoints {
+public final class ThreePoints {
     private let imageProvider: ImageProvider
     private let tapper: SomewhereTapper
 
     private var queue: GameQueue!
     private let imageAnalyzer = ImageAnalyzer()
+    private let gameModelCollector = GameModelCollector()
 
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: SomewhereTapper) {
@@ -34,7 +35,9 @@ public class ThreePoints {
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
         performFirstImageSetupIfRequired(with: image)
-        imageAnalyzer.analyze(image: image)
+        if let result = imageAnalyzer.analyze(image: image) {
+            gameModelCollector.accept(result: result, time: time)
+        }
     }
 
     /// Initialize the imageAnalyzer on the very first image.

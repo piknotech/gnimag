@@ -12,7 +12,7 @@ import ImageAnalysisKit
 /// Height of the ad at the bottom. Varies depending on the device.
 private let adHeight = 100
 
-class ImageAnalyzer {
+final class ImageAnalyzer {
     /// States whether the ImageAnalyzer has been initialized by `initialize`.
     var isInitialized = false
     private var screen: ScreenLayout!

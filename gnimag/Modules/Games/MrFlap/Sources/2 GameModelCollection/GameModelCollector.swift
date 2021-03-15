@@ -8,7 +8,7 @@ import GameKit
 
 /// GameModelCollector accepts output from image analysis to create and update an up-to-date game model.
 /// Before new results from image analysis are added, they are first checked for data integrity.
-class GameModelCollector {
+final class GameModelCollector {
     let model: GameModel
     let mode: GameMode
 
@@ -44,7 +44,7 @@ class GameModelCollector {
 
     /// Use the AnalysisResult to update the game model.
     /// Before actually updating the game model, the integrity of the result is checked.
-    /// Returns true if the game model has been updated; else, nothing of the data was integer.
+    /// Returns true if the game model has been updated; else, the data was not fully integer.
     func accept(result: AnalysisResult, time: Double) -> Bool {
         debugLogger.currentFrame.gameModelCollection.wasPerformed = true
         defer { model.player.performDebugLogging() }
