@@ -13,7 +13,7 @@ enum DotColor: Equatable, CaseIterable {
 
     /// Convert a Color into the nearest DotColor.
     /// If the color is not represented accurately by a DotColor, return nil.
-    init?(color: Color) {
+    init?(from color: Color) {
         if let value = (DotColor.allCases.first { $0.referenceColor.distance(to: color) < 0.15 }) {
             self = value
         } else {
@@ -22,7 +22,7 @@ enum DotColor: Equatable, CaseIterable {
     }
 
     /// A Color which approximately represents this DotColor.
-    private var referenceColor: Color {
+    var referenceColor: Color {
         switch self {
         case .orange: return Color(0.92, 0.35, 0.14)
         case .violet: return Color(0.51, 0.19, 0.58)

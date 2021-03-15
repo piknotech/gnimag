@@ -8,7 +8,7 @@ import Foundation
 import Image
 
 /// EdgeDetector detects the edge of a shape which has a uniform color.
-/// A starting point that is already at the edge is required.
+/// A starting point inside the shape is required.
 /// Where the image bounds are hit, the edge continues outside the bounds, unless inverse is true.
 public enum EdgeDetector {
     public enum DetectionLimit {
