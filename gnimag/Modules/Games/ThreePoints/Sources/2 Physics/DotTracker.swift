@@ -12,16 +12,18 @@ final class DotTracker {
 
     let yCenter: LinearTracker
     let radius: ConstantTracker
+    let color: DotColor
 
     /// Default initializer.
     init(dot: Dot) {
         yCenter = LinearTracker(tolerancePoints: 2, tolerance: .absolute(20% * dot.radius))
         radius = ConstantTracker(tolerancePoints: 1, tolerance: .absolute(20% * dot.radius))
+        color = dot.color
     }
 
     /// Check if all given values match the trackers.
     func integrityCheck(with dot: Dot, at time: Double) -> Bool {
-        yCenter.isDataPointValid(value: dot.yCenter, time: time) && radius.isValueValid(dot.radius)
+        color == dot.color && yCenter.isDataPointValid(value: dot.yCenter, time: time) && radius.isValueValid(dot.radius)
     }
 
     /// Update the trackers with the values from the given dot.

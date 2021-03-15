@@ -6,7 +6,8 @@
 /// PrismStateTracker keeps track of the prism's state.
 /// Thereby, it knows when the state should change (due to scheduled taps) and informs outsiders when this does or does not happen.
 final class PrismStateTracker {
-    private var state: PrismState?
+    /// The current state.
+    private(set) var state: PrismState?
 
     /// The state change between last frame and now.
     /// Nil if there is no change between last frame and now, else the new state.
@@ -22,6 +23,4 @@ final class PrismStateTracker {
             stateChange = nil
         }
     }
-
-    // ...
 }

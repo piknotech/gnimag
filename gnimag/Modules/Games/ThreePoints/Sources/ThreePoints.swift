@@ -50,7 +50,7 @@ public final class ThreePoints {
         guard !imageAnalyzer.isInitialized else { return }
 
         playfield = imageAnalyzer.initialize(with: image)
-        tapPredictor = TapPredictor(playfield: playfield, tapper: tapper, timeProvider: imageProvider.timeProvider)
+        tapPredictor = TapPredictor(playfield: playfield, tapper: tapper, timeProvider: imageProvider.timeProvider, gameModel: gameModelCollector.model)
         guard playfield != nil else {
             exit(withMessage: "First image could not be analyzed! Aborting.")
         }

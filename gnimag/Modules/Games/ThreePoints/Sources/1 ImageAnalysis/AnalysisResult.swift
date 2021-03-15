@@ -20,4 +20,11 @@ struct Dot {
 enum PrismState: Equatable {
     case idle(top: DotColor)
     case rotating(towards: DotColor)
+
+    var topColor: DotColor {
+        switch self {
+        case let .idle(top: top): return top
+        case let .rotating(towards: top): return top
+        }
+    }
 }

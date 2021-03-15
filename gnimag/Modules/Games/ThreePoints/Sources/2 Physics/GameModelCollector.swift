@@ -29,7 +29,7 @@ final class GameModelCollector {
 
         for dot in dots {
             let matching = trackers.filter {
-                $0.yCenter.isDataPoint(value: dot.yCenter, time: time, validWithTolerance: .absolute(dot.radius), fallback: .useLastValue)
+                dot.color == $0.color && $0.yCenter.isDataPoint(value: dot.yCenter, time: time, validWithTolerance: .absolute(dot.radius), fallback: .useLastValue)
             }
 
             if matching.count == 0 {

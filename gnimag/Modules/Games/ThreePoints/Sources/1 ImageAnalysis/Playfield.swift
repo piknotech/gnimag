@@ -16,7 +16,10 @@ struct Playfield {
     struct Prism {
         let circumcircle: Circle
 
-        /// Side length of equilateral triangle
+        /// Side length of the equilateral triangle.
         var sideLength: Double { sqrt(3) * Double(circumcircle.radius) }
+
+        /// When a dot has this (or a lower) y-center, it collides with the prism. This is also the top of the aligned prism.
+        var collisionY: Double { Double(circumcircle.center.y + circumcircle.radius / 2) }
     }
 }

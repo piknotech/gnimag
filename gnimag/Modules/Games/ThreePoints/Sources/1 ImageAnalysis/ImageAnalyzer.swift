@@ -93,7 +93,7 @@ final class ImageAnalyzer {
         let path = ExpandingCirclePath(center: prism.circumcircle.center.nearestPixel, bounds: image.bounds).limited(by: 100)
         guard let pixel = image.findFirstPixel(matching: match, on: path) else { return nil }
 
-        // Detect orange edge
+        // Detect edge of the specific colored prism region
         guard let edge = EdgeDetector.search(in: image, shapeColor: match, from: pixel, angle: .zero) else { return nil }
         let obb = SmallestOBB.containing(edge)
 
@@ -103,7 +103,7 @@ final class ImageAnalyzer {
         guard width.isAlmostEqual(to: sqrt(3) * radius, tolerance: 0.15 * radius),
             height.isAlmostEqual(to: 0.5 * radius, tolerance: 0.1 * radius) else { return nil }
 
-        // Calculate position of orange: 0 is top, 1 is left, 2 is right; in-between is during rotation
+        // Calculate position of color: 0 is top, 1 is left, 2 is right; in-between is during rotation
         let angle = PolarCoordinates.angle(for: obb.center, respectiveTo: prism.circumcircle.center)
         var position = (angle - .pi / 2) / (2 * .pi / 3)
         if position < 0 { position += 3 }
@@ -115,13 +115,13 @@ final class ImageAnalyzer {
         if abs(position - round(position)) < 0.05 {
             // Idle
             let p = Int(round(position)) % 3
-            let color = iterate(DotColor.orange, \.next, p)
+            let color = iterate(color, \.next, p)
             return .idle(top: color)
         }
         else {
             // Rotating
             let p = Int(ceil(position)) % 3
-            let color = iterate(DotColor.orange, \.next, p)
+            let color = iterate(color, \.next, p)
             return .rotating(towards: color)
         }
     }
@@ -137,7 +137,7 @@ final class ImageAnalyzer {
         let length = Int(ceil(CGFloat(start.y) - playfield.prism.circumcircle.point(at: .north).y))
         let path = StraightPath(start: start, angle: .south, bounds: image.bounds, speed: 2).limited(by: length / 2)
 
-        // Cluster orange pixels into dots; each cluster corresponds to one dot
+        // Cluster pixels of the given DotColor; each cluster corresponds to one dot
         let match = color.referenceColor.withTolerance(0.15)
         let pixels = path.filter { match.matches(image.color(at: $0)) }
         let clusters = SimpleClustering.from(pixels, maxDistance: 10)
