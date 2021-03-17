@@ -6,21 +6,34 @@
 /// PrismStateTracker keeps track of the prism's state.
 /// Thereby, it knows when the state should change (due to scheduled taps) and informs outsiders when this does or does not happen.
 final class PrismStateTracker {
-    /// The current state.
-    private(set) var state: PrismState?
-
-    /// The state change between last frame and now.
-    /// Nil if there is no change between last frame and now, else the new state.
-    private(set) var stateChange: PrismState?
+    /// The current state and top color.
+    private(set) var state = Change<PrismState>()
+    private(set) var color = Change<DotColor>()
 
     /// Update the tracker with the new PrismState.
     /// This updates `stateChange`. Calling `update` again overrides `stateChange`.
-    func update(with state: PrismState) {
-        defer { self.state = state }
-        if state != self.state {
-            stateChange = state
+    func update(with newState: PrismState) {
+        state.set(value: newState)
+        color.set(value: newState.topColor)
+
+        if color.change != nil { print(color.value!) }
+    }
+}
+
+struct Change<A: Equatable> {
+    private(set) var value: A?
+    private(set) var change: A?
+
+    init(initialValue: A? = nil) {
+        value = nil
+    }
+
+    mutating func set(value: A) {
+        defer { self.value = value }
+        if [nil, value].contains(self.value) {
+            change = nil
         } else {
-            stateChange = nil
+            change = value
         }
     }
 }

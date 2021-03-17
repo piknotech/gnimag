@@ -16,7 +16,7 @@ final class DotTracker {
 
     /// Default initializer.
     init(dot: Dot) {
-        yCenter = LinearTracker(tolerancePoints: 2, tolerance: .absolute(20% * dot.radius))
+        yCenter = LinearTracker(tolerancePoints: 2, tolerance: .absolute(dot.radius))
         radius = ConstantTracker(tolerancePoints: 1, tolerance: .absolute(20% * dot.radius))
         color = dot.color
     }
