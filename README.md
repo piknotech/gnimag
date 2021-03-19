@@ -14,7 +14,7 @@
 </p>
 
 
-**_gnimag_ is an intelligent game auto-player. It holds world records in multiple smartphone games**. _gnimag_ is the software component in this multi-part, real-time _game autoplaying system_:
+**_gnimag_ is an intelligent game auto-player. It holds [world records](Documentation/WorldRecords.md) in multiple smartphone games**. _gnimag_ is the software component in this multi-part, real-time _game autoplaying system_:
 
 
 
