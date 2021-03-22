@@ -19,7 +19,7 @@ final class GameModelCollector {
         model.dots.removeAll(where: \.orphanage.isOrphaned)
 
         // Update prism state tracker
-        model.prism.update(with: result.prismState)
+        model.prism.update(with: result.prismRotation)
     }
 
     /// Match dots from image analysis to their corresponding trackers.

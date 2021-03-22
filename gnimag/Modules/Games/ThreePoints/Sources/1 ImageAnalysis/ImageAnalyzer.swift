@@ -83,7 +83,11 @@ final class ImageAnalyzer {
 
     /// Determine the prisms counterclockwise rotation. 0° means: orange is on top.
     private func rotation(of prism: Playfield.Prism, in image: Image) -> Angle? {
-        return DotColor.allCases.lazy.compactMap { self.rotation(of: prism, in: image, using: $0) }.first
+        // Somehow DotColor.allCases.lazy.compactMap(...).first calls the closure TWICE instead of once
+        for color in DotColor.allCases {
+            if let result = rotation(of: prism, in: image, using: color) { return result }
+        }
+        return nil
     }
 
     /// Determine the prisms counterclockwise rotation. 0° means: orange is on top.
@@ -104,8 +108,9 @@ final class ImageAnalyzer {
         guard width.isAlmostEqual(to: sqrt(3) * radius, tolerance: 0.15 * radius),
             height.isAlmostEqual(to: 0.5 * radius, tolerance: 0.1 * radius) else { return nil }
 
-        // Calculate angle from OBB
-        var angle = PolarCoordinates.angle(for: obb.center, respectiveTo: prism.circumcircle.center)
+        // Calculate angle using OBB's up-axis
+        let upAxis = obb.rightHandedCoordinateAxes(respectiveTo: prism.circumcircle.center).up
+        var angle = PolarCoordinates.angle(for: upAxis, respectiveTo: .zero)
         angle -= .pi / 2 // Now, 0° means the color is on top
         angle -= (2 * .pi / 3) * CGFloat(color.distance(to: .orange)) // Now, 0° means orange is on top
         return Angle(angle)
