@@ -178,6 +178,7 @@
 		634E9CE52330DB4D00BCA1EA /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */; };
 		6350DBF225FFF645004D843B /* DotProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366619125FFF2D000B6BAF2 /* DotProperties.swift */; };
 		6350DBF4260014C9004D843B /* Array+Sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6350DBF3260014C9004D843B /* Array+Sort.swift */; };
+		63516594260213D7008723E1 /* PrismStateTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63516593260213D7008723E1 /* PrismStateTracker.swift */; };
 		63521E9523D7511F002706C0 /* BisectionSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63521E9423D7511F002706C0 /* BisectionSolver.swift */; };
 		6354CECA2409467600A4C3B8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631213C823257EB600C126B4 /* main.swift */; };
 		6355B6FD2444EBF700DCAFBB /* SimulatedBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6355B6FC2444EBF700DCAFBB /* SimulatedBar.swift */; };
@@ -189,7 +190,6 @@
 		6366618425FF966B00B6BAF2 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618325FF966B00B6BAF2 /* GameModel.swift */; };
 		6366618625FF96F900B6BAF2 /* DotTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618525FF96F900B6BAF2 /* DotTracker.swift */; };
 		6366618825FF98D000B6BAF2 /* GameModelCollector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618725FF98D000B6BAF2 /* GameModelCollector.swift */; };
-		6366618A25FF990A00B6BAF2 /* PrismStateTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618925FF990A00B6BAF2 /* PrismStateTracker.swift */; };
 		6366618B25FFAA5600B6BAF2 /* OrphanageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7F6D323F5A12A00187840 /* OrphanageDetector.swift */; };
 		6366619025FFB25800B6BAF2 /* TapPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6366618F25FFB25800B6BAF2 /* TapPredictor.swift */; };
 		63672C15242B5CC6008FCDFC /* OCRConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63672C14242B5CC6008FCDFC /* OCRConfig.swift */; };
@@ -563,6 +563,7 @@
 		634E4FC2235874AF00AE9C91 /* Polynomial+Arithmetic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Polynomial+Arithmetic.swift"; sourceTree = "<group>"; };
 		634E9CE42330DB4D00BCA1EA /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
 		6350DBF3260014C9004D843B /* Array+Sort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Sort.swift"; sourceTree = "<group>"; };
+		63516593260213D7008723E1 /* PrismStateTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrismStateTracker.swift; sourceTree = "<group>"; };
 		63521E9423D7511F002706C0 /* BisectionSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BisectionSolver.swift; sourceTree = "<group>"; };
 		6355B6FC2444EBF700DCAFBB /* SimulatedBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatedBar.swift; sourceTree = "<group>"; };
 		6358C623242D6EB900DF41CE /* GradientColorMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorMatching.swift; sourceTree = "<group>"; };
@@ -574,7 +575,6 @@
 		6366618325FF966B00B6BAF2 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
 		6366618525FF96F900B6BAF2 /* DotTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotTracker.swift; sourceTree = "<group>"; };
 		6366618725FF98D000B6BAF2 /* GameModelCollector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModelCollector.swift; sourceTree = "<group>"; };
-		6366618925FF990A00B6BAF2 /* PrismStateTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrismStateTracker.swift; sourceTree = "<group>"; };
 		6366618F25FFB25800B6BAF2 /* TapPredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapPredictor.swift; sourceTree = "<group>"; };
 		6366619125FFF2D000B6BAF2 /* DotProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotProperties.swift; sourceTree = "<group>"; };
 		63672C14242B5CC6008FCDFC /* OCRConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRConfig.swift; sourceTree = "<group>"; };
@@ -2397,7 +2397,7 @@
 				6366618725FF98D000B6BAF2 /* GameModelCollector.swift */,
 				6366618325FF966B00B6BAF2 /* GameModel.swift */,
 				6366618525FF96F900B6BAF2 /* DotTracker.swift */,
-				6366618925FF990A00B6BAF2 /* PrismStateTracker.swift */,
+				63516593260213D7008723E1 /* PrismStateTracker.swift */,
 			);
 			path = "2 Physics";
 			sourceTree = "<group>";
@@ -3366,8 +3366,8 @@
 				63FBD9B525FCCA820026954F /* AnalysisResult.swift in Sources */,
 				63FBD9B625FCCA820026954F /* ImageAnalyzer.swift in Sources */,
 				639C339B25F68BA5005D0B6D /* ThreePoints.swift in Sources */,
-				6366618A25FF990A00B6BAF2 /* PrismStateTracker.swift in Sources */,
 				6350DBF225FFF645004D843B /* DotProperties.swift in Sources */,
+				63516594260213D7008723E1 /* PrismStateTracker.swift in Sources */,
 				63FBD9B925FCCAC00026954F /* Playfield.swift in Sources */,
 				6366619025FFB25800B6BAF2 /* TapPredictor.swift in Sources */,
 				6366618825FF98D000B6BAF2 /* GameModelCollector.swift in Sources */,

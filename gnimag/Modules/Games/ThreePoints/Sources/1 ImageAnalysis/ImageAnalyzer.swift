@@ -35,10 +35,10 @@ final class ImageAnalyzer {
 
     /// Find all dots and determine the prism state.
     func analyze(image: Image) -> AnalysisResult? {
-        guard let prism = state(of: playfield.prism, in: image) else { return nil }
+        guard let angle = rotation(of: playfield.prism, in: image) else { return nil }
         let dots = findDots(in: image)
 
-        return AnalysisResult(prismState: prism, dots: dots)
+        return AnalysisResult(prismRotation: angle, dots: dots)
     }
 
     /// Detect the prism in an image.
@@ -81,13 +81,14 @@ final class ImageAnalyzer {
         return colors.count == 3 && colors[0].next == colors[1] && colors[1].next == colors[2] && colors[2].next == colors[0]
     }
 
-    /// Determine whether the prism is rotating and find its top color.
-    private func state(of prism: Playfield.Prism, in image: Image) -> PrismState? {
-        return DotColor.allCases.lazy.compactMap { self.state(of: prism, in: image, using: $0) }.first
+    /// Determine the prisms counterclockwise rotation. 0° means: orange is on top.
+    private func rotation(of prism: Playfield.Prism, in image: Image) -> Angle? {
+        return DotColor.allCases.lazy.compactMap { self.rotation(of: prism, in: image, using: $0) }.first
     }
 
-    /// Determine whether the prism is rotating and find its top color using one specific color.
-    private func state(of prism: Playfield.Prism, in image: Image, using color: DotColor) -> PrismState? {
+    /// Determine the prisms counterclockwise rotation. 0° means: orange is on top.
+    /// Determine this by looking for a specific color.
+    private func rotation(of prism: Playfield.Prism, in image: Image, using color: DotColor) -> Angle? {
         // Find pixel inside prism
         let match = color.referenceColor.withTolerance(0.15)
         let path = ExpandingCirclePath(center: prism.circumcircle.center.nearestPixel, bounds: image.bounds).limited(by: 100)
@@ -103,27 +104,11 @@ final class ImageAnalyzer {
         guard width.isAlmostEqual(to: sqrt(3) * radius, tolerance: 0.15 * radius),
             height.isAlmostEqual(to: 0.5 * radius, tolerance: 0.1 * radius) else { return nil }
 
-        // Calculate position of color: 0 is top, 1 is left, 2 is right; in-between is during rotation
-        let angle = PolarCoordinates.angle(for: obb.center, respectiveTo: prism.circumcircle.center)
-        var position = (angle - .pi / 2) / (2 * .pi / 3)
-        if position < 0 { position += 3 }
-
-        func iterate<A>(_ s: A, _ f: (A) -> A, _ n: Int) -> A {
-            n == 0 ? s : iterate(f(s), f, n-1)
-        }
-
-        if abs(position - round(position)) < 0.05 {
-            // Idle
-            let p = Int(round(position)) % 3
-            let color = iterate(color, \.next, p)
-            return .idle(top: color)
-        }
-        else {
-            // Rotating
-            let p = Int(ceil(position)) % 3
-            let color = iterate(color, \.next, p)
-            return .rotating(towards: color)
-        }
+        // Calculate angle from OBB
+        var angle = PolarCoordinates.angle(for: obb.center, respectiveTo: prism.circumcircle.center)
+        angle -= .pi / 2 // Now, 0° means the color is on top
+        angle -= (2 * .pi / 3) * CGFloat(color.distance(to: .orange)) // Now, 0° means orange is on top
+        return Angle(angle)
     }
 
     /// Find all dots in the image.
