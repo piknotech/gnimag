@@ -15,7 +15,8 @@ public final class GameQueue {
     public let timingStats: GameQueueTimingStats
 
     /// More sophisticated detector regarding exact frame durations.
-    public let framerateDetector: FramerateDetector
+    /// Must explicitly be provided during initialization.
+    private let framerateDetector: FramerateDetector?
 
     private let imageProvider: ImageProvider
 
@@ -33,11 +34,11 @@ public final class GameQueue {
     private var nextFrameToAnalyze: Frame?
 
     /// Default initializer.
-    public init(imageProvider: ImageProvider, synchronousFrameCallback: @escaping (Frame) -> Void) {
+    public init(imageProvider: ImageProvider, synchronousFrameCallback: @escaping (Frame) -> Void, framerateDetector: FramerateDetector? = nil) {
         self.imageProvider = imageProvider
         self.synchronousFrameCallback = synchronousFrameCallback
         self.timingStats = GameQueueTimingStats(timeProvider: imageProvider.timeProvider)
-        self.framerateDetector = FramerateDetector()
+        self.framerateDetector = framerateDetector
     }
 
     /// Begin receiving images.
@@ -76,7 +77,7 @@ public final class GameQueue {
         let incomingTime = imageProvider.timeProvider.currentTime
 
         synchronized(self) {
-            framerateDetector.newFrame(time: frame.1)
+            framerateDetector?.newFrame(time: frame.1)
             timingStats.newFrame(frame: frame, at: incomingTime)
 
             // Note if the previous frame was dropped

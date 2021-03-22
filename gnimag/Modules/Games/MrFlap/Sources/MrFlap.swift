@@ -61,9 +61,10 @@ public final class MrFlap {
         
         imageAnalyzer = ImageAnalyzer(debugLogger: debugLogger)
 
-        queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update)
+        let framerateDetector = FramerateDetector()
+        queue = GameQueue(imageProvider: imageProvider, synchronousFrameCallback: update, framerateDetector: framerateDetector)
 
-        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider, debugLogger: debugLogger, framerate: queue.framerateDetector)
+        tapPredictor = TapPredictor(tapper: tapper, timeProvider: imageProvider.timeProvider, debugLogger: debugLogger, framerate: framerateDetector)
     }
 
     /// Begin receiving images and play the game.
