@@ -20,11 +20,11 @@ enum TopPrismColor: Equatable {
 /// Others can either retrieve this color or query whether it has changed during the last `update` cycle.
 final class PrismStateTracker {
     /// The current top color, or `unsure` during a wild rotation.
-    @Change var _topColor: TopPrismColor = .unsure
+    @Observable var topColor: TopPrismColor = .unsure
 
-    /// Property wrappers cannot be accessed from outside the type
-    var topColor: TopPrismColor { _topColor }
-    var topColorChange: TopPrismColor? { __topColor.change }
+    /// The latest changes to `topColor`. Accessing `latestColorChanges` will clear its contents.
+    var mostRecentChanges: [Observable<TopPrismColor>.Change] { _topColor.latestChanges }
+    var mostRecentChange: TopPrismColor? { _topColor.mostRecentChange }
 
     /// Properties of a transition from `unsure` to an idle `color`.
     private var wildToIdleTransition: (candidate: DotColor, consecutiveFrames: Int)?
@@ -40,7 +40,7 @@ final class PrismStateTracker {
             let color = Prism.topColor(angle: angle) ??
                 Prism.nextTopColorRotatingCounterclockwise(currentAngle: angle)
 
-            _topColor = .color(color)
+            topColor = .color(color)
             return
         }
 
@@ -53,7 +53,7 @@ final class PrismStateTracker {
         if topColor == .unsure, let color = Prism.topColor(angle: angle) {
             if let (candidate, counter) = wildToIdleTransition, candidate == color {
                 if counter + 1 >= 2 { // Transition successful
-                    _topColor = .color(candidate)
+                    topColor = .color(candidate)
                 } else {
                     wildToIdleTransition = (candidate, counter + 1)
                 }
@@ -73,9 +73,9 @@ final class PrismStateTracker {
             if ccw { // Normal, counterclockwise rotation
                 let color = Prism.topColor(angle: angle) ??
                     Prism.nextTopColorRotatingCounterclockwise(currentAngle: angle)
-                _topColor = .color(color)
+                topColor = .color(color)
             } else { // Rotation is clockwise, go to `unsure`
-                _topColor = .unsure
+                topColor = .unsure
                 wildToIdleTransition = nil
             }
         }
@@ -89,7 +89,7 @@ private struct Prism {
     /// If the angle doesn't correspond to the idle position of one of the three colors (within +- `tolerance`), return nil.
     static func topColor(angle: Angle, tolerance: Double = 0.05) -> DotColor? {
         let rotations = angle.value / (2 * .pi / 3)
-        guard rotations - round(rotations) < 0.05 else { return nil }
+        guard abs(rotations - round(rotations)) < tolerance else { return nil }
 
         let fullRotations = Int(round(rotations))
         return iterate(.orange, \.next, fullRotations)
@@ -109,20 +109,38 @@ private struct Prism {
     }
 }
 
-// MARK: - Change
-/// Allows access to the most recent change of the wrapped value.
-@propertyWrapper struct Change<A: Equatable> {
-    /// If the latest assignment `self = x` changed the wrapped value, return `self`.
-    /// Else, return `nil`.
-    var change: A?
+// MARK: - Observable
+/// Observable tracks all changes that are performed to the property.
+/// The changes are collected and can be accessed via `changes`. Accessing `changes` clears the stored changes.
+@propertyWrapper class Observable<A: Equatable> {
+    /// Contains all changes since the **last read access** to `latestChanges`.
+    /// Accessing `latestChanges` will clear its contents.
+    var latestChanges: [Change] {
+        let result = _latestChanges
+        _latestChanges.removeAll()
+        return result
+    }
+    private var _latestChanges =  [Change]()
+    struct Change {
+        let from: A
+        let to: A
+    }
 
-    /// Setting the value will update `change`, depending on whether the new value equals the old value.
+    /// The value of the most recent change, if there is one, else nil.
+    /// Reading this will clear `latestChanges`.
+    var mostRecentChange: A? { latestChanges.last?.to }
+
+    /// Default initializer.
+    init(wrappedValue value: A) {
+        wrappedValue = value
+        _latestChanges = [Change(from: value, to: value)]
+    }
+
+    /// A wrapper around `value`.
     var wrappedValue: A {
         willSet {
-            if newValue == wrappedValue {
-                change = nil
-            } else {
-                change = newValue
+            if wrappedValue != newValue {
+                _latestChanges.append(Change(from: wrappedValue, to: newValue))
             }
         }
     }
