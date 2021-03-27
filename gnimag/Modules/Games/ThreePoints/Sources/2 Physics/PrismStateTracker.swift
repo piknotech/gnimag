@@ -4,6 +4,7 @@
 //
 
 import Common
+import Foundation
 
 /// TopPrismColor describes the color that is on top of an idle or currently rotating prism.
 /// The game doesn't care whether the prism is rotating towards color C or is idle with top color C when a dot hits the critical position.

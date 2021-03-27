@@ -12,13 +12,24 @@ import Tapping
 final class TapPredictor: TapPredictorBase {
     private let playfield: Playfield
     private let gameModel: GameModel
-    private let delay: Double = 0.05 // remove
+    private let delay: Double = 0.13 // remove
+
+    private let triggerDuration = 0.2
+
+    /// `Distances` describes preferred minimum distances between consecutive events.
+    /// Tap scheduling tries keeping these distances, and generates a fair solution if this cannot be done.
+    private struct Distances {
+        static let betweenTaps = 0.1
+        static let afterCollision = 0.1
+        static let beforeCollision = 0.1
+    }
 
     /// All active tap tokens, i.e. all taps which have been performed, but are not yet visible for image analysis.
     /// A token is removed either when the tap is seen to have been executed or when it is not detected until the token's trigger time. In this case, a fresh tap will be executed.
-    var tokens = [TapToken]()
+    private var tokens = [TapToken]()
 
-    var pastEvents = FixedSizeFIFO<Event>(capacity: 2)
+    /// The most recent events. Only the most recent one is relevant currently.
+    private var pastEvents = FixedSizeFIFO<Event>(capacity: 2)
 
     /// Default initializer.
     init(playfield: Playfield, tapper: SomewhereTapper, timeProvider: TimeProvider, gameModel: GameModel) {
@@ -46,21 +57,41 @@ final class TapPredictor: TapPredictorBase {
 
         // Get required number of taps to survive next collision
         guard let nextCollision = collision, let prismColor = prismColor else { return nil }
-        let distance = prismColor.distance(to: nextCollision.dotColor)
+        let T = nextCollision.absoluteTime - currentTime
+        let numTaps = prismColor.distance(to: nextCollision.dotColor)
+        if numTaps == 0 { return nil }
 
+        // Keep distance to most recent event
         let mostRecentPastEvent = pastEvents.elements.max(by: \.absoluteTime)
+        let distanceToLastEvent = currentTime - (mostRecentPastEvent?.absoluteTime ?? .greatestFiniteMagnitude)
 
-        // Schedule 1 or 2 taps between now (currentTime) and nextCollision
-
-        // todo
-        if distance > 0 {
-            // 100 ms between consecutive taps
-            let taps = Array(0 ..< distance).map { RelativeTap(scheduledIn: 0.1 * Double($0)) }
-            let relative = RelativeTapSequence(taps: taps, unlockDuration: nil)
-            return AbsoluteTapSequence(relative, relativeTo: timeProvider.currentTime)
+        // Calculate preferred safety net, i.e. distance to most recent event
+        var safetyNet: Double = 0
+        if mostRecentPastEvent is CollisionWithDot {
+            safetyNet = max(0, Distances.afterCollision - distanceToLastEvent)
+        } else if mostRecentPastEvent is PrismRotation {
+            safetyNet = max(0, Distances.betweenTaps - distanceToLastEvent)
         }
 
-        return nil
+        // Calculate total forces from left and from right; find a fair center point of the opposite-directed arrows if they overlap
+        let rightForce = safetyNet + Double(numTaps - 1) * Distances.betweenTaps
+        let leftForce = Distances.beforeCollision
+
+        var newRightForce = rightForce
+        if rightForce + leftForce > T {
+            let overlap = rightForce + leftForce - T
+            newRightForce -= overlap / 2
+            newRightForce = min(T, max(0, newRightForce))
+        }
+        let factor = rightForce == 0 ? 0 : newRightForce / rightForce
+
+        // Generate tap sequence
+        let distances: [Double] = Array(0 ..< numTaps).map { (i: Int) -> Double in
+            factor * (safetyNet + Double(i) * Distances.betweenTaps)
+        }
+
+        let relative = RelativeTapSequence(taps: distances.map(RelativeTap.init(scheduledIn:)), unlockDuration: nil)
+        return AbsoluteTapSequence(relative, relativeTo: timeProvider.currentTime)
     }
 
     /// Update tokens: remove tokens which have been fulfilled or not fulfilled.
@@ -78,6 +109,7 @@ final class TapPredictor: TapPredictorBase {
     }
 
     /// The color the prism should have after all already-executed taps have been detected.
+    /// During `unsure` state of the prism, this is `nil`, and tap prediction is paused.
     private var prismColor: DotColor? {
         guard case .color(var color) = gameModel.prism.topColor else { return nil }
 
@@ -89,7 +121,7 @@ final class TapPredictor: TapPredictorBase {
 
     /// Called after a tap was performed by the scheduler.
     private func tapPerformed(tap: PerformedTap) {
-        let token = TapToken(tap: tap, color: prismColor!.next, triggerTime: tap.performedAt + delay + 0.3)
+        let token = TapToken(tap: tap, color: prismColor!.next, triggerTime: tap.performedAt + delay + triggerDuration)
         tokens.append(token)
 
         let event = PrismRotation(absoluteTime: tap.performedAt + delay)
