@@ -39,7 +39,7 @@ final class GameModelCollector {
             } else if matching.count == 1 && pairs[matching[0]] == nil {
                 pairs[matching[0]] = dot
             } else {
-                Terminal.log(.warning, "Multiple DotTrackers match the dot \(dot)")
+                // Terminal.log(.warning, "Multiple DotTrackers match the dot \(dot)")
             }
         }
 
@@ -57,7 +57,7 @@ final class GameModelCollector {
             if tracker.integrityCheck(with: dot, at: time) {
                 tracker.update(with: dot, at: time)
             } else {
-                Terminal.log(.warning, "DotTracker - integrity error")
+                // Terminal.log(.warning, "DotTracker - integrity error")
             }
         }
 

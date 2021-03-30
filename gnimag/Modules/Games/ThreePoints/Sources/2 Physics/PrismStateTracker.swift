@@ -26,7 +26,7 @@ final class PrismStateTracker {
 
     /// The latest changes to `topColor`. Accessing `latestColorChanges` will clear its contents.
     var mostRecentChanges: [Observable<TopPrismColor>.Change] { _topColor.latestChanges }
-    var mostRecentChange: TopPrismColor? { _topColor.mostRecentChange }
+    var mostRecentChange: Observable<TopPrismColor>.Change? { _topColor.mostRecentChange }
 
     /// Properties of a transition from `unsure` to an idle `color`.
     private var wildToIdleTransition: (candidate: DotColor, consecutiveFrames: Int)?
@@ -47,7 +47,7 @@ final class PrismStateTracker {
         }
 
         // If angle hasn't changed and rotation is not wild: nothing to do
-        if lastAngle.distance(to: angle) < 0.05, topColor != .unsure {
+        if lastAngle.distance(to: angle) < 0.1, topColor != .unsure {
             return
         }
 
@@ -123,6 +123,7 @@ private struct Prism {
         return result
     }
     private var _latestChanges =  [Change]()
+
     struct Change {
         let from: A
         let to: A
@@ -130,7 +131,7 @@ private struct Prism {
 
     /// The value of the most recent change, if there is one, else nil.
     /// Reading this will clear `latestChanges`.
-    var mostRecentChange: A? { latestChanges.last?.to }
+    var mostRecentChange: Change? { latestChanges.last }
 
     /// Default initializer.
     init(wrappedValue value: A, initialChange: Bool) {
