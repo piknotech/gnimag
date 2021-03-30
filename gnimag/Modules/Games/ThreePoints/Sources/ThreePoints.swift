@@ -21,6 +21,16 @@ public final class ThreePoints {
 
     private var playfield: Playfield!
 
+    /// The state of the game.
+    private var state = State.beforeGame
+    private var firstTapTime: Double?
+    private var hadInitialChange = false
+    private enum State {
+        case beforeGame
+        case waitingForFirstPrismRotation
+        case inGame
+    }
+
     /// Default initializer.
     public init(imageProvider: ImageProvider, tapper: SomewhereTapper) {
         self.imageProvider = imageProvider
@@ -38,21 +48,74 @@ public final class ThreePoints {
     /// Update method, called each time a new image is available.
     private func update(image: Image, time: Double) {
         performFirstImageSetupIfRequired(with: image)
-        if let result = imageAnalyzer.analyze(image: image) {
-            gameModelCollector.accept(result: result, time: time)
-            tapPredictor.predictionStep()
+
+        switch state {
+        case .beforeGame:
+            beforeGame(image: image, time: time)
+
+        case .waitingForFirstPrismRotation:
+            waitingForFirstPrismRotation(image: image, time: time)
+
+        case .inGame:
+            inGame(image: image, time: time)
         }
     }
 
     /// Initialize the imageAnalyzer on the very first image.
     /// Does nothing if imageAnalyzer is already initialized.
-    internal func performFirstImageSetupIfRequired(with image: Image) {
+    private func performFirstImageSetupIfRequired(with image: Image) {
         guard !imageAnalyzer.isInitialized else { return }
 
         playfield = imageAnalyzer.initialize(with: image)
         tapPredictor = TapPredictor(playfield: playfield, tapper: tapper, timeProvider: imageProvider.timeProvider, gameModel: gameModelCollector.model)
+
         guard playfield != nil else {
             exit(withMessage: "First image could not be analyzed! Aborting.")
+        }
+    }
+
+    /// Tap to start the game. After 1s, determine the delay: tap again and wait until the prism begins rotating.
+    private func beforeGame(image: Image, time: Double) {
+        tapPredictor.tapNow()
+        queue.stop(for: 1) // Don't to anything for 1 sec
+
+        Timing.shared.perform(after: 1) {
+            self.firstTapTime = self.imageProvider.timeProvider.currentTime
+            self.tapPredictor.tapNow()
+        }
+
+        state = .waitingForFirstPrismRotation
+    }
+
+    /// Determine whether the prism has changed its rotation. If so, transfer to the in-game state.
+    private func waitingForFirstPrismRotation(image: Image, time: Double) {
+        guard let result = imageAnalyzer.analyze(image: image) else { return }
+
+        gameModelCollector.accept(result: result, time: time)
+        let change = gameModelCollector.model.prism.mostRecentChange
+
+        // On the very first game model collection, there is a change to the current prism top color. Ignore this
+        if change != nil && !hadInitialChange {
+            hadInitialChange = true
+        }
+
+        // The actual change we're interested in is the one from the second tap
+        else if change != nil {
+            tapPredictor.delay = time - (firstTapTime ?? .infinity)
+            state = .inGame
+            print("delay:", tapPredictor.delay)
+
+            if tapPredictor.delay < 0 {
+                exit(withMessage: "First tap was detected before it was performed!")
+            }
+        }
+    }
+
+    /// Normal in-game update.
+    private func inGame(image: Image, time: Double) {
+        if let result = imageAnalyzer.analyze(image: image) {
+            gameModelCollector.accept(result: result, time: time)
+            tapPredictor.predictionStep()
         }
     }
 }

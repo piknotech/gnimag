@@ -21,7 +21,8 @@ enum TopPrismColor: Equatable {
 /// Others can either retrieve this color or query whether it has changed during the last `update` cycle.
 final class PrismStateTracker {
     /// The current top color, or `unsure` during a wild rotation.
-    @Observable var topColor: TopPrismColor = .unsure
+    @Observable(initialChange: false)
+    var topColor: TopPrismColor = .unsure
 
     /// The latest changes to `topColor`. Accessing `latestColorChanges` will clear its contents.
     var mostRecentChanges: [Observable<TopPrismColor>.Change] { _topColor.latestChanges }
@@ -132,9 +133,9 @@ private struct Prism {
     var mostRecentChange: A? { latestChanges.last?.to }
 
     /// Default initializer.
-    init(wrappedValue value: A) {
+    init(wrappedValue value: A, initialChange: Bool) {
         wrappedValue = value
-        _latestChanges = [Change(from: value, to: value)]
+        _latestChanges = initialChange ? [Change(from: value, to: value)] : []
     }
 
     /// A wrapper around `value`.

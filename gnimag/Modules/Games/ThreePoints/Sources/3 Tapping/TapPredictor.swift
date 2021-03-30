@@ -12,8 +12,12 @@ import Tapping
 final class TapPredictor: TapPredictorBase {
     private let playfield: Playfield
     private let gameModel: GameModel
-    private let delay: Double = 0.13 // remove
 
+    /// Instead of using the `delay` from `self.scheduler.delayTracker`, this delay is determined once at the start of the game and is not updated thereafter.
+    /// It must be set from outside.
+    var delay: Double = 0
+
+    /// Extra duration (plus `delay`) after which non-detected taps will be counted as not executed.
     private let triggerDuration = 0.2
 
     /// `Distances` describes preferred minimum distances between consecutive events.

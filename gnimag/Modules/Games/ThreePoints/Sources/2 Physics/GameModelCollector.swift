@@ -3,6 +3,8 @@
 //  Copyright © 2019 - 2021 Piknotech. All rights reserved.
 //
 
+import Common
+
 /// GameModelCollector accepts output from image analysis to create and update an up-to-date game model.
 /// Before new results from image analysis are added, they are first checked for data integrity.
 final class GameModelCollector {
@@ -37,7 +39,7 @@ final class GameModelCollector {
             } else if matching.count == 1 && pairs[matching[0]] == nil {
                 pairs[matching[0]] = dot
             } else {
-                print("Many matching!?")
+                Terminal.log(.warning, "Multiple DotTrackers match the dot \(dot)")
             }
         }
 
@@ -55,7 +57,7 @@ final class GameModelCollector {
             if tracker.integrityCheck(with: dot, at: time) {
                 tracker.update(with: dot, at: time)
             } else {
-                print("Not integer!")
+                Terminal.log(.warning, "DotTracker - integrity error")
             }
         }
 
