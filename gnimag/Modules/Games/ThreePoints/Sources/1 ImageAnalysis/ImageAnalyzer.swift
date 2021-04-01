@@ -112,6 +112,10 @@ final class ImageAnalyzer {
         let upAxis = obb.rightHandedCoordinateAxes(respectiveTo: prism.circumcircle.center).up
         var angle = PolarCoordinates.angle(for: upAxis, respectiveTo: .zero)
         angle -= .pi / 2 // Now, 0° means the color is on top
+
+        // Do NOT use the top color because incoming dots might disturb the measurement
+        if Angle(angle).distance(to: .zero) < (.pi / 3) { return nil }
+
         angle -= (2 * .pi / 3) * CGFloat(color.distance(to: .orange)) // Now, 0° means orange is on top
         return Angle(angle)
     }
