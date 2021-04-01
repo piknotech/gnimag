@@ -13,39 +13,53 @@ import Geometry
 import Tapping
 import ThreePoints
 
-Permissions.checkOnStartup()
+let arduino = SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
+let arguments = CommandLine.arguments
+// let arguments = ["tp"]
 
-let imageProvider = ImageListProvider(directoryPath: NSHomeDirectory() +/ "Desktop/TP", framerate: 60, startingAt: 166)
-let tapper = NoopTapper()
-let threePoints = ThreePoints(imageProvider: imageProvider, tapper: tapper)
-threePoints.play()
+if arguments.contains("tap") {
+    Timing.shared.perform(after: 2) {
+        arduino.tap()
+        arduino.tap()
+        arduino.tap()
+        exit(0)
+    }
+}
 
-/*
-// Arduino
-let imageProvider = scrcpy.imageProvider.resizingImages(factor: 0.5)
-let tapper = SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
+else if arguments.contains("tp") {
+    Permissions.checkOnStartup()
 
-let mrflap = MrFlap(
-    imageProvider: imageProvider,
-    tapper: tapper,
-    debugParameters: DebugParameters(
-        location: NSHomeDirectory() +/ "Desktop/Debug.noSync",
-        occasions: [],
-        logEvery: 1000,
-        content: .all,
-        logLastCoupleFramesOnCrash: true
+    let imageProvider = quickTime
+    let tapper = arduino
+    let threePoints = ThreePoints(imageProvider: imageProvider, tapper: tapper)
+
+    Timing.shared.perform(after: 2) {
+        threePoints.play()
+    }
+}
+
+else if arguments.contains("mrflap") {
+    Permissions.checkOnStartup()
+
+    let imageProvider = airServer // scrcpy.imageProvider.resizingImages(factor: 0.5)
+    let tapper = arduino
+
+    let mrflap = MrFlap(
+        imageProvider: imageProvider,
+        tapper: tapper,
+        debugParameters: DebugParameters(
+            location: NSHomeDirectory() +/ "Desktop/Debug.noSync",
+            occasions: [],
+            logEvery: 1000,
+            content: .all,
+            logLastCoupleFramesOnCrash: true
+        )
     )
-)
 
-Timing.shared.perform(after: 2) {
-    mrflap.play()
+    Timing.shared.perform(after: 2) {
+        mrflap.play()
+    }
 }
-
-mrflap.crashed += {
-    print("CRASHED!")
-}
-*/
 
 PowerManager.disableScreenSleep()
-
 RunLoop.main.run()
