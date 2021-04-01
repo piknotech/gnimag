@@ -18,3 +18,10 @@ identiti (iOS) | Freaking Math+ (iOS)
 :-------------------------:|:-------------------------:
 ![](Resources/Highscores/identiti.png)  | ![](Resources/Highscores/FreakingMath+.png) 
 
+
+
+## Three Points: 🥈
+
+<p align="center">
+	<img src="Resources/Highscores/ThreePoints.png" width="350">
+</p>
