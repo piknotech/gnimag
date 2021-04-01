@@ -38,7 +38,6 @@ public class FramerateDetector {
     public let tracker = LinearTracker(maxDataPoints: 50, tolerance: .absolute(0), maxDataPointsForLogging: 1000)
     private var nextIndex = 0.0
 
-
     /// Default initializer.
     public init() {
     }

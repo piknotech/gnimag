@@ -38,7 +38,7 @@ public final class TapDelayTracker {
     /// Call when a tap has just been performed at the given time.
     public func tapPerformed(_ tap: PerformedTap) {
         performedTaps.append(tap)
-        performedTaps.sort { $0.scheduledFor < $1.scheduledFor }
+        performedTaps.sort(by: \.scheduledFor)
     }
 
     /// Call when a tap has just been detected at the given time.

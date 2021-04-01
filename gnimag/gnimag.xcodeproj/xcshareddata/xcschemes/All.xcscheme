@@ -182,6 +182,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "639C338A25F68998005D0B6D"
+               BuildableName = "ThreePoints.framework"
+               BlueprintName = "ThreePoints"
+               ReferencedContainer = "container:gnimag.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "631212AC23253DC700C126B4"
                BuildableName = "gnimag"
                BlueprintName = "gnimag-cli"

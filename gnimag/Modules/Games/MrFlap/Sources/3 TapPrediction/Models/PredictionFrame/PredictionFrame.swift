@@ -35,8 +35,6 @@ extension PredictionFrame {
         gmc.model.bars.compactMap { tracker in
             guard let bar = BarProperties(bar: tracker, with: gmc.model.player, playfield: playfield, currentTime: currentTime, gmc: gmc) else { return nil }
             return PlayerBarInteraction(player: player, bar: bar, playfield: playfield, currentTime: currentTime, barTracker: tracker)
-        }.sorted {
-            $0.timeUntilLeaving < $1.timeUntilLeaving
-        }
+        }.sorted(by: \.timeUntilLeaving)
     }
 }

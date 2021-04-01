@@ -43,6 +43,7 @@ class ImageAnalyzer {
             return .failure(.error) & {debug.outcome = .error}
         }
         debug.coloring.result = coloring
+        lastColoring = coloring
 
         // Decide whether player has crashed
         if coloring.crashColor.matches(coloring.theme) {

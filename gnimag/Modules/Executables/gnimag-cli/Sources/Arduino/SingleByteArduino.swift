@@ -18,6 +18,7 @@ struct SingleByteArduino: SomewhereTapper {
             exit(withMessage: "Arduino not found.")
         }
         self.port = port
+        port.baudRate = 9600
         port.open()
     }
 

@@ -61,7 +61,7 @@ open class TapPredictorBase {
     }
 
     /// Override to create a predicted tap sequence for the current frame.
-    /// When returning nil, nothing happens (i.e. no taps and no lock), and predictionLogic will be called again next frame.
+    /// Returning nil is equivalent to returning an empty sequence.
     open func predictionLogic() -> AbsoluteTapSequence? {
         nil
     }
@@ -73,6 +73,7 @@ open class TapPredictorBase {
     /// Unschedule all scheduled taps and unlocking.
     private func unschedule() {
         scheduler.unscheduleAll()
+        tapSequence = nil
         Timing.shared.cancelTasks(withObject: self) // Unschedule unlocking
     }
 
