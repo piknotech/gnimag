@@ -2822,7 +2822,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1250;
 				TargetAttributes = {
 					630682C72430CE4C00C5B28E = {
 						CreatedOnToolsVersion = 11.4;
