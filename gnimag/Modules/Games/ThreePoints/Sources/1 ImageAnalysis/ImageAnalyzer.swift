@@ -69,7 +69,7 @@ final class ImageAnalyzer {
     /// Validate whether the prism colors match together.
     private func validate(_ prism: Playfield.Prism, in image: Image) -> Bool {
         let angles: [Angle] = [0, 1, 2].map { i -> Angle in
-            Angle(Double.pi/2 - Double(i) * 2/3 * Double.pi)
+            Angle(Double.pi/2 - Double(i) * 0.667 * Double.pi)
         }
 
         let smallCircle = Circle(center: prism.circumcircle.center, radius: prism.circumcircle.radius / 4)
