@@ -81,7 +81,7 @@ class ImageAnalyzer {
     /// Find the coloring of the game.
     private func findColoring(in image: Image) -> Coloring? {
         // Step 1: use static pixel to find the main (theme) color
-        let topLeft = Pixel(10, image.bounds.height - 10)
+        let topLeft = Pixel(10, image.bounds.height - 100)
         let theme = image.color(at: topLeft)
 
         // Step 2: consider 21 pixels and determine their most frequent color to find the secondary color
