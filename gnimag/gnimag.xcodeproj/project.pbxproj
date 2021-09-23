@@ -232,6 +232,7 @@
 		637B56A923CF2AEC007E51B0 /* MultiScatterStrokable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56A823CF2AEC007E51B0 /* MultiScatterStrokable.swift */; };
 		637B56B223D070ED007E51B0 /* FunctionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B56B123D070ED007E51B0 /* FunctionWrapper.swift */; };
 		637E4C4C26FB63C500C2EC0C /* GRBLDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637E4C4B26FB63C500C2EC0C /* GRBLDevice.swift */; };
+		637E4C6C26FC7B9B00C2EC0C /* TerminationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637E4C6B26FC7B9B00C2EC0C /* TerminationHandler.swift */; };
 		637FCB4B2391AA0C0067BBCC /* DebugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB492391A9FA0067BBCC /* DebugLogger.swift */; };
 		637FCB4F2392BBD30067BBCC /* GameQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB4E2392BBD30067BBCC /* GameQueue.swift */; };
 		637FCB512392D1FE0067BBCC /* GameQueueTimingStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */; };
@@ -646,6 +647,7 @@
 		637B56A823CF2AEC007E51B0 /* MultiScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiScatterStrokable.swift; sourceTree = "<group>"; };
 		637B56B123D070ED007E51B0 /* FunctionWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionWrapper.swift; sourceTree = "<group>"; };
 		637E4C4B26FB63C500C2EC0C /* GRBLDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRBLDevice.swift; sourceTree = "<group>"; };
+		637E4C6B26FC7B9B00C2EC0C /* TerminationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminationHandler.swift; sourceTree = "<group>"; };
 		637FCB492391A9FA0067BBCC /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		637FCB4E2392BBD30067BBCC /* GameQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameQueue.swift; sourceTree = "<group>"; };
 		637FCB502392D1FE0067BBCC /* GameQueueTimingStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameQueueTimingStats.swift; sourceTree = "<group>"; };
@@ -1698,6 +1700,7 @@
 				63EAE48925F56D9F00C80530 /* Permissions.swift */,
 				6392A1B225A0F0CB00761241 /* PowerManager.swift */,
 				631555A825A3D6E30056B8AD /* MultiTapper.swift */,
+				637E4C6B26FC7B9B00C2EC0C /* TerminationHandler.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -3085,6 +3088,7 @@
 				631555A925A3D6E30056B8AD /* MultiTapper.swift in Sources */,
 				631213CE23257EB600C126B4 /* DisplayLinkedImageProvider.swift in Sources */,
 				630CE2F32440AD31006017F4 /* ScreenInteractor.swift in Sources */,
+				637E4C6C26FC7B9B00C2EC0C /* TerminationHandler.swift in Sources */,
 				63D3E3A526F8C56D00394495 /* Plotter.swift in Sources */,
 				637E4C4C26FB63C500C2EC0C /* GRBLDevice.swift in Sources */,
 				631213C923257EB600C126B4 /* NoopTapper.swift in Sources */,

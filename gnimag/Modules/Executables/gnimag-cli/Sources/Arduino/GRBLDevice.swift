@@ -14,6 +14,7 @@ class GRBLDevice: NSObject {
 
     /// True after the welcome message (Grbl X.Xx) has been sent.
     private(set) var isInitialized = false
+    let initialized = Event<Void>()
 
     /// True when the device is currently moving.
     private(set) var isMoving = false
@@ -33,6 +34,13 @@ class GRBLDevice: NSObject {
         port.delegate = self
         port.baudRate = 115200
         port.open()
+
+        TerminationHandler.shared.onTerminate += {
+            Timing.shared.perform(after: 0.25) {
+                print("close")
+                self.port.close()
+            }
+        }
 
         responseEvaluator.callback = receivedResponse(response:)
     }
@@ -72,6 +80,7 @@ extension GRBLDevice: ORSSerialPortDelegate {
         switch response {
         case .welcome:
             isInitialized = true
+            initialized.trigger()
 
         case .idle where isMoving:
             isMoving = false

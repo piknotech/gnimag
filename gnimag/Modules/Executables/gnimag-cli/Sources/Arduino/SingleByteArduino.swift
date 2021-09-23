@@ -9,17 +9,24 @@ import ORSSerial
 import Tapping
 
 /// A SingleByteArduino sends a single byte to a connected Arduino via USB each time when a tap shall be performed.
-struct SingleByteArduino: SomewhereTapper {
+class SingleByteArduino: SomewhereTapper {
     let port: ORSSerialPort
 
-    /// Default initializer.
+    /// Default initializer. Opens the given port.
     init(portPath: String) {
         guard let port = ORSSerialPort(path: portPath) else {
-            exit(withMessage: "Arduino not found.")
+            exit(withMessage: "Arduino not found on \(portPath).")
         }
         self.port = port
         port.baudRate = 9600
         port.open()
+
+        TerminationHandler.shared.onTerminate += {
+            Timing.shared.perform(after: 0.25) {
+                print("close")
+                self.port.close()
+            }
+        }
     }
 
     /// Tap on the screen by sending a single byte to the Arduino.

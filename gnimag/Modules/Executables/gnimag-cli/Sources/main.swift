@@ -13,7 +13,13 @@ import Geometry
 import Tapping
 import ThreePoints
 
-let arduino = SingleByteArduino(portPath: "/dev/cu.usbmodem14101")
+let plotter = Plotter(penPlotterPath: "/dev/cu.usbserial-14240", arduinoPath: "/dev/cu.usbmodem142201")
+let game = FreakingMath(imageProvider: airServer, tapper: plotter, game: .normal)
+//let game = identiti(imageProvider: airServer, tapper: plotter, os: .iOS)
+plotter.initialized += game.play
+
+/*
+let arduino = SingleByteArduino(portPath: "/dev/cu.usbmodem142201")
 let arguments = CommandLine.arguments
 // let arguments = ["tp"]
 
@@ -29,7 +35,7 @@ if arguments.contains("tap") {
 else if arguments.contains("tp") {
     Permissions.checkOnStartup()
 
-    let imageProvider = quickTime
+    let imageProvider = airServer // quickTime
     let tapper = arduino
     let threePoints = ThreePoints(imageProvider: imageProvider, tapper: tapper)
 
@@ -59,7 +65,7 @@ else if arguments.contains("mrflap") {
     Timing.shared.perform(after: 2) {
         mrflap.play()
     }
-}
+}*/
 
 PowerManager.disableScreenSleep()
 RunLoop.main.run()
