@@ -132,20 +132,21 @@ class FreakingMathImageAnalyzer: ImageAnalyzerProtocol {
         let white = Color.white.withTolerance(0.1)
 
         // Find end of upper bar
-        let corner = Pixel(image.width - 5, image.height - 1)
+        let corner = Pixel(image.width - 25, image.height - 1)
         let path = StraightPath(start: corner, angle: .south, bounds: image.bounds)
         let sequence = ColorMatchSequence([white, .not(white)])
         guard let barEnd = image.follow(path: path, untilFulfillingSequence: sequence).fulfilledPixel else { return nil }
 
         // Find start of "0"
-        let diagonal = StraightPath(start: barEnd, angle: Angle(1.35 * .pi), bounds: image.bounds)
-        guard let zero = image.findFirstPixel(matching: white, on: diagonal) else { return nil }
+        let down = StraightPath(start: barEnd, angle: .south, bounds: image.bounds)
+        guard let zero = image.findFirstPixel(matching: white, on: down) else { return nil }
 
         // Guess AABB
         let length = barEnd.distance(to: zero)
         if length > 100 { return nil }
-        let firstCorner = barEnd.CGPoint - CGPoint(x: 2, y: 2)
-        let otherCorner = barEnd.CGPoint - CGPoint(x: 4 * length, y: 2.5 * length)
+
+        let firstCorner = CGPoint(x: Double(image.width) - 5, y: Double(barEnd.y) - length / 2)
+        let otherCorner = firstCorner - CGPoint(x: 3 * length, y: 2 * length)
         let aabb = AABB(containing: [firstCorner, otherCorner])
 
         // Verify text is "0"
@@ -159,7 +160,7 @@ class FreakingMathImageAnalyzer: ImageAnalyzerProtocol {
 
     /// Find the locations of the true and false buttons.
     private func findButtons(in image: Image, background: ColorMatch) -> (left: AABB, right: AABB)? {
-        let inset = 5 // Remove possible edge artifacts
+        let inset = 20 // Remove edge artifacts
 
         let buttonForeground = Color.white.withTolerance(0.15)
         let buttonMatch = ColorMatch.block { color in
