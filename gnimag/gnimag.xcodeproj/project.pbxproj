@@ -274,6 +274,7 @@
 		63CCCAFF246178E7002605DD /* ORSSerial in Frameworks */ = {isa = PBXBuildFile; productRef = 63CCCAFE246178E7002605DD /* ORSSerial */; };
 		63CCCB01246178F8002605DD /* SingleByteArduino.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CCCB00246178F8002605DD /* SingleByteArduino.swift */; };
 		63D002962373037900041069 /* DebugFrame+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D002952373037900041069 /* DebugFrame+Data.swift */; };
+		63D3E3A526F8C56D00394495 /* Plotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D3E3A426F8C56D00394495 /* Plotter.swift */; };
 		63D8EC9623D89C5D00121F2B /* Point+Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9523D89C5D00121F2B /* Point+Position.swift */; };
 		63D8EC9B23D9FFEE00121F2B /* Jump.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D8EC9A23D9FFEE00121F2B /* Jump.swift */; };
 		63DF005724261DC1001D81B3 /* ScreenLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DF005624261DC1001D81B3 /* ScreenLayout.swift */; };
@@ -697,6 +698,7 @@
 		63CCCB00246178F8002605DD /* SingleByteArduino.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleByteArduino.swift; sourceTree = "<group>"; };
 		63D002932373024600041069 /* DebugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogger.swift; sourceTree = "<group>"; };
 		63D002952373037900041069 /* DebugFrame+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DebugFrame+Data.swift"; sourceTree = "<group>"; };
+		63D3E3A426F8C56D00394495 /* Plotter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plotter.swift; sourceTree = "<group>"; };
 		63D8EC9323D8947D00121F2B /* CGRectScatterStrokable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectScatterStrokable.swift; sourceTree = "<group>"; };
 		63D8EC9523D89C5D00121F2B /* Point+Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Point+Position.swift"; sourceTree = "<group>"; };
 		63D8EC9A23D9FFEE00121F2B /* Jump.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jump.swift; sourceTree = "<group>"; };
@@ -1684,6 +1686,7 @@
 			isa = PBXGroup;
 			children = (
 				63CCCB00246178F8002605DD /* SingleByteArduino.swift */,
+				63D3E3A426F8C56D00394495 /* Plotter.swift */,
 				637E4C4B26FB63C500C2EC0C /* GRBLDevice.swift */,
 			);
 			path = Arduino;
@@ -3082,6 +3085,7 @@
 				631555A925A3D6E30056B8AD /* MultiTapper.swift in Sources */,
 				631213CE23257EB600C126B4 /* DisplayLinkedImageProvider.swift in Sources */,
 				630CE2F32440AD31006017F4 /* ScreenInteractor.swift in Sources */,
+				63D3E3A526F8C56D00394495 /* Plotter.swift in Sources */,
 				637E4C4C26FB63C500C2EC0C /* GRBLDevice.swift in Sources */,
 				631213C923257EB600C126B4 /* NoopTapper.swift in Sources */,
 			);
