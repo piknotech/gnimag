@@ -6,18 +6,34 @@ void setup() {
 
 void loop() {
   while (Serial.available()) {
-    Serial.read();
-    click();
+    switch (Serial.read()) {
+      case 'd':
+        down(); break;
+      case 'u':
+        up(); break;
+      case 'c':
+        click(); break;
+      default:
+        break;
+    }
   }
 }
 
 void click() {
+  down();
+  delay(50);
+  up(); 
+  delay(25);
+}
+
+void down() {
   digitalWrite(8, HIGH);
   digitalWrite(13, HIGH);
-  delay(50);
+}
+
+void up() {
   digitalWrite(8, LOW);
   digitalWrite(13, LOW);
-  delay(25);
 }
 
 void test() {

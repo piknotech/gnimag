@@ -9,6 +9,7 @@ import ORSSerial
 import Tapping
 
 /// A SingleByteArduino sends a single byte to a connected Arduino via USB each time when a tap shall be performed.
+/// In addition, it has the option to only move the tip down or up. A tap consists of both down- and up-movements.
 class SingleByteArduino: SomewhereTapper {
     let port: ORSSerialPort
 
@@ -31,7 +32,17 @@ class SingleByteArduino: SomewhereTapper {
 
     /// Tap on the screen by sending a single byte to the Arduino.
     func tap() {
-        port.send(Data([1]))
+        port.send("c".data(using: .ascii)!)
+    }
+
+    /// Move the pen tip down so it touches the screen.
+    func down() {
+        port.send("d".data(using: .ascii)!)
+    }
+
+    /// Lift the pen tip from the screen.
+    func up() {
+        port.send("u".data(using: .ascii)!)
     }
 
     /// All currently connected/available ports.

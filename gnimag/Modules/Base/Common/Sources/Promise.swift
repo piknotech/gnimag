@@ -137,6 +137,11 @@ public final class Promise<Result> {
 // MARK: Success Methods for Promise<Void>
 
 extension Promise where Result == Void {
+    /// Convenience method to successfully finish a promise with a void result.
+    public func fulfill() {
+        finished(with: .result(()))
+    }
+
     /// Convenience method to create a new, successful promise with a void result.
     public static func success() -> Promise<Void> {
         return .success(value: ())
