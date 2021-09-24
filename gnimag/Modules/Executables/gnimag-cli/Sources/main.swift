@@ -13,59 +13,45 @@ import Geometry
 import Tapping
 import ThreePoints
 
+Permissions.checkOnStartup()
+PowerManager.disableScreenSleep()
+
 let plotter = Plotter(penPlotterPath: "/dev/cu.usbserial-14240", arduinoPath: "/dev/cu.usbmodem142201")
-let game = FreakingMath(imageProvider: airServer, tapper: plotter, game: .normal)
-//let game = identiti(imageProvider: airServer, tapper: plotter, os: .iOS)
-plotter.initialized += game.play
 
-/*
-let arduino = SingleByteArduino(portPath: "/dev/cu.usbmodem142201")
-let arguments = CommandLine.arguments
-// let arguments = ["tp"]
-
-if arguments.contains("tap") {
+if CommandLine.arguments.contains("tap") {
     Timing.shared.perform(after: 2) {
-        arduino.tap()
-        arduino.tap()
-        arduino.tap()
+        plotter.tap(); plotter.tap(); plotter.tap()
+    }
+}
+else if CommandLine.arguments.contains("identiti") {
+    let game = identiti(imageProvider: airServer, tapper: plotter, os: .iOS)
+    Timing.shared.perform(after: 2, block: game.play)
+}
+else if CommandLine.arguments.contains("mrflap") {
+    let game = MrFlap(imageProvider: airServer, tapper: plotter)
+    Timing.shared.perform(after: 2, block: game.play)
+}
+else if CommandLine.arguments.contains("tp") {
+    let game = ThreePoints(imageProvider: airServer, tapper: plotter)
+    Timing.shared.perform(after: 2, block: game.play)
+}
+else if CommandLine.arguments.contains("fm") {
+    let game = FreakingMath(imageProvider: airServer, tapper: plotter, game: .normal)
+    Timing.shared.perform(after: 2, block: game.play)
+}
+else if CommandLine.arguments.contains("fm+") {
+    let game = FreakingMath(imageProvider: airServer, tapper: plotter, game: .plus)
+    Timing.shared.perform(after: 2, block: game.play)
+}
+else if CommandLine.arguments.contains("flowfree") {
+    let game = FlowFreeSingleLevel(imageProvider: airServer, dragger: plotter)
+    Timing.shared.perform(after: 2, block: game.play)
+}
+
+TerminationHandler.shared.onTerminate += {
+    Timing.shared.perform(after: 0.5) {
         exit(0)
     }
 }
 
-else if arguments.contains("tp") {
-    Permissions.checkOnStartup()
-
-    let imageProvider = airServer // quickTime
-    let tapper = arduino
-    let threePoints = ThreePoints(imageProvider: imageProvider, tapper: tapper)
-
-    Timing.shared.perform(after: 2) {
-        threePoints.play()
-    }
-}
-
-else if arguments.contains("mrflap") {
-    Permissions.checkOnStartup()
-
-    let imageProvider = airServer // scrcpy.imageProvider.resizingImages(factor: 0.5)
-    let tapper = arduino
-
-    let mrflap = MrFlap(
-        imageProvider: imageProvider,
-        tapper: tapper,
-        debugParameters: DebugParameters(
-            location: NSHomeDirectory() +/ "Desktop/Debug.noSync",
-            occasions: [],
-            logEvery: 1000,
-            content: .all,
-            logLastCoupleFramesOnCrash: true
-        )
-    )
-
-    Timing.shared.perform(after: 2) {
-        mrflap.play()
-    }
-}*/
-
-PowerManager.disableScreenSleep()
 RunLoop.main.run()

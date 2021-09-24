@@ -37,7 +37,6 @@ class GRBLDevice: NSObject {
 
         TerminationHandler.shared.onTerminate += {
             Timing.shared.perform(after: 0.25) {
-                print("close")
                 self.port.close()
             }
         }

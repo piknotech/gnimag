@@ -18,6 +18,8 @@ class TerminationHandler {
             source.resume()
             return source
         }
+
+        atexit { TerminationHandler.shared.onTerminate.trigger() }
     }
 
     static let shared = TerminationHandler()
