@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    private let highlightingColor = Color.blue
+    private let highlightingColor = Color(red: 0, green: 0, blue: 1)
     @State var highlightedPoint: CGPoint?
 
     var drag: some Gesture {
@@ -19,7 +19,7 @@ struct ContentView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            makePath(for: geometry, point: highlightedPoint).stroke(highlightingColor, lineWidth: 2)
+            makePath(for: geometry, point: highlightedPoint).stroke(highlightingColor, lineWidth: 5)
         }
         .background(Color.white)
         .gesture(drag)
